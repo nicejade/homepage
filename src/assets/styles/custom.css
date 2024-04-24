@@ -1,0 +1,49 @@
+:root {
+  --sl-text-5xl: 1.8rem;
+  --sl-text-4xl: 1.6rem;
+  --sl-text-3xl: 1.4rem;
+  --sl-text-2xl: 1.2rem;
+  --sl-text-xl: 1.125rem;
+  --sl-text-lg: 1rem;
+  --sl-color-accent: #f04b22 !important;
+}
+
+.link-title {
+  font-size: var(--sl-text-base);
+}
+
+select {
+  outline: none;
+}
+
+.main-pane li {
+  margin-left: 2rem;
+  list-style-type: initial;
+}
+
+.main-pane li li {
+  list-style-type: circle;
+}
+
+.medium-zoom-image--opened {
+  z-index: 1000;
+}
+
+[aria-current='page']:hover,
+[aria-current='page']:focus,
+[aria-current='page'] {
+  color: var(--sl-color-accent);
+  background-color: transparent;
+}
+
+#starlight__sidebar a {
+  transition: all .4s ease;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+}
+
+#starlight__sidebar a:hover {
+  transform: scale(1.023);
+}

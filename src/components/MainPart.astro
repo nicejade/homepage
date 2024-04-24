@@ -1,0 +1,20 @@
+---
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import configs from '../configs';
+---
+
+<div>
+  {
+    configs.map(({ title, style, list }) => (
+      <h2>{title}</h2>
+      <CardGrid stagger={style === 'stagger'}>
+        {
+          // @ts-ignore
+          list.map(({ title, link, desc }) => (
+            <LinkCard title={title} href={link} description={desc} />
+          ))
+        }
+      </CardGrid>
+    ))
+  }
+</div>

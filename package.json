@@ -1,0 +1,27 @@
+{
+  "name": "fine-niceshare-site",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.5.5",
+    "@astrojs/starlight": "^0.20.1",
+    "@astrojs/svelte": "^5.1.0",
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.3.5",
+    "flowbite-svelte": "^0.46.0",
+    "hint.css": "^3.0.0",
+    "medium-zoom": "^1.1.0",
+    "sharp": "^0.33.2",
+    "starlight-links-validator": "^0.6.0",
+    "svelte": "^4.2.12",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  }
+}

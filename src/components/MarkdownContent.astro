@@ -1,0 +1,9 @@
+---
+import '@astrojs/starlight/style/markdown.css';
+import MediumZoom from './MediumZoom.svelte'
+---
+
+<div class="sl-markdown-content">
+  <MediumZoom client:only='svelte' />
+  <slot />
+</div>
