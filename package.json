@@ -1,5 +1,5 @@
 {
-  "name": "fine-niceshare-site",
+  "name": "homepage",
   "type": "module",
   "version": "0.1.0",
   "scripts": {
@@ -18,10 +18,12 @@
     "flowbite-svelte": "^0.46.0",
     "hint.css": "^3.0.0",
     "medium-zoom": "^1.1.0",
-    "sharp": "^0.33.2",
     "starlight-links-validator": "^0.6.0",
-    "svelte": "^4.2.12",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "svelte": "^4.2.12"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.3",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5"
   }
 }

@@ -10,14 +10,14 @@ export default defineConfig({
 		port: 6969,
 		host: true,
 	},
-	site: 'https://niceshare.site/',
+	site: 'https://www.niceshare.site/',
 	integrations: [
 		svelte(),
 		starlight({
 			plugins: [starlightLinksValidator()],
 			title: '逍遥自在轩',
 			social: {
-				github: 'https://github.com/nicejade/fine.niceshare.site',
+				github: 'https://github.com/nicejade/homepage',
 				mastodon: 'https://mastodon.social/@nicejade',
 				'x.com': 'https://x.com/nicejadeyang',
 			},
