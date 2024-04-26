@@ -23,7 +23,8 @@ export default defineConfig({
 			},
 			components: {
         // Override the default `MarkdownContent` component.
-        MarkdownContent: './src/components/MarkdownContent.astro',
+				MarkdownContent: './src/components/MarkdownContent.astro',
+				LinkCard: './src/components/LinkCard.svelte',
       },
 			logo: {
 				src: './src/assets/images/logo.svg',

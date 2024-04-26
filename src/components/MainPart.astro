@@ -1,5 +1,6 @@
 ---
-import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid } from '@astrojs/starlight/components';
+import LinkCard from './LinkCard.svelte';
 import configs from '../configs';
 ---
 
@@ -11,7 +12,7 @@ import configs from '../configs';
         {
           // @ts-ignore
           list.map(({ title, link, desc }) => (
-            <LinkCard title={title} href={link} description={desc} />
+            <LinkCard title={title} href={link} desc={desc} />
           ))
         }
       </CardGrid>
