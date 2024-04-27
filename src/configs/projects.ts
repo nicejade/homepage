@@ -3,19 +3,14 @@ export default {
   style: 'stagger',
   list: [
     {
+      title: '缘知随心庭',
+      link: 'https://fine.niceshare.site/',
+      desc: '缘知随心庭，基于 Astro、Starlight、Svelte、TailwindCSS、TypeScript 所构建的个人知识管理与分享博客，部署于 Cloudflare 内容分发网络；主要用于记录人工智能探究、自动化、技术分享、生活感悟等。',
+    },
+    {
       title: '晚晴幽草轩',
       link: 'https://www.jeffjade.com/',
       desc: '基于 Hexo 所构建、部署于 Github Pages 服务的个人博客；名字取自：“天意怜幽草，人间重晚晴”。专注分享互联网应用（Web 应用、快应用、小程序等）开发，以及优质网站、AI 应用、效率工具、心得感悟等内容。',
-    },
-    {
-      title: '缘知随心庭',
-      link: 'https://fine.niceshare.site/',
-      desc: '缘知随心庭，基于 Astro、Svelte 所构建的个人知识管理与分享博客，部署于 Cloudflare 内容分发网络；主要用于记录学习笔记、技术分享、生活感悟等。',
-    },
-    {
-      title: '悠然宜想亭',
-      link: 'https://forum.lovejade.cn/',
-      desc: '基于 Flarum 所搭建的现代化社区，旨在营造温润、宽厚、互助的现代化社区；您可以在这里探讨技术、寻求创意、分享美食、聊聊工作、发布科普等等，甚至是为喜欢的作品打 Call、推广，只要遵纪守法、恪守道德，此隅云间，便是您悠然交流、适宜分享之所。',
     },
     {
       title: '玉桃文飨轩',
