@@ -18,8 +18,8 @@ export default defineConfig({
 			title: '逍遥自在轩',
 			social: {
 				github: 'https://github.com/nicejade/homepage',
-				mastodon: 'https://mastodon.social/@nicejade',
 				'x.com': 'https://x.com/nicejadeyang',
+				mastodon: 'https://mastodon.social/@nicejade',
 			},
 			components: {
         // Override the default `MarkdownContent` component.

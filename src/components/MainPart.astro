@@ -4,18 +4,17 @@ import LinkCard from './LinkCard.svelte';
 import configs from '../configs';
 ---
 
-<div>
-  {
-    configs.map(({ title, style, list }) => (
-      <h2>{title}</h2>
-      <CardGrid stagger={style === 'stagger'}>
-        {
-          // @ts-ignore
-          list.map(({ title, link, desc }) => (
-            <LinkCard title={title} href={link} desc={desc} />
-          ))
-        }
-      </CardGrid>
-    ))
-  }
-</div>
+
+{
+  configs.map(({ title, style, list }) => (
+    <h2 style="background: -webkit-linear-gradient(#212121, #00695C);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">{title}</h2>
+    <CardGrid stagger={style === 'stagger'}>
+      {
+        // @ts-ignore
+        list.map(({ title, link, desc }) => (
+          <LinkCard title={title} link={link} desc={desc} />
+        ))
+      }
+    </CardGrid>
+  ))
+}
