@@ -1,0 +1,73 @@
+---
+title: 逍遥自在轩 | 个人主页
+description: 基于 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS, TypeScript 所构建的个人主页，快速、易用、易于访问、高度可定制。
+tableOfContents: false
+template: splash
+---
+
+<div align="center">
+  <strong>
+    基于 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS, TypeScript 所构建的个人主页，快速、易用、易于访问、高度可定制。
+  </strong>
+</div>
+
+## 🚀 项目结构
+
+```
+.
+├── public/
+├── src/
+│   ├── assets/
+│   ├── assets/configs
+│   ├── content/
+│   │   ├── docs/
+│   │   └── config.ts
+│   └── env.d.ts
+├── astro.config.mjs
+├── tailwind.config.mjs
+├── package.json
+└── tsconfig.json
+```
+
+您的链接放置在 `src/configs` 目录，这是您主要需要关注的，如果您对页面样式没有额外要求。
+
+## 🏹 如何使用？
+
+```bash
+# clone project
+git clone https://github.com/nicejade/homepage.git
+cd homepage
+
+# install dependencies
+pnpm i
+
+pnpm start
+```
+
+接下来您只需要按照自己的需求，修改配置即可；主要涉及文件：`astro.config.mjs`、`src/configs`、`src/content/docs/*.mdx`。
+
+## 🚀 如何部署？
+
+Homepage](https://github.com/nicejade/homepage)  是一个完全基于静态网站构建的项目，不需要复杂的后端逻辑或数据库操作。您可以根据个人喜好选择不同的部署方式，例如使用静态网站托管服务（如 GitHub Pages、Cloudflare、Netlify）、CDN 和云存储服务、Docker 容器或虚拟主机或共享主机。我推荐使用 GitHub Pages 和 Cloudflare，它们提供免费的服务，并且部署过程简单，同时还支持 HTTPS。
+
+## 🛠️ 自定义
+
+由于本项目基于 Starlight， [Homepage](https://github.com/nicejade/homepage) 高度可定制，支持自定义主题、自定义 CSS 和 JS（选择您喜欢的 JS 和 CSS 框架）、自定义布局、格式化、本地化等。有关更多信息，请查阅 [Starlight 文档](https://starlight.astro.build/zh-cn/getting-started/)。
+
+## 特别鸣谢
+
+本项目的开发过程中，依赖并受益于以下优秀的开源技术和工具（未包含全部）。它们不仅提供了强大的功能，还促进了项目的高效开发和稳定运行。
+
+- [Astro](https://astro.build/): 作为一个静态网站生成器，Astro 允许开发者使用各种流行的前端框架和标记语言来构建网站，同时通过其群岛架构优化了网站的加载速度和性能。
+- [Starlight](https://starlight.astro.build/zh-cn/getting-started/): 作为基于 Astro 的文档主题，Starlight 提供了一系列专为文档网站设计的开箱即用功能，包括清晰的导航、主题颜色配置以及国际化支持。
+- [Svelte](https://svelte.dev/): 一个创新的前端框架，它在构建时将模板编译成高效的 JavaScript 代码，从而减少了运行时的体积和提高了性能。
+- [Markdown](https://www.markdownguide.org/): Markdown 是一种简洁的标记语言，它允许开发者使用易读易写的文本格式编写内容，并最终转换成 HTML。
+- [MDX](https://mdxjs.com/): 允许您在 Markdown 内容中使用 JSX。您可以导入交互式图表或警报等组件，并将它们嵌入到您的内容中。这使得使用组件编写长篇内容变得非常有趣。
+- [TailwindCSS](https://tailwindcss.com/): 一个 CSS 框架，它提供了大量的工具类，使得开发者能够快速构建出响应式和定制化的 UI 设计。
+- [TypeScript](https://www.typescriptlang.org/): JavaScript 的超集，它引入了静态类型系统，帮助开发者在开发大型应用时提高代码的质量和开发效率。
+
+## 📄 许可证
+
+[MIT](http://opensource.org/licenses/MIT)
+
+版权所有 (c) 2024-至今，[逍遥自在轩](https://www.niceshare.site/)。

@@ -80,4 +80,4 @@ During the development of this project, we relied on and benefited from the foll
 
 [Homepage](https://github.com/nicejade/homepage) is released under the [MIT License](http://opensource.org/licenses/MIT).
 
-Copyright (c) 2024-~，[逍遥自在轩](https://www.niceshare.site/) .
+Copyright (c) 2024-present，[逍遥自在轩](https://www.niceshare.site/) .
