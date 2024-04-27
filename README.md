@@ -35,11 +35,7 @@ Inside of your Astro + Starlight project, you'll see the following folders and f
 └── tsconfig.json
 ```
 
-Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
-
-Images can be added to `src/assets/` and embedded in Markdown with a relative link. Static assets, like favicons, can be placed in the `public/` directory. 
-
-Your links are placed in the `src/configs` directory, which is your main concern if you have no additional requirements for the page style.
+Your link configuration is in the 'src/configs' directory, which is your main focus, especially if you have no additional requirements for the page style.
 
 ## 🏹 How to use ?
 
@@ -62,7 +58,7 @@ Then you only need to modify the configuration according to your own needs; The 
 
 ## Customization
 
-Because it's based on [starlight](https://starlight.astro.build/), [Homepage](https://github.com/nicejade/homepage) is highly customizable, with support for custom themes, custom CSS & JS (Choose your favorite js && CSS framework), custom layouts, formatting, localization and more. See [starlight docs](https://starlight.astro.build/zh-cn/getting-started/) for more information.
+Since this project is built on [Starlight](https://starlight.astro.build/), [Homepage](https://github.com/nicejade/homepage) is highly customizable, with support for custom themes, custom CSS & JS (Choose your favorite js && CSS framework), custom layouts, formatting, localization and more. See [Starlight docs](https://starlight.astro.build/zh-cn/getting-started/) for more information.
 
 ## Special Thanks
 
