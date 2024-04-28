@@ -1,7 +1,7 @@
 <p align="center">
   <a href="https://www.niceshare.site/" target="_blank">
     <img width="120"
-    src="https://github.com/nicejade/homepage/blob/main/client/public/favicon.svg?raw=true">
+    src="https://github.com/nicejade/homepage/blob/main/public/favicon.svg?raw=true">
   </a>
 </p>
 
@@ -13,13 +13,26 @@
   </strong>
 </div>
 
+<div align="center">
+  <a href="https://nodejs.org/en/" target="_blank">
+    <img src="https://img.shields.io/badge/node-%3E%3D%2016.0.0-green.svg" alt="Node Version">
+  </a>
+  <a href="https://github.com/nicejade/homepage">
+    <img src="https://img.shields.io/github/license/nicejade/homepage" alt="LICENSE">
+  </a>
+  <a href="https://prettier.io/">
+    <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat" alt="Prettier">
+  </a>
+  <a href="https://aboutme.lovejade.cn/?utm_source=github.com">
+    <img src="https://img.shields.io/badge/Author-nicejade-%23a696c8.svg" alt="Author nicejade">
+  </a>
+</div>
+
 ### English | [中文](https://www.niceshare.site/about)
 
 ## 🧱 Project Structure
 
-Inside of your Astro + Starlight project, you'll see the following folders and files:
-
-```
+```bash
 .
 ├── public/
 ├── src/
@@ -35,7 +48,7 @@ Inside of your Astro + Starlight project, you'll see the following folders and f
 └── tsconfig.json
 ```
 
-Your link configuration is in the 'src/configs' directory, which is your main focus, especially if you have no additional requirements for the page style.
+Your link configuration is in the `src/configs` directory, which is your main focus, especially if you have no additional requirements for the page style.
 
 ## 🏹 How to use ?
 
