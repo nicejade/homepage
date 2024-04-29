@@ -22,5 +22,15 @@ export default {
       link: 'https://useanything.com/',
       desc: 'AnythingLLM 是一个全栈应用程序，您可以使用商业现成的 LLM 或流行的开源 LLM 和 vectorDB 解决方案来构建私有 ChatGPT，无需任何妥协，您可以在本地运行，也可以远程托管并能够智能聊天以及您提供的任何文件。'
     },
+    {
+      title: 'Poe | 快捷实用的 AI 聊天',
+      link: 'https://poe.com/',
+      desc: 'Poe 是一个快速、有帮助的 AI 聊天网站。在这里，您可以免费与 ChatGPT、GPT-4、Genimi PRO、Claude 3 Opus、DALLE 3 以及其他数百万个 AI 进行对话。您可以选择使用 Google 账号、Apple 账号或者手机号登录。'
+    },
+    {
+      title: 'Meta AI ｜ Chat Wdith Llama 3',
+      link: 'https://llama3.dev/',
+      desc: 'Llama3 是 Meta AI 开发的高性能、多功能语言模型的最新版本。其主要亮点包括：扩展的知识库和功能、改进的多语言支持、增强推理和分析能力、持续致力于安全等；可在这个网站体验 Llama3:8B 及 Llama3:70B 等模型。'
+    },
   ]
 }

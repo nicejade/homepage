@@ -1,26 +1,16 @@
 export default {
-  title: '部署服务',
+  title: '在线服务',
   style: 'stagger',
   list: [
     {
-      title: '静轩之别苑 | Ghost 构建博客',
-      link: 'https://quickapp.lovejade.cn/',
-      desc: '基于 Ghost 所构建、用 Docker 部署在阿里云服务器的个人博客；主要承载 Web 、快应用开发等技术内容；悲莫悲兮生别离, 乐莫乐兮新相知。'
+      title: 'Flaticon | 矢量图标和贴纸',
+      link: 'https://www.flaticon.com/',
+      desc: 'Flaticon 是最大的免费、矢量图标数据库，用于个人和商业用途；它提供 PNG，SVG，EPS，PSD，和 CSS 格式；同时，Flaticon 也是世界上最大的免费图标搜索引擎，你可以在这里检测、下载各种你想要的图标和贴纸。'
     },
     {
-      title: '悠然宜想亭 | Flarum 搭建社区',
-      link: 'https://forum.lovejade.cn/',
-      desc: '基于 Flarum 所搭建的现代化社区，旨在营造温润、宽厚、互助的现代化社区；您可以在这里探讨技术、寻求创意、分享美食、聊聊工作、发布科普等等，甚至是为喜欢的作品打 Call、推广，只要遵纪守法、恪守道德，此隅云间，便是您悠然交流、适宜分享之所。',
+      title: 'iLoveIMG | 在线图片编辑器',
+      link: 'https://www.iloveimg.com/',
+      desc: 'iLoveIMG 是一款 Web 应用，可让您在几秒钟内免费修改图像；这里有您想要批量编辑图片的所有工具，只需点击几下，即可根据自己的需要，对图片进行批量压缩、裁剪、格式转换或尺寸调整，还可以同时处理不同的图片文件。',
     },
-    {
-      title: '公众号 & Markdown 排版',
-      link: 'https://wechat.jeffjade.com/',
-      desc: '公众号 & Markdown 排版：基于 React、markdown-it、prettier 等工具所构建；支持自定义样式的 Markdown 在线编辑器；致力于微信公众号、知乎、稀土掘金等平台发文更容易。'
-    },
-    {
-      title: 'Quick Reference ｜ 编码备忘清单',
-      link: 'https://codehelp.jeffjade.com/',
-      desc: '为开发人员分享快速参考备忘清单【速查表】，目的是为了方便自己的技术栈查阅。其涵盖内容十分广泛，譬如编程、数据库、前端、配置、Nodejs、快捷键等。'
-    }
   ]
 }

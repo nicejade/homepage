@@ -1,11 +1,13 @@
 import projects from "./projects"
-import services from "./services"
+import selfhosted from "./selfhosted"
 import aitools from "./aitools"
 import softwares from "./softwares"
+import services from "./services"
 
 export default [
   projects,
-  services,
+  selfhosted,
   aitools,
   softwares,
+  services,
 ]
