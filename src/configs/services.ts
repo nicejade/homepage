@@ -9,7 +9,7 @@ export default {
     },
     {
       title: 'Tabler Icons | 高度可定制的免费 SVG 图标',
-      link: 'https://www.flaticon.com/',
+      link: 'https://tablericons.com/',
       desc: 'Tabler Icons，提供 4926 个开源免费 SVG 图标，高度可定制，无需归属，可用于商业用途。可您在 Web 项目中直接使用，您可以在线设置图标的尺寸、Stroke、以及颜色；而且还提供内置搜索功能，整体体验良好。'
     },
     {
