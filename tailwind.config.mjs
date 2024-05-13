@@ -37,7 +37,12 @@ export default {
 			tiny: { min: '768px' },
 		},
 		colors: { ...colors, ...selfCustomColors },
-		extend: {},
+		extend: {
+			boxShadow: {
+				'custom': '8px 8px 20px 2px #ebebeb;',
+				'custom-xl': '8px 8px 30px 6px #c3c3c3;',
+      }
+		},
 	},
 	plugins: [],
 }
