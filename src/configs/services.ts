@@ -1,6 +1,6 @@
 export default {
   title: '在线服务',
-  style: 'stagger',
+  style: 'default',
   list: [
     {
       title: 'Flaticon | 矢量图标和贴纸',

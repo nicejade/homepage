@@ -1,6 +1,6 @@
 export default {
   title: '人工智能',
-  style: 'default',
+  style: 'stagger',
   list: [
     {
       title: 'OpenAI | 一家人工智能研究和部署公司',
