@@ -39,8 +39,10 @@ export default {
 		colors: { ...colors, ...selfCustomColors },
 		extend: {
 			boxShadow: {
-				'custom': '8px 8px 20px 2px #ebebeb;',
-				'custom-xl': '8px 8px 30px 6px #c3c3c3;',
+				'custom-white': '8px 8px 20px 2px #ebebeb;',
+				'custom-white-xl': '8px 8px 30px 6px #c3c3c3;',
+				'custom-dark': '8px 8px 20px 2px #212121;',
+				'custom-dark-xl': '8px 8px 20px 2px #363636;',
       }
 		},
 	},

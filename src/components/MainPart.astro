@@ -11,7 +11,7 @@ import configs from '../configs';
       {
         // @ts-ignore
         list.map(({ title, link, desc }) => (
-          <LinkCard title={title} link={link} desc={desc} />
+          <LinkCard client:only='svelte' title={title} link={link} desc={desc}  />
         ))
       }
     </CardGrid>
