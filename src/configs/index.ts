@@ -4,6 +4,7 @@ import aitools from "./aitools"
 import search from "./search"
 import softwares from "./softwares"
 import services from "./services"
+import cloudservices from "./cloudservices"
 
 export default [
   projects,
@@ -11,5 +12,6 @@ export default [
   aitools,
   search,
   softwares,
+  cloudservices,
   services,
 ]
