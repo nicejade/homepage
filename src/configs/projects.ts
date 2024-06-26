@@ -25,7 +25,12 @@ export default {
     {
       title: '为高效而生：Arya Jarvis',
       link: 'https://arya.lovejade.cn/',
-      desc: 'Arya Jarvis 是一款基于 Node.js 所编写命令行工具，旨在为开发人员节省更多时间和精力（譬如：用于快速构建本地 Web 服务器、一键找到您本地 IP 地址并复制到剪切板、为指定文本生成二维码等）；适用于 Mac、Windows、Linux 等平台。',
+      desc: 'Arya Jarvis，一款基于 Node.js 所编写命令行工具，旨在为开发人员节省更多时间和精力（譬如：用于快速构建本地静态服务、一键找到本地 IP 地址并复制到剪切板、为指定文本生成二维码等）；适用于 Mac、Windows、Linux 等平台。',
+    },
+    {
+      title: '倾城之链 ｜ 周刊',
+      link: 'https://link.niceshare.site/',
+      desc: '倾城之链是一个开放平台，致力于汇聚全球优秀网站，探索互联网的无限可能。周刊同步过去一周倾城平台收录的精彩内容，供各位同好共赏。网站基于 Gatsby 框架构建，于 2024 年 3 月 1 日，由于各种原因，被迫暂停内容更新。',
     }
   ],
 }
