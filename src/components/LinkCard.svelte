@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte'
+  import AnchorJS from 'anchor-js';
 
 	export let link;
   export let title;
@@ -7,6 +8,10 @@
   let isDarkMode = false
 
   onMount(() => {
+    const anchors = new AnchorJS();
+    anchors.options.visible = 'always';
+    anchors.add('h2');
+
     isDarkMode = localStorage.getItem('starlight-theme') === 'dark'
 
     const observer = new MutationObserver(mutationsList => {

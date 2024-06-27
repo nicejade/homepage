@@ -17,6 +17,9 @@ dependencies:
   '@astrojs/tailwind':
     specifier: ^5.1.0
     version: 5.1.0(astro@4.4.15)(tailwindcss@3.4.3)
+  anchor-js:
+    specifier: ^5.0.0
+    version: 5.0.0
   astro:
     specifier: ^4.3.5
     version: 4.4.15(typescript@5.4.5)
@@ -1417,6 +1420,10 @@ packages:
     resolution: {integrity: sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+    dev: false
+
+  /anchor-js@5.0.0:
+    resolution: {integrity: sha512-2bOqCsBIXAYhjAN3iI4QevoAJtB2gRWAiY9P3P7CVW8lIjA3Dl6ldhDlWeeQvCHif+V5vIndfLOag/5I8tzTzA==}
     dev: false
 
   /ansi-align@3.0.1:
