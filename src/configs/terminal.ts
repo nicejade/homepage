@@ -33,6 +33,16 @@ export default {
       desc: 'Vim 是一个高度可配置的文本编辑器，由 Bram Moolenaar 开发，适用于高效的文本编辑和程序开发。它支持多种编程语言的语法高亮、自动补全、插件扩展等功能。Vim 具有强大的模式编辑功能，包括命令模式、插入模式、可视模式等，使用户能够快速进行文本操作。其高效的键盘快捷键设计显著提升了编辑速度和生产力。'
     },
     {
+      title: 'Homebrew | 一款流行的开源软件包管理器',
+      link: 'https://brew.sh/',
+      desc: 'Homebrew 是一款流行的开源软件包管理器，专为 macOS 和 Linux 操作系统设计。它允许用户通过命令行快速安装、升级和管理软件包，包括开发工具、应用程序和库。Homebrew 使用简单且灵活，社区支持广泛，用户可以轻松扩展其功能，成为许多开发者和系统管理员的首选工具。'
+    },
+    {
+      title: 'Nvm | 最好用的 Node 版本管理器',
+      link: 'https://github.com/nvm-sh/nvm',
+      desc: 'Nvm 是开源的 Node.js 版本管理工具，支持在同一台计算机上安装和切换多个 Node.js 版本。它允许开发者根据项目需求选择和管理 Node.js 版本，通过简单的命令行操作实现版本切换和管理全局和项目依赖。它支持跨平台，是 Node.js 开发者常用的工具之一，提升了开发环境的灵活性和效率。'
+    },
+    {
       title: 'Google ZX | 编写更好脚本的工具',
       link: 'https://github.com/google/zx',
       desc: 'Google ZX 是一个用于编写更佳脚本的工具，由 Google 开发。它基于 Node.js，使得 JavaScript 脚本编写更为便捷。ZX 提供了对 child_process 的有用封装、自动转义参数，并设置了合理的默认值，从而简化了复杂脚本的编写。ZX 适用于希望在命令行脚本中使用 JavaScript 的开发者。'
