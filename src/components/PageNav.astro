@@ -1,0 +1,20 @@
+---
+import NavLink from './NavLink.svelte';
+import configs from '../configs';
+---
+
+<section id="page-nav">
+  {
+    configs.map(({ title }) => (
+      <NavLink href={'#' + title} title={title}></NavLink>
+    ))
+  }
+</section>
+
+<style>
+  #page-nav {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+  }
+</style>
