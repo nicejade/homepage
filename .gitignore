@@ -4,9 +4,6 @@ dist/
 # generated types
 .astro/
 
-# scripts
-deploy.sh
-
 # dependencies
 node_modules/
 
