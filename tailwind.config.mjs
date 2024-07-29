@@ -3,7 +3,7 @@ const colors = require('tailwindcss/colors')
 
 const selfCustomColors = {
 	brand: {
-		DEFAULT: '#00695C',
+		DEFAULT: '#813c86',
 	},
 	black: {
 		DEFAULT: '#212121',

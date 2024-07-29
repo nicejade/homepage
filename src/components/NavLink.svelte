@@ -10,6 +10,9 @@
 </a>
 
 <style>
+.nav-link {
+  color: var(--sl-color-text-accent);
+}
 .nav-link:hover {
   cursor: pointer;
   animation: jelly 0.5s;

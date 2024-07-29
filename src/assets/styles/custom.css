@@ -6,6 +6,12 @@
   --sl-text-xl: 1.125rem;
   --sl-text-lg: 1rem;
   --sl-color-accent: #2c3e50 !important;
+  --sl-color-text-accent: #813c86 !important;
+  --sl-color-link-accent: #2edfa3;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+	color: var(--sl-color-link-accent);
 }
 
 .link-title {
