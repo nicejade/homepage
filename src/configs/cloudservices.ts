@@ -12,5 +12,10 @@ export default {
       link: 'https://www.cloudflare.com/',
       desc: 'Cloudflare 是一家全球领先的云端服务提供商，专注于加速和保护互联网服务。其核心产品包括 CDN（内容分发网络），提升网站访问速度和安全性；DDoS 攻击防护，保障网络可靠性；以及边缘计算服务，将应用程序和内容更靠近用户。Cloudflare 的服务广泛应用于网站加速、安全防护、DNS 解析、SSL 加密等方面，为全球数百万网站提供支持，帮助提升用户体验和网络安全性。'
     },
+    {
+      title: 'DigitalOcean | 面向开发人员的云基础设施',
+      link: 'https://m.do.co/c/046a8e6b255c',
+      desc: 'DigitalOcean 成立于 2011 年， 是一家提供云计算服务的公司。其核心产品包括虚拟服务器（Droplets）、托管数据库、对象存储（Spaces）和 Kubernetes 容器服务等。它以简化开发者体验为目标，提供直观的用户界面和丰富的 API，使用户能够快速部署和管理应用程序。此外，DigitalOcean 还提供可扩展的解决方案和全球数据中心，以满足不同规模企业的需求。'
+    },
   ]
 }

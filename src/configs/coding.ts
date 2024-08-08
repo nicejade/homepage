@@ -8,6 +8,11 @@ export default {
       desc: 'Visual Studio Code（简称 VS Code ）是一款由 Microsoft 开发的免费开源代码编辑器。它支持多种编程语言和文件类型，具有强大的编辑功能和智能代码补全。VS Code 提供丰富的插件生态系统，用户可以根据需要扩展功能。它轻量快速，支持调试、版本控制和内置终端，适用于多个操作系统，是开发者热门选择。'
     },
     {
+      title: 'Cursor | The AI Code Editor',
+      link: 'https://www.cursor.com/',
+      desc: 'Cursor 是一款结合传统代码编辑器和 AI 功能的创新编程应用。基于 Visual Studio Code，它提供熟悉的编码环境，同时集成强大的 AI 辅助功能。主要特点包括 AI 代码生成、智能代码补全、代码解释、错误诊断、重构建议等。它通过 AI 辅助简化编码过程，提高编程效率，同时保留了传统编辑器的灵活性和功能性。'
+    },
+    {
       title: 'Github Copilot | AI 编程助手',
       link: 'https://github.com/features/copilot',
       desc: 'GitHub Copilot 是由 GitHub 与 OpenAI 合作开发的编程助手工具，基于先进的 AI 技术。它能够根据用户输入和上下文提供智能代码建议和自动补全，支持多种编程语言。GitHub Copilot 不仅可以加速编码过程，还能提高代码质量和生产效率。这款工具集成在多种开发环境中，帮助开发者快速创建和编辑代码。'
