@@ -18,7 +18,7 @@ export default defineConfig({
 			title: '逍遥自在轩',
 			social: {
 				github: 'https://github.com/nicejade/homepage',
-				'x.com': 'https://x.com/nicejadeyang',
+				'x.com': 'https://x.com/MarshalXuan',
 				mastodon: 'https://mastodon.social/@nicejade',
 			},
 			components: {

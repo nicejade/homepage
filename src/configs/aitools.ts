@@ -28,6 +28,11 @@ export default {
       desc: '通义千问是阿里云研发的大型语言模型，具备智能对话、文本创作等能力，支持多语言处理，适用于问答、聊天、写作等场景，强调合法合规，拒绝生成不当内容，提供高效、安全的服务，致力于理解和生成自然语言。'
     },
     {
+      title: '零一万物 | AI 2.0大模型技术和应用的全球公司',
+      link: 'https://www.lingyiwanwu.com/',
+      desc: '零一万物致力于成为一家由技术愿景驱动、拥有卓越中国工程底蕴的创新企业，推动以基座大模型为突破的 AI 2.0 掀起技术、平台到应用多个层面的革命。该公司推出 Yi-Lightning、Yi-Large 等大模型，得到用户好评。'
+    },
+    {
       title: 'Poe | 快捷实用的 AI 聊天',
       link: 'https://poe.com/',
       desc: 'Poe 是一个快速、有帮助的 AI 聊天网站。在这里，您可以免费与 ChatGPT、GPT-4、Genimi PRO、Claude 3 Opus、DALLE 3 以及其他数百万个 AI 进行对话。您可以选择使用 Google 账号、Apple 账号或者手机号登录。'

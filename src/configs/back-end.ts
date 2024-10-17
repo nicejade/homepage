@@ -8,9 +8,14 @@ export default {
       desc: 'Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时，用于构建高性能的服务器端应用。它采用事件驱动、非阻塞 I/O 模型，使其在处理并发连接时表现出色，适合构建实时应用，如聊天、流媒体等。Node.js 拥有强大的包管理器 npm，提供丰富的第三方模块，简化了开发流程。其单线程架构通过事件循环机制实现高效资源利用。Node.js 兼容多种操作系统，并支持现代 JavaScript 语法，广泛应用于 Web 开发、API 服务和微服务架构。'
     },
     {
-      title: 'Deno | 下一代 JavaScript 运行时',
+      title: 'Deno | 快速的一体化 JavaScript 运行时',
       link: 'https://deno.com/',
       desc: 'Deno 是现代 JavaScript 和 TypeScript 运行时。其设计目标是解决 Node.js 的一些痛点，诸如包管理、安全性和模块系统。Deno 内置 TypeScript 支持，无需额外配置，采用 ES 模块（ESM）代替 CommonJS 模块。Deno 具有默认安全性，要求显式权限授予，防止未经授权的文件、网络和环境访问。其包管理采用 URL 导入，无需集中式注册表。Deno 提供了现代化的标准库和简洁的命令行工具，适合构建高效、安全的服务器端应用。'
+    },
+    {
+      title: 'Bun | 下一代 JavaScript 运行时',
+      link: 'https://bun.sh/',
+      desc: 'Bun 是一个超快的 JavaScript 运行时，旨在提升 Web 开发体验。它不仅兼具包管理器、任务运行器和构建工具功能，还内置了 TypeScript 支持和快速模块解析。Bun 通过底层优化显著提高了性能，支持现代开发需求，如热模块替换（HMR）和服务器端渲染（SSR）。此外，它内置 HTTP 服务器，简化了应用构建和开发流程。Bun 的目标是成为更高效的 JavaScript 生态系统工具。更多信息请访问 Bun 官网。'
     },
     {
       title: 'Fastify | 高性能的 Node.js Web 框架',
