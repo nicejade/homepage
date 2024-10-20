@@ -78,6 +78,34 @@ export default defineConfig({
 				{
 					tag: 'meta',
 					attrs: {
+						name: 'twitter:card',
+						content: 'summary_large_image',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'twitter:image',
+						content: 'https://lovejade.oss-cn-shenzhen.aliyuncs.com/逍遥自在轩.png',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'twitter:title',
+						content: '逍遥自在轩 | 个人主页',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'twitter:description',
+						content: '逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
 						name: 'theme-color',
 						content: '#ffffff',
 					},
