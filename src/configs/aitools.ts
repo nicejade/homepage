@@ -18,6 +18,11 @@ export default {
       desc: 'Claude 是由 Anthropic 开发的高级 AI 聊天机器人，旨在提供个人助理服务。用户可用自然语言与 Claude 互动，完成写作、学习和头脑风暴等任务。Claude 能处理多达 100K 个 token 的输入，适用于长篇文档和书籍。'
     },
     {
+      title: 'xAI | 深入了解我们的宇宙',
+      link: 'https://x.ai/',
+      desc: 'xAI 是一家人工智能公司，一家由埃隆-马斯克（Elon Musk）创立的新公司，2023 年 7 月 12 日宣布成立；其使命是推动科学发现，深入了解我们的宇宙。其第一个产品是会话式人工智能 Grok，可在 X 平台使用。'
+    },
+    {
       title: 'Meta AI ｜ Chat Wdith Llama 3',
       link: 'https://llama3.dev/',
       desc: 'Llama3 是 Meta AI 开发的高性能、多功能语言模型的最新版本。其主要亮点包括：扩展的知识库和功能、改进的多语言支持、增强推理和分析能力、持续致力于安全等；可在这个网站体验 Llama3:8B 及 Llama3:70B 等模型。'
