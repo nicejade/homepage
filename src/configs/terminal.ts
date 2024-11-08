@@ -67,5 +67,10 @@ export default {
       link: 'https://github.com/sharkdp/bat',
       desc: 'Bat 是一个现代化的命令行工具，用于替代传统的 cat 命令。它增加了语法高亮、分页和 Git 集成等功能，使文件内容查看更加直观和友好。Bat 支持多种语言的语法高亮，自动检测文件类型，并提供上下文分页以便于阅读长文件。此外，Bat 还能显示 Git 修改信息，方便查看文件的版本控制状态。'
     },
+    {
+      title: 'fd | 简单、用户友好的“find”替代方案',
+      link: 'https://github.com/sharkdp/fd',
+      desc: 'fd 是一个现代化的文件搜索工具，用 Rust 编写，为替代传统的 find 命令而生。它采用简单的语法（fd pattern），支持正则表达式，默认忽略 .gitignore 和隐藏文件。特点是搜索速度快、支持彩色输出、智能大小写匹配，还能对搜索结果执行批量操作。总之，fd 比 find 更简洁、更快速、更友好。'
+    },
   ]
 }

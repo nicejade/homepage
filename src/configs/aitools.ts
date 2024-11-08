@@ -48,6 +48,11 @@ export default {
       desc: 'Hugging Face 是一个面向自然语言处理（NLP）任务的开源平台和社区。它提供了丰富的工具和资源，使开发者能够轻松地构建、训练和部署自然语言处理模型。这使得在 NLP 领域进行协作和知识共享变得更加容易。'
     },
     {
+      title: 'OpenRouter | 大语言模型的统一接口',
+      link: 'https://openrouter.ai/',
+      desc: 'OpenRouter 为个人开发者和小型团队提供了一种无需 GPU 服务器、零成本搭建大模型助手的解决方案。通过简单的配置和调用，可快速上手并利用预训练的大模型解决各种实际问题。从现在开始，探索 OpenRouter 带来的无限可能。'
+    },
+    {
       title: 'Replicate | 使用 API 运行 AI',
       link: 'https://replicate.com/',
       desc: 'Replicate 是一个简化机器学习模型托管、运行和共享的平台。支持多种深度学习框架，提供简单API调用，便于模型推理和实验。拥有丰富的模型库，覆盖图像、文本等应用，促进团队协作。Replicate 使模型部署和使用高效直观，加速创新。'
