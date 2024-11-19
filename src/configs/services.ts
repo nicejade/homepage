@@ -3,6 +3,11 @@ export default {
   style: 'default',
   list: [
     {
+      title: 'Excalidraw | 手绘外观和感觉 • 协作 • 安全',
+      link: 'https://excalidraw.com/',
+      desc: 'Excalidraw 是一款优秀的在线绘图工具，专注于创建手绘风格的示意图。它提供简洁的界面和丰富的绘图元素，包括几何图形、箭头、文本等。可导出为PNG、SVG等多种格式，支持深色模式，还提供多种第三方集成。特别适合用于制作流程图、架构图、线框图等技术文档，是开发者和设计师的得力助手。'
+    },
+    {
       title: 'Flaticon | 矢量图标和贴纸',
       link: 'https://www.flaticon.com/',
       desc: 'Flaticon 是最大的免费、矢量图标数据库，用于个人和商业用途；它提供 PNG，SVG，EPS，PSD，和 CSS 格式；同时，Flaticon 也是世界上最大的免费图标搜索引擎，你可以在这里检测、下载各种你想要的图标和贴纸。'
