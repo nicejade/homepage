@@ -3,6 +3,11 @@ export default {
   style: 'stagger',
   list: [
     {
+      title: '清风明月轩',
+      link: 'https://www.thebettersites.com/',
+      desc: '清风明月轩，一处沉淀数字匠心的艺术空间，荟萃精心雕琢的网络作品与独立项目。以东方哲学为根基，融合现代设计的美学韵味，追求简约而优雅的至臻体验。力求技术与艺术相映成辉，愿每件作品恰似江上之清风，山间之明月。',
+    },
+    {
       title: '生财有迹（Wealth Tracker）',
       link: 'https://github.com/nicejade/wealth-tracker/',
       desc: '💰生财有迹（Wealth Tracker）是一款专注于个人资产分析的应用程序。其核心功能是：全面记录并展示用户的资产状况，帮助用户轻松了解财务现状；运用 AI 能力，结合每种资产的特性和当前环境，提供适宜的财务建议。',

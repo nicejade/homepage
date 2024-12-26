@@ -28,6 +28,11 @@ export default {
       desc: 'Llama3 是 Meta AI 开发的高性能、多功能语言模型的最新版本。其主要亮点包括：扩展的知识库和功能、改进的多语言支持、增强推理和分析能力、持续致力于安全等；可在这个网站体验 Llama3:8B 及 Llama3:70B 等模型。'
     },
     {
+      title: 'DeepSeek | 深度求索',
+      link: 'https://www.deepseek.com/',
+      desc: 'DeepSeek，成立于 2023 年，专注于研究世界领先的通用人工智能底层模型与技术。其最新的 DeepSeek-V3 模型在多个基准测试中表现优异，特别擅长数学、代码和推理任务。此外，它开源了多款模型，包括 DeepSeek LLM、DeepSeek Coder 等，促进 AI 研究的开放与合作。'
+    },
+    {
       title: '通义千问 | 你的全能AI助手',
       link: 'https://tongyi.aliyun.com/',
       desc: '通义千问是阿里云研发的大型语言模型，具备智能对话、文本创作等能力，支持多语言处理，适用于问答、聊天、写作等场景，强调合法合规，拒绝生成不当内容，提供高效、安全的服务，致力于理解和生成自然语言。'
