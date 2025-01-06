@@ -45,6 +45,20 @@ export default defineConfig({
 			],
 			head: [
 				{
+					tag: 'meta',
+					attrs: {
+						name: 'robots',
+						content: 'index, follow',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'keywords',
+						content: '导航网站,逍遥自在轩,工具集合,软件推荐,生活服务,工作效率,人工智能,技能学习,文档构建,休闲娱乐,云上服务,在线服务,编码开发,前端开发,后台开发',
+					},
+				},
+				{
 					tag: 'link',
 					attrs: {
 						rel: 'apple-touch-icon',
@@ -106,6 +120,48 @@ export default defineConfig({
 				{
 					tag: 'meta',
 					attrs: {
+						name: 'twitter:card',
+						content: 'summary_large_image',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'twitter:image',
+						content: 'https://lovejade.oss-cn-shenzhen.aliyuncs.com/逍遥自在轩.png',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'og:type',
+						content: 'website',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'og:title',
+						content: '逍遥自在轩 | 个人主页',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'og:description',
+						content: '逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
+						name: 'og:image',
+						content: 'https://lovejade.oss-cn-shenzhen.aliyuncs.com/逍遥自在轩.png',
+					},
+				},
+				{
+					tag: 'meta',
+					attrs: {
 						name: 'theme-color',
 						content: '#ffffff',
 					},
@@ -135,6 +191,20 @@ export default defineConfig({
             src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8586652723015758',
             defer: true,
 					},
+				},
+				{
+					tag: 'script',
+					attrs: {
+						type: 'application/ld+json',
+					},
+					content: JSON.stringify({
+						"@context": "https://schema.org",
+						"@type": "WebSite",
+						"name": "逍遥自在轩",
+						"url": "https://www.niceshare.site/",
+						"description": "逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。",
+						"inLanguage": "zh-CN"
+					}),
 				},
 			],
 		}),
