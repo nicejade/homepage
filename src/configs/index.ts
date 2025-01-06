@@ -11,6 +11,7 @@ import backEnd from "./back-end"
 import entertain from "./entertain"
 import cloudservices from "./cloudservices"
 import services from "./services"
+import learning from "./learning"
 
 export default [
   projects,
@@ -22,6 +23,7 @@ export default [
   coding,
   frontEnd,
   backEnd,
+  learning,
   document,
   entertain,
   cloudservices,
