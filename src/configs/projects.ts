@@ -28,6 +28,11 @@ export default {
       desc: '玉桃文飨轩🍑 ，简单好用的在线文本工具；支持将 Markdown、Rich Text 等格式内容，快速转化为 png、pdf、html 等文件，并支持自定义设置、一键下载等功能。基于 Vue3 、 Vite 、 Pinia 、 TailwindCSS 、 TypeScript 构建。',
     },
     {
+      title: '曼妙句子 - 精选摇曳生姿的文字',
+      link: 'https://read.lovejade.cn/',
+      desc: '人生最曼妙的风景，是内心的淡定与从容。曼妙句子，旨在云集世间摇曳生姿的文字，或情感、或唯美、或修身、或励志、或哲学、或娱乐，拳拳真情，精心择选，总有荡漾你心的那一言。',
+    },
+    {
       title: '为高效而生：Arya Jarvis',
       link: 'https://arya.lovejade.cn/',
       desc: 'Arya Jarvis，一款基于 Node.js 所编写命令行工具，旨在为开发人员节省更多时间和精力（譬如：用于快速构建本地静态服务、一键找到本地 IP 地址并复制到剪切板、为指定文本生成二维码等）；适用于 Mac、Windows、Linux 等平台。',
