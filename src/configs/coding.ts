@@ -23,6 +23,16 @@ export default {
       desc: 'GitHub Copilot 是由 GitHub 与 OpenAI 合作开发的编程助手工具，基于先进的 AI 技术。它能够根据用户输入和上下文提供智能代码建议和自动补全，支持多种编程语言。GitHub Copilot 不仅可以加速编码过程，还能提高代码质量和生产效率。这款工具集成在多种开发环境中，帮助开发者快速创建和编辑代码。'
     },
     {
+      title: 'Continue | 领先的开源 AI 代码助手',
+      link: 'https://www.continue.dev/',
+      desc: 'Continue 是一个领先的开源 AI 代码助手，旨在通过在集成开发环境（IDE）中提供自定义的自动补全和聊天功能，提升开发者的工作效率。该工具支持与多种大型语言模型（LLM）的集成，如 OpenAI、Anthropic 等，允许用户根据需求选择最适合的模型。Continue 的主要功能包括：代码自动补全、参考和聊天、突出并指导等等。'
+    },
+    {
+      title: 'Cline | IDE 中的自主编码代理',
+      link: 'https://github.com/cline/cline',
+      desc: 'Cline 是一个开源的自主编码代理，直接集成在您的集成开发环境（IDE）中。 它能够在每一步都获得您的许可的情况下，创建和编辑文件、执行命令、使用浏览器等。Cline 的设计旨在提高开发者的生产力，提供类似于 Cursor 的功能，甚至在某些方面有所超越，允许用户根据需求选择最适合的模型, 如 DeepSeek、Claude 等。'
+    },
+    {
       title: 'Prettier | 固执己见的代码格式化程序',
       link: 'https://prettier.io/',
       desc: 'Prettier 是一款流行的代码格式化工具，支持多种编程语言，及多款代码编译器。它能自动调整代码的缩进、空格、分号等风格，确保代码风格的一致性和可读性。Prettier 简化了代码格式化的流程，减少了开发者在风格选择上的时间和精力投入，提高了团队协作效率，并有助于减少由格式问题引起的代码审查时间。'
