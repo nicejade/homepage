@@ -3,9 +3,24 @@ export default {
   style: 'default',
   list: [
     {
+      title: 'Untools | 促进更好思考的工具',
+      link: 'https://untools.co/',
+      desc: 'Untools 是一个开源的思维工具集合，旨在帮助用户解决问题、做出决策和理解系统。 该网站提供了多种思维框架，如艾森豪威尔矩阵、冰山模型、决策矩阵等，帮助用户在不同情境下选择合适的工具。Untools 的目标用户包括需要提升思维能力的个人、教育工作者和组织。'
+    },
+    {
       title: 'Excalidraw | 手绘外观和感觉 • 协作 • 安全',
       link: 'https://excalidraw.com/',
       desc: 'Excalidraw 是一款优秀的在线绘图工具，专注于创建手绘风格的示意图。它提供简洁的界面和丰富的绘图元素，包括几何图形、箭头、文本等。可导出为PNG、SVG等多种格式，支持深色模式，还提供多种第三方集成。特别适合用于制作流程图、架构图、线框图等技术文档，是开发者和设计师的得力助手。'
+    },
+    {
+      title: 'Shots | 创建惊人的模型（Mockups）',
+      link: 'https://shots.so/',
+      desc: 'Shots，很精致的一款 Mockups 工具，可用来创建令人惊叹的设备模型，做出非常漂亮的图片效果；它支持多类模型，如 iPhone、Mac、iMac、iWatch、截图类等场景，且支持修改如图片弧度、3D、偏移量、背景、比例等。',
+    },
+    {
+      title: 'Device Shots | 社交平台的设备模型',
+      link: 'https://deviceshots.com/',
+      desc: 'Device Shots，一款超棒的样机生成网站；它能在几秒钟内即可创建不同设备的样机，通过网站或移动应用程序的屏幕截图，免费获取高分辨率的设备模型，比如：手机、电脑、手表等等；它不仅访问速度超快，而且支持超多设备。',
     },
     {
       title: 'Flaticon | 矢量图标和贴纸',
@@ -16,6 +31,11 @@ export default {
       title: 'Tabler Icons | 高度可定制的免费 SVG 图标',
       link: 'https://tablericons.com/',
       desc: 'Tabler Icons，提供 4926 个开源免费 SVG 图标，高度可定制，无需归属，可用于商业用途。可您在 Web 项目中直接使用，您可以在线设置图标的尺寸、Stroke、以及颜色；而且还提供内置搜索功能，整体体验良好。'
+    },
+    {
+      title: 'Svgl | SVG 徽标的精美资料库',
+      link: 'https://svgl.app/',
+      desc: 'Svgl 是一个开源的 SVG 标志库，提供数百个可供开发者和设计师免费使用的 SVG 格式标志。该项目基于 SvelteKit 和 Tailwind CSS 构建，旨在为用户提供美观且易于集成的标志资源。Svgl 的目标用户包括需要高质量 SVG 标志的开发者、设计师以及其他创意工作者。'
     },
     {
       title: 'iLoveIMG | 在线图片编辑器',
@@ -41,16 +61,6 @@ export default {
       title: 'Carbon | 以漂亮的图片分享源代码',
       link: 'https://carbon.now.sh/',
       desc: 'Carbon 是一款优秀的代码转图片工具，它支持多种编程语言的语法高亮，提供丰富的自定义选项，包括主题、字体、窗口样式和背景色等。用户只需将代码粘贴到编辑器中，简单调整后即可生成美观的代码截图，从而方便分享。',
-    },
-    {
-      title: 'Shots | 创建惊人的模型（Mockups）',
-      link: 'https://shots.so/',
-      desc: 'Shots，很精致的一款 Mockups 工具，可用来创建令人惊叹的设备模型，做出非常漂亮的图片效果；它支持多类模型，如 iPhone、Mac、iMac、iWatch、截图类等场景，且支持修改如图片弧度、3D、偏移量、背景、比例等。',
-    },
-    {
-      title: 'Device Shots | 社交平台的设备模型',
-      link: 'https://deviceshots.com/',
-      desc: 'Device Shots，一款超棒的样机生成网站；它能在几秒钟内即可创建不同设备的样机，通过网站或移动应用程序的屏幕截图，免费获取高分辨率的设备模型，比如：手机、电脑、手表等等；它不仅访问速度超快，而且支持超多设备。',
     },
   ]
 }
