@@ -5,15 +5,16 @@ import aitools from "./aitools"
 import search from "./search"
 import social from "./social"
 import softwares from "./softwares"
+import learning from "./learning"
 import terminal from "./terminal"
 import coding from "./coding"
-import learning from "./learning"
 import document from "./document"
 import frontEnd from "./front-end"
 import backEnd from "./back-end"
-import entertain from "./entertain"
-import cloudservices from "./cloudservices"
+import webDevTools from "./webDevTools"
 import services from "./services"
+import cloudservices from "./cloudservices"
+import entertain from "./entertain"
 
 export default [
   projects,
@@ -24,12 +25,13 @@ export default [
   social,
   softwares,
   terminal,
+  learning,
   coding,
   frontEnd,
   backEnd,
-  learning,
+  webDevTools,
   document,
+  services,
   entertain,
   cloudservices,
-  services,
 ]

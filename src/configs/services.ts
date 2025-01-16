@@ -28,16 +28,6 @@ export default {
       desc: 'Flaticon 是最大的免费、矢量图标数据库，用于个人和商业用途；它提供 PNG，SVG，EPS，PSD，和 CSS 格式；同时，Flaticon 也是世界上最大的免费图标搜索引擎，你可以在这里检测、下载各种你想要的图标和贴纸。'
     },
     {
-      title: 'Tabler Icons | 高度可定制的免费 SVG 图标',
-      link: 'https://tablericons.com/',
-      desc: 'Tabler Icons，提供 4926 个开源免费 SVG 图标，高度可定制，无需归属，可用于商业用途。可您在 Web 项目中直接使用，您可以在线设置图标的尺寸、Stroke、以及颜色；而且还提供内置搜索功能，整体体验良好。'
-    },
-    {
-      title: 'Svgl | SVG 徽标的精美资料库',
-      link: 'https://svgl.app/',
-      desc: 'Svgl 是一个开源的 SVG 标志库，提供数百个可供开发者和设计师免费使用的 SVG 格式标志。该项目基于 SvelteKit 和 Tailwind CSS 构建，旨在为用户提供美观且易于集成的标志资源。Svgl 的目标用户包括需要高质量 SVG 标志的开发者、设计师以及其他创意工作者。'
-    },
-    {
       title: 'iLoveIMG | 在线图片编辑器',
       link: 'https://www.iloveimg.com/',
       desc: 'iLoveIMG 是一款 Web 应用，可让您在几秒钟内免费修改图像；这里有您想要批量编辑图片的所有工具，只需点击几下，即可根据自己的需要，对图片进行批量压缩、裁剪、格式转换或尺寸调整，还可以同时处理不同的图片文件。',
