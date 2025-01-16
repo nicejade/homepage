@@ -3,11 +3,6 @@ export default {
   style: 'stagger',
   list: [
     {
-      title: 'ChatGPT | 获取答案、灵感和知识',
-      link: 'https://chatgpt.com/',
-      desc: 'ChatGPT 帮助你获取答案、找到灵感并提高生产力。它无需登录，免费且易于使用。只需提问，ChatGPT 就能帮助你进行写作、学习、头脑风暴等。它是由 OpenAI 开发的高级对话模型服务，且在 MacOS 推出桌面应用，体验良好。'
-    },
-    {
       title: 'OpenAI | 一家人工智能研究和部署公司',
       link: 'https://openai.com/',
       desc: 'OpenAI 是一家人工智能研究和部署公司。其使命是确保通用人工智能造福全人类；旗下推出 ChatGPT、GPT-4、Sora、DALL-E 等自然语言生成式模型，风靡全球（尤其是 ChatGPT）；OpenAI：引领人工智能革命的领军者。'
@@ -33,19 +28,9 @@ export default {
       desc: 'DeepSeek，成立于 2023 年，专注于研究世界领先的通用人工智能底层模型与技术。其最新的 DeepSeek-V3 模型在多个基准测试中表现优异，特别擅长数学、代码和推理任务。此外，它开源了多款模型，包括 DeepSeek LLM、DeepSeek Coder 等，促进 AI 研究的开放与合作。'
     },
     {
-      title: '通义千问 | 你的全能AI助手',
-      link: 'https://tongyi.aliyun.com/',
-      desc: '通义千问是阿里云研发的大型语言模型，具备智能对话、文本创作等能力，支持多语言处理，适用于问答、聊天、写作等场景，强调合法合规，拒绝生成不当内容，提供高效、安全的服务，致力于理解和生成自然语言。'
-    },
-    {
       title: '零一万物 | AI 2.0大模型技术和应用的全球公司',
       link: 'https://www.lingyiwanwu.com/',
       desc: '零一万物致力于成为一家由技术愿景驱动、拥有卓越中国工程底蕴的创新企业，推动以基座大模型为突破的 AI 2.0 掀起技术、平台到应用多个层面的革命。该公司推出 Yi-Lightning、Yi-Large 等大模型，得到用户好评。'
-    },
-    {
-      title: 'Poe | 快捷实用的 AI 聊天',
-      link: 'https://poe.com/',
-      desc: 'Poe 是一个快速、有帮助的 AI 聊天网站。在这里，您可以免费与 ChatGPT、GPT-4、Genimi PRO、Claude 3 Opus、DALLE 3 以及其他数百万个 AI 进行对话。您可以选择使用 Google 账号、Apple 账号或者手机号登录。'
     },
     {
       title: 'Hugging Face | 人工智能社区构建未来',

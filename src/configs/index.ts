@@ -1,5 +1,6 @@
 import projects from "./projects"
 import selfhosted from "./selfhosted"
+import chatbot from "./chatbot"
 import aitools from "./aitools"
 import search from "./search"
 import softwares from "./softwares"
@@ -16,6 +17,7 @@ import learning from "./learning"
 export default [
   projects,
   selfhosted,
+  chatbot,
   aitools,
   search,
   softwares,
