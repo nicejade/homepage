@@ -1,19 +1,36 @@
 {
-	"name": "\u900d\u9065\u81ea\u5728\u8f69",
-	"short_name": "\u900d\u9065\u81ea\u5728\u8f69",
+	"name": "逍遥自在轩",
+	"short_name": "逍遥自在轩",
+	"description": "逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。",
+	"start_url": "/",
+	"display": "standalone",
+	"display_override": ["window-controls-overlay", "standalone"],
+	"screenshots": [
+		{
+			"src": "/screenshots/desktop.png",
+			"sizes": "1200x676",
+			"type": "image/png",
+			"form_factor": "wide",
+			"label": "桌面端主页面"
+		}
+	],
+	"background_color": "#ffffff",
+	"theme_color": "#f59e0b",
 	"icons": [
+		{
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
 		{
 			"src": "/android-chrome-192x192.png",
 			"sizes": "192x192",
 			"type": "image/png"
 		},
 		{
-			"src": "/android-chrome-512x512.png",
-			"sizes": "512x512",
+			"src": "/apple-touch-icon.png",
+			"sizes": "180x180",
 			"type": "image/png"
 		}
-	],
-	"theme_color": "#ffffff",
-	"background_color": "#ffffff",
-	"display": "standalone"
+	]
 }
