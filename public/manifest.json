@@ -7,7 +7,7 @@
 	"display_override": ["window-controls-overlay", "standalone"],
 	"screenshots": [
 		{
-			"src": "/screenshots/desktop.png",
+			"src": "/mockup.png",
 			"sizes": "1200x676",
 			"type": "image/png",
 			"form_factor": "wide",

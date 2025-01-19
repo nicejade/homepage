@@ -17,5 +17,10 @@ export default {
       link: 'https://m.do.co/c/046a8e6b255c',
       desc: 'DigitalOcean 成立于 2011 年， 是一家提供云计算服务的公司。其核心产品包括虚拟服务器（Droplets）、托管数据库、对象存储（Spaces）和 Kubernetes 容器服务等。它以简化开发者体验为目标，提供直观的用户界面和丰富的 API，使用户能够快速部署和管理应用程序。此外，DigitalOcean 还提供可扩展的解决方案和全球数据中心，以满足不同规模企业的需求。'
     },
+     {
+      title: 'Docker Hub 容器镜像库 | 应用容器化',
+      link: 'https://hub.docker.com/',
+      desc: 'Docker Hub 是一个领先的容器镜像仓库，专为开发者和团队设计，用于存储、分发和管理 Docker 容器镜像。作为 Docker 生态系统的重要组成部分，它提供了一个强大的平台，让开发者可以快速查找、下载和使用官方镜像以及来自社区的高质量镜像（如 Nginx、MySQL 等）。作为容器管理和部署的重要工具，Docker Hub 是现代 DevOps 和云原生开发中不可或缺的利器。'
+    },
   ]
 }
