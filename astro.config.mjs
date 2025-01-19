@@ -85,8 +85,8 @@ export default defineConfig({
 				{
 					tag: 'link',
 					attrs: {
-						manifest: '/manifest.json',
-						re: 'manifest',
+						href: '/manifest.json',
+						rel: 'manifest',
 					},
 				},
 				{

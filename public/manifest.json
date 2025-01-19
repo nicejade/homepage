@@ -2,8 +2,10 @@
 	"name": "逍遥自在轩",
 	"short_name": "逍遥自在轩",
 	"description": "逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。",
-	"start_url": "/",
+	"id": "/?source=pwa",
+	"start_url": "/?source=pwa",
 	"display": "standalone",
+	"scope": "/",
 	"display_override": ["window-controls-overlay", "standalone"],
 	"screenshots": [
 		{
