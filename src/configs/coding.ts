@@ -13,14 +13,14 @@ export default {
       desc: 'Cursor 是一款结合传统代码编辑器和 AI 功能的创新编程应用。基于 Visual Studio Code，它提供熟悉的编码环境，同时集成强大的 AI 辅助功能。主要特点包括 AI 代码生成、智能代码补全、代码解释、错误诊断、重构建议等。它通过 AI 辅助简化编码过程，提高编程效率，同时保留了传统编辑器的灵活性和功能性。'
     },
     {
-      title: 'VS Code | 免费开源代码编辑器',
-      link: 'https://code.visualstudio.com/',
-      desc: 'Visual Studio Code（简称 VS Code ）是一款由 Microsoft 开发的免费开源代码编辑器。它支持多种编程语言和文件类型，具有强大的编辑功能和智能代码补全。VS Code 提供丰富的插件生态系统，用户可以根据需要扩展功能。它轻量快速，支持调试、版本控制和内置终端，适用于多个操作系统，是开发者热门选择。'
-    },
-    {
       title: 'Github Copilot | AI 编程助手',
       link: 'https://github.com/features/copilot',
       desc: 'GitHub Copilot 是由 GitHub 与 OpenAI 合作开发的编程助手工具，基于先进的 AI 技术。它能够根据用户输入和上下文提供智能代码建议和自动补全，支持多种编程语言。GitHub Copilot 不仅可以加速编码过程，还能提高代码质量和生产效率。这款工具集成在多种开发环境中，帮助开发者快速创建和编辑代码。'
+    },
+    {
+      title: 'Trae - Ship Faster with Trae',
+      link: 'https://www.trae.ai/',
+      desc: 'Trae 是字节跳动推出一款创新的人工智能集成开发环境（IDE），专门设计用于提升开发者的工作效率。它的核心特点是能够自适应地与开发者协同工作，通过 AI 技术来加速开发流程。这款工具采用智能协作方式，能够理解开发者的编码习惯和工作模式，随着使用不断优化和调整，为用户提供更个性化的开发体验。'
     },
     {
       title: 'Continue | 领先的开源 AI 代码助手',
@@ -29,8 +29,13 @@ export default {
     },
     {
       title: 'Cline | IDE 中的自主编码代理',
-      link: 'https://github.com/cline/cline',
+      link: 'https://cline.bot/',
       desc: 'Cline 是一个开源的自主编码代理，直接集成在您的集成开发环境（IDE）中。 它能够在每一步都获得您的许可的情况下，创建和编辑文件、执行命令、使用浏览器等。Cline 的设计旨在提高开发者的生产力，提供类似于 Cursor 的功能，甚至在某些方面有所超越，允许用户根据需求选择最适合的模型, 如 DeepSeek、Claude 等。'
+    },
+    {
+      title: 'VS Code | 免费开源代码编辑器',
+      link: 'https://code.visualstudio.com/',
+      desc: 'Visual Studio Code（简称 VS Code ）是一款由 Microsoft 开发的免费开源代码编辑器。它支持多种编程语言和文件类型，具有强大的编辑功能和智能代码补全。VS Code 提供丰富的插件生态系统，用户可以根据需要扩展功能。它轻量快速，支持调试、版本控制和内置终端，适用于多个操作系统，是开发者热门选择。'
     },
     {
       title: 'Prettier | 固执己见的代码格式化程序',
