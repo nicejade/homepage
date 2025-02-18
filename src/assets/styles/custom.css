@@ -6,8 +6,15 @@
   --sl-text-xl: 1.125rem;
   --sl-text-lg: 1rem;
   --sl-color-accent: #2c3e50 !important;
-  --sl-color-text-accent: #813c86 !important;
+  --sl-color-text-accent: #2196f3 !important;
   --sl-color-link-accent: #2edfa3;
+}
+
+.tagline {
+  font-weight: black;
+  background: linear-gradient(to bottom right,#aa4b6b, #6b6b83, #3b8d99);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .sl-markdown-content a:not(:where(.not-content *)) {
