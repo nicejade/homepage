@@ -4,6 +4,7 @@ export default {
   list: [
     {
       title: 'Starlight | 🌟 使用 Astro 构建文档站点',
+      stars: 5,
       link: 'https://starlight.astro.build/',
       desc: 'Starlight 是一款基于 Astro 的文档站点构建工具，旨在提供快速、易用且可访问的文档解决方案。它支持站点导航、搜索、国际化和 SEO，确保用户体验优良。可以使用 Markdown、MDX 等标记语言，并提供 TypeScript 类型安全的前置验证，提升开发体验。Starlight 是框架无关的，允许用户集成 React、Vue 和 Svelte 等 UI 组件，满足个性化需求。用户反馈其设计直观，极大简化了内容创作流程，是构建高质量文档网站的理想选择。'
     },

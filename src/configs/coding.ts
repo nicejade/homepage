@@ -4,11 +4,13 @@ export default {
   list: [
     {
       title: 'Codeium Windsurf | 旨在让您保持流畅状态',
+      stars: 5,
       link: 'https://codeium.com/windsurf',
       desc: 'Codeium Windsurf 是一款创新的 AI 驱动代码编辑器，专注于提供流畅的编码体验。它提供无限制的 AI 代码补全功能，支持实时代码建议和智能代码生成。独特之处在于其"流畅状态"设计理念，通过智能预测和上下文理解，让开发者保持连贯的编码节奏。提供免费的基础功能，包括代码补全、重构建议和 AI 辅助编程等特性。'
     },
     {
       title: 'Cursor | The AI Code Editor',
+      stars: 5,
       link: 'https://www.cursor.com/',
       desc: 'Cursor 是一款结合传统代码编辑器和 AI 功能的创新编程应用。基于 Visual Studio Code，它提供熟悉的编码环境，同时集成强大的 AI 辅助功能。主要特点包括 AI 代码生成、智能代码补全、代码解释、错误诊断、重构建议等。它通过 AI 辅助简化编码过程，提高编程效率，同时保留了传统编辑器的灵活性和功能性。'
     },
@@ -34,6 +36,7 @@ export default {
     },
     {
       title: 'VS Code | 免费开源代码编辑器',
+      stars: 5,
       link: 'https://code.visualstudio.com/',
       desc: 'Visual Studio Code（简称 VS Code ）是一款由 Microsoft 开发的免费开源代码编辑器。它支持多种编程语言和文件类型，具有强大的编辑功能和智能代码补全。VS Code 提供丰富的插件生态系统，用户可以根据需要扩展功能。它轻量快速，支持调试、版本控制和内置终端，适用于多个操作系统，是开发者热门选择。'
     },

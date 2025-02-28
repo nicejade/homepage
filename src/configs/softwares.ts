@@ -39,6 +39,7 @@ export default {
     },
     {
       title: 'Obsidian ｜ 锐化你的思维',
+      stars: 5,
       link: 'https://obsidian.md/',
       desc: 'Obsidian 是一款强大的笔记和知识管理工具，采用本地文件存储和 Markdown 格式。它支持跨平台使用，提供连接笔记、图表视图、插件扩展等功能。它注重关联性和可视化，用户可以创建复杂的笔记网络，帮助整理思绪和信息等，是提升工作效率的理想选择。',
     },

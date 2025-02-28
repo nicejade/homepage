@@ -4,6 +4,7 @@ export default {
   list: [
     {
       title: 'Svelte | 通过控制论增强的 Web 应用程序',
+      stars: 5,
       link: 'https://svelte.dev/',
       desc: 'Svelte 是一个现代 JavaScript 框架，用于构建高效的用户界面。与传统框架不同，Svelte 在构建时而非运行时进行工作，将组件编译为高效的原生 JavaScript 代码。其特点包括无需虚拟 DOM、响应式设计和简洁的语法。开发者在编写 Svelte 组件时，可以使用类似 HTML 的语法和内联的 CSS，提升开发效率和代码可读性。Svelte 通过减少框架的运行时开销，实现了更快的加载速度和更高的性能，非常适合构建高性能的现代 Web 应用。'
     },
@@ -34,6 +35,7 @@ export default {
     },
     {
       title: 'Electron | 构建跨平台桌面应用',
+      stars: 5,
       link: 'https://www.electronjs.org/',
       desc: 'Electron 是一个开源框架，由 GitHub 开发，允许使用 JavaScript、HTML 和 CSS 构建跨平台桌面应用。它结合了 Chromium 和 Node.js，提供了丰富的 API，使开发者能创建高性能的桌面应用程序。Electron 支持自动更新、系统托盘集成、本地文件访问等功能，常用于开发如 Visual Studio Code、Slack 和 Discord 等应用。其跨平台特性和强大的社区支持使其成为桌面应用开发的热门选择。'
     },
@@ -49,6 +51,7 @@ export default {
     },
     {
       title: 'TailwindCSS | 实用优先的 CSS 框架',
+      stars: 5,
       link: 'https://tailwindcss.com/',
       desc: 'Tailwind CSS 是一个功能强大的实用优先的 CSS 框架。它不提供预定义的组件，而是提供了一系列低级实用工具类，开发者可以通过这些类快速构建自定义的设计。其主要特点包括原子化设计、即时预览和深度可定制性。开发者无需离开 HTML，即可快速调整样式，显著提升开发效率。此外，Tailwind CSS 支持配置文件，允许全局定制设计系统。其优化的生产构建流程能够移除未使用的 CSS，确保最终代码包的最小化，适合构建性能优异的现代 Web 应用。'
     },
@@ -59,6 +62,7 @@ export default {
     },
     {
       title: 'Vite | 下一代前端工具',
+      stars: 5,
       link: 'https://vitejs.dev/',
       desc: 'Vite 是一个现代化的前端构建工具，由 Vue.js 的作者尤雨溪开发。Vite 的设计目标是提供极快的开发体验和构建速度。它通过原生 ES 模块（ESM）在浏览器中加载模块，实现了即时的热模块替换（HMR），使得开发者能够快速查看代码改动。Vite 采用 Rollup 进行生产环境打包，确保了构建效率和优化效果。其内置了 TypeScript、JSX、CSS 等多种文件类型的支持，同时也支持 Vue、React 等框架的插件生态。Vite 的配置简单灵活，非常适合现代前端开发。'
     },
