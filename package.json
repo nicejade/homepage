@@ -8,7 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "bash deploy.sh"
+    "deploy": "bash deploy.sh",
+    "cf-build": "pnpm install --no-frozen-lockfile && astro check && astro build"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
