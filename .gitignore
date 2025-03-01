@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+# pnpm lock file
+pnpm-lock.yaml
+
 # dependencies
 node_modules/
 
