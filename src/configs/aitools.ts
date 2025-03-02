@@ -33,6 +33,7 @@ export default {
     },
     {
       title: '零一万物 | AI 2.0大模型技术和应用的全球公司',
+      declining: true,
       link: 'https://www.lingyiwanwu.com/',
       desc: '零一万物致力于成为一家由技术愿景驱动、拥有卓越中国工程底蕴的创新企业，推动以基座大模型为突破的 AI 2.0 掀起技术、平台到应用多个层面的革命。该公司推出 Yi-Lightning、Yi-Large 等大模型，得到用户好评。'
     },

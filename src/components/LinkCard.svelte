@@ -6,6 +6,7 @@
   export let title;
   export let desc;
   export let stars = 0;
+  export let declining = false;
   let isDarkMode = false
 
   onMount(() => {
@@ -33,9 +34,11 @@
 </script>
 
 <div class="rounded-lg p-5 transition-shadow duration-150 ease-in-out relative 
-  { isDarkMode ? "shadow-custom-dark hover:shadow-custom-dark-xl" : "shadow-custom-white hover:shadow-custom-white-xl" }">
-  <a href="{link + '?ref=niceshare.site'}" target="_blank" rel="noopener"
-    class="text-xl font-medium no-underline hover:cursor-pointer">
+  { isDarkMode ? "shadow-custom-dark hover:shadow-custom-dark-xl" : "shadow-custom-white hover:shadow-custom-white-xl" }
+  { declining ? 'cursor-not-allowed opacity-60' : '' }">
+  <a href="{declining ? 'javascript:void(0)' : link + '?ref=niceshare.site'}" target="_blank" rel="noopener"
+    class="text-xl font-medium no-underline hover:cursor-pointer
+    { declining? 'pointer-events-none' : '' }">
     <h3 class="text-base text-black hover:text-brand">{title}</h3>
 		<p class="text-sm font-normal no-underline text-gray">
     	{desc}
