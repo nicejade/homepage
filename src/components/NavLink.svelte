@@ -2,13 +2,12 @@
 	export let href;
   export let title;
   
-  // 添加 GA 点击事件埋点函数
+  // 添加 GA4 点击事件埋点函数
   function traceEventReporting() {
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'click', {
-        'event_category': 'navigation',
-        'event_label': title,
-        'link_url': href
+      window.gtag('event', 'navigation_click', {
+        'navigation_path': href,
+        'navigation_title': title
       });
     }
   }
