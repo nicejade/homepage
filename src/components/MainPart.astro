@@ -68,6 +68,13 @@ import configs from '../configs';
 </style>
 
 <script>
+  // 为 gtag 添加类型声明
+  declare global {
+    interface Window {
+      gtag?: (...args: any[]) => void;
+    }
+  }
+
   // 当页面加载完成后执行
   document.addEventListener('DOMContentLoaded', () => {
     const backToTopButton = document.getElementById('back-to-top');
@@ -84,12 +91,12 @@ import configs from '../configs';
     
     // 点击按钮回到顶部
     backToTopButton.addEventListener('click', () => {
-      if (typeof window.gtag === 'function') {
-        window.gtag('event', 'back_to_top_click', {
-          'event_category': 'engagement',
-          'event_label': 'back_to_top_button'
-        });
-      }
+      // 使用可选链操作符，避免 gtag 未定义的错误
+      window.gtag?.('event', 'back_to_top_click', {
+        'event_category': 'engagement',
+        'event_label': 'back_to_top_button'
+      });
+      
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
