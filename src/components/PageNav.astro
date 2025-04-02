@@ -6,7 +6,7 @@ import configs from '../configs';
 <section id="page-nav">
   {
     configs.map(({ title }) => (
-      <NavLink href={'#' + title} title={title}></NavLink>
+      <NavLink client:only='svelte'  href={'#' + title} title={title}></NavLink>
     ))
   }
 </section>

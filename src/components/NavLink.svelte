@@ -1,9 +1,20 @@
 <script>
 	export let href;
   export let title;
+  
+  // 添加 GA 点击事件埋点函数
+  function traceEventReporting() {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'click', {
+        'event_category': 'navigation',
+        'event_label': title,
+        'link_url': href
+      });
+    }
+  }
 </script>
 
-<a href={href} title={title} 
+<a title={title} href={href} on:click={traceEventReporting}
   class="nav-link py-2 px-5 me-3 mb-3 text-sm font-medium focus:outline-none bg-transparent rounded-full 
   border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-0 md:px-4 md:py-1.5 md:me-2">
   {title}
