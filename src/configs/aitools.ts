@@ -21,15 +21,15 @@ export default {
       desc: 'xAI 是一家人工智能公司，一家由埃隆-马斯克（Elon Musk）创立的新公司，2023 年 7 月 12 日宣布成立；其使命是推动科学发现，深入了解我们的宇宙。其第一个产品是会话式人工智能 Grok，可在 X 平台使用。'
     },
     {
+      title: 'DeepSeek | 深度求索',
+      stars: 4,
+      link: 'https://www.deepseek.com/',
+      desc: 'DeepSeek，成立于 2023 年，专注于研究世界领先的通用人工智能底层模型与技术。其最新的 DeepSeek-V3 模型在多个基准测试中表现优异，特别擅长数学、代码和推理任务。此外，它开源了多款模型，包括 DeepSeek LLM、DeepSeek Coder 等，促进 AI 研究的开放与合作。'
+    },
+    {
       title: 'Meta AI ｜ Chat Wdith Llama 3',
       link: 'https://llama3.dev/',
       desc: 'Llama3 是 Meta AI 开发的高性能、多功能语言模型的最新版本。其主要亮点包括：扩展的知识库和功能、改进的多语言支持、增强推理和分析能力、持续致力于安全等；可在这个网站体验 Llama3:8B 及 Llama3:70B 等模型。'
-    },
-    {
-      title: 'DeepSeek | 深度求索',
-      stars: 5,
-      link: 'https://www.deepseek.com/',
-      desc: 'DeepSeek，成立于 2023 年，专注于研究世界领先的通用人工智能底层模型与技术。其最新的 DeepSeek-V3 模型在多个基准测试中表现优异，特别擅长数学、代码和推理任务。此外，它开源了多款模型，包括 DeepSeek LLM、DeepSeek Coder 等，促进 AI 研究的开放与合作。'
     },
     {
       title: '零一万物 | AI 2.0大模型技术和应用的全球公司',

@@ -14,6 +14,12 @@ export default {
       desc: '💰生财有迹（Wealth Tracker）是一款专注于个人资产分析的应用程序。其核心功能是：全面记录并展示用户的资产状况，帮助用户轻松了解财务现状；运用 AI 能力，结合每种资产的特性和当前环境，提供适宜的财务建议。',
     },
     {
+      title: 'Arya - 在线 Markdown 编辑器',
+      stars: 5,
+      link: 'https://markdown.lovejade.cn/',
+      desc: 'Arya，是一款基于 Vue、Vditor，为未来而构建的在线 Markdown 编辑器；轻量且强大：内置粘贴 HTML 自动转换为 Markdown，支持流程图、甘特图、时序图、任务列表，可导出携带样式的图片、PDF、微信公众号特制的 HTML 等。',
+    },
+    {
       title: '缘知随心庭',
       link: 'https://fine.niceshare.site/',
       desc: '缘知随心庭，基于 Astro、Starlight、Svelte、TailwindCSS、TypeScript 所构建的个人知识管理与分享博客，部署于 Cloudflare 内容分发网络；主要用于记录人工智能探究、自动化、技术分享、生活感悟等。',
@@ -37,11 +43,6 @@ export default {
       title: '为高效而生：Arya Jarvis',
       link: 'https://arya.lovejade.cn/',
       desc: 'Arya Jarvis，一款基于 Node.js 所编写命令行工具，旨在为开发人员节省更多时间和精力（譬如：用于快速构建本地静态服务、一键找到本地 IP 地址并复制到剪切板、为指定文本生成二维码等）；适用于 Mac、Windows、Linux 等平台。',
-    },
-    {
-      title: 'Arya - 在线 Markdown 编辑器',
-      link: 'https://markdown.lovejade.cn/',
-      desc: 'Arya，是一款基于 Vue、Vditor，为未来而构建的在线 Markdown 编辑器；轻量且强大：内置粘贴 HTML 自动转换为 Markdown，支持流程图、甘特图、时序图、任务列表，可导出携带样式的图片、PDF、微信公众号特制的 HTML 等。',
     },
     {
       title: '倾城之链 - NICE LINKS',
