@@ -46,13 +46,21 @@ export default {
       link: 'https://code.visualstudio.com/',
       desc: 'Visual Studio Code（简称 VS Code ）是一款由 Microsoft 开发的免费开源代码编辑器。它支持多种编程语言和文件类型，具有强大的编辑功能和智能代码补全。VS Code 提供丰富的插件生态系统，用户可以根据需要扩展功能。它轻量快速，支持调试、版本控制和内置终端，适用于多个操作系统，是开发者热门选择。'
     },
+     {
+      title: 'Onlook | The Cursor for Designers',
+      stars: 5,
+      link: 'https://onlook.com/',
+      desc: 'Onlook 是一个面向设计师的 React 视觉编辑器，让你无需手写代码即可“边设计边写 code”。它提供类似 Figma 的界面，可实时调整布局、样式、文本、组件交互等，所有改动都同步写入 React（Next.js + TailwindCSS）项目  ￼。内置 AI 聊天助手，还能通过提示自动生成或修改前端页面，实现“AI 驱动前端构建”。 '
+    },
     {
       title: 'Prettier | 固执己见的代码格式化程序',
+      stars: 5,
       link: 'https://prettier.io/',
       desc: 'Prettier 是一款流行的代码格式化工具，支持多种编程语言，及多款代码编译器。它能自动调整代码的缩进、空格、分号等风格，确保代码风格的一致性和可读性。Prettier 简化了代码格式化的流程，减少了开发者在风格选择上的时间和精力投入，提高了团队协作效率，并有助于减少由格式问题引起的代码审查时间。'
     },
     {
       title: 'Google | 全球领先的搜索引擎',
+      stars: 5,
       link: 'https://www.google.com/',
       desc: 'Google 是由拉里·佩奇和谢尔盖·布林于 1998 年创立。其核心功能是通过关键字搜索互联网内容，并以相关性排序结果。它使用复杂的算法和机器学习技术，确保用户获得最相关和高质量的搜索结果。除了基本的网页搜索，Google 还提供图片、视频、新闻、地图等多种搜索服务。简洁界面和强大搜索能力使其在全球最受欢迎。'
     },
