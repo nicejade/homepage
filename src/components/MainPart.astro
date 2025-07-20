@@ -77,8 +77,19 @@ import configs from '../configs';
 
   // 当页面加载完成后执行
   document.addEventListener('DOMContentLoaded', () => {
-    const backToTopButton = document.getElementById('back-to-top');
+    // 检查 URL 中是否存在锚点
+    const hash = decodeURIComponent(window.location.hash);
+    if (hash) {
+      // 延迟一下以确保页面内容已完全加载
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
     
+    const backToTopButton = document.getElementById('back-to-top');
     // 监听滚动事件
     window.addEventListener('scroll', () => {
       // 当页面滚动超过 300px 时显示按钮
