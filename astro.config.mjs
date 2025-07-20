@@ -29,6 +29,7 @@ export default defineConfig({
 			logo: {
 				src: './src/assets/images/logo.svg',
 			},
+			pagefind: false,
 			lastUpdated: false,
 			pagination: false,
 			defaultLocale: 'root',
