@@ -3,6 +3,7 @@ import starlight from '@astrojs/starlight'
 import svelte from '@astrojs/svelte'
 import tailwind from '@astrojs/tailwind'
 import starlightLinksValidator from 'starlight-links-validator'
+import starlightThemeRapide from 'starlight-theme-rapide'
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,7 +15,7 @@ export default defineConfig({
 	integrations: [
 		svelte(),
 		starlight({
-			plugins: [starlightLinksValidator()],
+			plugins: [starlightLinksValidator(), starlightThemeRapide()],
 			title: '逍遥自在轩',
 			social: [
 				{ icon: 'mastodon', label: 'Mastodon', href: 'https://mastodon.social/@nicejade' },
