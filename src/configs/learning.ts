@@ -27,5 +27,10 @@ export default {
       link: 'https://englishnewsinlevels.com/',
       desc: 'English News In Levels， 它通过将新闻故事按不同的难度等级分解，让各个水平的学习者都能轻松提高阅读、听力和词汇能力。每篇文章都有对应的音频，用户可以听新闻报道，这有助于提高听力理解和发音。在文章中，某些单词会提供简单的解释，帮助学习者理解难度较高的词汇。网站上的新闻内容简洁明了，适合英语学习者，避免了过于复杂的语言和长句结构。网站会不断更新最新的新闻，同时还能增强英语学习的趣味性。总之，这是一个集趣味性与实用性于一体的学习平台，帮助学习者在轻松愉快的氛围中提升英语水平。'
     },
+    {
+      title: '英语小说网（双语小说）',
+      link: 'https://yingyuxiaoshuo.com/',
+      desc: '英语小说网致力于打造一个高质量的英语阅读网站，提供了大量英文小说（诸如：权力的游戏 A Game Of Thrones、百年孤独 One Hundred Years Of Solitude、基督山伯爵 The Count of Monte Cristo、杀死一只知更鸟 To Kill a Mocking Bird、肖申克的救赎 The Shawshank Redemption、简爱 Jane Eyre、老人与海 The Old Man and the Sea），中英双语小说，原版英语小说，英文名著等在线免费阅读，并配有单词翻译、单词生词本等功能，方便大家学习英语，通过英语阅读提高英语水平。'
+    },
   ]
 }

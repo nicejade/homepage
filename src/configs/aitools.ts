@@ -27,6 +27,12 @@ export default {
       desc: 'DeepSeek，成立于 2023 年，专注于研究世界领先的通用人工智能底层模型与技术。其最新的 DeepSeek-V3 模型在多个基准测试中表现优异，特别擅长数学、代码和推理任务。此外，它开源了多款模型，包括 DeepSeek LLM、DeepSeek Coder 等，促进 AI 研究的开放与合作。'
     },
     {
+      title: '智谱 | 让机器像人一样思考',
+      stars: 4,
+      link: 'https://www.zhipuai.cn/',
+      desc: '由清华大学计算机系技术成果转化而来的公司，致力于打造新一代认知智能通用模型。公司合作研发了双语千亿级超大规模预训练模型 GLM-130B，并构建了高精度通用知识图谱，形成数据与知识双轮驱动的认知引擎，基于此模型打造了 ChatGLM。此外，智谱还推出了认知大模型平台 Bigmodel.ai，包括 CodeGeeX 和 CogView 等产品，提供智能 API 服务，链接物理世界的亿级用户、赋能元宇宙数字人、成为具身机器人的基座，赋予机器像人一样“思考”的能力。'
+    },
+    {
       title: 'Meta AI ｜ Chat Wdith Llama 3',
       link: 'https://llama3.dev/',
       desc: 'Llama3 是 Meta AI 开发的高性能、多功能语言模型的最新版本。其主要亮点包括：扩展的知识库和功能、改进的多语言支持、增强推理和分析能力、持续致力于安全等；可在这个网站体验 Llama3:8B 及 Llama3:70B 等模型。'
