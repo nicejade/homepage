@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/starlight": "^0.32.2",
-    "@astrojs/svelte": "^7.0.5",
-    "@astrojs/tailwind": "^6.0.0",
+    "@astrojs/starlight": "0.35.2",
+    "@astrojs/svelte": "7.1.0",
+    "@astrojs/tailwind": "6.0.2",
     "anchor-js": "^5.0.0",
-    "astro": "^5.4.1",
+    "astro": "5.12.5",
     "medium-zoom": "^1.1.0",
     "starlight-links-validator": "^0.14.3",
     "svelte": "^5.20.5"

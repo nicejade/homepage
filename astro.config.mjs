@@ -16,11 +16,14 @@ export default defineConfig({
 		starlight({
 			plugins: [starlightLinksValidator()],
 			title: '逍遥自在轩',
-			social: {
-				github: 'https://github.com/nicejade/homepage',
-				'x.com': 'https://x.com/MarshalXuan',
-				mastodon: 'https://mastodon.social/@nicejade',
-			},
+			social: [
+				{ icon: 'mastodon', label: 'Mastodon', href: 'https://mastodon.social/@nicejade' },
+				{ icon: 'telegram', label: 'Telegram', href: 'https://t.me/nicejade' },
+				{ icon: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@MarshalXuan' },
+				{ icon: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/nice.jade.yang' },
+				{ icon: 'x.com', label: 'X', href: 'https://x.com/MarshalXuan' },
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/nicejade/homepage' },
+			],
 			components: {
         // Override the default `MarkdownContent` component.
 				MarkdownContent: './src/components/MarkdownContent.astro',

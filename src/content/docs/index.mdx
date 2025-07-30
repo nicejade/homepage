@@ -1,19 +1,21 @@
 ---
-title: 清闲无事，坐卧随心
+title: <strong class="hero-title">清闲无事，坐卧随心</strong>
 description: 逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。
 template: splash
 hero:
   tagline: 应无所住，而生其心。  莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。
-  image:
-    html: <img src="/hero.svg" alt="逍遥自在轩 ｜ 个人主页" />
+  html: <img src="/hero.svg" alt="逍遥自在轩 ｜ 个人主页" />
   actions:
     - text: 缘知随心庭
       link: https://fine.niceshare.site/?ref=niceshare.site
       icon: right-arrow
       variant: primary
+      attrs:
+        target: _blank
     - text: 知晓更多
       link: /about
       icon: external
+      variant: minimal
 ---
 
 import MainPart from './../../components/MainPart.astro';

@@ -15,10 +15,23 @@
   background: linear-gradient(to bottom right,#aa4b6b, #6b6b83, #3b8d99);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: 600;
 }
 
 .sl-markdown-content a:not(:where(.not-content *)) {
 	color: var(--sl-color-link-accent);
+}
+
+.hero-title {
+  font-size: var(--sl-text-5xl);
+}
+
+.site-title {
+  img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+  }
 }
 
 .link-title {
