@@ -39,7 +39,7 @@
   <a href="{declining ? 'javascript:void(0)' : link + '?ref=niceshare.site'}" target="_blank" rel="noopener"
     class="text-xl font-medium no-underline hover:cursor-pointer
     { declining? 'pointer-events-none' : '' }">
-    <h3 class="text-xl font-bold text-black hover:text-brand">{title}</h3>
+    <h3 class="text-xl font-bold { isDarkMode ? 'text-silver' : 'text-black' } dark:text-white hover:text-brand">{title}</h3>
 		<p class="text-base mt-2 font-normal no-underline text-gray">
     	{desc}
   	</p>

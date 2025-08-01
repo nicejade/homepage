@@ -9,7 +9,7 @@
   --sl-color-accent: #2c3e50 !important;
   --sl-color-text-accent: #2196f3 !important;
   --sl-color-link-accent: #2edfa3;
-  --sl-icon-brand: #2196f3 !important;
+  --sl-color-brand: #2196f3 !important;
 }
 
 svg {
@@ -41,11 +41,15 @@ svg {
 
 .sl-link-button {
   padding: 1rem;
-  border: 1px solid var(--sl-icon-brand);
+  border: 1px solid var(--sl-color-brand);
 }
 
 .primary {
   background-color: #fffaf0;
+}
+
+html[data-theme='dark'] .primary {
+  background-color: var(--sl-color-brand);
 }
 
 .site-title {
