@@ -40,7 +40,7 @@
     class="text-xl font-medium no-underline hover:cursor-pointer
     { declining? 'pointer-events-none' : '' }">
     <h3 class="text-xl font-bold { isDarkMode ? 'text-silver' : 'text-black' } dark:text-white hover:text-brand">{title}</h3>
-		<p class="text-base mt-2 font-normal no-underline text-gray">
+		<p class="text-base mt-2 font-normal no-underline { isDarkMode ? 'text-gray-400' : 'text-grey' }">
     	{desc}
   	</p>
     <div class="flex flex-row absolute items-center justify-center top-0 right-2 !mt-1">

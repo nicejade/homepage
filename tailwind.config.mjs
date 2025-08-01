@@ -8,14 +8,14 @@ const selfCustomColors = {
 	black: {
 		DEFAULT: '#212121',
 	},
-	gray: {
+	grey: {
 		DEFAULT: '#565656',
-	},
-	mark: {
-		DEFAULT: '#ff6f61',
 	},
 	silver: {
 		DEFAULT: '#ececec',
+	},
+	mark: {
+		DEFAULT: '#ff6f61',
 	},
 	warn: {
 		DEFAULT: '#f59e0b',

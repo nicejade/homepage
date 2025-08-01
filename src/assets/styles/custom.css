@@ -1,5 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  --sl-text-5xl: 1.8rem;
+  --sl-text-5xl: 3rem;
   --sl-text-4xl: 1.6rem;
   --sl-text-3xl: 1.4rem;
   --sl-text-2xl: 1.2rem;
@@ -12,6 +16,20 @@
   --sl-color-brand: #2196f3 !important;
 }
 
+h1 {
+  font-size: var(--sl-text-5xl);
+  font-weight: 600;
+  font-family: cursive;
+}
+
+h2 {
+  font-size: var(--sl-text-4xl);
+}
+
+h3 {
+  font-size: var(--sl-text-3xl);
+}
+
 svg {
   --sl-icon-size: 1.2rem !important;
   font-size: var(--sl-icon-size) !important;
@@ -21,6 +39,16 @@ svg {
 
 .header {
   padding: 0 1rem;
+}
+
+.primary {
+  background-color: #fffaf0;
+}
+
+html[data-theme='dark'] .primary {
+  background: #0F2027;
+  background: -webkit-linear-gradient(to left, #2C5364, #203A43, #0F2027);
+  background: linear-gradient(to left, #2C5364, #203A43, #0F2027)
 }
 
 .tagline {
@@ -35,22 +63,11 @@ svg {
 	color: var(--sl-color-link-accent);
 }
 
-.hero-title {
-  font-size: var(--sl-text-5xl);
-}
-
 .sl-link-button {
   padding: 1rem;
   border: 1px solid var(--sl-color-brand);
 }
 
-.primary {
-  background-color: #fffaf0;
-}
-
-html[data-theme='dark'] .primary {
-  background-color: var(--sl-color-brand);
-}
 
 .site-title {
   img {
