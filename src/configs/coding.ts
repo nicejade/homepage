@@ -3,6 +3,12 @@ export default {
   style: 'stagger',
   list: [
     {
+      title: 'Claude Code - 以终端速度深度编程 Anthropic',
+      stars: 5,
+      link: 'https://www.anthropic.com/claude-code',
+      desc: 'Claude Code 是 Anthropic 开发的一款创新的 AI 驱动代码编辑器，专注于提供流畅的编码体验。它提供无限制的 AI 代码补全功能，支持实时代码建议和智能代码生成。独特之处在于其"流畅状态"设计理念，通过智能预测和上下文理解，让开发者保持连贯的编码节奏。提供免费的基础功能，包括代码补全、重构建议和 AI 辅助编程等特性。'
+    },
+    {
       title: 'Augment Code -真实软件的AI编码平台',
       stars: 5,
       link: 'https://www.augmentcode.com/',
