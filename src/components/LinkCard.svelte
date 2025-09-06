@@ -14,7 +14,7 @@
     anchors.options.visible = 'always';
     anchors.add('h2');
 
-    isDarkMode = localStorage.getItem('starlight-theme') === 'dark'
+    isDarkMode = localStorage.getItem('starlight-theme') === 'dark' || document.documentElement.getAttribute('data-theme') === 'dark'
 
     const observer = new MutationObserver(mutationsList => {
       for (let mutation of mutationsList) {

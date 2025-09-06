@@ -14,7 +14,7 @@
 </script>
 
 <a title={title} href={href} on:click={traceEventReporting}
-  class="nav-link py-2 px-5 me-3 mb-3 text-sm font-medium focus:outline-none bg-transparent rounded-full 
+  class="nav-link py-2 px-5 me-3 mb-3 font-medium focus:outline-none rounded-full 
   border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-0 md:px-4 md:py-1.5 md:me-2">
   {title}
 </a>
@@ -22,6 +22,7 @@
 <style>
 .nav-link {
   color: var(--sl-color-text-accent);
+  margin: 0.5rem;
 }
 .nav-link:hover {
   cursor: pointer;

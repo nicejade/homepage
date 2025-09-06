@@ -1,9 +1,9 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 import svelte from '@astrojs/svelte'
-import tailwind from '@astrojs/tailwind'
 import starlightLinksValidator from 'starlight-links-validator'
 import starlightThemeRapide from 'starlight-theme-rapide'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://astro.build/config
 export default defineConfig({
@@ -44,6 +44,7 @@ export default defineConfig({
 				},
 			},
 			customCss: [
+				'./src/assets/styles/tailwind.css',
 				// 你的自定义 CSS 文件的相对路径
 				'./src/assets/styles/custom.css',
 			],
@@ -198,6 +199,6 @@ export default defineConfig({
 				},
 			],
 		}),
-		tailwind(),
 	],
+	vite: { plugins: [tailwindcss()] },
 })
