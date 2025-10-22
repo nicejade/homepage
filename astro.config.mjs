@@ -20,6 +20,7 @@ export default defineConfig({
 			social: [
 				{ icon: 'mastodon', label: 'Mastodon', href: 'https://mastodon.social/@nicejade' },
 				{ icon: 'telegram', label: 'Telegram', href: 'https://t.me/nicejade' },
+				{ icon: 'external', label: '逍遥自在轩', href: 'https://fine.niceshare.site/' },
 				{ icon: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@MarshalXuan' },
 				{ icon: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/nice.jade.yang' },
 				{ icon: 'x.com', label: 'X', href: 'https://x.com/MarshalXuan' },

@@ -4,7 +4,7 @@ export default {
   list: [
     {
       title: '清风明月轩',
-      link: 'https://www.thebettersites.com/',
+      link: 'https://www.lovejade.cn/',
       desc: '清风明月轩，一处沉淀数字匠心的艺术空间，荟萃精心雕琢的网络作品与独立项目。以东方哲学为根基，融合现代设计的美学韵味，追求简约而优雅的至臻体验。力求技术与艺术相映成辉，愿每件作品恰似江上之清风，山间之明月。',
     },
     {
