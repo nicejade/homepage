@@ -45,8 +45,15 @@ export default {
     },
     {
       title: 'Notion ｜ 强大的跨平台协作工具',
+      stars: 5,
       link: 'https://www.notion.so/',
       desc: 'Notion 是一款强大的跨平台协作工具，融合了笔记、数据库、任务管理和协作功能。用户可以创建和组织文档、表格、项目计划等内容，并支持实时协作和分享。Notion 提供丰富的模板和自定义选项，适用于个人和团队，帮助提升工作和学习效率。',
+    },
+    {
+      title: 'AFFiNE - All In One KnowledgeOS',
+      stars: 4,
+      link: 'https://affine.pro/',
+      desc: 'AFFiNE 是一款开源、一体化的「知识操作系统」工具，由 toeverything 团队开发，旨在整合文档、白板和数据库等工作空间，在写作、绘图、计划协作之间实现无缝切换。官网介绍它是 “Write, Draw, Plan All at Once” 的平台，强调「本地优先、隐私为先」。',
     },
     {
       title: 'Ima.copilot | 腾讯智能工作台',
