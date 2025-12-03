@@ -3,10 +3,15 @@ export default {
   style: 'stagger',
   list: [
     {
-      title: 'Claude Code - 以终端速度深度编程 Anthropic',
+      title: 'Cursor | The AI Code Editor',
       stars: 5,
-      link: 'https://www.anthropic.com/claude-code',
-      desc: 'Claude Code 是 Anthropic 开发的一款创新的 AI 驱动代码编辑器，专注于提供流畅的编码体验。它提供无限制的 AI 代码补全功能，支持实时代码建议和智能代码生成。独特之处在于其"流畅状态"设计理念，通过智能预测和上下文理解，让开发者保持连贯的编码节奏。提供免费的基础功能，包括代码补全、重构建议和 AI 辅助编程等特性。'
+      link: 'https://www.cursor.com/',
+      desc: 'Cursor 是一款结合传统代码编辑器和 AI 功能的创新编程应用。基于 Visual Studio Code，它提供熟悉的编码环境，同时集成强大的 AI 辅助功能。主要特点包括 AI 代码生成、智能代码补全、代码解释、错误诊断、重构建议等。它通过 AI 辅助简化编码过程，提高编程效率，同时保留了传统编辑器的灵活性和功能性。'
+    },
+    {
+      title: 'Google Antigravity | 下一代集成开发环境',
+      link: 'https://antigravity.google/',
+      desc: 'Google Antigravity 是 Google 最新推出的“代理优先”AI 集成开发环境（IDE）。它由 Gemini 模型驱动，突破了传统代码补全的局限，允许开发者指挥 AI 代理跨编辑器、终端和内置浏览器自主完成从规划、编码到测试验证的复杂任务。其核心在于多代理协作与全自动工作流，旨在大幅提升全栈开发效率，目前面向个人开发者免费开放。'
     },
     {
       title: 'Augment Code -真实软件的AI编码平台',
@@ -21,10 +26,16 @@ export default {
       desc: 'Codeium Windsurf 是一款创新的 AI 驱动代码编辑器，专注于提供流畅的编码体验。它提供无限制的 AI 代码补全功能，支持实时代码建议和智能代码生成。独特之处在于其"流畅状态"设计理念，通过智能预测和上下文理解，让开发者保持连贯的编码节奏。提供免费的基础功能，包括代码补全、重构建议和 AI 辅助编程等特性。'
     },
     {
-      title: 'Cursor | The AI Code Editor',
+      title: 'Claude Code - 以终端速度深度编程 Anthropic',
       stars: 5,
-      link: 'https://www.cursor.com/',
-      desc: 'Cursor 是一款结合传统代码编辑器和 AI 功能的创新编程应用。基于 Visual Studio Code，它提供熟悉的编码环境，同时集成强大的 AI 辅助功能。主要特点包括 AI 代码生成、智能代码补全、代码解释、错误诊断、重构建议等。它通过 AI 辅助简化编码过程，提高编程效率，同时保留了传统编辑器的灵活性和功能性。'
+      link: 'https://www.anthropic.com/claude-code',
+      desc: 'Claude Code 是 Anthropic 开发的一款创新的 AI 驱动代码编辑器，专注于提供流畅的编码体验。它提供无限制的 AI 代码补全功能，支持实时代码建议和智能代码生成。独特之处在于其"流畅状态"设计理念，通过智能预测和上下文理解，让开发者保持连贯的编码节奏。提供免费的基础功能，包括代码补全、重构建议和 AI 辅助编程等特性。'
+    },
+    {
+      title: 'Gemini CLI - 利用人工智能 进行构建、调试和部署',
+      stars: 5,
+      link: 'https://geminicli.com/',
+      desc: 'Gemini CLI 是一个开源的命令行工具，能让你在终端里直接调用 Gemini 模型，用自然语言指令来生成、审查或重构代码，也可以执行文件操作、自动化工作流、生成文档、分析日志，乃至从 PDF／草图生成应用／界面原型。它支持百万 token 上下文窗口，意味着可以处理大型代码库。提供免费配额，对个人开发者非常友好。'
     },
     {
       title: 'Github Copilot | AI 编程助手',

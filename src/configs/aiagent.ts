@@ -9,6 +9,12 @@ export default {
       desc: 'MCP（Model Context Protocol，MCP）是一个开放协议，旨在标准化应用程序向大型语言模型（LLM）提供上下文信息的方式。类似于 USB-C 为设备提供标准化连接，MCP 为 AI 应用程序与不同数据源和工具之间的连接提供了统一标准。通过 MCP，开发者可以利用现有的预构建集成，灵活切换 LLM 提供商，并遵循最佳实践确保数据在自身基础设施内的安全。这使得在 LLM 之上构建代理和复杂工作流更加高效。'
     },
     {
+      title: 'AGENTS.md | 用于指导编码代理的简单、开放的格式',
+      link: 'https://agents.md/',
+      stars: 5,
+      desc: 'AGENTS.md 是由 OpenAI 等组织发起的一个开源、通用 Markdown 格式，用来为 AI 编程“智能体”（coding agents）提供项目专属指南。简单来说，如果把 README.md 当成人类开发者的入门文档，那 AGENTS.md 就是“给 AI 的 README”。其主要作用包括：告诉 AI 如何安装依赖、运行测试、遵守代码风格、执行 lint、构建与部署流程、提交流程、安全约定等，无须人为重复说明即可安心执行任务。'
+    },
+    {
       title: 'MCP Servers | 最大的 MCP Servers 集合',
       link: 'https://mcp.so/',
       stars: 5,
