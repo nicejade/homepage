@@ -45,6 +45,11 @@ export default {
       desc: 'Arya Jarvis，一款基于 Node.js 所编写命令行工具，旨在为开发人员节省更多时间和精力（譬如：用于快速构建本地静态服务、一键找到本地 IP 地址并复制到剪切板、为指定文本生成二维码等）；适用于 Mac、Windows、Linux 等平台。',
     },
     {
+      title: 'FDC，Rust 构建的文件分类整理工具',
+      link: 'https://fine.niceshare.site/projects/fine-directory-curator/',
+      desc: '🗂️FDC，一个快速、优雅的 Rust 命令行 工具，用于让 macOS 与 Linux 文件夹保持整洁（计划支持 Windows）。 它会按「年份」和「类型」对源目录的一级项进行归类，避免覆盖冲突，保留顶层结构，并允许在进行任何破坏性更改前先「预览」。',
+    },
+    {
       title: '倾城之链 - NICE LINKS',
       link: 'https://site.lovejade.cn/',
       desc: '倾城之链是一个专注于收集和分享优质网站的在线服务平台。它为用户提供高质量的网站导航，涵盖编程开发等数十个领域；平台采用简洁优雅的设计风格，支持按类别浏览和关键词搜索，每个链接都配有简要说明，方便用户快速找到所需资源。',
