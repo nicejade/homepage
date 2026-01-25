@@ -10,6 +10,7 @@ export default {
     },
     {
       title: '清风明月轩',
+      stars: 5,
       link: 'https://www.lovejade.cn/',
       desc: '清风明月轩，一处沉淀数字匠心的艺术空间，荟萃精心雕琢的网络作品与独立项目。以东方哲学为根基，融合现代设计的美学韵味，追求简约而优雅的至臻体验。力求技术与艺术相映成辉，愿每件作品恰似江上之清风，山间之明月。',
     },
@@ -20,7 +21,14 @@ export default {
       desc: 'Arya，是一款基于 Vue、Vditor，为未来而构建的在线 Markdown 编辑器；轻量且强大：内置粘贴 HTML 自动转换为 Markdown，支持流程图、甘特图、时序图、任务列表，可导出携带样式的图片、PDF、微信公众号特制的 HTML 等。',
     },
     {
+      title: '智析单词书',
+      stars: 5,
+      link: 'https://word.lovejade.cn/',
+      desc: '基于 GPT 生成的深度解析，涵盖超过 8000+ 核心英语词汇。不仅提供精准的词义与例句，更深入挖掘词根词缀、文化背景、记忆技巧及趣味小故事。旨在通过 AI 帮助英语学习者构建逻辑化的词汇体系，让单词记忆不再是死记硬背。',
+    },
+    {
       title: '缘知随心庭',
+      stars: 4,
       link: 'https://fine.niceshare.site/',
       desc: '缘知随心庭，基于 Astro、Starlight、Svelte、TailwindCSS、TypeScript 所构建的个人知识管理与分享博客，部署于 Cloudflare 内容分发网络；主要用于记录人工智能探究、自动化、技术分享、生活感悟等。',
     },
@@ -31,6 +39,7 @@ export default {
     },
     {
       title: '玉桃文飨轩',
+      stars: 5,
       link: 'https://share.lovejade.cn/',
       desc: '玉桃文飨轩🍑 ，简单好用的在线文本工具；支持将 Markdown、Rich Text 等格式内容，快速转化为 png、pdf、html 等文件，并支持自定义设置、一键下载等功能。基于 Vue3 、 Vite 、 Pinia 、 TailwindCSS 、 TypeScript 构建。',
     },
