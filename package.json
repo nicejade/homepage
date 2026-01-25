@@ -9,10 +9,11 @@
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "bash deploy.sh",
-    "cf-build": "pnpm install --no-frozen-lockfile && astro check && astro build"
+    "seo": "node scripts/check-seo.js"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/sitemap": "^3.7.0",
     "@astrojs/starlight": "0.35.2",
     "@astrojs/starlight-tailwind": "^4.0.1",
     "@astrojs/svelte": "7.1.0",

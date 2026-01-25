@@ -2,8 +2,20 @@
 <browserconfig>
     <msapplication>
         <tile>
+            <square70x70logo src="/mstile-70x70.png"/>
             <square150x150logo src="/mstile-150x150.png"/>
-            <TileColor>#2d89ef</TileColor>
+            <square310x310logo src="/mstile-310x310.png"/>
+            <wide310x150logo src="/mstile-310x150.png"/>
+            <TileColor>#f59e0b</TileColor>
         </tile>
+        <notification>
+            <polling-uri src="https://www.niceshare.site/notifications/feed1"/>
+            <polling-uri2 src="https://www.niceshare.site/notifications/feed2"/>
+            <polling-uri3 src="https://www.niceshare.site/notifications/feed3"/>
+            <polling-uri4 src="https://www.niceshare.site/notifications/feed4"/>
+            <polling-uri5 src="https://www.niceshare.site/notifications/feed5"/>
+            <frequency>30</frequency>
+            <cycle>1</cycle>
+        </notification>
     </msapplication>
 </browserconfig>

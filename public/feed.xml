@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" 
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>逍遥自在轩 | 个人主页</title>
+    <link>https://www.niceshare.site/</link>
+    <description>逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。</description>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 25 Jan 2026 00:00:00 GMT</lastBuildDate>
+    <pubDate>Sun, 03 Nov 2024 00:00:00 GMT</pubDate>
+    <ttl>60</ttl>
+    <atom:link href="https://www.niceshare.site/feed.xml" rel="self" type="application/rss+xml"/>
+    <image>
+      <url>https://www.niceshare.site/logo.png</url>
+      <title>逍遥自在轩</title>
+      <link>https://www.niceshare.site/</link>
+      <width>512</width>
+      <height>512</height>
+    </image>
+    <copyright>Copyright 2024-present 逍遥自在轩. All rights reserved.</copyright>
+    <managingEditor>yunjeff@163.com (逍遥自在轩)</managingEditor>
+    <webMaster>yunjeff@163.com (逍遥自在轩)</webMaster>
+    <category>Technology</category>
+    <category>Web Development</category>
+    <category>Tools</category>
+    
+    <item>
+      <title>逍遥自在轩 - 精选工具与资源导航</title>
+      <link>https://www.niceshare.site/</link>
+      <guid isPermaLink="true">https://www.niceshare.site/</guid>
+      <description>汇集生活和工作中频繁使用的优质工具、软件和服务，包括 AI 工具、编程开发、在线服务等。</description>
+      <pubDate>Sun, 03 Nov 2024 00:00:00 GMT</pubDate>
+      <dc:creator>逍遥自在轩</dc:creator>
+      <category>Tools</category>
+      <category>Web Development</category>
+    </item>
+    
+    <item>
+      <title>关于逍遥自在轩</title>
+      <link>https://www.niceshare.site/about</link>
+      <guid isPermaLink="true">https://www.niceshare.site/about</guid>
+      <description>了解逍遥自在轩的诞生初衷、技术栈和项目结构。</description>
+      <pubDate>Sun, 03 Nov 2024 00:00:00 GMT</pubDate>
+      <dc:creator>逍遥自在轩</dc:creator>
+      <category>About</category>
+    </item>
+  </channel>
+</rss>
