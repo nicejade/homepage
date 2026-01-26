@@ -3,6 +3,12 @@ export default {
   style: 'stagger',
   list: [
     {
+      title: 'Agent Skills | 为代理提供新的能力和专业知识。',
+      link: 'https://agentskills.io/',
+      stars: 5,
+      desc: 'Agent Skills 是一个由 Anthropic 推动的开放标准与平台，通过规范化的模块化技能（skills）为 AI 代理（agents）提供结构化能力，从而实现更可靠、专业和可重复的任务执行。每个 skill 本质上是一个文件夹，包含一个 SKILL.md（元数据 + 指令）、可选脚本、模板和资源，定义某类任务的流程、方法和参考信息。代理在需要时按需加载相关技能，大幅提升执行效率和准确性，同时避免上下文膨胀。'
+    },
+    {
       title: 'MCP | 模型上下文协议',
       link: 'https://modelcontextprotocol.io/',
       stars: 5,
@@ -13,6 +19,12 @@ export default {
       link: 'https://agents.md/',
       stars: 5,
       desc: 'AGENTS.md 是由 OpenAI 等组织发起的一个开源、通用 Markdown 格式，用来为 AI 编程“智能体”（coding agents）提供项目专属指南。简单来说，如果把 README.md 当成人类开发者的入门文档，那 AGENTS.md 就是“给 AI 的 README”。其主要作用包括：告诉 AI 如何安装依赖、运行测试、遵守代码风格、执行 lint、构建与部署流程、提交流程、安全约定等，无须人为重复说明即可安心执行任务。'
+    },
+    {
+      title: 'Clawdbot | 运行在您自己的设备上的个人 AI 助手',
+      link: 'https://clawd.bot/',
+      stars: 5,
+      desc: 'Clawd.bot 是款开源、可自托管的 AI 助手平台，主打“在聊天中把事办完”。它可运行于 Telegram、Discord 等工具中，支持执行真实任务，如管理邮箱与日程、自动化脚本、网页浏览与信息提取、文件与系统操作。它具备持久记忆和跨会话上下文，可通过插件持续扩展能力。相比只会对话的 AI，它更像一名全天候数字助理，适用于个人效率提升、团队协作与自动化工作流，并让用户对数据与能力保持高度掌控。'
     },
     {
       title: 'MCP Servers | 最大的 MCP Servers 集合',
