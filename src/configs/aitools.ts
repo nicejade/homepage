@@ -32,6 +32,12 @@ export default {
       link: 'https://www.zhipuai.cn/',
       desc: '由清华大学计算机系技术成果转化而来的公司，致力于打造新一代认知智能通用模型。公司合作研发了双语千亿级超大规模预训练模型 GLM-130B，并构建了高精度通用知识图谱，形成数据与知识双轮驱动的认知引擎，基于此模型打造了 ChatGLM。此外，智谱还推出了认知大模型平台 Bigmodel.ai，包括 CodeGeeX 和 CogView 等产品，提供智能 API 服务，链接物理世界的亿级用户、赋能元宇宙数字人、成为具身机器人的基座，赋予机器像人一样“思考”的能力。'
     },
+     {
+      title: 'MiniMax | 与所有人共创智能',
+      stars: 4,
+      link: 'https://www.minimaxi.com/',
+      desc: 'MiniMax 是一家专注于通用人工智能的科技公司，致力于打造"与所有人共享智能"的 AI 生态系统。公司自主研发了完整的模型矩阵，涵盖文本生成、视频创作（Hailuo）、语音合成及音乐生成等多元领域。核心产品包括智能助手 MiniMax Agent、视频创作平台 Hailuo、语音合成工具 Audio 及 AI 角色扮演应用 Talkie，并通过开放 API 为开发者提供全栈 AI 能力支持。MiniMax 以技术创新为驱动，持续拓展人机交互边界，推动 AI 技术普惠化应用。'
+    },
     {
       title: 'Meta AI ｜ Chat Wdith Llama 3',
       link: 'https://llama3.dev/',
