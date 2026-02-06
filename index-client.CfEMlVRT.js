@@ -1,0 +1,1 @@
+import{T as t,U as o,V as a,W as c,X as l}from"./runtime.B3vDPYsY.js";function f(n){t===null&&o(),a&&t.l!==null?u(t).m.push(n):c(()=>{const e=l(n);if(typeof e=="function")return e})}function u(n){var e=n.l;return e.u??={a:[],b:[],m:[]}}export{f as o};
