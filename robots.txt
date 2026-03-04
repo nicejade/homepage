@@ -1,0 +1,41 @@
+# robots.txt for https://www.niceshare.site/
+# 允许所有搜索引擎爬取所有内容
+
+# 全局规则 - 允许所有搜索引擎
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_astro/
+
+# Google Bot - 优先级最高
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+# Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+
+# DuckDuckGo Bot
+User-agent: DuckDuckBot
+Allow: /
+
+# 禁止有害爬虫
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Sitemap 位置
+Sitemap: https://www.niceshare.site/sitemap-index.xml
+Sitemap: https://www.niceshare.site/sitemap-0.xml
+
+# 主机信息
+Host: https://www.niceshare.site
