@@ -21,10 +21,16 @@ export default {
       desc: 'AGENTS.md 是由 OpenAI 等组织发起的一个开源、通用 Markdown 格式，用来为 AI 编程“智能体”（coding agents）提供项目专属指南。简单来说，如果把 README.md 当成人类开发者的入门文档，那 AGENTS.md 就是“给 AI 的 README”。其主要作用包括：告诉 AI 如何安装依赖、运行测试、遵守代码风格、执行 lint、构建与部署流程、提交流程、安全约定等，无须人为重复说明即可安心执行任务。'
     },
     {
-      title: 'Clawdbot | 运行在您自己的设备上的个人 AI 助手',
-      link: 'https://clawd.bot/',
+      title: 'OpenClaw | 运行在您自己的设备上的个人 AI 助手',
+      link: 'https://openclaw.ai/',
       stars: 5,
-      desc: 'Clawd.bot 是款开源、可自托管的 AI 助手平台，主打“在聊天中把事办完”。它可运行于 Telegram、Discord 等工具中，支持执行真实任务，如管理邮箱与日程、自动化脚本、网页浏览与信息提取、文件与系统操作。它具备持久记忆和跨会话上下文，可通过插件持续扩展能力。相比只会对话的 AI，它更像一名全天候数字助理，适用于个人效率提升、团队协作与自动化工作流，并让用户对数据与能力保持高度掌控。'
+      desc: 'OpenClaw 是款开源、可自托管的 AI 助手平台，主打“在聊天中把事办完”。它可运行于 Telegram、Discord 等工具中，支持执行真实任务，如管理邮箱与日程、自动化脚本、网页浏览与信息提取、文件与系统操作。它具备持久记忆和跨会话上下文，可通过插件持续扩展能力。相比只会对话的 AI，它更像一名全天候数字助理，适用于个人效率提升、团队协作与自动化工作流，并让用户对数据与能力保持高度掌控。'
+    },
+    {
+      title: 'ClawHub | AI Agent 技能市场与版本管理平台',
+      link: 'https://clawhub.ai/',
+      stars: 5,
+      desc: 'ClawHub 是专为 AI Agent 打造的技能仓库（Skill Dock），开发者可以上传、版本管理和分享 Agent Skills 技能包。它支持语义搜索发现技能，一键安装（npx clawhub install），以及版本回滚。平台采用类似 npm 的版本管理机制，确保技能可靠可用。无门槛开放，让优质 AI 技能流通无阻，是构建和扩展 AI Agent 能力的核心基础设施。'
     },
     {
       title: 'MCP Servers | 最大的 MCP Servers 集合',
