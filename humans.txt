@@ -1,0 +1,35 @@
+/* TEAM */
+  Developer: 逍遥自在轩
+  Site: https://www.niceshare.site/
+  Twitter: @MarshalXuan
+  Mastodon: @nicejade@mastodon.social
+  GitHub: https://github.com/nicejade
+  Location: China
+
+/* THANKS */
+  Astro - https://astro.build/
+  Starlight - https://starlight.astro.build/
+  Svelte - https://svelte.dev/
+  TailwindCSS - https://tailwindcss.com/
+  TypeScript - https://www.typescriptlang.org/
+  MDX - https://mdxjs.com/
+
+/* SITE */
+  Last update: 2025/01/25
+  Language: 简体中文 / Simplified Chinese
+  Doctype: HTML5
+  IDE: Cursor, VS Code
+  Technologies: Astro 5, Starlight, Svelte 5, TypeScript 5, TailwindCSS 4, MDX
+  Standards: HTML5, CSS3, ES2024, WCAG 2.1 AA
+  Components: Responsive Design, PWA, SEO Optimized
+  Hosting: Cloudflare Pages
+  Performance: 100/100 Lighthouse Score Target
+  
+/* SITE FEATURES */
+  - Progressive Web App (PWA)
+  - Fully Responsive Design
+  - SEO Optimized
+  - Accessibility (A11y) Compliant
+  - Fast Loading (< 2s)
+  - Modern Browser Support
+  - Dark Mode Support
