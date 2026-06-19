@@ -12,7 +12,7 @@ Build a polished GitHub project curation section for the existing Astro + Starli
 
 In scope:
 
-- Add a new site section named `GitHub 珍藏` at `/github/`.
+- Add a new site section named `开源琅嬛阁` at `/github/`.
 - Create a static content collection for curated GitHub projects.
 - Show a searchable, filterable list of project cards.
 - Give every project its own MDX detail page.
@@ -45,12 +45,12 @@ Pages:
 
 Navigation:
 
-- Add `GitHub 珍藏` as a visible route from the homepage experience.
+- Add `开源琅嬛阁` as a visible route from the homepage experience.
 - Keep the route compatible with Starlight's generated content navigation.
 
 Naming:
 
-- Section title: `GitHub 珍藏`
+- Section title: `开源琅嬛阁`
 - Route: `/github/`
 - Content collection: `github`
 
@@ -101,7 +101,7 @@ The `/github/` page should feel like a curated library rather than a plain link 
 
 Top section:
 
-- Title: `GitHub 珍藏`
+- Title: `开源琅嬛阁`
 - Subtitle: explain that the section collects AI and developer productivity open-source projects.
 - A compact stats row can show total projects and tag count if it does not crowd the layout.
 

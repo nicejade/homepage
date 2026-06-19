@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the approved `GitHub 珍藏` static curation section with seeded repository MDX entries, searchable filtering UI, detail pages, and a local Codex Skill for generating new entries.
+**Goal:** Build the approved `开源琅嬛阁` static curation section with seeded repository MDX entries, searchable filtering UI, detail pages, and a local Codex Skill for generating new entries.
 
 **Architecture:** Astro owns content collections, static routing, SEO metadata, and MDX rendering. Svelte owns the list-page interaction island using small pure helper functions for normalization and filtering. The repo-local Codex Skill produces one MDX file under `src/content/github/` and validates the site after generation.
 
@@ -129,7 +129,7 @@ Generate static paths from the collection, render `GithubRepoPreview`, and rende
 
 - [ ] **Step 4: Add homepage navigation**
 
-Add a visible `GitHub 珍藏` action or section link from `src/content/docs/index.mdx`.
+Add a visible `开源琅嬛阁` action or section link from `src/content/docs/index.mdx`.
 
 ### Task 4: Local Codex Skill
 

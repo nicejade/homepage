@@ -1,4 +1,4 @@
 interface:
   display_name: "GitHub Project Curator"
-  short_description: "Generate GitHub 珍藏 MDX entries from repo URLs"
-  default_prompt: "Use $github-project-curator to add this GitHub repository to GitHub 珍藏."
+  short_description: "Generate 开源琅嬛阁 MDX with X-style preview metadata"
+  default_prompt: "Use $github-project-curator to add this GitHub repo to 开源琅嬛阁 with X-style social card metadata, 核心特性, 与替代方案, and structured 如何使用 sections."

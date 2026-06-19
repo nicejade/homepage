@@ -49,3 +49,24 @@ export function githubMetaTagClass(active = false): string {
 export function formatGithubStars(stars: number): string {
   return stars.toLocaleString('en-US');
 }
+
+/** Compact star count for list cards, e.g. 45234 → "45k+", 1200 → "1.2k+". */
+export function formatGithubStarsCompact(stars: number): string {
+  if (stars >= 10_000) {
+    return `${Math.round(stars / 1000)}k+`;
+  }
+  if (stars >= 1_000) {
+    const k = stars / 1000;
+    const rounded = k >= 10 ? `${Math.round(k)}` : k.toFixed(1).replace(/\.0$/, '');
+    return `${rounded}k+`;
+  }
+  return '<1k+';
+}
+
+/** Compact count for forks, issues, contributors on social cards. */
+export function formatGithubStatCompact(value: number | undefined): string {
+  if (value === undefined || value < 0) return '—';
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(1).replace(/\.0$/, '')}k`;
+  return String(value);
+}

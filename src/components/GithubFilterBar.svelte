@@ -12,10 +12,10 @@
 
 <div
   class="sticky top-0 z-10 -mx-4 border-b border-black/[0.06] bg-white/70 px-4 py-4 backdrop-blur-xl dark:border-white/[0.08] dark:bg-gray-950/70 sm:-mx-6 sm:px-6"
-  aria-label="GitHub 珍藏筛选"
+  aria-label="开源琅嬛阁筛选"
 >
   <div class="flex flex-col gap-3.5">
-    <label for="github-search" class="sr-only">搜索 GitHub 珍藏</label>
+    <label for="github-search" class="sr-only">搜索开源琅嬛阁</label>
     <div class="relative">
       <svg
         class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey/70 dark:text-gray-500"

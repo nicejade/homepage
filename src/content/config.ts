@@ -16,6 +16,11 @@ const githubCollection = defineCollection({
 		publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 		updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 		curationReason: z.string(),
+		repoDescription: z.string().optional(),
+		avatarUrl: z.string().url().optional(),
+		forks: z.number().int().nonnegative().optional(),
+		openIssues: z.number().int().nonnegative().optional(),
+		contributors: z.number().int().nonnegative().optional(),
 	}),
 });
 

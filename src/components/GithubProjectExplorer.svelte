@@ -48,7 +48,7 @@
   }
 </script>
 
-<section class="flex flex-col gap-8" aria-label="GitHub 珍藏项目列表">
+<section class="flex flex-col gap-8" aria-label="开源琅嬛阁项目列表">
   <header class="mx-auto max-w-2xl text-center">
     <h2
       class="text-3xl font-semibold tracking-tight text-black dark:text-silver sm:text-4xl"
@@ -85,7 +85,7 @@
   />
 
   {#if filteredProjects.length > 0}
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+    <div class="project-grid">
       {#each filteredProjects as project (project.slug)}
         <GithubProjectCard {project} {selectedTag} onTagClick={setTag} />
       {/each}
@@ -94,3 +94,27 @@
     <GithubEmptyState onClearFilters={clearFilters} />
   {/if}
 </section>
+
+<style>
+  .project-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  /* 平板 / MacBook：2 列 */
+  @media (min-width: 48rem) {
+    .project-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* 超大 MacBook / 宽屏：3 列 */
+  @media (min-width: 90rem) {
+    .project-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+  }
+</style>

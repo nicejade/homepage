@@ -13,7 +13,7 @@ Redesign the `/github/` list and `/github/[slug]/` detail pages with a component
 | Topic | Choice |
 |-------|--------|
 | Scope | Full chain: header, filters, cards, empty state, detail preview |
-| Card density | Balanced: keep metadata + short curation reason; GitHub action as secondary icon button |
+| Card density | Balanced: single `description` line + metadata; `curationReason` search-only; GitHub action as secondary icon button |
 | List width | `max-w-6xl` centered, `not-content` |
 | Filters | Full-width sticky search; horizontally scrollable tag chips |
 | Detail width | Wide preview card; `max-w-3xl` centered MDX body |

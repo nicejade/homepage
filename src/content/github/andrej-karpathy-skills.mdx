@@ -1,0 +1,101 @@
+---
+title: Karpathy Coding Guidelines
+description: 基于 Andrej Karpathy 对 LLM 编程陷阱的总结，用一份 CLAUDE.md 约束 Claude Code / Cursor 的假设、复杂度与改动范围。
+repo: https://github.com/multica-ai/andrej-karpathy-skills
+repoDescription: A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.
+avatarUrl: https://avatars.githubusercontent.com/u/254743058?v=4
+tags:
+  - AI 编程
+  - 开发工具
+  - Agent
+language: Markdown
+stars: 178689
+forks: 18259
+openIssues: 120
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-19"
+updatedAt: "2026-06-19"
+curationReason: 把 Karpathy 总结的 LLM 编码反模式浓缩成可复制规则，适合想减少 AI 过度假设与过度工程的团队。
+---
+
+## 项目介绍
+
+这是一份受 Andrej Karpathy 启发的 AI 编程行为准则，核心产物是单个 `CLAUDE.md` 文件（及配套的 Cursor 规则）。它针对大模型在结对编程中常见的四类问题——擅自假设、过度工程、无关改动、缺少可验证目标——给出四条可操作的约束原则，帮助 Claude Code、Cursor 等工具在动手前先想清楚、改得少、改得准。
+
+## 核心特性
+
+- **Think Before Coding**：显式陈述假设，有歧义时先问，必要时反驳过度复杂的方案
+- **Simplicity First**：只做被请求的功能，拒绝为单次用途抽象、为不可能场景写防御代码
+- **Surgical Changes**：只改任务相关代码，不顺手重构邻域逻辑，风格与现有代码保持一致
+- **Goal-Driven Execution**：把「加验证」「修 bug」转化为可检验的成功标准与测试驱动步骤
+- 支持 Claude Code 插件安装、项目级 `CLAUDE.md` 追加，以及 Cursor 项目规则复用
+
+## 对用户价值
+
+许多 AI 编程助手会默默选定一种理解并一路实现，导致 diff 膨胀、无关文件被改动、问题要在实现后才暴露。这份准则把 Karpathy 观察到的反模式写成可复制的项目规则，让助手在编码前暴露不确定性、在编码中保持克制，并用测试与验证闭环替代模糊的「做好就行」。
+
+## 与替代方案
+
+- 相比通用 `CLAUDE.md` 模板或空规则文件，本仓库针对 LLM 编码失误给出了具体原则与自检问题，而非泛泛的「写好代码」。
+- 相比 Cursor Rules / Copilot Instructions 的自定义写法，这里提供经过社区验证的完整条文，可直接安装或合并进现有配置。
+- 若你需要多代理编排、技能市场或运行时沙箱，可评估同一作者团队的 [Multica](https://github.com/multica-ai/multica)；本仓库专注行为约束，不负责代理调度。
+
+## 适应人群
+
+- 使用 Claude Code 或 Cursor 做日常开发的工程师，希望减少 AI 乱改代码。
+- 需要在团队内统一 AI 助手行为规范的 Tech Lead 或平台同学。
+- 已遇到「模型过度设计 / 顺手重构 / 不先澄清需求」等痛点的个人开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 使用 Claude Code，或能在项目中放置 `CLAUDE.md` / Cursor 规则的环境。
+- 对目标仓库有写入权限（安装插件或追加规则文件）。
+- 理解准则偏向「谨慎优于速度」，简单一行修改不必套用全部流程。
+
+### 安装方式
+
+**方式 A：Claude Code 插件（推荐）**
+
+在 Claude Code 内添加 marketplace 并安装：
+
+```
+/plugin marketplace add forrestchang/andrej-karpathy-skills
+/plugin install andrej-karpathy-skills@karpathy-skills
+```
+
+**方式 B：项目级 CLAUDE.md**
+
+新项目：
+
+```bash
+curl -o CLAUDE.md https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md
+```
+
+已有 `CLAUDE.md` 时追加：
+
+```bash
+echo "" >> CLAUDE.md
+curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
+```
+
+**方式 C：Cursor**
+
+参考仓库内 [CURSOR.md](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CURSOR.md)，将 `.cursor/rules/karpathy-guidelines.mdc` 复制到目标项目，或安装为全局 Skill。
+
+### 首次运行
+
+安装插件或写入规则后，在 Claude Code / Cursor 中打开目标项目，发起一个中等复杂度的编码任务（如「为某 API 补输入校验」），观察助手是否会在实现前澄清歧义、列出计划与验证步骤。
+
+### 验证是否成功
+
+若准则生效，你应看到：diff 更聚焦请求范围、实现前出现澄清问题、复杂任务附带可验证步骤。可在 `CLAUDE.md` 末尾追加项目专属规则（语言栈、测试要求等）并与本准则合并使用。
+
+### 常见坑 / 注意事项
+
+- README 中的插件 marketplace 与 `CLAUDE.md` 原始地址仍指向 `forrestchang/andrej-karpathy-skills`；与 `multica-ai`  fork 内容同步，安装时以 README 为准。
+- 准则会抑制过度工程，对明显的一行修复不必强制完整流程，需结合任务复杂度判断。
+- 合并进现有 `CLAUDE.md` 时注意去重，避免与项目既有规则冲突；项目特定约束应写在独立章节中。

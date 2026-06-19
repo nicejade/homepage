@@ -1,0 +1,121 @@
+---
+title: Superpowers
+description: 面向编码代理的完整开发方法论与可组合技能库，覆盖头脑风暴、计划、子代理协作与 TDD。
+repo: https://github.com/obra/superpowers
+repoDescription: An agentic skills framework & software development methodology that works.
+avatarUrl: https://avatars.githubusercontent.com/u/45416?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: Shell
+stars: 233059
+forks: 20702
+openIssues: 269
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-19"
+updatedAt: "2026-06-19"
+curationReason: 让 Agent 先澄清需求再写代码，适合 Cursor / Claude Code 等场景下追求规范研发流程的团队。
+---
+
+## 项目介绍
+
+Superpowers 是由 Jesse Vincent（obra）与 Prime Radiant 团队维护的一套 **Agent 技能框架与软件研发方法论**。它通过一组可组合的技能（Skills）与会话启动指令，让编码代理在动手写代码前先澄清目标、产出可审阅的设计，再生成细粒度实施计划，并以子代理驱动开发、严格 TDD 与代码审查闭环推进任务。技能会在相关场景自动触发，无需每次手动指定工作流。
+
+## 核心特性
+
+- **brainstorming**：编码前通过提问收敛需求，分块展示设计供确认并保存设计文档
+- **writing-plans / executing-plans**：将设计拆成 2–5 分钟可执行的小任务，含文件路径、验证步骤与完整代码指引
+- **subagent-driven-development**：按任务派发子代理，两阶段审查（规格符合度 → 代码质量），支持长时间自主推进
+- **test-driven-development**：强制 RED-GREEN-REFACTOR，先写失败测试再写最小实现
+- **systematic-debugging / verification-before-completion**：四阶段根因排查，完成前必须有运行证据
+- **using-git-worktrees / finishing-a-development-branch**：隔离分支开发，任务结束后引导合并、PR 或清理
+- 支持 Claude Code、Cursor、Codex、Gemini CLI、GitHub Copilot CLI、OpenCode、Pi 等十余种 Agent 宿主
+
+## 对用户价值
+
+许多 AI 编程助手会「看到需求就写代码」，导致范围漂移、缺少设计共识、测试被跳过。Superpowers 把经过验证的研发流程编码成自动触发的技能链：先对齐「真正要做什么」，再产出 junior 也能照做的计划，最后用 TDD 与子代理审查保证质量。对团队而言，它提供可复制的 Agent 行为标准；对个人而言，可减少反复纠偏与大规模 diff 返工。
+
+## 与替代方案
+
+- 相比 [Karpathy Coding Guidelines](https://github.com/multica-ai/andrej-karpathy-skills) 等单文件行为准则，Superpowers 覆盖从需求澄清到分支收尾的**完整工作流**，而非仅约束编码风格。
+- 相比通用 Cursor Rules 或零散 prompt 模板，这里提供**可测试、跨宿主复用**的技能库与 marketplace 安装路径，并内置子代理编排与 TDD 强制流程。
+- 相比只提供 MCP 工具或单次任务脚本的 Agent 框架，Superpowers 侧重**方法论与流程编排**；若你需要运行时沙箱、多模型路由或企业托管，可评估 Prime Radiant 商业服务或自建编排层，本仓库不负责基础设施。
+
+## 适应人群
+
+- 使用 Cursor、Claude Code、Codex 等工具，希望 Agent 按「设计 → 计划 → TDD → 审查」顺序工作的开发者。
+- 需要在团队内统一 AI 结对编程流程、减少「直接开写」反模式的 Tech Lead。
+- 已熟悉基础 Agent 用法，想引入子代理驱动开发与系统化调试等进阶实践的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 使用 README 列出的某一 Agent 宿主（Cursor、Claude Code、Codex 等）；多宿主需**分别安装**。
+- 对目标项目有读写权限；子代理与工作树流程需要 Git 仓库。
+- 接受方法论偏向 TDD 与 YAGNI——简单一行修改可能被流程「过度包装」，需结合任务复杂度判断。
+
+### 安装方式
+
+**Cursor（推荐本站点读者）**
+
+在 Agent 对话中：
+
+```text
+/add-plugin superpowers
+```
+
+或在插件 marketplace 搜索 `superpowers` 安装。
+
+**Claude Code — 官方 marketplace**
+
+```bash
+/plugin install superpowers@claude-plugins-official
+```
+
+**Claude Code — Superpowers marketplace**
+
+```bash
+/plugin marketplace add obra/superpowers-marketplace
+/plugin install superpowers@superpowers-marketplace
+```
+
+**Codex CLI**
+
+```bash
+/plugins
+# 搜索 superpowers，选择 Install Plugin
+```
+
+**Gemini CLI**
+
+```bash
+gemini extensions install https://github.com/obra/superpowers
+```
+
+**GitHub Copilot CLI**
+
+```bash
+copilot plugin marketplace add obra/superpowers-marketplace
+copilot plugin install superpowers@superpowers-marketplace
+```
+
+更多宿主（Antigravity、Factory Droid、Kimi Code、OpenCode、Pi 等）见[仓库 README](https://github.com/obra/superpowers#installation)。
+
+### 首次运行
+
+安装并重启或新开 Agent 会话后，发起一个中等复杂度的功能请求（例如「给某模块加筛选与测试」）。Superpowers 应先在 **brainstorming** 阶段提问并分块展示设计，而非立即修改代码。
+
+### 验证是否成功
+
+确认以下行为出现即表示技能链已激活：设计确认后才进入 **writing-plans**；实现阶段出现 RED-GREEN TDD 步骤；多步任务会触发 **subagent-driven-development** 或带检查点的 **executing-plans**。可在会话中观察 Agent 是否引用具体 skill 名称。
+
+### 常见坑 / 注意事项
+
+- 多宿主环境需各自安装；OpenCode 等需单独执行其 [INSTALL.md](https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md) 指引。
+- brainstorming 的可选可视化伴侣默认加载 Prime Radiant  logo 做版本遥测，不含项目内容；可设 `SUPERPOWERS_DISABLE_TELEMETRY=1` 关闭。
+- 上游一般**不接受随意新增 skill 的 PR**；修改 skill 须兼容所有支持的 Agent，贡献前阅读 `writing-skills` 与 `evals/README.md`。
+- 企业级商业支持见 sales@primeradiant.com；社区问题可走 [Discord](https://discord.gg/35wsABTejz) 或 GitHub Issues。

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { GithubProject } from '../lib/github-curation';
   import {
-    formatGithubStars,
+    formatGithubStarsCompact,
     GITHUB_CARD_INTERACTIVE,
     GITHUB_CARD_SHADOW,
     GITHUB_SURFACE,
@@ -14,7 +14,7 @@
 </script>
 
 <article
-  class="group relative flex h-full flex-col gap-4 p-5 sm:p-6 {GITHUB_SURFACE} {GITHUB_CARD_SHADOW} {GITHUB_CARD_INTERACTIVE}"
+  class="group relative flex h-full min-w-0 flex-col gap-4 p-5 sm:p-6 {GITHUB_SURFACE} {GITHUB_CARD_SHADOW} {GITHUB_CARD_INTERACTIVE}"
 >
   <div class="flex flex-col gap-2 pr-16">
     <p class="truncate font-mono text-xs text-grey/80 dark:text-gray-500">{project.ownerRepo}</p>
@@ -64,7 +64,7 @@
           d="M20.924 7.625a1.52 1.52 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.52 1.52 0 0 0 .387-1.575"
         />
       </svg>
-      <span>{formatGithubStars(project.stars)}</span>
+      <span>{formatGithubStarsCompact(project.stars)}</span>
     </div>
     <div class="flex items-center gap-1.5 text-grey dark:text-gray-400">
       <span class="h-2 w-2 rounded-full bg-brand/70" aria-hidden="true"></span>
@@ -72,14 +72,6 @@
     </div>
     <div class="text-grey dark:text-gray-400">{project.license || 'Unknown'}</div>
   </dl>
-
-  {#if project.curationReason}
-    <p
-      class="line-clamp-2 rounded-xl bg-black/[0.025] px-3.5 py-2.5 text-sm leading-relaxed text-grey dark:bg-white/[0.03] dark:text-gray-400"
-    >
-      {project.curationReason}
-    </p>
-  {/if}
 
   <div class="mt-auto flex items-center gap-2.5 pt-1">
     <a

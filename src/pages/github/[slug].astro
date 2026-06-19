@@ -2,7 +2,8 @@
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import { getCollection, render } from 'astro:content';
 import GithubPageShell from '../../components/GithubPageShell.astro';
-import GithubRepoPreview from '../../components/GithubRepoPreview.astro';
+import GithubSocialCard from '../../components/GithubSocialCard.svelte';
+import MarkdownContent from '../../components/MarkdownContent.astro';
 import { normalizeGithubProject } from '../../lib/github-curation';
 
 export async function getStaticPaths() {
@@ -22,20 +23,22 @@ const description = entry.data.description;
 <StarlightPage
 	hasSidebar={false}
 	frontmatter={{
-		title: `${entry.data.title} - GitHub 珍藏`,
+		title: `${entry.data.title} - 开源琅嬛阁`,
 		description,
 		tableOfContents: false,
 		head: [
 			{ tag: 'link', attrs: { rel: 'canonical', href: `https://www.niceshare.site/github/${entry.slug}/` } },
-			{ tag: 'meta', attrs: { property: 'og:title', content: `${entry.data.title} | GitHub 珍藏` } },
+			{ tag: 'meta', attrs: { property: 'og:title', content: `${entry.data.title} | 开源琅嬛阁` } },
 			{ tag: 'meta', attrs: { property: 'og:description', content: description } },
 		],
 	}}
 >
 	<GithubPageShell>
-		<GithubRepoPreview project={project} />
+		<GithubSocialCard client:load project={project} />
 	</GithubPageShell>
-	<GithubPageShell wide={false} class="mt-2">
-		<Content />
+	<GithubPageShell wide={false} markdown class="mt-2">
+		<MarkdownContent>
+			<Content />
+		</MarkdownContent>
 	</GithubPageShell>
 </StarlightPage>

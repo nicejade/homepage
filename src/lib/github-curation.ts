@@ -13,6 +13,11 @@ export type GithubProjectInput = {
     publishedAt?: string;
     updatedAt?: string;
     curationReason?: string;
+    repoDescription?: string;
+    avatarUrl?: string;
+    forks?: number;
+    openIssues?: number;
+    contributors?: number;
   };
 };
 
@@ -29,6 +34,11 @@ export type GithubProject = {
   publishedAt: string;
   updatedAt: string;
   curationReason: string;
+  repoDescription?: string;
+  avatarUrl?: string;
+  forks?: number;
+  openIssues?: number;
+  contributors?: number;
   slug: string;
   href: string;
   ownerRepo: string;
@@ -57,6 +67,11 @@ export function normalizeGithubProject(entry: GithubProjectInput): GithubProject
     publishedAt: entry.data.publishedAt ?? '',
     updatedAt: entry.data.updatedAt ?? '',
     curationReason: entry.data.curationReason ?? '',
+    repoDescription: entry.data.repoDescription,
+    avatarUrl: entry.data.avatarUrl,
+    forks: entry.data.forks,
+    openIssues: entry.data.openIssues,
+    contributors: entry.data.contributors,
     slug: entry.slug,
     href: `/github/${entry.slug}/`,
     ownerRepo,
@@ -67,6 +82,7 @@ export function normalizeGithubProject(entry: GithubProjectInput): GithubProject
     searchText: [
       project.title,
       project.description,
+      project.curationReason,
       project.tags.join(' '),
       project.language,
       project.ownerRepo,
