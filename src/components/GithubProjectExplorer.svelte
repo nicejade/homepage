@@ -3,48 +3,90 @@
   import {
     filterGithubProjects,
     getGithubProjectTags,
+    paginateGithubProjects,
+    parseGithubPageParam,
     type GithubProject,
   } from '../lib/github-curation';
   import GithubEmptyState from './GithubEmptyState.svelte';
   import GithubFilterBar from './GithubFilterBar.svelte';
+  import GithubPagination from './GithubPagination.svelte';
   import GithubProjectCard from './GithubProjectCard.svelte';
 
   export let projects: GithubProject[] = [];
 
   let query = '';
   let selectedTag = '';
+  let requestedPage = 1;
+  let gridElement: HTMLDivElement | null = null;
+  let lastQuery = '';
+  let lastSelectedTag = '';
+  let urlReady = false;
 
   $: tags = getGithubProjectTags(projects);
   $: filteredProjects = filterGithubProjects(projects, { query, selectedTag });
   $: hasFilters = query.trim() !== '' || selectedTag !== '';
+  $: pagination = paginateGithubProjects(filteredProjects, requestedPage);
+  $: visibleProjects = pagination.items;
+
+  $: if (urlReady && (query !== lastQuery || selectedTag !== lastSelectedTag)) {
+    requestedPage = 1;
+    lastQuery = query;
+    lastSelectedTag = selectedTag;
+  }
+
+  $: if (urlReady) {
+    syncUrl(pagination.page);
+  }
 
   onMount(() => {
-    const tagFromUrl = new URLSearchParams(window.location.search).get('tag');
+    const params = new URLSearchParams(window.location.search);
+    const tagFromUrl = params.get('tag');
     if (tagFromUrl && tags.includes(tagFromUrl)) {
       selectedTag = tagFromUrl;
     }
+    requestedPage = parseGithubPageParam(params.get('page'));
+    lastQuery = query;
+    lastSelectedTag = selectedTag;
+    urlReady = true;
   });
 
-  function setTag(tag: string) {
-    selectedTag = selectedTag === tag ? '' : tag;
-    syncTagToUrl(selectedTag);
-  }
-
-  function syncTagToUrl(tag: string) {
+  function syncUrl(page: number) {
     if (typeof window === 'undefined') return;
     const url = new URL(window.location.href);
-    if (tag) {
-      url.searchParams.set('tag', tag);
+    if (selectedTag) {
+      url.searchParams.set('tag', selectedTag);
     } else {
       url.searchParams.delete('tag');
     }
+    if (page > 1) {
+      url.searchParams.set('page', String(page));
+    } else {
+      url.searchParams.delete('page');
+    }
     window.history.replaceState({}, '', url);
+  }
+
+  function scrollToGrid() {
+    if (!gridElement || typeof window === 'undefined') return;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    gridElement.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'start',
+    });
+  }
+
+  function goToPage(page: number) {
+    requestedPage = page;
+    scrollToGrid();
+  }
+
+  function setTag(tag: string) {
+    selectedTag = selectedTag === tag ? '' : tag;
   }
 
   function clearFilters() {
     query = '';
     selectedTag = '';
-    syncTagToUrl('');
   }
 </script>
 
@@ -85,10 +127,21 @@
   />
 
   {#if filteredProjects.length > 0}
-    <div class="project-grid">
-      {#each filteredProjects as project (project.slug)}
-        <GithubProjectCard {project} {selectedTag} onTagClick={setTag} />
-      {/each}
+    <div id="github-project-grid" class="flex flex-col gap-6">
+      <div class="project-grid" bind:this={gridElement}>
+        {#each visibleProjects as project (project.slug)}
+          <GithubProjectCard {project} {selectedTag} onTagClick={setTag} />
+        {/each}
+      </div>
+
+      <GithubPagination
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        totalItems={pagination.totalItems}
+        startIndex={pagination.startIndex}
+        endIndex={pagination.endIndex}
+        onPageChange={goToPage}
+      />
     </div>
   {:else}
     <GithubEmptyState onClearFilters={clearFilters} />

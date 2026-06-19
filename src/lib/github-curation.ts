@@ -50,6 +50,20 @@ export type GithubProjectFilters = {
   selectedTag: string;
 };
 
+export const GITHUB_PAGE_SIZE = 15;
+
+export type GithubPaginationResult = {
+  items: GithubProject[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  startIndex: number;
+  endIndex: number;
+};
+
+export type GithubPaginationToken = number | 'ellipsis';
+
 export function normalizeGithubProject(entry: GithubProjectInput): GithubProject {
   const repo = entry.data.repo ?? '';
   const ownerRepo = getOwnerRepo(repo);
@@ -108,6 +122,64 @@ export function filterGithubProjects(
 
 export function getGithubProjectTags(projects: GithubProject[]): string[] {
   return [...new Set(projects.flatMap((project) => project.tags))].sort();
+}
+
+export function parseGithubPageParam(value: string | null): number {
+  if (!value) return 1;
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isFinite(parsed) || parsed < 1) return 1;
+  return parsed;
+}
+
+export function paginateGithubProjects(
+  projects: GithubProject[],
+  page: number,
+  pageSize = GITHUB_PAGE_SIZE,
+): GithubPaginationResult {
+  const totalItems = projects.length;
+  const totalPages = totalItems === 0 ? 0 : Math.ceil(totalItems / pageSize);
+  const safePage =
+    totalPages === 0 ? 1 : Math.min(Math.max(1, Math.floor(page) || 1), totalPages);
+  const startOffset = (safePage - 1) * pageSize;
+  const items = projects.slice(startOffset, startOffset + pageSize);
+
+  return {
+    items,
+    page: safePage,
+    pageSize,
+    totalItems,
+    totalPages,
+    startIndex: totalItems === 0 ? 0 : startOffset + 1,
+    endIndex: totalItems === 0 ? 0 : startOffset + items.length,
+  };
+}
+
+/** Page numbers for classic pagination; folds with ellipsis when totalPages > 7. */
+export function getGithubPaginationPageNumbers(
+  currentPage: number,
+  totalPages: number,
+): GithubPaginationToken[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  if (currentPage <= 4) {
+    return [1, 2, 3, 4, 5, 'ellipsis', totalPages];
+  }
+
+  if (currentPage >= totalPages - 3) {
+    return [
+      1,
+      'ellipsis',
+      totalPages - 4,
+      totalPages - 3,
+      totalPages - 2,
+      totalPages - 1,
+      totalPages,
+    ];
+  }
+
+  return [1, 'ellipsis', currentPage - 1, currentPage, currentPage + 1, 'ellipsis', totalPages];
 }
 
 function getOwnerRepo(repoUrl: string): string {

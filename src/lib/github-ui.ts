@@ -36,6 +36,26 @@ export function githubTagButtonClass(active: boolean): string {
   return `${base} bg-black/[0.04] text-grey hover:bg-black/[0.07] hover:text-black dark:bg-white/[0.06] dark:text-gray-300 dark:hover:bg-white/[0.1] dark:hover:text-white`;
 }
 
+/** Numbered page control in list pagination. */
+export function githubPaginationPageClass(active: boolean): string {
+  const base =
+    'inline-flex min-h-9 min-w-9 items-center justify-center rounded-xl px-2.5 text-sm font-medium tabular-nums transition-[background-color,color] duration-200 ease-out motion-reduce:transition-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
+  if (active) {
+    return `${base} bg-brand text-white`;
+  }
+  return `${base} bg-black/[0.04] text-grey hover:bg-black/[0.07] hover:text-black dark:bg-white/[0.06] dark:text-gray-300 dark:hover:bg-white/[0.1] dark:hover:text-white`;
+}
+
+/** Prev/next control in list pagination. */
+export function githubPaginationNavClass(disabled: boolean): string {
+  const base =
+    'inline-flex h-9 w-9 items-center justify-center rounded-xl border text-sm transition-[background-color,color,border-color] duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
+  if (disabled) {
+    return `${base} cursor-not-allowed border-black/[0.06] text-grey/40 dark:border-white/[0.06] dark:text-gray-600`;
+  }
+  return `${base} cursor-pointer border-black/10 text-grey hover:border-black/20 hover:bg-black/[0.03] hover:text-black dark:border-white/15 dark:text-gray-300 dark:hover:border-white/25 dark:hover:bg-white/[0.04] dark:hover:text-white`;
+}
+
 /** Inline metadata tag rendered inside cards and the detail preview. */
 export function githubMetaTagClass(active = false): string {
   const base =

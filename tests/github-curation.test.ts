@@ -3,7 +3,11 @@ import assert from 'node:assert/strict';
 import {
   filterGithubProjects,
   getGithubProjectTags,
+  getGithubPaginationPageNumbers,
+  GITHUB_PAGE_SIZE,
   normalizeGithubProject,
+  paginateGithubProjects,
+  parseGithubPageParam,
 } from '../src/lib/github-curation.ts';
 import {
   normalizeRepoStats,
@@ -78,6 +82,90 @@ test('filters by curationReason even when phrase is absent from description', ()
 test('filters by selected tag and returns unique sorted tags', () => {
   assert.equal(filterGithubProjects([project], { query: '', selectedTag: 'Agent' }).length, 1);
   assert.deepEqual(getGithubProjectTags([project]), ['AI 编程', 'Agent', '开发工具']);
+});
+
+function makeProjects(count: number) {
+  return Array.from({ length: count }, (_, index) =>
+    normalizeGithubProject({
+      slug: `project-${index + 1}`,
+      data: {
+        title: `Project ${index + 1}`,
+        description: '测试项目',
+        repo: `https://github.com/org/project-${index + 1}`,
+        tags: ['开发工具', 'CLI', '工作流'],
+        language: 'TypeScript',
+        stars: 100,
+        license: 'MIT',
+        featured: false,
+        publishedAt: '2026-06-20',
+        updatedAt: '2026-06-20',
+        curationReason: '适合测试分页场景。',
+      },
+    })
+  );
+}
+
+test('paginates projects with a fixed page size of 15', () => {
+  const projects = makeProjects(18);
+  const page1 = paginateGithubProjects(projects, 1);
+  const page2 = paginateGithubProjects(projects, 2);
+
+  assert.equal(GITHUB_PAGE_SIZE, 15);
+  assert.equal(page1.page, 1);
+  assert.equal(page1.totalPages, 2);
+  assert.equal(page1.totalItems, 18);
+  assert.equal(page1.items.length, 15);
+  assert.equal(page1.startIndex, 1);
+  assert.equal(page1.endIndex, 15);
+  assert.equal(page1.items[0]?.slug, 'project-1');
+  assert.equal(page2.page, 2);
+  assert.equal(page2.items.length, 3);
+  assert.equal(page2.startIndex, 16);
+  assert.equal(page2.endIndex, 18);
+  assert.equal(page2.items[0]?.slug, 'project-16');
+});
+
+test('clamps invalid page numbers to the nearest valid page', () => {
+  const projects = makeProjects(18);
+
+  assert.equal(paginateGithubProjects(projects, 0).page, 1);
+  assert.equal(paginateGithubProjects(projects, 99).page, 2);
+  assert.equal(parseGithubPageParam(null), 1);
+  assert.equal(parseGithubPageParam('2'), 2);
+  assert.equal(parseGithubPageParam('abc'), 1);
+});
+
+test('returns empty pagination metadata for no results', () => {
+  const result = paginateGithubProjects([], 3);
+
+  assert.deepEqual(result.items, []);
+  assert.equal(result.totalItems, 0);
+  assert.equal(result.totalPages, 0);
+  assert.equal(result.startIndex, 0);
+  assert.equal(result.endIndex, 0);
+});
+
+test('folds page numbers with ellipsis when there are many pages', () => {
+  assert.deepEqual(getGithubPaginationPageNumbers(1, 10), [1, 2, 3, 4, 5, 'ellipsis', 10]);
+  assert.deepEqual(getGithubPaginationPageNumbers(5, 10), [
+    1,
+    'ellipsis',
+    4,
+    5,
+    6,
+    'ellipsis',
+    10,
+  ]);
+  assert.deepEqual(getGithubPaginationPageNumbers(10, 10), [
+    1,
+    'ellipsis',
+    6,
+    7,
+    8,
+    9,
+    10,
+  ]);
+  assert.deepEqual(getGithubPaginationPageNumbers(3, 5), [1, 2, 3, 4, 5]);
 });
 
 test('formatGithubStarsCompact rounds list card star counts', () => {

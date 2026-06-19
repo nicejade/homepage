@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+# superpowers brainstorm session artifacts
+.superpowers/
+
 # pnpm lock file
 pnpm-lock.yaml
 
