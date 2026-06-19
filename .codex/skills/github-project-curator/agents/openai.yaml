@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Project Curator"
+  short_description: "Generate GitHub 珍藏 MDX entries from repo URLs"
+  default_prompt: "Use $github-project-curator to add this GitHub repository to GitHub 珍藏."

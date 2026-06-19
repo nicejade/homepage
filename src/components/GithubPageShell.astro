@@ -1,0 +1,13 @@
+---
+type Props = {
+	wide?: boolean;
+	class?: string;
+};
+
+const { wide = true, class: className = '' } = Astro.props;
+const widthClass = wide ? 'max-w-6xl' : 'max-w-3xl';
+---
+
+<div class={`not-content mx-auto w-full px-4 sm:px-6 ${widthClass} ${className}`}>
+	<slot />
+</div>

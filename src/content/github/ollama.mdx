@@ -1,0 +1,39 @@
+---
+title: Ollama
+description: 在本机快速运行和管理大语言模型的命令行与服务工具。
+repo: https://github.com/ollama/ollama
+homepage: https://ollama.com
+tags:
+  - 本地模型
+  - CLI
+  - AI 工具
+language: Go
+stars: 174464
+license: MIT
+featured: true
+publishedAt: "2026-06-19"
+updatedAt: "2026-06-19"
+curationReason: 本地模型体验的基础设施入口，极大降低了下载、运行和切换模型的门槛。
+---
+
+## 项目介绍
+
+Ollama 是在本机运行大语言模型的实用工具，提供命令行、后台服务和模型管理能力。它把模型下载、启动和调用流程压缩到很少的命令里，因此常被用作本地 AI 应用的底座。
+
+## GitHub 仓库预览
+
+仓库位于 [ollama/ollama](https://github.com/ollama/ollama)，核心语言为 Go。项目主页和模型库列出了可运行的模型与安装方式，仓库主题集中在 LLM、本地运行和模型生态。
+
+## 对用户价值
+
+对开发者而言，Ollama 提供了一个稳定的本地模型服务入口，可以被 Open WebUI、编辑器插件、脚本或原型应用调用。对普通用户而言，它让“在自己电脑上跑模型”这件事变得更可理解。
+
+## 适应人群
+
+- 想尝试本地大模型的个人用户。
+- 需要本地模型 API 的开发者。
+- 构建自托管 AI 工具链的团队。
+
+## 如何使用
+
+安装 Ollama 后使用 `ollama run <model>` 拉取并运行模型，再通过命令行或本地 API 调用。实际部署时需要根据显存、内存和并发需求选择合适大小的模型。

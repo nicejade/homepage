@@ -1,0 +1,43 @@
+---
+title: Comet
+description: 将 OpenSpec 与 Superpowers 串联为五阶段 Agent Skill 工作流，从想法到归档全程可恢复、可校验。
+repo: https://github.com/rpamis/comet
+homepage: https://www.npmjs.com/package/@rpamis/comet
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: TypeScript
+stars: 1473
+license: MIT
+featured: false
+publishedAt: "2026-06-19"
+updatedAt: "2026-06-19"
+curationReason: 把 Spec 驱动开发与 Agent Skill 编排做成可恢复的五阶段流水线，适合研究「如何让多个 Skill 自动衔接」。
+---
+
+## 项目介绍
+
+Comet（`@rpamis/comet`）是一个面向 AI 编程场景的 Agent Skill 编排工具。它把 OpenSpec 的「做什么」（大纲、提案、Spec 生命周期与归档）与 Superpowers 的「怎么做」（技术设计、规划、执行与收尾）串成五阶段自动化流水线，并用阶段守卫脚本校验状态，避免代理仅凭口头确认就推进流程。
+
+主入口 `/comet` 支持读取当前 Spec 状态并从中断处继续，适合跨会话的长任务开发。
+
+## GitHub 仓库预览
+
+仓库位于 [rpamis/comet](https://github.com/rpamis/comet)，核心语言为 TypeScript，MIT 许可。README 提供中英文说明与安装指引；仓库主题集中在 Spec 驱动开发、Agent Skills 与工作流编排。npm 包 [`@rpamis/comet`](https://www.npmjs.com/package/@rpamis/comet) 是主要分发入口。
+
+## 对用户价值
+
+对日常用 Cursor、Claude Code 等 AI 编程工具的用户，Comet 把「写 Spec → 设计 → 实现 → 验证 → 归档」从反复提醒代理同步文档，变成可脚本化、可恢复的流程。`.comet.yaml` 记录阶段、执行模式与验证结果，减少会话中断后重新读文档、猜进度的 token 浪费。
+
+对 Skill 作者而言，它也是一份可参考的实现：如何可靠触发嵌套 Skill、如何在阶段间自动交接，以及如何把脆弱流程从 Prompt 抽到可测试的 Shell 脚本里。
+
+## 适应人群
+
+- 已在使用 OpenSpec 或 Superpowers，希望两者协同而非二选一的开发者。
+- 需要可中断、可恢复的 Spec 驱动开发流程的团队。
+- 想研究 Agent Skill 安装分发与阶段状态机设计的工具作者。
+
+## 如何使用
+
+环境要求 Node.js 20+、npm 与 Bash 兼容终端（Windows 建议 Git Bash）。全局安装后执行 `comet init` 初始化项目，在 AI 编程会话中使用 `/comet` 启动或恢复流程。具体子命令、审查模式（`off|standard|thorough`）与平台差异请以 README 与 `NEWS.md` 为准；首次使用建议在可回滚分支上跑通一个小需求再接入主项目。

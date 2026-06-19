@@ -1,0 +1,35 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { getCollection } from 'astro:content';
+import GithubPageShell from '../../components/GithubPageShell.astro';
+import GithubProjectExplorer from '../../components/GithubProjectExplorer.svelte';
+import { normalizeGithubProject } from '../../lib/github-curation';
+
+const entries = await getCollection('github');
+const projects = entries
+	.map((entry) => normalizeGithubProject({ slug: entry.slug, data: entry.data }))
+	.sort((a, b) => {
+		if (a.featured !== b.featured) return a.featured ? -1 : 1;
+		return b.updatedAt.localeCompare(a.updatedAt) || a.title.localeCompare(b.title);
+	});
+
+const description = '收录 AI 编程、本地模型、工作流自动化与开发者生产力方向的高质量 GitHub 开源项目。';
+---
+
+<StarlightPage
+	hasSidebar={false}
+	frontmatter={{
+		title: 'GitHub 珍藏',
+		description,
+		tableOfContents: false,
+		head: [
+			{ tag: 'link', attrs: { rel: 'canonical', href: 'https://www.niceshare.site/github/' } },
+			{ tag: 'meta', attrs: { property: 'og:title', content: 'GitHub 珍藏 | 逍遥自在轩' } },
+			{ tag: 'meta', attrs: { property: 'og:description', content: description } },
+		],
+	}}
+>
+	<GithubPageShell>
+		<GithubProjectExplorer client:load projects={projects} />
+	</GithubPageShell>
+</StarlightPage>
