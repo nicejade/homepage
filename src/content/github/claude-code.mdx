@@ -1,0 +1,110 @@
+---
+title: Claude Code
+description: Anthropic 官方终端 Agent 编码工具，自然语言理解代码库并驱动编辑与 Git 工作流。
+repo: https://github.com/anthropics/claude-code
+homepage: https://code.claude.com/docs/en/overview
+repoDescription: Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.
+avatarUrl: https://avatars.githubusercontent.com/u/76263028?v=4
+tags:
+  - AI 编程
+  - Agent
+  - CLI
+language: Python
+stars: 133329
+forks: 21553
+openIssues: 8876
+contributors: 1
+license: Unknown
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 已订阅 Claude、想在终端、IDE 或 GitHub PR 里用官方 Agent 做跨文件任务的用户。
+---
+
+## 项目介绍
+
+Claude Code 是 Anthropic 推出的 Agent 编码工具，可在终端、IDE 与 GitHub（@claude）中使用。它读取本地代码库上下文，通过自然语言完成跨文件编辑、复杂代码解释、常规开发任务与 Git 工作流。本仓库主要承载官方插件、示例与问题反馈入口；CLI 本体需通过官方安装脚本获取，并绑定 Anthropic 账户使用。
+
+## 核心特性
+
+- **终端原生 Agent**：在项目目录运行 `claude`，用对话驱动读文件、改代码、跑命令
+- **多入口集成**：支持终端 CLI、IDE 扩展，以及在 GitHub 上 @claude 触发协作
+- **Git 工作流**：可协助提交、分支与 PR 相关操作，减少重复性版本管理步骤
+- **官方插件生态**：仓库 `plugins/` 提供 code-review、feature-dev、security-guidance、hookify 等扩展命令与代理
+- **内置反馈通道**：终端内 `/bug` 可直接上报问题，社区可通过 Discord 交流
+
+## 对用户价值
+
+Claude Code 把「理解整个仓库」和「执行多步改动」收敛到一个 Agent 流程里，比 Web 聊天复制粘贴更高效。对于已使用 Claude 的开发者，它提供与 Anthropic 模型深度对齐的官方编码体验；插件与 Hooks 机制也便于团队把代码审查、安全规范等流程固化进日常开发。
+
+## 与替代方案
+
+- 相比 **Cline** 等开源自主代理，Claude Code 是 Anthropic 官方产品，模型与产品迭代绑定更紧，但核心 CLI 并非传统意义上的全开源软件。
+- 相比 **Aider**，Claude Code 自主性更强，可编排终端与多文件任务；Aider 更强调逐 diff 结对与多模型切换灵活性。
+- 相比 **Cursor** 等 IDE Agent，Claude Code 更偏终端与 GitHub 工作流；若团队已 All-in 某一 IDE，可评估是否需额外引入 CLI Agent。
+- 若仅需补全而非 Agent 任务，**Continue** 或 **Copilot** 可能更轻量。
+
+## 适应人群
+
+- 已订阅 Claude Pro/Max 或企业方案、希望把 Agent 接入日常编码的开发者。
+- 习惯终端与 Git 工作流、需要跨文件自动化改动的个人或小团队。
+- 想在 GitHub PR 或 IDE 中与官方 Claude Agent 协作的工程师。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+ 运行环境（官方 README 标注；安装脚本会处理依赖）。
+- 有效的 Anthropic 账户与 Claude Code 使用权限。
+- 建议在已有 Git 管理的项目目录中试用，便于回滚改动。
+
+### 安装方式
+
+> npm 全局安装已标记为 deprecated，请优先使用官方推荐方式。
+
+**macOS / Linux（推荐）：**
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+**Homebrew（macOS / Linux）：**
+
+```bash
+brew install --cask claude-code
+```
+
+**Windows（推荐）：**
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+**WinGet（Windows）：**
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+更多安装选项、卸载与排错见 [官方 Setup 文档](https://code.claude.com/docs/en/setup)。
+
+### 首次运行
+
+进入目标项目目录，执行：
+
+```bash
+claude
+```
+
+用自然语言描述一个小任务（如补充测试、解释某模块或整理 Git 提交），观察 Agent 如何读取文件并提出改动。
+
+### 验证是否成功
+
+确认 `claude` 命令可启动、能访问项目文件，且对话中可触发读/写与 Git 相关操作。若使用插件，可在仓库 [plugins 目录](https://github.com/anthropics/claude-code/tree/main/plugins) 查阅可用扩展并按文档启用。
+
+### 常见坑 / 注意事项
+
+- **勿再用 deprecated 的 `npm install -g @anthropic-ai/claude-code`**，除非临时过渡；官方已推荐脚本或包管理器安装。
+- 使用前阅读 [数据使用政策](https://code.claude.com/docs/en/data-usage)，了解会话与反馈数据的收集范围。
+- Agent 可执行终端命令，首次试用应限制任务范围并审查高风险操作。
+- 本 GitHub 仓库以插件与反馈为主，遇到产品问题可用 `/bug` 或提交 [GitHub Issue](https://github.com/anthropics/claude-code/issues)。

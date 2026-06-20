@@ -1,0 +1,101 @@
+---
+title: Svelte
+description: 编译型前端框架，将声明式组件编译为高效 DOM 更新代码，无虚拟 DOM 运行时，主打简洁与性能。
+repo: https://github.com/sveltejs/svelte
+homepage: https://svelte.dev
+repoDescription: web development for the rest of us
+avatarUrl: https://avatars.githubusercontent.com/u/23617963?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: JavaScript
+stars: 87322
+forks: 4949
+openIssues: 1032
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 从 React/Vue 迁移评估、构建交互组件或基于 SvelteKit 搭建全栈应用的团队与个人开发者。
+---
+
+## 项目介绍
+
+Svelte 是由 [Svelte 团队](https://svelte.dev) 维护的编译型前端 UI 框架：你在 `.svelte` 文件中用 HTML、CSS 与 JavaScript 编写声明式组件，构建时由编译器生成针对 DOM 的精确更新逻辑，而非在浏览器中运行庞大的运行时与虚拟 DOM diff。Svelte 5 引入 Runes 响应式原语，让状态与副作用更直观；完整应用通常搭配官方全栈框架 [SvelteKit](https://svelte.dev/docs/kit) 使用。本仓库即 Svelte 编译器与核心运行时源码。
+
+## 核心特性
+
+- **编译时优化**：将组件编译为精简 JavaScript，减少包体积与运行时开销，更新 DOM 时尽量做最小必要变更
+- **单文件组件**：`.svelte` 文件内聚模板、样式与逻辑，支持 scoped CSS，学习曲线相对平缓
+- **Runes 响应式模型**（Svelte 5）：以 `$state`、`$derived`、`$effect` 等原语描述状态与派生，替代早期基于 `let` 与 `$:` 的写法
+- **渐进式采用**：既可嵌入现有页面作为局部组件，也可通过 SvelteKit 构建路由、SSR 与全栈应用
+- **丰富官方资源**：交互式 [Tutorial](https://svelte.dev/tutorial)、[Examples](https://svelte.dev/examples)、[REPL](https://svelte.dev/repl) 与完整 [文档](https://svelte.dev/docs/svelte/overview) 降低上手门槛
+
+## 对用户价值
+
+传统框架把大量工作放在浏览器运行时，项目变大后往往面临包体积与更新性能压力。Svelte 把响应式与 DOM 更新逻辑前移到编译阶段，让常见交互组件在同等功能下更轻量，也减少「为了性能而手写优化」的负担。若你维护营销页、仪表盘或需要精细交互的产品界面，Svelte 提供接近原生 Web 技术的写作体验；若需要路由、数据加载与部署一体化，SvelteKit 在同一生态内延伸为全栈方案，避免另选后端框架的割裂感。
+
+## 与替代方案
+
+- 相比 [React](https://react.dev/)，Svelte 不依赖虚拟 DOM 运行时，默认心智模型更接近「写模板 + 状态」；React 生态与招聘市场更成熟，第三方组件与岗位匹配往往更广。
+- 相比 [Vue](https://vuejs.org/)，两者都强调单文件组件与渐进式接入；Svelte 更强调编译期优化与更少的框架 API 表面，Vue 在 Options/Composition API 与周边工具链上积累更深。
+- 相比 [Angular](https://angular.dev/)，Svelte 更轻量、约束更少，适合小团队快速迭代；Angular 提供开箱即用的完整企业级框架（依赖注入、表单、路由一体化），大型规范化项目有时更省心。
+- 边界说明：本仓库聚焦 **UI 编译器与核心库**；生产级应用的路由、构建与部署请优先参考 [SvelteKit](https://github.com/sveltejs/kit) 与[官方文档](https://svelte.dev/docs/kit)，勿将仅安装 `svelte` 等同于完整应用脚手架。
+
+## 适应人群
+
+- 希望用更少样板代码构建交互界面，并关注首屏体积与运行时性能的前端工程师。
+- 已有 React/Vue 经验，正在评估迁移成本或在新项目中试用编译型框架的技术负责人。
+- 需要单文件组件、scoped 样式与官方教程/REPL 支持，快速从原型到可维护组件库的产品与全栈开发者。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+（以 [SvelteKit 文档](https://svelte.dev/docs/kit) 当前要求为准）。
+- npm、pnpm 或 Yarn 等包管理器。
+- 仅体验语法可使用浏览器 [REPL](https://svelte.dev/repl)，无需本地环境；正式项目推荐通过 SvelteKit 脚手架创建。
+
+### 安装方式
+
+**方式一：新建 SvelteKit 应用（官方推荐，适合完整项目）**
+
+```bash
+npx sv create my-app
+cd my-app
+npm install
+```
+
+使用 pnpm 时，在 `sv create` 向导中选择 pnpm，或于项目目录执行 `pnpm install`。
+
+**方式二：在现有 Vite 等项目中添加 Svelte 编译器**
+
+```bash
+npm install -D svelte @sveltejs/vite-plugin-svelte
+```
+
+具体 `vite.config` 与 `svelte.config` 写法见 [Svelte 文档 - Getting started](https://svelte.dev/docs/svelte/getting-started)。
+
+### 首次运行
+
+在 SvelteKit 项目中启动开发服务器：
+
+```bash
+npm run dev
+```
+
+终端会输出本地预览地址（默认 `http://localhost:5173`）。在 `src/routes/` 下编辑页面即可看到热更新。若仅需快速体验语法，可打开 [Tutorial](https://svelte.dev/tutorial) 或 [REPL](https://svelte.dev/repl) 无需本地安装。
+
+### 验证是否成功
+
+- 浏览器打开 dev server URL，默认欢迎页可正常渲染且无控制台报错。
+- 修改 `src/routes/+page.svelte` 中的文案或按钮事件，保存后页面应热更新。
+- 运行 `npm run build` 成功产出生产构建；`npm run preview` 可本地预览构建结果。
+
+### 常见坑 / 注意事项
+
+- **Svelte 与 SvelteKit 分工**：`svelte` 包提供编译器与组件运行时；路由、SSR、适配器与 `+page.server` 等能力属于 SvelteKit，选型时勿混淆。
+- **版本与迁移**：Svelte 5 的 Runes 与 Svelte 4 写法差异较大，维护旧项目请对照 [迁移指南](https://svelte.dev/docs/svelte/v5-migration-guide)；升级前阅读 [CHANGELOG](https://github.com/sveltejs/svelte/blob/main/packages/svelte/CHANGELOG.md)。
+- **生态与岗位**：组件库与招聘市场体量通常小于 React，引入前评估团队技能与第三方依赖可用性。
+- **社区支持**：问题可查 [文档](https://svelte.dev/docs)、[Discord](https://svelte.dev/chat) 或 GitHub Issues；`.dev` 域名偶发本地 DNS 问题可参考 README 中的说明。

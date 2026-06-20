@@ -1,0 +1,112 @@
+---
+title: "SnapDOM"
+description: "高性能 DOM 截图引擎，将页面元素导出为 PNG/SVG/WebP，零依赖且比 html2canvas 更快。"
+repo: "https://github.com/zumerlab/snapdom"
+homepage: "https://snapdom.dev"
+repoDescription: "High-performance engine for capturing, modifying, and converting DOM elements into any format."
+avatarUrl: "https://avatars.githubusercontent.com/u/103702169?v=4"
+tags:
+  - 开发工具
+  - 前端
+  - Web API
+language: "JavaScript"
+stars: 7887
+forks: 285
+openIssues: 4
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: "适合在网页内做卡片分享、海报导出或报表截图的前端开发者。"
+---
+
+## 项目介绍
+
+SnapDOM 是新一代 DOM 捕获引擎，可将任意 DOM 子树转换为自包含的图像表示，并导出为 SVG、PNG、JPG、WebP、Canvas 或 Blob。它基于标准 Web API 构建，无运行时依赖，在官方基准测试中显著快于 html2canvas 与 html-to-image，适合需要在前端生成分享图、海报或报表截图的场景。
+
+## 核心特性
+
+- 完整捕获 DOM：内联样式、伪元素（`::before`/`::after`）与字体
+- 支持 Shadow DOM、同源 iframe、CSS `counter()`/`counters()` 与 `line-clamp`
+- 一次克隆、多次导出：可复用捕获结果分别输出 PNG、SVG、JPG、WebP 或触发下载
+- 插件体系（Beta）：通过生命周期钩子扩展捕获流程，支持自定义导出格式
+- 零依赖、纯 Web API，提供 ESM/CJS 与 CDN 多种引入方式
+
+## 对用户价值
+
+传统方案（html2canvas、dom-to-image）在复杂节点上往往慢且样式还原不稳定。SnapDOM 通过「克隆 → 样式内联 → 图片/字体嵌入 → SVG foreignObject → 导出」的流水线，在保持高还原度的同时把捕获耗时压到毫秒级。对需要「页面内一键保存为图片」的产品（分享卡片、数据看板、设计稿导出）来说，集成成本低、包体小、API 直观。
+
+## 与替代方案
+
+- **html2canvas**：生态成熟、文档多，但复杂 DOM 下性能明显落后；SnapDOM 在官方基准中同类场景快一个数量级以上。
+- **html-to-image / dom-to-image**：轻量易用，但对伪元素、字体嵌入与 Shadow DOM 的支持不如 SnapDOM 完整。
+- **服务端截图（Puppeteer 等）**：适合整页或跨域场景，但需要后端资源；SnapDOM 适合纯前端、用户当前视口内的元素级导出。
+- **局限**：跨域图片需 CORS 或 `useProxy`；Safari 上 WebP 会回退 PNG，嵌入字体时性能受 WebKit 限制；自定义滚动条样式仅在未滚动时生效。
+
+## 适应人群
+
+- 需要在 Web 应用内实现「保存为图片」「生成分享海报」的前端开发者。
+- 正在从 html2canvas 迁移、希望提升捕获速度与样式还原度的团队。
+- 构建低代码/报表/设计工具，需要可扩展导出管线的工程师。
+
+## 如何使用
+
+### 前置条件
+
+- 现代浏览器环境（Chromium、Firefox、Safari 等；部分特性在 Safari 有已知限制）。
+- Node.js 18+（若通过 npm 安装并在构建工具中使用）。
+- 待捕获元素内的外部图片需允许跨域访问，否则需配置 `useProxy`。
+
+### 安装方式
+
+```bash
+npm i @zumer/snapdom
+# 或
+yarn add @zumer/snapdom
+```
+
+CDN 引入：
+
+```html
+<script type="module">
+  import { snapdom } from "https://unpkg.com/@zumer/snapdom/dist/snapdom.mjs";
+</script>
+```
+
+插件（可选）：
+
+```bash
+npm install @zumer/snapdom-plugins
+```
+
+### 首次运行
+
+一行代码将元素导出为 PNG：
+
+```js
+import { snapdom } from '@zumer/snapdom';
+
+const img = await snapdom.toPng(document.querySelector('#card'));
+document.body.appendChild(img);
+```
+
+可复用捕获、多次导出：
+
+```js
+const result = await snapdom(document.querySelector('#card'));
+await result.toPng();
+await result.download({ format: 'jpg', filename: 'card.jpg' });
+```
+
+### 验证是否成功
+
+在目标页面上对已知 DOM 节点调用 `snapdom.toPng()`，检查生成的图片是否包含预期文字、背景图与伪元素样式。可在 [snapdom.dev](https://snapdom.dev) 在线 Demo 对比效果。
+
+### 常见坑 / 注意事项
+
+- 跨域图片未配置 CORS 会导致捕获空白或缺失，可启用 `useProxy` 选项。
+- Safari 上使用 WebP 格式会自动回退为 PNG；嵌入字体（`embedFonts`）时捕获较慢，可通过 `safariWarmupAttempts` 调优。
+- 通过 JS `FontFace()` 动态加载的字体需参考官方 issue #43 的 workaround。
+- 元素已滚动时，自定义 `::-webkit-scrollbar` 样式不会被捕获。
+- 生产环境建议锁定稳定版 `@zumer/snapdom`，`@dev` 标签含新特性但可能不够稳定。

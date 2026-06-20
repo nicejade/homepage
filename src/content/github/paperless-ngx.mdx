@@ -1,0 +1,86 @@
+---
+title: paperless-ngx
+description: 社区维护的自托管文档管理系统，扫描、OCR 与全文检索，把纸质档案数字化归档。
+repo: https://github.com/paperless-ngx/paperless-ngx
+homepage: https://docs.paperless-ngx.com
+repoDescription: "A community-supported supercharged document management system: scan, index and archive all your documents"
+avatarUrl: https://avatars.githubusercontent.com/u/99562962?v=4
+tags:
+  - 知识管理
+  - 自动化
+  - 工作流
+language: Python
+stars: 42253
+forks: 2813
+openIssues: 5
+license: GPL-3.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 适合家庭与小型团队搭建私有纸质文档库，替代云盘堆 PDF 却搜不到内容的困境。
+---
+
+## 项目介绍
+
+Paperless-ngx 是原 Paperless 与 Paperless-ng 的官方继任项目，由社区团队共同维护。它把扫描件、PDF 与邮件附件统一入库，通过 OCR 与元数据索引变成可检索的私有文档库，目标是让实体纸张真正「少留一点」。
+
+## 核心特性
+
+- 支持 PDF、图片与常见办公文档，自动提取文本并建立全文索引
+- 基于 Tesseract 的 OCR，可选机器学习辅助自动打标签与分类
+- 消费目录（Consumption folder）与邮件收件，文件放入即自动处理
+- 标签、通信方、文档类型与自定义字段，便于组织发票、合同与证件
+- 多用户权限、REST API 与 Angular Web 界面，适合长期自托管部署
+- 官方提供 Docker Compose 模板与一键安装脚本，迁移自 Paperless-ng 较简单
+
+## 对用户价值
+
+纸质发票、保单、合同往往散落在抽屉与邮箱里，检索靠记忆、备份靠运气。Paperless-ngx 把「扫描 → 识别 → 归档 → 搜索」串成固定流程，数据留在自有服务器，比把 PDF 丢进云盘再手动命名更可持续。
+
+## 与替代方案
+
+- 相比原 Paperless-ng，Paperless-ngx 由组织化社区接手，文档、CI 与发布节奏更稳定，是现有用户的推荐升级路径。
+- 相比 Mayan EDMS 等企业级 DMS，Paperless-ngx 更轻量，聚焦个人与小型团队的扫描归档场景。
+- 相比 Google Drive、iCloud 等云存储，自托管方案隐私可控，且针对 OCR 与文档元数据做了专门优化；但需要自行维护服务器与备份。
+- 若只需协作编辑 Office 文档，应优先考虑 Notion、飞书等；Paperless-ngx 强项在「已生成 PDF/扫描件」的长期归档。
+
+## 适应人群
+
+- 想数字化家庭账单、证件与医疗记录，又不愿把敏感文件交给公有云的用户。
+- 小型工作室或自由职业者，需要统一归档发票、合同与客户往来邮件。
+- 已有 Homelab / NAS，希望用 Docker 跑一套私有文档库的 self-host 爱好者。
+
+## 如何使用
+
+### 前置条件
+
+- 推荐环境：Linux 服务器或 NAS，已安装 Docker 与 Docker Compose。
+- 准备足够磁盘空间存放原始文件与数据库；扫描仪或稳定的 PDF 来源。
+- 了解 GPL-3.0 许可；**敏感文档以明文存储，务必在可信内网主机运行并做好备份**（官方安全说明强调勿部署在不可信主机）。
+
+### 安装方式
+
+官方推荐 Docker Compose。可用一键脚本生成配置：
+
+```bash
+bash -c "$(curl -L https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/main/install-paperless-ngx.sh)"
+```
+
+也可直接使用仓库 [`docker/compose`](https://github.com/paperless-ngx/paperless-ngx/tree/main/docker/compose) 目录中的 Compose 文件，从 GitHub Container Registry 拉取镜像。其他安装方式见[官方文档](https://docs.paperless-ngx.com/setup/#installation)。
+
+### 首次运行
+
+按脚本或文档完成数据库、Redis 与 Paperless 服务配置后启动栈，在 Web 界面创建管理员账户。将测试 PDF 或扫描图片放入 consumption 目录，或通过界面上传，观察是否自动 OCR 并出现在文档列表。
+
+### 验证是否成功
+
+- 浏览器可访问 Web UI 并完成登录。
+- 上传的文档在列表中可见，全文搜索能命中 OCR 提取的内容。
+- 可为文档添加标签、通信方，确认元数据保存正常。
+
+### 常见坑 / 注意事项
+
+- 默认不对文档内容加密，生产环境请限制网络暴露、启用 HTTPS，并定期备份数据库与 `media` 目录。
+- OCR 质量高度依赖扫描分辨率与对比度，模糊或倾斜页面识别率会明显下降。
+- 首次大批量导入可能占用较多 CPU 与磁盘 I/O，建议分批处理。
+- 从 Paperless-ng 迁移通常只需替换 Docker 镜像，但升级前仍应阅读 [Migrating 文档](https://docs.paperless-ngx.com/setup/#migrating-to-paperless-ngx) 并做好快照。

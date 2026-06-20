@@ -1,0 +1,118 @@
+---
+title: Puppeteer
+description: 通过 DevTools Protocol 控制 Chrome/Firefox 的 Node.js 浏览器自动化库，默认无头运行，常用于 E2E 测试与网页抓取。
+repo: https://github.com/puppeteer/puppeteer
+homepage: https://pptr.dev
+repoDescription: "JavaScript API for Chrome and Firefox"
+avatarUrl: https://avatars.githubusercontent.com/u/6906516?v=4
+tags:
+  - 自动化
+  - 开发工具
+  - 工作流
+language: TypeScript
+stars: 95119
+forks: 9500
+openIssues: 250
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: E2E 测试选型、爬虫/截图/PDF 脚本、以及 Agent 浏览器工具链（如 chrome-devtools-mcp）的技术评估。
+---
+
+## 项目介绍
+
+Puppeteer 是 Google Chrome 团队维护的 Node.js 库，通过 [DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) 或 [WebDriver BiDi](https://pptr.dev/webdriver-bidi) 以高层 API 驱动 Chrome 或 Firefox。默认以无头（headless）模式运行，也支持有界面调试。仓库为 monorepo，日常开发安装 npm 包 `puppeteer` 或 `puppeteer-core` 即可；官方文档与 API 参考见 [pptr.dev](https://pptr.dev/docs)。
+
+## 核心特性
+
+- **高层浏览器控制 API**：`launch`、`newPage`、`goto`、点击、键盘输入、截图、PDF 导出等常见自动化能力开箱即用
+- **Chrome 与 Firefox 双引擎**：Chrome 通过 DevTools Protocol；Firefox 走 WebDriver BiDi，跨浏览器场景可统一脚本结构
+- **`puppeteer` / `puppeteer-core` 双包策略**：完整包安装时下载匹配版本浏览器；core 包仅作库使用，需自行指定 `executablePath` 或配合 `@puppeteer/browsers` 管理二进制
+- **Locator 与可访问性选择器**：支持 `::-p-aria()`、`::-p-text()` 等语义化定位，减少 brittle CSS 选择器依赖
+- **浏览器下载与配置体系**：`npx puppeteer browsers install`、`.puppeteerrc.js` 与 `PUPPETEER_CACHE_DIR` 等机制便于 CI 与容器环境复现
+- **生态延伸**：官方推荐 [`chrome-devtools-mcp`](https://github.com/ChromeDevTools/chrome-devtools-mcp) 作为基于 Puppeteer 的 MCP 服务器；并实验性支持 [WebMCP](https://pptr.dev/guides/webmcp)
+
+## 对用户价值
+
+若你需要在 Node.js 中程序化打开网页、填表、截图、生成 PDF、抓取动态渲染内容或跑端到端回归，Puppeteer 提供了比直接调 DevTools 更低门槛的抽象。安装 `puppeteer` 时会拉取兼容版 Chrome，本地与 CI 环境一致性较好；在 Docker 或受限网络下，可改用 `puppeteer-core` 挂载已有 Chromium，或通过配置缓存目录避免重复下载。对 AI Agent 与自动化平台，Puppeteer 也是 chrome-devtools-mcp 等「浏览器工具」的常见底层实现，适合把「让模型操作真实浏览器」接入工作流。
+
+## 与替代方案
+
+- 相比 [Playwright](https://github.com/microsoft/playwright)，Puppeteer 与 Chrome 生态绑定更深、历史更久，Stars 与 npm 下载量庞大；Playwright 内置多浏览器并行、自动等待与更强的一体式测试 Runner，新项目做跨浏览器 E2E 时 Playwright 往往更省心。
+- 相比 [Selenium](https://www.selenium.dev/)，Selenium 基于 WebDriver 标准、多语言客户端成熟，适合已有 Java/Python 测试栈的企业；Puppeteer 专注 JavaScript/TypeScript，API 更现代，与 Node 脚本和前端仓库集成更自然。
+- 相比 [Cypress](https://www.cypress.io/)，Cypress 强调「在浏览器内跑测试」的开发者体验与 Time Travel 调试，更偏前端团队交互式 E2E；Puppeteer 更通用，适合爬虫、批处理、PDF/截图流水线及底层自动化，而非开箱即用的测试 UI 框架。
+- 边界说明：本仓库为 **Puppeteer 源码 monorepo**；应用侧通常 `npm i puppeteer` 即可，无需 clone 本仓库。`puppeteer-core` 不读取 Puppeteer 配置文件与环境变量中的下载选项，需自行管理浏览器路径。
+
+## 适应人群
+
+- 需要在 Node.js/TypeScript 中编写爬虫、截图、PDF 导出或表单自动化脚本的后端或全栈工程师。
+- 维护基于 Chrome DevTools Protocol 的 E2E 测试、视觉回归或 CI 冒烟流水线的前端/测试工程师。
+- 评估浏览器自动化底座（含 MCP/Agent 场景）的技术负责人，或从 Puppeteer 迁移到 Playwright/Selenium 的选型对比者。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+（以 [官方 Troubleshooting](https://pptr.dev/troubleshooting) 与当前 major 版本要求为准；过旧 Node 可能导致模块解析错误）。
+- 磁盘空间：安装 `puppeteer` 会下载 Chrome for Testing（缓存默认在 `~/.cache/puppeteer`）。
+- Linux 无头环境常需额外系统依赖（字体、沙箱相关库）；Docker 场景见官方 [Docker 指南](https://pptr.dev/guides/docker)。
+
+### 安装方式
+
+**方式一：完整包（含浏览器下载）**
+
+```bash
+npm i puppeteer
+```
+
+**方式二：仅库，不自动下载浏览器**
+
+```bash
+npm i puppeteer-core
+```
+
+若 npm/pnpm/Yarn/Bun 等包管理器**默认阻止依赖 install 脚本**，安装后需手动下载浏览器：
+
+```bash
+npx puppeteer browsers install
+```
+
+npm 用户也可在 `package.json` 中为 `puppeteer` 配置 `allowScripts` 以恢复 postinstall 下载（见 [README 说明](https://github.com/puppeteer/puppeteer#installation)）。
+
+### 首次运行
+
+创建 `demo.mjs`（或 TypeScript 等价文件）：
+
+```js
+import puppeteer from 'puppeteer';
+
+const browser = await puppeteer.launch();
+const page = await browser.newPage();
+await page.goto('https://example.com');
+console.log(await page.title());
+await browser.close();
+```
+
+执行：
+
+```bash
+node demo.mjs
+```
+
+有界面调试可将 `launch` 改为 `{ headless: false }`。
+
+### 验证是否成功
+
+- 命令退出码为 0，控制台打印目标页面标题（如 `Example Domain`）。
+- 无 `Could not find expected browser locally` 等浏览器缺失报错。
+- 可选：运行 README 中的完整示例（含 `locator` 与键盘交互），确认 API 与本地 Chrome 版本匹配。
+
+### 常见坑 / 注意事项
+
+- **Install 脚本被拦截**：现代包管理器常默认禁用 postinstall，导致运行时找不到浏览器；务必执行 `npx puppeteer browsers install` 或配置 `allowScripts`。
+- **缓存目录不可写**：CI/打包场景若 home 目录不可用，设置 `PUPPETEER_CACHE_DIR` 或在 `.puppeteerrc.js` 中指定 `cacheDirectory`，并重新安装或手动 install browsers。
+- **Linux 沙箱与 root**：在 Docker 或 root 用户下可能需要 `launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })`；生产环境应优先修复依赖与权限，而非长期关闭沙箱。
+- **HTTP 站点导航报错**：Chrome for Testing 可能启用 HTTPS-First 相关特性，访问 HTTP URL 时出现 `net::ERR_BLOCKED_BY_CLIENT`；可按 [Troubleshooting](https://pptr.dev/troubleshooting) 禁用对应 feature 或改用 HTTPS。
+- **Windows 企业策略**：若 Chrome 策略强制扩展，默认 `--disable-extensions` 可能导致启动失败，可设 `enableExtensions: true`。
+- **与 Playwright 选型**：需要内置 test runner、trace、多浏览器矩阵时，可并行评估 Playwright；Puppeteer 更适合轻量脚本与 DevTools 深度集成场景。

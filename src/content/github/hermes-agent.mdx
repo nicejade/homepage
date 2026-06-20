@@ -1,0 +1,125 @@
+---
+title: hermes-agent
+description: Nous Research 自进化 AI Agent，内置技能学习与跨会话记忆，支持 300+ 模型与消息网关。
+repo: https://github.com/NousResearch/hermes-agent
+homepage: https://hermes-agent.nousresearch.com
+repoDescription: "The agent that grows with you"
+avatarUrl: https://avatars.githubusercontent.com/u/134168893?v=4
+tags:
+  - Agent
+  - AI 编程
+  - 自动化
+language: Python
+stars: 197464
+forks: 34935
+openIssues: 22229
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 适合用 Telegram/Discord 远程驱动 Agent、定时任务与 OpenClaw 迁移的自托管场景。
+---
+
+## 项目介绍
+
+Hermes Agent 是 [Nous Research](https://nousresearch.com) 开源的**自进化 AI Agent**：内置学习闭环，能从经验中创建技能、在使用中持续改进，并主动沉淀知识、检索历史会话，跨会话建立对你的理解。它不限于笔记本本地运行——可在 $5 VPS、GPU 集群或 Modal/Daytona 等近零空闲成本的无服务器环境上部署，并通过 Telegram 等渠道远程对话。支持 OpenRouter、NVIDIA NIM、OpenAI、Anthropic 等 **300+** 模型，用 `hermes model` 切换，无厂商锁定。
+
+## 核心特性
+
+- **自进化学习闭环**：Agent 策展记忆、周期性知识提醒、复杂任务后自主创建技能；兼容 [agentskills.io](https://agentskills.io) 开放标准，并集成 [Honcho](https://github.com/plastic-labs/honcho) 辩证式用户建模
+- **全功能终端 TUI**：多行编辑、斜杠命令补全、会话历史、中断重定向与流式工具输出
+- **多平台消息网关**：单一 gateway 进程同时服务 Telegram、Discord、Slack、WhatsApp、Signal 与 CLI，支持语音转写与跨平台会话连续性
+- **定时自动化**：内置 cron 调度器，可用自然语言配置日报、备份、审计等无人值守任务，并投递到任意已连接平台
+- **子 Agent 与并行**：隔离子 Agent 处理并行工作流；可用 Python RPC 脚本折叠多步流水线，降低上下文成本
+- **六种终端后端**：本地、Docker、SSH、Singularity、Modal、Daytona；后两者支持休眠唤醒，空闲时成本极低
+- **40+ 工具与 MCP**：工具集可配置；可接入任意 MCP 服务器扩展能力
+- **OpenClaw 迁移**：`hermes claw migrate` 可导入 SOUL.md、记忆、技能、消息配置与 API 密钥
+
+## 对用户价值
+
+普通 Agent 往往「用完即忘」，技能与偏好难以沉淀。Hermes 把**技能创建、记忆持久化、会话检索与用户建模**写进 Agent 循环本身，让长期协作越用越顺手。对个人开发者，一条安装命令即可在 CLI 或 Telegram 上获得带工具链的结对助手；对需要 7×24 自动化的人，cron + 消息投递把「提醒我写日报」变成真正执行的无人值守流程。多后端部署意味着不必把算力绑在笔记本上——VPS 或 serverless 上跑 Agent，手机上发消息即可跟进进度。
+
+## 与替代方案
+
+- 相比 [OpenClaw](https://github.com/openclaw/openclaw) 等**多会话编排型**方案，Hermes 强调**内置学习闭环与官方迁移路径**（`hermes claw migrate`），并在单一 gateway 下统一 CLI 与六大消息平台；若你已在用 OpenClaw，可评估迁移而非并行维护两套配置。
+- 相比 [Cline](https://github.com/cline/cline)、[Aider](https://github.com/Aider-AI/aider) 等**IDE/终端结对编程**工具，Hermes 是**独立 Agent 运行时**：更强在远程消息网关、定时任务、子 Agent 与云后端，而非深度编辑器集成；写代码场景可叠加 MCP，但主战场是「随处可达的个人 Agent」。
+- 相比 [LangGraph](https://github.com/langchain-ai/langgraph)、[AutoGen](https://github.com/microsoft/autogen) 等**框架库**，Hermes 提供**开箱即用的 CLI、TUI、网关与安装器**；若你需要从零拼装编排逻辑选框架，若你要快速跑起来并持续积累技能选 Hermes。
+- 相比仅调用单一云 API 的聊天机器人，Hermes 支持**自带密钥或 Nous Portal 一站式 Tool Gateway**（搜索、生图、TTS、云浏览器），且模型可自由切换；Nous Portal 是可选便利层，非强制绑定。
+
+## 适应人群
+
+- 希望 Agent 能**跨会话记住偏好、自动沉淀技能**，而非每次从零开始的长期用户。
+- 需要通过 **Telegram、Discord、Slack** 等在手机上驱动云主机上 Agent 的开发者或运维者。
+- 从 **OpenClaw** 迁移、或需要 cron 定时报告/备份等**无人值守自动化**的效率型用户。
+- 研究工具调用与轨迹生成的团队（支持 batch trajectory 与压缩，面向下一代 tool-calling 模型训练）。
+
+## 如何使用
+
+### 前置条件
+
+- **Linux / macOS / WSL2 / Termux**：bash 环境；安装脚本会自动处理 uv、Python 3.11、Node.js、ripgrep、ffmpeg 等依赖。
+- **Windows 原生**：PowerShell；安装器会捆绑便携 MinGit（约 45MB），无需管理员权限。
+- **模型访问**：自备 OpenRouter、OpenAI、Anthropic 等 API 密钥，或使用 [Nous Portal](https://portal.nousresearch.com) OAuth 一站式接入（`hermes setup --portal`）。
+- 消息网关（Telegram 等）需对应平台的 Bot Token 与网络可达性；生产环境建议阅读[安全文档](https://hermes-agent.nousresearch.com/docs/user-guide/security)（命令审批、DM 配对、容器隔离）。
+
+### 安装方式
+
+**Linux / macOS / WSL2 / Termux**
+
+```bash
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+```
+
+**Windows（PowerShell）**
+
+```powershell
+iex (irm https://hermes-agent.nousresearch.com/install.ps1)
+```
+
+**可选：Nous Portal 一键配置（模型 + Tool Gateway）**
+
+```bash
+hermes setup --portal
+```
+
+Termux 等特殊环境见[官方 Termux 指南](https://hermes-agent.nousresearch.com/docs/getting-started/termux)。
+
+### 首次运行
+
+```bash
+source ~/.bashrc   # 或 source ~/.zshrc
+hermes             # 启动交互式 CLI
+hermes model       # 选择 LLM 提供商与模型
+hermes setup       # 完整配置向导（推荐首次使用）
+```
+
+若需消息平台，额外执行：
+
+```bash
+hermes gateway setup
+hermes gateway start
+```
+
+从 OpenClaw 迁移：
+
+```bash
+hermes claw migrate              # 交互式完整迁移
+hermes claw migrate --dry-run    # 预览将导入的内容
+```
+
+### 验证是否成功
+
+- `hermes doctor` 无阻塞性错误。
+- `hermes` 进入 TUI 后可正常对话；`/model` 能列出并切换模型。
+- 配置网关后，向 Telegram/Discord 等发送消息能收到回复；`hermes portal info`（若使用 Portal）显示已接入的后端。
+- `hermes tools` 可查看已启用工具集；`/skills` 可浏览技能列表。
+
+### 常见坑 / 注意事项
+
+- 安装后需 **reload shell**（`source ~/.bashrc` 或 `~/.zshrc`），否则 `hermes` 命令可能找不到。
+- Windows 原生与 WSL2 安装路径不同：原生在 `%LOCALAPPDATA%\hermes`，WSL2/Linux 在 `~/.hermes`；勿混用同一配置目录。
+- Termux 上勿盲目安装完整 `.[all]` extra，应按文档使用 `.[termux]`，避免 Android 不兼容的语音依赖。
+- 多平台共用斜杠命令，但**启动方式不同**：CLI 用 `hermes`，消息平台需先 `hermes gateway start`；详见[ CLI 与消息网关对照表](https://hermes-agent.nousresearch.com/docs/user-guide/messaging)。
+- API 密钥与审批规则涉及安全边界；生产部署前务必配置命令 allowlist 与 DM 配对，勿把 gateway 暴露在公网无认证环境。
+- 贡献者开发路径：标准安装后在 `$HERMES_HOME/hermes-agent`（通常 `~/.hermes/hermes-agent`）执行 `uv pip install -e ".[all,dev]"` 与 `scripts/run_tests.sh`；完整文档见 [hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)。

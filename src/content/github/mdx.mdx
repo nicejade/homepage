@@ -1,0 +1,122 @@
+---
+title: MDX
+description: 在 Markdown 中无缝嵌入 JSX 的可编写格式，可导入 React 等组件，面向组件时代的长文内容。
+repo: https://github.com/mdx-js/mdx
+homepage: https://mdxjs.com
+repoDescription: Markdown for the component era
+avatarUrl: https://avatars.githubusercontent.com/u/37453691?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: JavaScript
+stars: 19617
+forks: 1186
+openIssues: 23
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 技术博客、文档站与内容平台需要在 Markdown 里混用 React/Vue 交互组件的前端与写作者。
+---
+
+## 项目介绍
+
+MDX 是由 [unified](https://github.com/unifiedjs/unified) 生态维护的可编写格式，口号是「Markdown for the component era」——在保留 Markdown 写作体验的同时，允许在文档中直接写 JSX、导入 React/Vue/Preact 等组件，并在正文里嵌入图表、提示框、交互演示等 UI。本仓库是 MDX 编译器与生态 monorepo，包含将 MDX 编译为 JavaScript 的核心包 `@mdx-js/mdx`，以及面向 webpack、Rollup/Vite、esbuild 等打包器的官方集成；站点 [mdxjs.com](https://mdxjs.com) 提供格式说明、Playground 与完整接入指南。
+
+## 核心特性
+
+- **Markdown + JSX 混写**：在 `.mdx` 文件中同时使用标题、列表等 Markdown 语法与 JSX 标签，可在 frontmatter 导出变量并在正文中引用
+- **组件导入与嵌入**：可 `import` 本地或 npm 包中的 React/Vue 等组件，把交互式图表、代码演示、Alert 等直接写进长文
+- **unified 编译管线**：基于 remark/rehype 生态，将 MDX 编译为可在目标 JSX 运行时执行的 JavaScript 模块
+- **多打包器官方集成**：提供 `@mdx-js/loader`（webpack/Next.js）、`@mdx-js/rollup`（Rollup/Vite）、`@mdx-js/esbuild`（esbuild/Bun）等接入方式
+- **多 JSX 运行时**：默认面向 React，亦支持 Preact、Vue、Solid、Svelte 等，通过 `jsxImportSource` 配置切换
+
+## 对用户价值
+
+纯 Markdown 适合静态文档，但技术博客与产品文档 increasingly 需要可交互示例；纯 JSX/TSX 又会让非工程写作者望而却步。MDX 把「写作层」与「组件层」解耦：作者继续用熟悉的 Markdown 工作流，开发者提供可复用组件库，读者在单页内获得连贯的阅读与交互体验。Astro、Next.js、Gatsby、Starlight 等框架均内置或推荐 MDX 作为内容格式，掌握 MDX 编译原理有助于排查构建错误、定制 remark 插件，或在无框架场景下用 `@mdx-js/mdx` 直接编译内容。
+
+## 与替代方案
+
+- 相比 [remark-react](https://github.com/remarkjs/remark-react) / [rehype-react](https://github.com/rehypejs/rehype-react) 等底层工具，MDX 提供**一等公民的 JSX 语法**与完整编译器，作者无需手写 AST 转换即可在 Markdown 中写组件；底层方案更灵活但集成成本更高。
+- 相比 [Markdoc](https://markdoc.dev/)（Stripe 推出），两者都支持在标记语言中嵌入组件；MDX 使用标准 JSX 语法、与 React 生态绑定更深，Markdoc 采用自定义标签语法，更适合需要严格内容/schema 约束的企业文档。
+- 相比直接在框架中使用 Markdown（无 JSX），MDX 适合需要在正文中**嵌入可交互 UI** 的场景；若内容纯静态、无需组件，普通 `.md` + 框架 Content Collections 往往更简单。
+- 相比在 `.astro` / `.vue` 单文件组件中写内容，MDX 让**非框架写作者**也能贡献带组件的长文，并与 npm 组件库自然集成。
+- 边界说明：MDX 编译产物依赖 JSX 运行时，不适合「零 JavaScript」的纯静态站点主体；安全上需警惕 MDX 中的任意 JS 执行，生产环境应限制可导入模块与编译选项（见官方 [Security](https://mdxjs.com/getting-started/#security) 说明）。
+
+## 适应人群
+
+- 维护技术博客、changelog 或产品文档，希望在 Markdown 正文中嵌入 Demo、图表、Tabs 等交互组件的前端开发者。
+- 使用 Astro、Next.js、Gatsby 等内容框架，需要理解或定制 MDX 编译链路的工程团队。
+- 技术写作者与 Developer Advocate，希望用 Markdown 写作又能在不离开文档文件的情况下调用设计系统组件。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 16+（官方 `@mdx-js/*` 包为 ESM only，需现代 Node 环境）。
+- 项目已支持 JSX：React、Preact、Vue 等任一 JSX 运行时均可。
+- 选定打包工具：Vite/Rollup、webpack/Next.js 或 esbuild，对应安装官方集成包。
+
+### 安装方式
+
+**方式一：Vite / Rollup 项目（常见）**
+
+```bash
+npm install @mdx-js/rollup @mdx-js/react
+```
+
+在 `vite.config.js` 或 `rollup.config.js` 中注册插件（React 为默认 JSX 运行时）：
+
+```js
+import mdx from '@mdx-js/rollup'
+
+export default {
+  plugins: [mdx(/* options */)]
+}
+```
+
+**方式二：webpack / Next.js**
+
+```bash
+npm install @mdx-js/loader @mdx-js/react
+```
+
+按 [官方 Next.js 集成文档](https://mdxjs.com/packages/loader/) 配置 `module.rules` 或 Next.js MDX 选项。
+
+**方式三：无打包器，使用核心编译器**
+
+```bash
+npm install @mdx-js/mdx
+```
+
+适合 Node 脚本或自定义构建管线，通过 `@mdx-js/mdx` 的 `compile` / `evaluate` API 处理 `.mdx` 文件。
+
+TypeScript 项目可额外安装类型支持：
+
+```bash
+npm install @types/mdx
+```
+
+### 首次运行
+
+1. 在项目中新建 `hello.mdx`，写入 Markdown 与 JSX 混合内容，例如导入一个简单组件并在正文使用。
+2. 在入口文件或路由中 `import Hello from './hello.mdx'`，按所选 JSX 运行时渲染（React 中即 `<Hello />`）。
+3. 启动开发服务器，访问引用该 MDX 的页面，确认编译与热更新正常。
+
+也可先在 [Playground](https://mdxjs.com/playground/) 在线试验语法，再落地到本地项目。
+
+### 验证是否成功
+
+- 开发服务器启动无 MDX 编译报错，目标页面能渲染 Markdown 与嵌入组件。
+- 修改 `.mdx` 文件后热更新生效，组件 props 变更能反映到页面。
+- 生产构建（如 `npm run build`）成功，产物中 MDX 页可正常访问。
+- 若使用 TypeScript，`import Post from './post.mdx'` 应能推断 `MDXProps` 类型（需 `@types/mdx` 与框架 JSX 类型声明）。
+
+### 常见坑 / 注意事项
+
+- **ESM only**：`@mdx-js/*` 包仅提供 ESM，CommonJS 项目需 `"type": "module"` 或动态 `import()`，详见各包 README。
+- **JSX 运行时配置**：使用 Preact、Vue、Solid 等非 React 运行时，须在编译选项中设置 `jsxImportSource`，并安装对应 `@mdx-js/react` 替代包（如 `@mdx-js/vue`）。
+- **安全**：MDX 可执行任意 JavaScript，勿对不可信来源的 MDX 直接 `evaluate`；生产环境限制 `import` 白名单，阅读官方 Security 章节。
+- **编辑器支持**：VS Code 可安装 [mdx-js/mdx-analyzer](https://github.com/mdx-js/mdx-analyzer) 获得语法高亮与类型提示。
+- **求助渠道**：查阅 [mdxjs.com 文档](https://mdxjs.com/docs/getting-started/)、[GitHub Discussions](https://github.com/mdx-js/mdx/discussions)，或 unified 社区 [OpenCollective](https://opencollective.com/unified) 支持渠道。

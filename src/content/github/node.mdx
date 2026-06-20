@@ -1,0 +1,122 @@
+---
+title: Node.js
+description: 开源跨平台 JavaScript 运行时，基于 V8 引擎，支撑服务端、CLI 工具与 npm 生态的核心基础设施。
+repo: https://github.com/nodejs/node
+homepage: https://nodejs.org
+repoDescription: "Node.js JavaScript runtime ✨🐢🚀✨"
+avatarUrl: https://avatars.githubusercontent.com/u/9950313?v=4
+tags:
+  - 开发工具
+  - 后端
+  - CLI
+language: JavaScript
+stars: 117874
+forks: 35726
+openIssues: 2500
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 后端运行时选型、npm 生态基建、企业 LTS 版本规划，以及需要贡献 Node 核心的系统级开发者。
+---
+
+## 项目介绍
+
+Node.js 是 OpenJS Foundation 维护的开源、跨平台 JavaScript 运行时，将 Google V8 引擎与 libuv 事件循环结合，让 JavaScript 可在服务端执行 I/O 密集型任务。它是 npm 生态的基石，支撑着 Express、Next.js、Electron 等大量框架与工具。本仓库为 Node.js **核心源码**；日常开发通常从 [nodejs.org](https://nodejs.org/) 安装二进制，文档与教程亦以官网为准。
+
+## 核心特性
+
+- **跨平台运行时**：官方提供 macOS、Windows、Linux 安装包与二进制，同一套 JavaScript 代码可在多平台部署
+- **事件驱动与非阻塞 I/O**：基于 libuv 的高并发模型，适合 API 服务、实时应用与 CLI 工具
+- **成熟发布节奏**：Current 每 6 个月发大版本；偶数大版本转 LTS，提供 Active LTS（12 个月）与 Maintenance（18 个月）支持
+- **内置 npm 与丰富标准库**：`fs`、`http`、`crypto`、`worker_threads` 等模块覆盖常见服务端场景
+- **开放治理**：TSC 技术指导委员会与协作者体系透明运作，安全响应与发布流程规范（见 [GOVERNANCE.md](https://github.com/nodejs/node/blob/main/GOVERNANCE.md)）
+
+## 对用户价值
+
+若你需要用 JavaScript 构建后端 API、自动化脚本、构建工具或桌面应用（配合 Electron），Node.js 是最主流、生态最完整的选择。LTS 版本为企业提供可预期的升级窗口与安全补丁节奏；npm 注册表则让依赖管理与工具链集成成本极低。对于全栈团队，前后端共用语言可降低协作门槛；代价是 CPU 密集任务需借助 Worker Threads、子进程或原生扩展，单线程事件循环模型需在架构设计时留意。
+
+## 与替代方案
+
+- 相比 [Deno](https://deno.com/)，Node.js 生态规模、第三方包数量与招聘市场显著更大；Deno 默认更安全（权限模型）、原生 TypeScript 支持更好，适合 greenfield 项目或对安全沙箱有强需求场景。
+- 相比 [Bun](https://bun.sh/)，Node.js 稳定性与 LTS 承诺经过更长生产验证；Bun 在启动速度、包管理一体化方面更快，但生态兼容性与企业级支持仍在追赶。
+- 相比 Python / Go / Java 等服务端语言，Node.js 复用前端 JavaScript 技能与 npm 工具链，适合 I/O 密集与实时场景；CPU 密集计算、强类型系统需求或特定企业中间件生态可能更适合其他语言。
+- 边界说明：本仓库用于**贡献 Node 核心**或从源码构建；应用开发安装官方二进制或版本管理器即可，无需 clone 本 repo。
+
+## 适应人群
+
+- 用 JavaScript/TypeScript 构建 API、BFF、微服务或 Serverless 函数的后端与全栈工程师。
+- 维护 npm 包、CLI 工具、前端构建链（Vite、Webpack 等）或需锁定 LTS 版本的企业技术负责人。
+- 希望深入 V8、libuv、模块加载器或参与 Node 核心贡献的系统级开发者（需阅读 [BUILDING.md](https://github.com/nodejs/node/blob/main/BUILDING.md)）。
+
+## 如何使用
+
+### 前置条件
+
+- 操作系统：macOS、Windows 10+、或主流 Linux 发行版（完整支持列表见 [BUILDING.md](https://github.com/nodejs/node/blob/main/BUILDING.md)）。
+- 生产环境建议选用 **LTS** 版本；实验性功能使用 Current，Nightly 仅用于测试。
+- 从源码构建需安装对应平台的编译工具链（Python、C/C++ 编译器等），复杂度远高于安装官方二进制。
+
+### 安装方式
+
+**方式一：官网安装包（推荐大多数用户）**
+
+从 [nodejs.org/en/download](https://nodejs.org/en/download/) 下载对应平台的 LTS 安装包或二进制。
+
+**方式二：版本管理器（多版本切换）**
+
+```bash
+# nvm（macOS / Linux）
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+nvm install --lts
+nvm use --lts
+```
+
+```bash
+# Homebrew（macOS）
+brew install node
+```
+
+```bash
+# fnm（跨平台，速度快）
+curl -fsSL https://fnm.vercel.app/install | bash
+fnm install --lts
+fnm use lts-latest
+```
+
+更多安装选项与包管理器索引见 [nodejs.org 下载页](https://nodejs.org/en/download/package-manager)。
+
+### 首次运行
+
+```bash
+node -v
+npm -v
+node -e "console.log('Hello, Node.js')"
+```
+
+创建 `hello.mjs` 并运行：
+
+```javascript
+// hello.mjs
+console.log(`Node.js ${process.version} on ${process.platform}`);
+```
+
+```bash
+node hello.mjs
+```
+
+### 验证是否成功
+
+- `node -v` 输出预期版本号（生产环境应为 LTS，如 `v22.x` 或当前 LTS 线）。
+- `npm -v` 可正常输出版本，无权限或路径错误。
+- 运行 `node -e "console.log('ok')"` 输出 `ok`，无模块加载或动态链接错误。
+- 查阅 [API 文档](https://nodejs.org/api/) 确认版本与本地安装一致。
+
+### 常见坑 / 注意事项
+
+- **Current vs LTS**：偶数大版本（如 20、22）为 LTS 线，企业生产应优先 LTS；Current 每 6 个月可能引入破坏性变更。
+- **源码仓库 vs 日常使用**：clone 本 repo 不等于「安装 Node」；贡献者需遵循 [CONTRIBUTING.md](https://github.com/nodejs/node/blob/main/CONTRIBUTING.md)，构建流程复杂。
+- **原生模块编译**：`node-gyp` 类依赖在 Windows 需 Visual Studio Build Tools，macOS 需 Xcode CLI，Linux 需 `build-essential`。
+- **ESM 与 CommonJS**：`"type": "module"` 与 `.mjs`/`.cjs` 扩展名影响 `import`/`require` 行为，混用时注意 [模块文档](https://nodejs.org/api/esm.html)。
+- **中国大陆网络**：npm 安装缓慢可配置镜像（如 [npmmirror](https://npmmirror.com/)）；Node 二进制亦可使用国内镜像站加速下载。

@@ -1,0 +1,113 @@
+---
+title: OpenCode
+description: 开源 AI 编码 Agent，支持终端、桌面与 IDE，可自由接入 75+ 大模型提供商。
+repo: https://github.com/anomalyco/opencode
+homepage: https://opencode.ai
+repoDescription: The open source coding agent.
+avatarUrl: https://avatars.githubusercontent.com/u/66570915?v=4
+tags:
+  - AI 编程
+  - Agent
+  - CLI
+language: TypeScript
+stars: 176305
+forks: 21470
+openIssues: 7237
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 想要开源终端 Agent、自由切换模型且保留 Plan/Build 双模式的日常开发者。
+---
+
+## 项目介绍
+
+OpenCode 是由 Anomaly 团队维护的开源 AI 编码 Agent，可在终端 TUI、桌面应用与 IDE 扩展中使用。它基于 AI SDK 与 Models.dev，支持 75+ 大模型提供商及本地模型，内置 Build 与 Plan 双模式，适合从代码探索到跨文件改动的完整开发流程。项目采用 MIT 许可，社区活跃，文档与多语言 README 完善。
+
+## 核心特性
+
+- **多入口形态**：终端 TUI、桌面应用（Beta）与 IDE 扩展，覆盖不同工作习惯
+- **Build / Plan 双 Agent**：Tab 切换；Plan 默认只读、改文件与 bash 需确认，Build 具备完整开发权限
+- **75+ 模型提供商**：通过 `/connect` 配置 API Key，支持 Anthropic、OpenAI、本地模型等；可选 OpenCode Zen 精选模型列表
+- **项目级上下文**：`/init` 分析仓库并生成 `AGENTS.md`，帮助 Agent 理解项目结构与编码规范
+- **会话协作**：支持 `/undo`/`redo` 回滚改动、`/share` 分享对话链接，以及 `@general` 子代理处理复杂搜索
+
+## 对用户价值
+
+OpenCode 把「理解代码库」和「执行多步改动」收敛到一个开源 Agent 里，同时保留 Plan 模式的安全边界。相比绑定单一厂商的闭源工具，你可以按任务切换模型与提供商，本地或私有端点也能接入。对于习惯终端工作流、又希望 Agent 能读文件、跑命令、做跨文件重构的开发者，它提供了接近商业产品的体验与 MIT 开源自由度。
+
+## 与替代方案
+
+- 相比 **Claude Code**，OpenCode 完全开源且模型无关，不绑定 Anthropic 账户；Claude Code 则是官方深度集成 Anthropic 生态的产品体验。
+- 相比 **Cline**，两者都强调自主 Agent 与终端/IDE 多入口；OpenCode 更突出多提供商切换与 OpenCode Zen 托管模型，Cline 则在 Kanban 并行编排与 SDK 扩展上更突出。
+- 相比 **Aider**，OpenCode 自主性更强、界面更完整（TUI/桌面）；Aider 更轻量，适合逐 diff 结对与快速 git 集成。
+- 若仅需 IDE 内补全而非 Agent 任务，**Continue** 或 **Copilot** 可能更轻量。
+
+## 适应人群
+
+- 习惯终端或桌面 TUI、希望用自然语言驱动跨文件改动的个人开发者。
+- 需要灵活切换大模型提供商、或接入本地/私有模型的团队。
+- 想评估开源 Agent 编码工具、对比 Plan/Build 工作流与商业方案的技术决策者。
+
+## 如何使用
+
+### 前置条件
+
+- 现代终端模拟器（如 WezTerm、Ghostty、Kitty 等；桌面版可跳过）。
+- 至少一个 LLM 提供商的 API Key，或通过 [OpenCode Zen](https://opencode.ai/auth) 获取托管密钥。
+- Node.js 环境（若使用 npm/bun/pnpm/yarn 安装）；Git 管理的项目目录便于回滚改动。
+
+### 安装方式
+
+**推荐（macOS / Linux）：**
+
+```bash
+curl -fsSL https://opencode.ai/install | bash
+```
+
+**Homebrew（macOS / Linux，推荐 tap 源）：**
+
+```bash
+brew install anomalyco/tap/opencode
+```
+
+**npm 全局安装：**
+
+```bash
+npm i -g opencode-ai@latest
+```
+
+**Windows：**
+
+```powershell
+scoop install opencode
+# 或
+choco install opencode
+```
+
+**桌面应用（Beta）：** 从 [opencode.ai/download](https://opencode.ai/download) 或 [Releases](https://github.com/anomalyco/opencode/releases) 下载对应平台安装包。
+
+> 安装前请移除 0.1.x 之前的旧版本。更多安装方式见 [官方文档](https://opencode.ai/docs)。
+
+### 首次运行
+
+进入目标项目目录，启动 OpenCode 并连接模型提供商：
+
+```bash
+cd /path/to/your-project
+opencode
+```
+
+在 TUI 中执行 `/connect`，选择 OpenCode Zen 或其他提供商并粘贴 API Key。随后运行 `/init` 生成项目级 `AGENTS.md`。
+
+### 验证是否成功
+
+确认 `opencode` 命令可启动、TUI 能响应输入。用 Plan 模式（Tab 切换）提一个代码探索问题，再切回 Build 模式尝试小改动；执行 `/models` 应能看到已配置的模型列表。
+
+### 常见坑 / 注意事项
+
+- **旧版本冲突**：0.1.x 之前版本需先卸载，否则安装脚本可能异常。
+- **Agent 权限**：Build 模式可改文件并执行 bash，首次试用应限制任务范围；Plan 模式虽默认只读，运行命令仍会请求确认。
+- **API Key 存储**：密钥保存在 `~/.local/share/opencode/auth.json`，勿提交到版本库。
+- **第三方衍生项目**：名称含 "opencode" 的非官方项目（如 opencode-dashboard）与 OpenCode 团队无隶属关系，选用时注意甄别。

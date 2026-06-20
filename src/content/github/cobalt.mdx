@@ -1,0 +1,119 @@
+---
+title: "Cobalt"
+description: 无广告、无追踪的开源媒体下载器，支持 YouTube/TikTok 等 20+ 平台，可自托管 API 与 Web 前端。
+repo: "https://github.com/imputnet/cobalt"
+homepage: "https://cobalt.tools"
+repoDescription: "best way to save what you love"
+avatarUrl: "https://avatars.githubusercontent.com/u/152056268?v=4"
+tags:
+  - 开发工具
+  - 网络工具
+  - 自动化
+language: "Svelte"
+stars: 40948
+forks: 3496
+openIssues: 249
+contributors: 56
+license: "AGPL-3.0"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 需要干净下载体验、自托管媒体抓取 API，或集成 YouTube/TikTok 等平台解析的开发者与创作者。
+---
+
+## 项目介绍
+
+[Cobalt](https://cobalt.tools) 是一款注重体验的开源媒体下载工具：粘贴公开链接即可获取视频、音频或图片，无广告、无追踪、无付费墙。项目以 monorepo 形式维护 Web 前端、Express API 与相关包；服务端不缓存内容，通过隧道代理与 ffmpeg 转封装完成下载，适合希望自建实例或对接 API 的开发者，也适合只想「贴链接、拿文件」的普通用户。
+
+## 核心特性
+
+- **多平台支持**：覆盖 YouTube（含 Shorts、8K/HDR）、TikTok、Instagram、Twitter/X、Reddit、SoundCloud、Bilibili、Vimeo、VK 等 20+ 服务，可按平台选择仅视频、仅音频或元数据
+- **简洁 Web 体验**：官方站点 [cobalt.tools](https://cobalt.tools) 提供零干扰界面；API 支持画质、码率、容器格式、字幕语言等细粒度参数
+- **代理式架构**：内容不落盘缓存，以隧道（tunnel）流式转发或本地 remux，降低存储与合规风险
+- **可自托管**：推荐 Docker Compose 一键部署（含 Watchtower 自动更新）；也支持 Node.js + pnpm 本地开发运行
+- **实例防护**：文档支持 API Key、Cloudflare Turnstile、速率限制等，便于公开实例防滥用
+- **AGPL-3.0 开源**：API 与整体仓库均开源，修改分发需遵循 AGPL 义务
+
+## 对用户价值
+
+商业下载站常夹杂广告、弹窗与数据收集；命令行工具（如 yt-dlp）功能强但学习成本高。Cobalt 把「解析 → 选格式 → 下载」收成一步，公开实例开箱即用，自托管则可完全掌控数据路径与访问策略。对创作者与运维者，自建 API 还能嵌入内部工具链；对注重隐私的用户，无追踪、不缓存的设计比第三方在线转换站更透明。项目明确仅面向**可免费公开访问**的内容，不承担终端用户的使用责任。
+
+## 与替代方案
+
+- 相比 **[yt-dlp](https://github.com/yt-dlp/yt-dlp)**，Cobalt 提供现成 Web UI 与 JSON API，部署后即可给非技术用户用；yt-dlp 平台覆盖更广、脚本化更强，适合纯 CLI 与批处理场景。
+- 相比 **[youtube-dl](https://github.com/ytdl-org/youtube-dl)**（维护放缓），Cobalt 持续迭代多平台解析，并内置现代前端与实例防护文档。
+- 相比 **SaveFrom、Y2Mate 等在线下载站**，Cobalt 开源可审计、无广告追踪，且可自托管避免第三方服务下线或注入脚本。
+- 相比 **[gallery-dl](https://github.com/mikf/gallery-dl)**（偏图库/相册批量抓取），Cobalt 聚焦短视频与社交平台链接，Web 交互更轻。
+- **官方托管 API**（如 `api.cobalt.tools`）带 Bot 防护，**不建议**未授权接入第三方项目；需稳定集成时应[自建实例](https://github.com/imputnet/cobalt/blob/main/docs/run-an-instance.md)或向实例所有者申请访问。
+
+## 适应人群
+
+- 希望无广告、无账号下载 YouTube/TikTok/Instagram 等公开内容的普通用户（使用官方站或自建前端）。
+- 需要为团队或产品提供媒体抓取 API、并愿意用 Docker 自托管的开发者。
+- 关注隐私与透明架构、不愿把链接交给不可信在线转换站的内容创作者与运维者。
+
+## 如何使用
+
+### 前置条件
+
+**使用官方 Web 站（最简单）**
+
+- 现代浏览器与可访问 [cobalt.tools](https://cobalt.tools) 的网络环境
+- 待下载内容为各平台**公开可访问**的链接
+
+**自托管 API（Docker，推荐）**
+
+- 已安装 [Docker](https://docs.docker.com/engine/install/) 与 [Docker Compose](https://docs.docker.com/compose/install/)
+- 若实例面向公网：准备域名、反向代理（如 Nginx），并建议配置 [Turnstile 或 API Key 防护](https://github.com/imputnet/cobalt/blob/main/docs/protect-an-instance.md)
+
+**本地开发运行 API**
+
+- Node.js ≥ 18、Git、[pnpm](https://pnpm.io/)
+- Ubuntu 22.04 上若 ffmpeg 静态二进制 DNS 异常，需安装并启动 `nscd`（见[官方说明](https://github.com/imputnet/cobalt/issues/101#issuecomment-1494822258)）
+
+### 安装方式
+
+**Docker Compose（生产推荐）**
+
+```sh
+mkdir cobalt && cd cobalt
+# 将官方示例写入 docker-compose.yml 并修改 API_URL
+# https://github.com/imputnet/cobalt/blob/main/docs/examples/docker-compose.example.yml
+docker compose up -d
+```
+
+示例中默认镜像为 `ghcr.io/imputnet/cobalt:11`，需将 `API_URL` 改为你的实例公网地址（末尾保留 `/`），否则隧道下载会异常。部分需登录才能看的公开内容，可在同目录放置 `cookies.json` 并在 compose 中挂载（见 [cookies 示例](https://github.com/imputnet/cobalt/blob/main/docs/examples/cookies.example.json)）。
+
+**源码本地运行 API**
+
+```sh
+git clone https://github.com/imputnet/cobalt
+cd cobalt/api
+pnpm install
+# 在 api 目录创建 .env，至少设置 API_URL（本地开发可用 http://localhost:9000/）
+pnpm start
+```
+
+环境变量完整列表见 [api-env-variables.md](https://github.com/imputnet/cobalt/blob/main/docs/api-env-variables.md)。
+
+### 首次运行
+
+1. **Web 用户**：打开 [cobalt.tools](https://cobalt.tools)，粘贴媒体链接，按需选择画质或「仅音频」，点击下载。
+2. **自托管用户**：确认容器运行后，将前端或自写客户端指向你的 `API_URL`；公网实例建议先完成 Turnstile / API Key 配置。
+3. **API 调用**：向 `POST /` 发送 JSON（`Content-Type` 与 `Accept` 均为 `application/json`），body 至少包含 `url` 字段；若实例启用鉴权，按文档添加 `Authorization` 头。详见 [API 文档](https://github.com/imputnet/cobalt/blob/main/docs/api.md)。
+
+### 验证是否成功
+
+- Web：页面返回下载或跳转，文件可正常播放/打开。
+- 自托管 API：访问 `GET /` 应返回 JSON，包含 `cobalt.version`、`cobalt.services` 等实例信息。
+- `POST /` 测试公开 YouTube 或 TikTok 链接，响应 `status` 为 `tunnel`、`redirect` 或 `picker` 之一，且 `url` 可下载。
+- Docker 部署：`docker compose ps` 显示 `cobalt` 容器为 running；Watchtower 容器正常则镜像会定期自动更新。
+
+### 常见坑 / 注意事项
+
+- **`API_URL` 配置错误**：自托管最常见问题；必须使用外部可访问的完整 URL（含 `https://` 与尾部 `/`），与反向代理域名一致。
+- **勿滥用官方托管 API**：文档明确公开实例有 Bot 防护，未授权集成会被拒；产品集成请自建实例。
+- **平台可用性波动**：Twitter/X 等站点可能因对方策略变化导致解析不稳定；README 服务表会标注支持程度（✅/❌/➖）。
+- **合规与版权**：仅下载你有权获取的公开内容；Cobalt 不提供盗版能力，用户需自行承担使用与分发责任。
+- **AGPL-3.0**：修改 API 或整体服务并对外提供时，需按许可证公开源码并保留版权声明。
+- **Cookies 需求**：部分平台公开内容仍需 Cookie 才能拉取，按文档配置 `cookies.json` 并限制实例访问范围。

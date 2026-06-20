@@ -1,0 +1,107 @@
+---
+title: OpenSpec
+description: 面向 AI 编码助手的规范驱动开发框架，在写代码前先对齐需求、设计与任务清单。
+repo: https://github.com/Fission-AI/OpenSpec
+homepage: https://openspec.dev/
+repoDescription: Spec-driven development (SDD) for AI coding assistants.
+avatarUrl: https://avatars.githubusercontent.com/u/203414896?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: TypeScript
+stars: 55654
+forks: 3900
+openIssues: 418
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 棕地项目里让 Agent 先产出 proposal/spec/tasks 再动手，适合 Cursor、Claude Code 等 25+ 工具场景。
+---
+
+## 项目介绍
+
+OpenSpec 是由 Fission AI 维护的 **规范驱动开发（Spec-Driven Development, SDD）** 框架，专为 AI 编码助手设计。它把「先对齐再动手」落到可追踪的工件上：每个变更拥有独立文件夹，内含 proposal、specs、design 与 tasks，人类与 Agent 在写代码前就需求与方案达成共识。项目强调流动迭代而非瀑布门禁，既适合个人项目，也能扩展到团队协作的棕地代码库。
+
+## 核心特性
+
+- **Agree before you build**：人类与 AI 在编码前对齐规范，减少聊天上下文里的隐性假设
+- **Stay organized**：每次变更生成 `openspec/changes/<name>/`，含 proposal、specs、design、tasks 四类工件
+- **Work fluidly**：任意工件可随时更新，无僵化阶段门禁；支持 `/opsx:propose` → `/opsx:apply` → `/opsx:archive` 闭环
+- **Use your tools**：通过斜杠命令与技能集成 Cursor、Claude Code、Codex 等 **25+** AI 助手
+- **棕地友好**：面向已有代码库迭代，而非仅适用于从零开始的新项目
+- **可配置工作流**：`openspec config profile` 可选扩展流程（`/opsx:new`、`/opsx:verify`、`/opsx:bulk-archive` 等）
+
+## 对用户价值
+
+许多 AI 结对编程会话把需求留在对话历史里，导致范围漂移、返工与不可预测输出。OpenSpec 增加一层轻量规范：Agent 先产出可审阅的 proposal 与任务清单，再按 tasks 逐项实现并归档，把「我们到底要做什么」变成仓库内的持久工件。对团队而言，变更有文件夹与归档记录可查；对个人而言，可在不引入重型流程的前提下获得 Spec Kit 类工具的结构化收益。
+
+## 与替代方案
+
+- 相比 GitHub [Spec Kit](https://github.com/github/spec-kit)，OpenSpec **更轻量**：无 Python 环境与严格阶段门禁，可随时修改任意工件，适合快速迭代。
+- 相比 AWS [Kiro](https://kiro.dev) 等 IDE 绑定方案，OpenSpec **工具中立**：不锁定特定编辑器或模型，沿用你已有的 Cursor / Claude Code / Codex 等工作流。
+- 相比 [Superpowers](https://github.com/obra/superpowers) 等 Agent 方法论技能库，OpenSpec 侧重 **仓库内规范工件与 CLI 初始化**，把 proposal/spec/tasks 落到 `openspec/` 目录；Superpowers 更偏会话内技能链编排，二者可互补而非互斥。
+- 若你不需要任何规范层、只求单次快速 patch，直接对话即可；OpenSpec 的价值在于 **可重复、可归档、可协作** 的变更管理。
+
+## 适应人群
+
+- 使用 Cursor、Claude Code、Codex 等工具，希望 Agent 先产出 proposal 与 tasks 再写代码的开发者。
+- 在棕地项目或多人协作中，需要把 AI 辅助变更留下可追溯记录的 Tech Lead。
+- 评估过 Spec Kit 但觉得流程过重，想要更灵活 SDD 工作流的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- **Node.js 20.19.0 或更高版本**（README 明确要求）。
+- 目标目录为 Git 项目（或计划纳入版本管理的代码库）。
+- 已安装并启用 README [支持列表](https://github.com/Fission-AI/OpenSpec/blob/main/docs/supported-tools.md) 中的某一 AI 助手；不同工具需按其文档完成斜杠命令或技能安装。
+- 推荐使用高推理能力模型（官方建议 Codex 5.5、Opus 4.7 等）做规划与实现；实施前清空上下文以保持窗口整洁。
+
+### 安装方式
+
+全局安装 CLI（亦支持 pnpm、yarn、bun、nix，见 [installation.md](https://github.com/Fission-AI/OpenSpec/blob/main/docs/installation.md)）：
+
+```bash
+npm install -g @fission-ai/openspec@latest
+```
+
+在项目根目录初始化：
+
+```bash
+cd your-project
+openspec init
+```
+
+若需扩展工作流，可配置 profile 后更新 Agent 指令：
+
+```bash
+openspec config profile
+openspec update
+```
+
+### 首次运行
+
+在 Agent 对话中发起提案，例如：
+
+```text
+/opsx:propose add-dark-mode
+```
+
+Agent 应在 `openspec/changes/add-dark-mode/` 下生成 proposal、specs、design、tasks。确认后执行 `/opsx:apply` 按 tasks 实现，完成后用 `/opsx:archive` 归档并更新主规范。
+
+### 验证是否成功
+
+- 运行 `openspec init` 后项目内出现 `openspec/` 目录与 Agent 集成文件。
+- `/opsx:propose` 能创建完整变更文件夹且四类工件可读。
+- `/opsx:apply` 按 tasks 推进，`/opsx:archive` 将变更移入 archive 并更新 specs。
+- 升级包后执行 `openspec update` 可刷新各工具的斜杠命令与技能定义。
+
+### 常见坑 / 注意事项
+
+- 升级 CLI 后务必在各项目内执行 `openspec update`，否则 Agent 可能仍使用旧版斜杠命令。
+- OpenSpec 默认收集匿名遥测（仅命令名与版本）；CI 中自动禁用，本地可设 `OPENSPEC_TELEMETRY=0` 或 `DO_NOT_TRACK=1` 关闭。
+- 较大功能贡献需先提 OpenSpec change proposal 与上游对齐；小修复可直接 PR。
+- 社区 schema 与工作流定制见 [customization.md](https://github.com/Fission-AI/OpenSpec/blob/main/docs/customization.md)；问题可走 [Discord](https://discord.gg/YctCnvvshC) 或 GitHub Issues。

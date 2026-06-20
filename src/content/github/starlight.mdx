@@ -1,0 +1,124 @@
+---
+title: Starlight
+description: 基于 Astro 的文档站主题，内置导航、搜索、i18n、SEO 与暗色模式，开箱即用的高性能技术文档方案。
+repo: https://github.com/withastro/starlight
+homepage: https://starlight.astro.build/
+repoDescription: Build beautiful, accessible, high-performance documentation websites with Astro
+avatarUrl: https://avatars.githubusercontent.com/u/44914786?v=4
+tags:
+  - 开发工具
+  - 知识管理
+  - 工作流
+language: TypeScript
+stars: 8693
+forks: 993
+openIssues: 11
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 开源项目文档站、产品手册与内部知识库从零搭建，或从 Docusaurus/VitePress 迁移评估的团队。
+---
+
+## 项目介绍
+
+Starlight 是 [Astro](https://astro.build/) 官方维护的文档站主题与集成（`@astrojs/starlight`），面向需要快速上线、又希望长期可维护的技术文档场景。它在 Astro 的内容层（Content Collections）之上提供导航侧栏、站内搜索、国际化、SEO、可读排版、代码高亮、暗色模式等完整能力，并自带卡片、标签页等文档组件。Starlight 自身文档站即由 Starlight 构建，可作为功能与体验的参考样板。
+
+## 核心特性
+
+- **开箱即用的文档体验**：站点导航、搜索、i18n、SEO、排版、代码高亮与暗色模式等常见文档需求默认集成，减少从零拼装主题的时间
+- **基于 Astro 内容层**：通过 `docsLoader` 与 `docsSchema` 管理 `src/content/docs/` 下的 Markdown、MDX 与 Markdoc，frontmatter 具备 TypeScript 类型校验
+- **多标记语言与文件路由**：内容文件即页面路由，支持在文档中混用 Astro 生态的 UI 组件（React、Vue、Svelte、Solid 等）
+- **可扩展的插件与主题**：官方维护 [Plugins](https://starlight.astro.build/resources/plugins/) 与 [Themes](https://starlight.astro.build/resources/themes/) 目录，社区可扩展搜索、分析、组件等行为
+- **新建与增量接入**：可用 `create astro` 模板一键脚手架，也可在现有 Astro 项目中通过 `astro add starlight` 增量集成
+
+## 对用户价值
+
+自建文档站时，团队往往在主题、搜索、导航与部署之间反复权衡，Docusaurus 或 VitePress 等方案又绑定特定前端栈。Starlight 把「文档站该有的默认体验」打包成 Astro 集成：若你已在用 Astro 做产品站，可在同仓追加文档分区；若从零开始，模板几分钟即可本地预览。Astro 的静态优先与按需水合模型，也让多数文档页在性能与可访问性上具备良好基线，适合开源 README 升级、API 参考与内部手册等长期维护的内容站点。
+
+## 与替代方案
+
+- 相比 [Docusaurus](https://docusaurus.io/)（React 生态），Starlight 更轻量地依托 Astro，不强制 React 作为主 UI 栈，适合已熟悉 Astro 或希望文档与营销站共用工具链的团队。
+- 相比 [VitePress](https://vitepress.dev/)（Vue 生态），两者都强调 Markdown 优先与快速启动；Starlight 在 i18n、内置组件与 Astro 集成生态上更完整，VitePress 则对 Vue 项目内嵌文档更自然。
+- 相比 [Nextra](https://nextra.site/)（Next.js）或 [MkDocs Material](https://squidfunk.github.io/mkdocs-material/)（Python），Starlight 面向 Node/前端工作流，并可直接复用 Astro 集成市场；若团队主力栈是 Next 或 Python，对应方案往往迁移成本更低。
+- 边界说明：Starlight 专注**文档站**而非通用 CMS 或博客平台；复杂多租户、重度自定义后台或非文档型站点需评估是否引入 Astro 全栈能力。
+
+## 适应人群
+
+- 维护开源库或 SaaS 产品，希望把 README 升级为可搜索、可版本化的正式文档站的开发者。
+- 已在用 Astro 构建官网，想以最小成本追加 `/docs` 或子路径文档区的全栈 / 前端团队。
+- 技术写作者与 Developer Advocate，需要 Markdown/MDX 写作体验、暗色模式与 i18n，且重视 Lighthouse 类性能指标的团队。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+（与当前 Astro 版本要求保持一致，以[官方文档](https://docs.astro.build/en/install-and-setup/)为准）。
+- 包管理器：npm、pnpm 或 Yarn 均可。
+- 新建项目无需预先安装 Astro；在现有项目中集成时，需已有可运行的 Astro 工程。
+
+### 安装方式
+
+**方式一：新建 Starlight 项目（推荐）**
+
+```bash
+npm create astro@latest -- --template starlight
+```
+
+使用 pnpm 时：
+
+```bash
+pnpm create astro@latest --template starlight
+```
+
+**方式二：在现有 Astro 项目中添加**
+
+```bash
+npx astro add starlight
+```
+
+随后在 `astro.config.mjs` 中配置 `title`，并在 `src/content.config.ts` 注册 `docs` 集合（见下方首次运行）。
+
+### 首次运行
+
+进入项目目录启动开发服务器：
+
+```bash
+npm run dev
+```
+
+终端会输出本地预览 URL（默认 `http://localhost:4321`）。在 `src/content/docs/` 下新增 Markdown 文件即可生成页面，例如首页 `index.md`：
+
+```markdown
+---
+title: My docs
+description: Learn more about my project in this docs site built with Starlight.
+---
+
+Welcome to my project!
+```
+
+若在现有项目中手动集成，需确保 `src/content.config.ts` 包含：
+
+```typescript
+import { defineCollection } from 'astro:content';
+import { docsLoader } from '@astrojs/starlight/loaders';
+import { docsSchema } from '@astrojs/starlight/schema';
+
+export const collections = {
+  docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }),
+};
+```
+
+### 验证是否成功
+
+- 浏览器打开 dev server URL，能看到 Starlight 默认布局、侧栏与首页内容。
+- 在 `src/content/docs/` 新增页面后，保存文件应触发热更新并在导航中可见。
+- 运行 `npm run build` 能成功产出静态站点；`npm run preview` 可本地预览生产构建结果。
+
+### 常见坑 / 注意事项
+
+- **内容目录结构**：默认路由基于 `src/content/docs/` 文件路径；若文档需统一挂在子路径（如 `/guides/`），需将文件放入对应子目录，详见[手册](https://starlight.astro.build/manual-setup/)。
+- **SSR 与预渲染**：Starlight 文档页默认预渲染；若项目启用 SSR 并需关闭某页预渲染，需显式设置 `prerender: false`，Cloudflare 等适配器可能还需 `nodejs_compat` 等额外配置。
+- **版本升级**：使用 `npx @astrojs/upgrade` 同步升级 Starlight 与 Astro 相关包，升级前阅读 [Starlight changelog](https://github.com/withastro/starlight/blob/main/packages/starlight/CHANGELOG.md) 中的破坏性变更。
+- **求助渠道**：问题可先查 [Starlight 文档](https://starlight.astro.build/)与 [Astro 文档](https://docs.astro.build/)；社区支持见 Astro Discord 的 `#support`（带 `starlight` 标签）或 `#starlight` 频道。

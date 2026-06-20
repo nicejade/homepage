@@ -1,0 +1,118 @@
+---
+title: UI UX Pro Max
+description: 面向 AI 编程助手的 UI/UX 设计智能 Skill，内置 67 种风格、161 套配色与行业推理规则，一键生成完整设计系统。
+repo: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+homepage: https://www.uupm.cc/
+repoDescription: An AI SKILL that provide design intelligence for building professional UI/UX multiple platforms
+avatarUrl: https://avatars.githubusercontent.com/u/246974152?v=4
+tags:
+  - AI 编程
+  - 开发工具
+  - Agent
+language: Python
+stars: 93874
+forks: 9825
+openIssues: 202
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 做落地页、仪表盘或移动端界面时，让 Claude Code / Cursor 自动匹配风格、配色与排版。
+---
+
+## 项目介绍
+
+UI UX Pro Max 是一套可安装到 Claude Code、Cursor、Windsurf 等 AI 编程助手的 UI/UX 设计 Skill。v2.0 的核心是 **Design System Generator**：根据你的产品类型与需求，自动推理并输出包含页面结构、视觉风格、配色、字体、动效与反模式清单的完整设计系统，覆盖 Web、移动端与 15 种技术栈。
+
+## 核心特性
+
+- **Design System Generator**：多域并行检索（产品类型、风格、配色、落地页模式、字体配对），经 BM25 排序与行业规则推理后输出可执行的设计系统
+- **67 种 UI 风格**：Glassmorphism、Claymorphism、Bento Grid、Dark Mode、AI-Native UI 等，含落地页与 BI 仪表盘子类
+- **161 套行业配色 + 57 组字体配对**：与 161 种产品类型一一对应，附 Google Fonts 导入建议
+- **99 条 UX 指南 + 25 种图表类型**：覆盖无障碍、触控、性能、表单反馈等优先级规则
+- **15 种技术栈指引**：React、Next.js、Vue、Nuxt、Svelte、SwiftUI、Flutter、Tailwind、shadcn/ui 等
+- **CLI 一键安装**：`uipro-cli` 支持 Claude、Cursor、Copilot、Codex 等 18+ 平台，亦可全局安装
+
+## 对用户价值
+
+用 AI 写界面时，常见问题是风格随意、配色不搭、缺少无障碍检查，产出像「AI 味」模板。本 Skill 把设计知识库嵌入助手工作流：你只需描述「为美容 SPA 做落地页」或「做金融科技仪表盘」，助手会先检索行业规则、生成设计系统，再按栈规范写代码，并附带交付前检查清单（对比度、hover 状态、响应式断点等）。
+
+## 与替代方案
+
+- 相比 Figma AI 或 v0 等独立设计生成工具，本 Skill 直接在编码助手内激活，设计与实现同会话完成，适合「边聊边写代码」的 Vibe Coding 流程。
+- 相比通用 UI 组件库文档（shadcn/ui、Tailwind UI），这里侧重**行业场景推理**（161 条规则）与反模式过滤，而非单纯罗列组件。
+- 相比手写 Cursor Rules 约束视觉风格，本仓库提供可搜索的数据库与 Python 检索脚本，维护成本更低；但若你需要品牌定制设计系统而非行业模板，仍需人工 override。
+- 搜索脚本依赖 Python 3.x；纯后端任务无需安装此 Skill。
+
+## 适应人群
+
+- 用 Claude Code / Cursor 做前端或全栈，希望界面更专业、少踩 UX 反模式的开发者。
+- 需要快速产出落地页、SaaS 仪表盘、电商或移动端 MVP 的独立开发者与小团队。
+- 正在搭建多平台 AI 编程工作流、希望统一 UI 质量基线的平台或效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 环境（用于安装 `uipro-cli`）。
+- **Python 3.x**（Skill 内置搜索与设计系统推理脚本依赖；macOS 可用 `brew install python3`）。
+- 已安装目标 AI 助手（Claude Code、Cursor 等）。
+
+### 安装方式
+
+**方式 A：CLI（推荐）**
+
+```bash
+npm install -g uipro-cli
+cd /path/to/your/project
+uipro init --ai cursor      # 或 claude / windsurf / copilot / codex 等
+```
+
+全局安装（所有项目可用）：
+
+```bash
+uipro init --ai cursor --global
+```
+
+**方式 B：Claude Code 插件市场**
+
+```
+/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
+/plugin install ui-ux-pro-max@ui-ux-pro-max-skill
+```
+
+其他常用命令：
+
+```bash
+uipro versions    # 查看可用版本
+uipro update        # 更新到最新版
+uipro uninstall     # 卸载（自动检测平台）
+```
+
+### 首次运行
+
+安装后，在支持 Skill 自动激活的平台（Claude Code、Cursor、Windsurf 等）直接用自然语言发起 UI 任务，例如：
+
+```
+为我的 SaaS 产品做一个落地页
+```
+
+在 Kiro、Copilot、Roo Code 等平台需使用斜杠命令：
+
+```
+/ui-ux-pro-max 为我的 SaaS 产品做一个落地页
+```
+
+### 验证是否成功
+
+- 项目目录出现对应平台的 Skill 文件（如 `.cursor/skills/` 或 `~/.cursor/skills/`）。
+- 发起 UI 相关请求后，助手应输出设计系统摘要（Pattern、Style、Colors、Typography、Anti-patterns）。
+- 运行 `python3 --version` 确认 Python 可用；若检索脚本报错，检查 PATH 与 Python 安装。
+
+### 常见坑 / 注意事项
+
+- **Python 是硬性依赖**：未安装 Python 3 时设计系统检索会失败，务必先 `python3 --version` 验证。
+- **平台差异**：Trae 需先切换到 SOLO 模式；Copilot / Kiro / Roo Code 使用 `/ui-ux-pro-max` 斜杠命令而非自动激活。
+- **离线安装**：网络受限时可用 `uipro init --offline` 使用内置资源包。
+- **贡献者开发**：源码在 `src/ui-ux-pro-max/`，修改后需同步到 `cli/assets/` 并用 `bun run build` 测试 CLI，详见仓库 CLAUDE.md。

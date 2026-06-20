@@ -1,0 +1,132 @@
+---
+title: MongoDB
+description: 面向文档模型的开源分布式数据库，以 BSON 存储灵活 schema，支持副本集与分片水平扩展。
+repo: https://github.com/mongodb/mongo
+homepage: https://www.mongodb.com/
+repoDescription: The MongoDB Database
+avatarUrl: https://avatars.githubusercontent.com/u/45120?v=4
+tags:
+  - 开发工具
+  - 系统工具
+  - 自托管
+language: C++
+stars: 28378
+forks: 5782
+openIssues: 26
+contributors: 1
+license: SSPL-1.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 文档型持久化、快速迭代 schema 与分片集群场景的后端与数据平台选型参考。
+---
+
+## 项目介绍
+
+MongoDB 是全球使用最广泛的文档型 NoSQL 数据库之一，本仓库为官方服务端源码，核心组件包括 `mongod`（数据库进程）与 `mongos`（分片路由）。数据以 BSON 文档形式存储，适合 schema 频繁演进、嵌套结构与半结构化负载。生产环境通常优先使用 [MongoDB Community 下载页](https://www.mongodb.com/try/download/community) 或 Docker 镜像，而非直接编译 GitHub 源码；需要向内核贡献代码时，请遵循 [Bug 报告与开发论坛](https://github.com/mongodb/mongo/wiki/Submit-Bug-Reports) 流程。
+
+## 核心特性
+
+- **文档模型与灵活 schema**：JSON/BSON 文档存储，字段可随业务演进，无需预先定义 rigid 表结构
+- **副本集与高可用**：自动故障转移、读写分离与跨节点数据冗余
+- **分片水平扩展**：`mongos` 路由 + 分片集群，应对海量数据与写入吞吐
+- **丰富查询与索引**：单文档、聚合管道、地理空间、全文检索及多类型索引
+- **多语言驱动生态**：官方与社区驱动覆盖主流语言，与 Atlas、Compass、mongosh 工具链配套
+
+## 对用户价值
+
+MongoDB 把「像存 JSON 一样存数据」的开发体验与分布式数据库能力结合，缩短从原型到生产的迭代周期。对需要快速上线、嵌套对象多、读多写多且 schema 不固定的应用（内容平台、IoT、用户画像、Catalog 等），文档模型往往比强关系 schema 更顺手。社区版可自托管，也可无缝迁移至 [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) 托管；驱动、University 与文档体系成熟，团队上手成本相对可控。
+
+## 与替代方案
+
+- 相比 **PostgreSQL（JSONB）**，MongoDB 原生文档模型与分片扩展路径更直观；PostgreSQL 在复杂关联查询、ACID 跨表事务与 SQL 生态上通常更强。
+- 相比 **Redis**，MongoDB 面向持久化与复杂查询，Redis 更适合内存缓存、队列与极低延迟数据结构。
+- 相比 **Couchbase / DynamoDB 等文档或键值云数据库**，MongoDB 自托管与 Atlas 托管并存，API 与工具链统一；纯 AWS 原生栈且强依赖 DynamoDB 专有特性时，DynamoDB 集成更无缝。
+- 相比 **MySQL 等传统 RDBMS**，MongoDB 弱化表连接与固定 schema，适合文档中心型应用；强关系约束、报表 JOIN 密集场景关系库仍更合适。
+
+## 适应人群
+
+- 需要文档型存储、快速迭代数据模型的后端开发者与全栈工程师。
+- 负责副本集、分片、备份升级与性能调优的 DBA 与运维工程师。
+- 评估 NoSQL 架构、许可合规（SSPL）与云迁移成本的技术负责人与数据平台团队。
+
+## 如何使用
+
+### 前置条件
+
+- 日常开发与生产优先通过 [Community 下载页](https://www.mongodb.com/try/download/community)、包管理器或 Docker 安装预编译包，源码构建见 [Building MongoDB](https://github.com/mongodb/mongo/blob/master/docs/building.md)。
+- 从源码构建需满足官方文档中的编译器、Python、scons 等依赖；macOS、Linux 均受支持。
+- 使用 Community Server 前请阅读 [SSPL 许可说明](https://github.com/mongodb/mongo/blob/master/LICENSE-Community.txt)；2018 年 10 月 16 日前版本为 AGPL，之后版本（含补丁）为 SSPL v1。
+
+### 安装方式
+
+**macOS（Homebrew，推荐日常开发）**
+
+```bash
+brew tap mongodb/brew
+brew install mongodb-community
+brew services start mongodb-community
+brew install mongosh
+```
+
+**Docker**
+
+```bash
+docker pull mongodb/mongodb-community-server
+docker run -d --name mongo -p 27017:27017 mongodb/mongodb-community-server
+```
+
+**安装 Shell（mongosh）**
+
+```bash
+# 或从 https://www.mongodb.com/try/download/shell 下载
+brew install mongosh
+```
+
+**从本仓库源码构建（开发/定制编译）**
+
+```bash
+git clone https://github.com/mongodb/mongo.git
+cd mongo
+# 详见 docs/building.md
+python3 buildscripts/scons.py install-mongod
+```
+
+### 首次运行
+
+**单节点本地实例（源码 `./mongod` 或已安装二进制）**
+
+```bash
+sudo mkdir -p /data/db
+mongod
+# 另开终端
+mongosh
+```
+
+**验证 Shell 连接**
+
+```javascript
+// mongosh
+help
+db.runCommand({ ping: 1 })
+```
+
+可选：使用仓库内脚本安装图形化管理工具 Compass：
+
+```bash
+./install_compass
+```
+
+### 验证是否成功
+
+- `mongod` 进程监听默认端口 27017，日志无 fatal 错误。
+- `mongosh` 可连接并执行 `db.runCommand({ ping: 1 })` 返回 `{ ok: 1 }`。
+- 插入测试文档后 `db.collection.find()` 可读回数据。
+
+### 常见坑 / 注意事项
+
+- **数据目录权限**：默认 `/data/db` 需可写；Docker 或自定义 `--dbpath` 时注意挂载卷权限。
+- **许可与商业使用**：SSPL 对「以 MongoDB 为核心提供 DBaaS」有额外限制，SaaS 或云托管选型前务必做法务评估；AGPL/SSPL 边界以各文件头声明为准。
+- **生产高可用**：单节点仅适合开发；生产应配置副本集、备份策略与监控，分片集群需额外部署 `mongos` 与 config server。
+- **版本升级**：跨大版本升级前阅读 [Release Notes](https://www.mongodb.com/docs/manual/release-notes/)，关注索引、驱动与 wire protocol 变更。
+- **驱动版本**：应用侧驱动 major 版本需与服务端兼容，见 [Drivers 文档](https://www.mongodb.com/docs/manual/applications/drivers/)。

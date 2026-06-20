@@ -1,0 +1,101 @@
+---
+title: Claude Code Best Practice
+description: Claude Code 最佳实践知识库，从 vibe coding 到 Agent 工程化，覆盖原语、工作流与 80+ 条社区技巧。
+repo: https://github.com/shanraisshan/claude-code-best-practice
+repoDescription: from vibe coding to agentic engineering - practice makes claude perfect
+avatarUrl: https://avatars.githubusercontent.com/u/11731897?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: HTML
+stars: 58337
+forks: 5866
+openIssues: 9
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 系统梳理 Subagents、Skills、Hooks 与编排模式，适合已用 Claude Code 想进阶 Agent 工程化的开发者。
+---
+
+## 项目介绍
+
+Claude Code Best Practice 是由 shanraisshan 维护的 **Claude Code 实践知识库**，口号是「从 vibe coding 到 agentic engineering」。仓库把官方文档、Boris Cherny 等核心成员的公开建议与社区高赞工作流汇总成可检索的结构：涵盖 Subagents、Commands、Skills、Hooks、MCP、Settings 等原语，并附带 `best-practice/` 指南与 `implementation/` 可运行示例。README 还横向对比 Superpowers、gstack、OpenSpec 等十余套主流研发工作流，适合当作 Claude Code 的「课程式参考书」而非单一技能包。
+
+## 核心特性
+
+- **原语全景图**：Subagents、Commands、Skills、Hooks、MCP、Plugins、Memory、Checkpointing 等概念均有最佳实践文档与实现索引
+- **编排示范**：`/weather-orchestrator` 演示 **Command → Agent（预载 Skill）→ Skill** 完整编排链路，含天气 SVG 输出
+- **工作流横评**：对照 Superpowers、Everything Claude Code、Spec Kit、gstack、OpenSpec 等项目的 Research → Plan → Execute → Review → Ship 模式
+- **跨模型协作**：收录 Plugin、MCP、Router 三类与 Codex、Gemini、本地模型联用的方案与工具清单
+- **83 条 Tips**：按 Prompting、Planning、Context、Session、CLAUDE.md、Agents、Hooks 等分类，来源标注至 Claude 团队或社区
+- **🔥 Hot 专题**：Ultrareview、Auto Mode、Agent Teams、Ralph Wiggum Loop、Git Worktrees 等新特性的实践链接与实现仓库
+
+## 对用户价值
+
+Claude Code 能力迭代极快，官方文档、X 帖与工作流仓库分散在各处，新手容易把 Agent 当聊天机器人用、老手也难以及时跟进新原语。本仓库把「该用什么原语、如何编排、业界怎么玩」收敛到一处：你可以先跑通 `/weather-orchestrator` 理解编排模式，再按 Tips 优化自己的 `CLAUDE.md`，或对照工作流表选型 Superpowers / OpenSpec 等方案。对团队而言，它是可共享的 onboarding 教材；对个人而言，可减少反复搜索碎片教程的时间。
+
+## 与替代方案
+
+- 相比 [Anthropic 官方文档](https://code.claude.com/docs)，本仓库提供 **社区技巧聚合、工作流横评与可克隆实现**，更像策展索引而非 API 参考手册。
+- 相比 [Superpowers](https://github.com/obra/superpowers) 等**可安装的技能方法论**，这里是 **Claude Code 生态地图 + 参考实现**；若你需要开箱即用的 TDD / 子代理技能链，应直接安装 Superpowers，再用本库理解其在全局中的位置。
+- 相比 [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) 等**大而全配置合集**，本库侧重 **概念解释、编排模式与来源可追溯的 Tips**；若目标是快速复制一套 `.claude/` 配置，ECC 可能更直接。
+- 本仓库 **不负责模型路由或 CLI 代理**；跨模型需求请配合文中列出的 claude-code-router、codex-plugin-cc 等专用工具。
+
+## 适应人群
+
+- 已安装 Claude Code，想系统理解 Agents / Commands / Skills / Hooks 如何组合编排的开发者。
+- 需要在团队内建立 Claude Code 最佳实践共识、挑选工作流框架的 Tech Lead。
+- 关注 Boris Cherny、Thariq 等官方成员动态，希望有一份持续更新的中文友好索引的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 [Claude Code CLI](https://code.claude.com/docs/en/quickstart) 并完成 Anthropic 账号认证。
+- 本机有 Git；克隆仓库需要网络访问 GitHub。
+- 理解本库定位为 **参考书 + 示例实现**，不是 npm 包或一键插件；核心收益来自阅读结构与在 Claude Code 内运行示例命令。
+
+### 安装方式
+
+克隆仓库到本地（可在独立目录学习，或 Fork 后按需拷贝 `.claude/` 片段到自己的项目）：
+
+```bash
+git clone https://github.com/shanraisshan/claude-code-best-practice.git
+cd claude-code-best-practice
+```
+
+在仓库根目录启动 Claude Code：
+
+```bash
+claude
+```
+
+### 首次运行
+
+在 Claude Code 会话中执行编排示范命令：
+
+```bash
+/weather-orchestrator
+```
+
+按提示选择摄氏或华氏温度单位；流程将依次调用 `weather-agent`（预载 `weather-fetcher` Skill）与 `weather-svg-creator` Skill。详见 [orchestration-workflow 文档](https://github.com/shanraisshan/claude-code-best-practice/blob/main/orchestration-workflow/orchestration-workflow.md)。
+
+### 验证是否成功
+
+执行完成后应生成：
+
+- `orchestration-workflow/weather.svg` — 天气 SVG 卡片
+- `orchestration-workflow/output.md` — 温度摘要
+
+终端会显示所取温度、单位与文件路径。若启用了作者推荐的 [Claude Code Hooks](https://github.com/shanraisshan/claude-code-hooks)，工作过程中还可听到自定义提示音。
+
+### 常见坑 / 注意事项
+
+- README 明确建议 **把本库当课程阅读，而非照搬整套工作流**；应先理解原语，再组装适合自己的流程。
+- 不要把 Claude 当普通聊天机器人；价值在于 Commands、Agents、Skills 等 **可组合原语**。
+- `🔥 Hot` 与 `implementation/` 中的高级特性（如 Ralph Wiggum Loop）有独立仓库，需单独克隆研读，并非全部内置于主仓库。
+- 仓库体量大、链接多，建议从 [How to Use](https://github.com/shanraisshan/claude-code-best-practice#get-the-maximum-out-of-this-repo-by-following-these-steps) 七步指引入手，再按需深入 `tips/` 与 `best-practice/`。
+- Stars 与功能列表随 Claude Code 版本快速变化，实施前对照 [官方 Changelog](https://code.claude.com/docs) 核实命令是否仍可用。

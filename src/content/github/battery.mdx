@@ -1,0 +1,110 @@
+---
+title: "Battery"
+description: Apple Silicon Mac 电池充电管理工具，可将长期插电设备的电量维持在 80% 以延长寿命，提供菜单栏 GUI 与 CLI。
+repo: "https://github.com/actuallymentor/battery"
+repoDescription: "CLI/GUI for managing the battery charging status for Apple silicon (M1, M2, M3) Macs"
+avatarUrl: "https://avatars.githubusercontent.com/u/9071382?v=4"
+tags:
+  - CLI
+  - 开发工具
+  - 系统工具
+language: "Shell"
+stars: 7042
+forks: 278
+openIssues: 171
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 长期插电办公的 M 系列 MacBook 用户，需要比 macOS「优化电池充电」更可预期的上限控制与 CLI 自动化。
+---
+
+## 项目介绍
+
+[Battery](https://github.com/actuallymentor/battery) 是面向 Apple Silicon MacBook（M1/M2/M3 等）的电池充电管理工具，开源 MIT，提供菜单栏 GUI 与 `battery` 命令行。核心思路是：长期接电时把电量维持在约 80%，减少满充与高温对锂电寿命的损耗。作者因 AlDente 许可限制而自建此项目，GUI 基于 Electron，底层通过 SMC 工具读写充电状态，重启或关闭托盘应用后限制仍生效。
+
+## 核心特性
+
+- **80% 充电上限**：插电时电量超过 80% 停止充电，低于 80% 再恢复，并可主动放电至目标区间
+- **重启后仍生效**：限制在重启、关闭托盘应用后保持，适合长期接电的桌面办公场景
+- **GUI + CLI 双模式**：`brew install battery` 或 DMG 安装菜单栏应用；也可单独用一行脚本安装 CLI
+- **可配置维持区间**：CLI 支持 `battery maintain 80` 或 `battery maintain 70-80` 等自定义百分比（仅 CLI 可设非 80% 上限）
+- **完整充电控制**：`charging on/off`、`adapter on/off`、充至指定电量、放电至指定电量、校准流程等
+- **仅 Apple Silicon**：依赖 SMC，不支持 Intel Mac；Intel 用户可考虑 AlDente 等替代
+
+## 对用户价值
+
+笔记本长期接电却默认充到 100%，会加速电池老化；macOS 自带的「优化电池充电」依赖机器学习与固定作息，作息不规律时效果不稳定。Battery 让你主动设定维持百分比，行为可预期：插电办公时电量稳定在 80% 附近，需要满充时可用 `battery charge 100` 或关闭限制。对习惯终端自动化的用户，CLI 可写入脚本或 cron；对普通用户，菜单栏应用首次输入管理员密码后即可后台运行，无需反复干预。
+
+## 与替代方案
+
+- 相比 **macOS 优化电池充电（Optimized Charging）**：系统功能会预测你的插电规律，在「预计长时间接电」时才延迟充过 80%，且无法精确指定维持百分比；Battery 由用户主动开关，可固定 80% 或自定义区间，适合作息不固定、需要确定性的场景。
+- 相比 **[AlDente](https://apphousekitchen.com/)**：AlDente 功能更丰富（Intel 也支持、有付费高级版），但免费版许可对重度用户较严；Battery 完全开源 MIT，CLI 可脚本化，GUI 更轻量。Intel Mac 用户应选 AlDente 而非 Battery。
+- 相比 **手动拔电源、靠习惯控电量**：Battery 在插电状态下自动放电/停充，无需物理拔线，且重启后策略仍保留。
+
+## 适应人群
+
+- 长期将 M 系列 MacBook 接电源使用的开发者、设计师与居家办公用户。
+- 希望用 CLI 将充电策略写入脚本、dotfiles 或自动化流程的终端用户。
+- 觉得系统「优化电池充电」不够可控，想要免费开源、可自托管逻辑的工具党。
+
+## 如何使用
+
+### 前置条件
+
+- **Apple Silicon Mac**（M1/M2/M3 等）；**不支持 Intel Mac**
+- macOS，首次安装 GUI 或 CLI 时需要**管理员密码**（安装 SMC 组件到 `/usr/local/bin`）
+- 若使用 Little Snitch 等防火墙，需放行 GitHub、更新服务器等 HTTPS 请求（阻断仅影响自动更新）
+
+### 安装方式
+
+**方式一：Homebrew 安装 GUI（推荐）**
+
+```bash
+brew install battery
+```
+
+安装后需**打开一次菜单栏应用**以完成组件安装；首次启动会请求管理员密码。
+
+**方式二：下载 DMG**
+
+从 [Releases](https://github.com/actuallymentor/battery/releases/) 下载安装包，打开应用完成初始化。
+
+**方式三：仅安装 CLI**
+
+```bash
+curl -s https://raw.githubusercontent.com/actuallymentor/battery/main/setup.sh | bash
+```
+
+脚本会下载预编译 `smc` 工具并安装 `smc` 与 `battery` 到 `/usr/local/bin`。
+
+### 首次运行
+
+**GUI**：打开 Battery 应用，输入管理员密码；应用会将电量放电至 80%（即使正插电），之后自动维持上限。
+
+**CLI**：设定维持 80% 充电上限（重启后仍生效）：
+
+```bash
+battery maintain 80
+```
+
+查看当前状态：
+
+```bash
+battery status
+```
+
+### 验证是否成功
+
+- 运行 `battery status` 查看 SMC 状态与电量百分比
+- 执行 `battery charging off` 后，菜单栏电池图标应显示「未在充电」；`battery charging on` 后恢复充电图标
+- 插电且电量高于设定上限时，电量应逐渐下降或不再上升
+
+### 常见坑 / 注意事项
+
+- **仅 Apple Silicon**：Intel Mac 无法使用，请改用 AlDente 等工具。
+- **旧版路径/权限问题**：若升级前版本异常，可执行 `sudo rm -rf ~/.battery` 并删除 `/usr/local/bin/smc` 与 `/usr/local/bin/battery` 后重新安装。
+- **自定义百分比**：非 80% 的上限或区间（如 `battery maintain 70-80`）**只能通过 CLI** 设置，GUI 默认维持 80%。
+- **隐私与网络**：GUI 会向自托管分析、GitHub 等发起 HTTPS 请求以统计安装量与检查更新；详见 README FAQ。
+- **卸载**：`battery uninstall` 可恢复充电并移除已安装组件。

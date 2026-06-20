@@ -1,0 +1,123 @@
+---
+title: nginx
+description: 全球最流行的开源 Web 服务器与反向代理，兼具高性能负载均衡、API 网关与内容缓存能力。
+repo: https://github.com/nginx/nginx
+homepage: https://nginx.org/
+repoDescription: The official NGINX Open Source repository.
+avatarUrl: https://avatars.githubusercontent.com/u/9163049?v=4
+tags:
+  - 开发工具
+  - 自动化
+  - CLI
+language: C
+stars: 30938
+forks: 8012
+openIssues: 423
+contributors: 100
+license: BSD-2-Clause
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 自建站点、反向代理、负载均衡与 TLS 终止场景下的后端与运维工程师首选。
+---
+
+## 项目介绍
+
+NGINX（读作「engine x」）是全球使用最广泛的开源 Web 服务器之一，同时承担反向代理、负载均衡、API 网关与内容缓存等角色。项目采用 master/worker 多进程架构，以事件驱动与低内存占用著称，适合高并发 HTTP/HTTPS、TCP/UDP 代理与邮件代理场景。官方建议优先使用 [nginx.org](https://nginx.org/) 发布的二进制包或本仓库源码，而非发行版自带的旧版社区包，以获取最新特性与安全修复。
+
+## 核心特性
+
+- **模块化架构**：核心功能由静态或动态模块扩展，可用 `nginx -V` 查看当前二进制内置模块
+- **声明式配置**：通过文本配置文件与指令（directives）组合 server/location/upstream 等结构，灵活度高
+- **多进程运行时**：master 进程管理 worker 与配置热加载，worker 数量可固定或按 CPU 核数自动调整
+- **稳定版与主线版**：stable 仅合入关键修复，mainline 承载最新特性；可按环境选择发布线
+- **动态模块支持**：如 njs（JavaScript 扩展）等可在不重新编译核心的情况下按需加载
+
+## 对用户价值
+
+NGINX 把静态资源托管、反向代理、七层负载均衡、限流、TLS 终止与边缘缓存收敛到单一、轻量的进程模型中，在同等硬件上往往比传统多线程服务器承受更高并发。对团队而言，它既是入门自建站点的默认选择，也是 Kubernetes Ingress、微服务网关与 CDN 边缘节点的常见底层组件。BSD 2-Clause 许可也便于商业部署与二次集成。
+
+## 与替代方案
+
+- 相比 **Apache HTTP Server**，NGINX 事件驱动模型在高并发静态与代理场景通常更省内存；Apache 的 `.htaccess` 与模块生态在共享主机与传统 LAMP 栈中仍常见。
+- 相比 **Caddy**，NGINX 配置更显式、模块与运维实践更成熟，但自动 HTTPS 与配置简洁度上 Caddy 对新手更友好。
+- 相比 **Traefik**，NGINX 更偏通用 Web/代理引擎，需手写配置；Traefik 与容器编排、服务发现集成更深，适合云原生动态路由。
+- 相比 **HAProxy**，两者都可做负载均衡；HAProxy 专注四层/七层 LB 与精细流量调度，NGINX 则同时覆盖 Web 服务、缓存与丰富 HTTP 模块。
+
+## 适应人群
+
+- 需要自建网站、API 网关或内网反向代理的后端与全栈开发者。
+- 负责生产环境入口流量、TLS、限流与缓存策略的运维与 SRE 工程师。
+- 评估 Ingress、边缘节点或高性能 HTTP 基础设施的技术负责人与架构师。
+
+## 如何使用
+
+### 前置条件
+
+- Linux、FreeBSD 或 macOS 等受支持平台；Windows 版目前为概念验证，仅建议开发测试使用。
+- 生产环境优先通过官方包仓库安装，需 root 或 sudo 权限管理系统服务。
+- 若从源码构建，需 GCC、make 及 PCRE、zlib 等依赖；启用 TLS 时还需 OpenSSL 开发库。
+
+### 安装方式
+
+**Linux（推荐：官方预编译包）**
+
+按发行版添加 [nginx.org 官方仓库](https://nginx.org/en/linux_packages.html) 后安装，例如 Debian/Ubuntu：
+
+```bash
+# 示例：按官方文档添加 nginx.org 源并安装 stable 或 mainline 包
+sudo apt update
+sudo apt install nginx
+```
+
+**从源码构建（本仓库）**
+
+```bash
+sudo apt update
+sudo apt install gcc make libpcre3-dev zlib1g-dev libssl-dev
+git clone https://github.com/nginx/nginx.git
+cd nginx
+auto/configure
+make
+sudo make install
+```
+
+默认安装路径为 `/usr/local/nginx/`。更多构建选项见 [configure 文档](https://nginx.org/en/docs/configure.html)。
+
+### 首次运行
+
+**包管理器安装后：**
+
+```bash
+sudo systemctl start nginx    # 或 service nginx start
+```
+
+**源码安装后：**
+
+```bash
+sudo /usr/local/nginx/sbin/nginx
+```
+
+编辑站点配置（包安装常见路径为 `/etc/nginx/nginx.conf`），重载配置：
+
+```bash
+sudo nginx -t && sudo nginx -s reload
+```
+
+新手可从 [Beginner's Guide](https://nginx.org/en/docs/beginners_guide.html) 入手，逐步配置 server、location 与 upstream。
+
+### 验证是否成功
+
+```bash
+curl localhost
+```
+
+若返回以 `Welcome to nginx!` 开头的 HTML 页面，说明服务已正常监听。也可执行 `nginx -v` 查看版本，`nginx -V` 查看编译参数与内置模块。
+
+### 常见坑 / 注意事项
+
+- **勿用发行版旧包**：系统自带 nginx 往往版本滞后；生产环境应使用 nginx.org 官方包或自行跟踪本仓库发布。
+- **stable 与 mainline**：需要新特性（如 HTTP/3）可选 mainline；保守生产环境常用 stable，升级前阅读 [CHANGES](https://nginx.org/en/CHANGES)。
+- **配置语法严格**：`nginx -t` 通过后再 reload，避免错误配置导致服务无法启动。
+- **共享内存与限流**：限流、缓存等模块常需 `limit_req_zone` 等共享内存区，worker 间才能一致计数。
+- **Windows 限制**：官方明确 Windows 构建不适合生产；生产请使用 Linux/FreeBSD 等成熟路径。

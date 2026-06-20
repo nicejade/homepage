@@ -1,0 +1,106 @@
+---
+title: Astro
+description: 面向内容驱动站点的现代 Web 框架，默认零 JS，支持 Islands 按需水合与多框架集成。
+repo: https://github.com/withastro/astro
+homepage: https://astro.build
+repoDescription: The web framework for content-driven websites. ⭐️ Star to support our work!
+avatarUrl: https://avatars.githubusercontent.com/u/44914786?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: TypeScript
+stars: 60310
+forks: 3556
+openIssues: 156
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 营销站、博客与文档站从零搭建，或从 Next.js/Gatsby 迁移评估静态优先方案的前端与全栈团队。
+---
+
+## 项目介绍
+
+Astro 是由 [withastro](https://github.com/withastro) 维护的现代 Web 框架，主打**内容驱动网站**：博客、文档、营销落地页与作品集等以 Markdown、MDX 或 `.astro` 组件为主的站点。它采用 **Islands 架构**——默认不向浏览器发送 JavaScript，仅在需要交互的 UI 区域按需水合（React、Vue、Svelte、Solid 等均可通过官方集成接入）。本仓库为 Astro 核心、`create-astro` 脚手架及 `@astrojs/*` 官方集成 monorepo；文档站主题 [Starlight](https://github.com/withastro/starlight) 在独立仓库维护。
+
+## 核心特性
+
+- **Islands 与零 JS 默认**：静态 HTML 优先，交互组件可声明 `client:*` 指令按需加载，显著降低首屏脚本体积
+- **`.astro` 单文件组件**：模板、脚本与样式同文件编写，语法接近 HTML，学习成本相对平缓
+- **Content Collections**：通过 `astro:content` 为 Markdown/MDX frontmatter 提供 TypeScript 类型校验与统一内容管理
+- **多框架与集成生态**：`astro add` 一键接入 React、Vue、Svelte、MDX、Tailwind、SSR 适配器（Node、Vercel、Netlify、Cloudflare 等）
+- **灵活输出模式**：支持静态站点生成（SSG）、服务端渲染（SSR）与混合预渲染，文件路由与动态路由并存
+
+## 对用户价值
+
+内容型站点往往「大部分页面只需 HTML」，却在 React/Next 等全栈方案里背负不必要的客户端运行时。Astro 把性能优化前移到构建阶段：默认零 JS 让 Lighthouse 与 SEO 基线更友好，又能在同一项目里局部引入熟悉的 UI 框架组件，避免为整站绑定单一前端栈。若团队要同时维护官网、博客与文档，Astro 与 Starlight 可共用工具链；若已有 Vite 经验，`create astro` 几分钟即可本地预览，降低从评估到上线的摩擦。
+
+## 与替代方案
+
+- 相比 [Next.js](https://nextjs.org/)（React 全栈），Astro 更强调**内容站与静态优先**，默认不强制 React 运行时；Next 在 App Router、全栈 API 与 React 生态深度上更适合复杂交互型应用。
+- 相比 [Gatsby](https://www.gatsbyjs.com/)（React SSG），两者都服务内容站点；Astro 的 Islands 模型与多框架集成更灵活，Gatsby 在 GraphQL 数据层与插件市场上历史积累更深。
+- 相比 [Nuxt](https://nuxt.com/)（Vue 全栈）或 [SvelteKit](https://svelte.dev/docs/kit)（Svelte 全栈），Astro 不绑定单一 UI 框架，适合「主体是 Markdown/静态页 + 少量交互岛」的站点；若产品本质是重度 SPA 或强依赖某一框架的全栈能力，对应框架往往更自然。
+- 相比 [Eleventy](https://www.11ty.dev/) 等静态站点生成器，Astro 提供组件化、Content Collections 与官方集成市场，抽象层级更高；极简单页或纯模板流水线场景，Eleventy 可能更轻。
+- 边界说明：Astro 并非通用后台或实时协作平台方案；复杂多租户 CMS、重度客户端状态管理应用需评估是否引入 SSR 与 islands 之外的架构。
+
+## 适应人群
+
+- 需要高性能博客、营销站或作品集，并希望用 Markdown/MDX 管理内容的前端与独立开发者。
+- 已在用 React/Vue/Svelte 组件库，希望在新内容站中**局部复用**而非整站迁移的团队。
+- 技术文档、开源项目官网维护者，计划搭配 [Starlight](https://starlight.astro.build/) 或自建 Content Collections 文档区。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+（以 [官方安装文档](https://docs.astro.build/en/install-and-setup/) 当前要求为准）。
+- npm、pnpm 或 Yarn 等包管理器。
+- 可选：浏览器访问 [astro.new](https://astro.new/) 在线体验模板，无需本地环境。
+
+### 安装方式
+
+**方式一：新建项目（推荐）**
+
+```bash
+npm create astro@latest
+```
+
+使用 pnpm 时：
+
+```bash
+pnpm create astro@latest
+```
+
+向导中可选择官方模板（博客、文档、基础等）与 TypeScript、Tailwind 等选项。
+
+**方式二：手动安装到现有目录**
+
+```bash
+npm install astro
+```
+
+随后按文档配置 `astro.config.mjs` 与 `package.json` 脚本（适合已有 Vite 工程增量接入）。
+
+### 首次运行
+
+进入项目目录启动开发服务器：
+
+```bash
+npm run dev
+```
+
+终端会输出本地预览 URL（默认 `http://localhost:4321`）。在 `src/pages/` 下新增 `.astro` 或 `.md` 文件即可生成路由；使用 Content Collections 时内容通常放在 `src/content/` 并由 `src/content.config.ts` 注册集合。
+
+### 验证是否成功
+
+- 浏览器打开 dev server URL，默认欢迎页可正常渲染且无控制台阻塞性错误。
+- 修改 `src/pages/index.astro` 或内容文件后，保存应触发热更新。
+- 运行 `npm run build` 成功产出 `dist/`；`npm run preview` 可本地预览生产构建结果。
+
+### 常见坑 / 注意事项
+
+- **Islands 水合**：交互组件需显式添加 `client:load`、`client:visible` 等指令，否则仅以静态 HTML 输出；过度水合会抵消零 JS 优势。
+- **集成与适配器**：SSR 部署需安装对应 `@astrojs/node`、`@astrojs/vercel` 等适配器；用 `npx astro add <integration>` 可自动写入配置，减少手写错误。
+- **版本升级**：使用 `npx @astrojs/upgrade` 同步升级 Astro 与官方集成，升级前阅读 [CHANGELOG](https://github.com/withastro/astro/blob/main/packages/astro/CHANGELOG.md) 中的破坏性变更。
+- **求助渠道**：查阅 [官方文档](https://docs.astro.build/)、[astro.new](https://astro.new/) 示例，或加入 [Astro Discord](https://astro.build/chat) 的 `#support` 频道。

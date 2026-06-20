@@ -1,0 +1,123 @@
+---
+title: SQLite
+description: 全球部署最广的嵌入式 SQL 数据库引擎，单文件零配置，源码以 Fossil 为准、GitHub 为镜像。
+repo: https://github.com/sqlite/sqlite
+homepage: https://sqlite.org/
+repoDescription: Official Git mirror of the SQLite source tree
+avatarUrl: https://avatars.githubusercontent.com/u/48680494?v=4
+tags:
+  - 开发工具
+  - 系统工具
+  - 嵌入式
+language: C
+stars: 9822
+forks: 1535
+openIssues: 23
+contributors: 1
+license: Public Domain
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 移动端、边缘设备与单机应用的轻量持久化与本地存储选型参考。
+---
+
+## 项目介绍
+
+SQLite 是部署量最大的 SQL 数据库引擎，以 C 库形式嵌入应用进程，无需独立服务器进程或配置。本 GitHub 仓库为官方 Git 镜像，完整源码可追溯至 2000 年；**权威版本库在 [Fossil](https://sqlite.org/src/timeline)**，Git 中的 commit 名称与官方 check-in 名称不同，沟通与校验完整性时应以 Fossil 官方名称为准。日常集成请优先使用 [sqlite.org 下载页](https://sqlite.org/download.html) 的预编译库与 CLI，而非直接编译镜像仓库。
+
+## 核心特性
+
+- **嵌入式架构**：单文件数据库，零配置启动，适合 App、浏览器、IoT 与边缘节点本地持久化
+- **完整 SQL 子集**：事务（ACID）、索引、触发器、视图、CTE 与 JSON 扩展函数
+- **跨平台 C 库**：Android、iOS、Windows、Linux 等主流平台均有成熟绑定与 ORM 支持
+- **Amalgamation 分发**：`sqlite3.c` 单文件 amalgamation 便于直接嵌入 C/C++ 项目
+- **公共领域授权**：源码无版权限制，可自由商用、修改与静态链接，无需开源衍生作品
+
+## 对用户价值
+
+SQLite 把「可靠的关系型存储」压缩到进程内调用，省去数据库运维、网络延迟与连接池复杂度，是移动应用、桌面软件、浏览器（WebAssembly）、测试夹具与单机工具链的默认本地存储。公共领域许可消除了商业合规顾虑；全球生态（Python sqlite3、Node better-sqlite3、Rust rusqlite 等）使集成成本极低。对团队而言，它是 PostgreSQL/MySQL 之外的「本地与嵌入式层」，也是许多 ORM 与框架的内置默认后端。
+
+## 与替代方案
+
+- 相比 **PostgreSQL / MySQL**，SQLite 面向单进程、单文件与嵌入式场景，不支持多客户端网络并发写入；需要多用户服务端数据库时应选客户端/服务器架构。
+- 相比 **DuckDB**，SQLite 通用 OLTP 与嵌入式集成更成熟；DuckDB 在单机分析查询与列式 OLAP 负载上通常更优。
+- 相比 **LevelDB / RocksDB**，SQLite 提供 SQL 与事务语义；纯 KV、极致写入吞吐或自定义存储引擎场景更适合 LSM 系库。
+- 相比 **云托管数据库**，SQLite 无运维成本、离线可用，但需自行处理备份、多实例同步与写入并发扩展。
+
+## 适应人群
+
+- 需要在 App、桌面或嵌入式设备中做本地持久化的移动与全栈开发者。
+- 构建 CLI 工具、测试环境或单机 SaaS 时希望零依赖数据库的后端工程师。
+- 评估数据层架构、许可合规与「本地优先」存储策略的技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- 生产与日常开发优先通过 [官方下载页](https://sqlite.org/download.html) 获取预编译 `sqlite3` CLI 与 amalgamation，而非依赖 GitHub 镜像编译。
+- 从源码构建需 GCC、GNU make；运行完整测试套件还需 TCL 8.6+ 与 `tcl-dev`（见 `doc/compile-for-unix.md`）。
+- 获取最新源码的推荐方式是 [Fossil](https://fossil-scm.org/)：`fossil open https://sqlite.org/src`。
+
+### 安装方式
+
+**macOS / Linux（CLI，推荐快速体验）**
+
+```bash
+# macOS
+brew install sqlite
+
+# Debian / Ubuntu
+sudo apt update && sudo apt install sqlite3 libsqlite3-dev
+```
+
+**从 tarball 源码编译（Unix）**
+
+```bash
+apt install gcc make tcl-dev   # Debian/Ubuntu 示例
+tar xzf sqlite.tar.gz && mkdir bld && cd bld
+../sqlite/configure
+make sqlite3                   # 命令行工具
+make sqlite3.c                 # amalgamation 单文件
+```
+
+**Fossil 获取官方源码树**
+
+```bash
+mkdir -p ~/sqlite && cd ~/sqlite
+fossil open https://sqlite.org/src
+fossil update release          # 最新正式发布
+```
+
+### 首次运行
+
+使用 CLI 创建并打开本地数据库文件：
+
+```bash
+sqlite3 myapp.db
+```
+
+在交互式 shell 中执行：
+
+```sql
+CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT NOT NULL);
+INSERT INTO users (name) VALUES ('alice');
+SELECT * FROM users;
+```
+
+应用内集成时，链接 `libsqlite3` 或使用各语言官方/社区绑定即可。
+
+### 验证是否成功
+
+```bash
+sqlite3 :memory: "SELECT sqlite_version();"
+sqlite3 myapp.db "SELECT count(*) FROM users;"
+```
+
+能返回版本号并读写表即表示核心功能正常。
+
+### 常见坑 / 注意事项
+
+- **GitHub 仅为镜像**：不接受 Pull Request；问题与补丁请走 [SQLite Forum](https://sqlite.org/forum/) 或 [bugs 论坛](https://sqlite.org/bugs)，安全相关问题可私信维护者。
+- **并发写入限制**：同一时刻仅一个写事务；高并发写场景需应用层队列、WAL 模式或迁移到服务端数据库。
+- **Git 与 Fossil 名称不一致**：引用 check-in、校验源码完整性时使用 Fossil 官方名称（见 README「Verifying Code Authenticity」）。
+- **备份与迁移**：数据库即单文件，复制 `.db` 即可备份；在线备份可用 `.backup` 命令，大版本升级前阅读 [Release Notes](https://sqlite.org/changes.html)。

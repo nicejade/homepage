@@ -1,0 +1,106 @@
+---
+title: Codex
+description: OpenAI 官方终端编码 Agent，本地运行，支持 CLI、IDE 与桌面应用。
+repo: https://github.com/openai/codex
+homepage: https://developers.openai.com/codex
+repoDescription: Lightweight coding agent that runs in your terminal
+avatarUrl: https://avatars.githubusercontent.com/u/14957082?v=4
+tags:
+  - AI 编程
+  - Agent
+  - CLI
+language: Rust
+stars: 92155
+forks: 13620
+openIssues: 7365
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 已订阅 ChatGPT Plus/Pro，想在终端或 Cursor 里用 OpenAI 官方 Agent 的开发者。
+---
+
+## 项目介绍
+
+Codex 是 OpenAI 推出的轻量级编码 Agent，可在本地终端运行，读取项目上下文并通过自然语言驱动读文件、改代码与执行命令。除 CLI 外，还提供 IDE 扩展（VS Code、Cursor、Windsurf）、桌面应用（`codex app`）与云端 Codex Web 等多种入口。本仓库以 Apache-2.0 开源，承载 CLI 核心实现与贡献指南，适合希望把 OpenAI Agent 能力接入日常开发工作流的用户。
+
+## 核心特性
+
+- **终端原生 Agent**：在项目目录运行 `codex`，用对话完成跨文件编辑与命令执行
+- **多入口形态**：CLI、IDE 扩展、桌面应用与 [Codex Web](https://chatgpt.com/codex) 云端 Agent，覆盖不同工作习惯
+- **ChatGPT 账户集成**：支持通过 ChatGPT 登录，纳入 Plus、Pro、Business、Edu 或 Enterprise 计划使用
+- **API Key 模式**：也可配置 API Key 接入，需按官方文档完成额外鉴权设置
+- **多平台安装**：官方脚本、npm、Homebrew 或 GitHub Release 二进制，覆盖 macOS、Linux 与 Windows
+
+## 对用户价值
+
+Codex 把 OpenAI 的编码 Agent 能力收敛到本地终端与常用 IDE，比纯 Web 聊天更贴近真实仓库上下文。对于已订阅 ChatGPT 的开发者，它提供与 OpenAI 生态对齐的官方编码体验；Apache-2.0 许可也便于团队审阅源码、参与贡献或评估长期接入成本。
+
+## 与替代方案
+
+- 相比 **Claude Code**，Codex 绑定 OpenAI / ChatGPT 生态，多入口（CLI、IDE、桌面、Web）覆盖更全；Claude Code 则深度对齐 Anthropic 模型与 GitHub @claude 工作流。
+- 相比 **OpenCode**，Codex 是 OpenAI 官方产品，账户与计费走 ChatGPT 计划；OpenCode 完全开源且模型无关，适合自由切换 75+ 提供商。
+- 相比 **Aider**，Codex 自主性更强、产品形态更完整；Aider 更轻量，强调逐 diff 结对与多模型切换灵活性。
+- 若仅需 IDE 内补全而非 Agent 任务，**Continue** 或 **Copilot** 可能更轻量。
+
+## 适应人群
+
+- 已订阅 ChatGPT Plus/Pro 或企业方案、希望把官方 Agent 接入终端或 IDE 的开发者。
+- 习惯 Cursor、VS Code 或 Windsurf，想在编辑器内直接使用 OpenAI 编码 Agent 的工程师。
+- 需要评估 OpenAI 官方本地 Agent 能力、并关注 Apache-2.0 开源实现的团队。
+
+## 如何使用
+
+### 前置条件
+
+- macOS、Linux 或 Windows 运行环境。
+- 有效的 ChatGPT 账户（Plus、Pro、Business、Edu 或 Enterprise），或已配置可用的 OpenAI API Key。
+- 建议在已有 Git 管理的项目目录中试用，便于审查与回滚 Agent 改动。
+
+### 安装方式
+
+**macOS / Linux（推荐）：**
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
+
+**Windows（推荐）：**
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+**其他方式：**
+
+```bash
+# npm
+npm install -g @openai/codex
+
+# Homebrew（macOS）
+brew install --cask codex
+```
+
+也可从 [GitHub Releases](https://github.com/openai/codex/releases/latest) 下载对应平台二进制（如 `codex-aarch64-apple-darwin.tar.gz`）。
+
+### 首次运行
+
+进入目标项目目录，执行：
+
+```bash
+codex
+```
+
+首次启动选择 **Sign in with ChatGPT** 完成登录；若使用 API Key，请参考 [官方鉴权文档](https://developers.openai.com/codex/auth#sign-in-with-an-api-key) 完成配置。用自然语言描述一个小任务（如解释模块、补充测试或整理提交），观察 Agent 如何读取文件并提出改动。
+
+### 验证是否成功
+
+确认 `codex` 命令可启动、能访问项目文件，且对话中可触发读/写与命令执行。若使用 IDE 扩展，可在 [官方 IDE 文档](https://developers.openai.com/codex/ide) 查阅安装步骤并验证编辑器内 Agent 可用。
+
+### 常见坑 / 注意事项
+
+- Agent 可执行终端命令，首次试用应限制任务范围并审查高风险操作。
+- API Key 模式与 ChatGPT 登录的计费、配额策略不同，接入前请阅读 [Codex 文档](https://developers.openai.com/codex) 与 ChatGPT 计划说明。
+- 桌面体验可运行 `codex app` 或访问 [Codex App 页面](https://chatgpt.com/codex?app-landing-page=true)；云端 Agent 请使用 [chatgpt.com/codex](https://chatgpt.com/codex)。
+- 从 GitHub Release 下载二进制后，解压文件名含平台标识，通常需重命名为 `codex` 再放入 PATH。

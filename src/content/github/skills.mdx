@@ -1,0 +1,99 @@
+---
+title: Anthropic Agent Skills
+description: Anthropic 官方的 Agent Skills 参考实现，含技能规范、示例库与 Claude Code 插件安装路径。
+repo: https://github.com/anthropics/skills
+repoDescription: Public repository for Agent Skills
+avatarUrl: https://avatars.githubusercontent.com/u/76263028?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: Python
+stars: 152794
+forks: 17998
+openIssues: 968
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 想按 agentskills.io 标准自建技能包，或在 Claude Code / API 中复用 PDF、PPT 等文档技能的开发者。
+---
+
+## 项目介绍
+
+这是 Anthropic 面向 Claude 生态公开的 **Agent Skills** 仓库：每个技能是一个独立文件夹，内含 `SKILL.md` 指令、脚本与资源，供 Claude 在特定任务中按需加载。仓库同时提供 [Agent Skills 规范](https://agentskills.io)（`spec/`）、可复制的技能模板（`template/`），以及创意、开发、企业与文档处理等多类示例，是理解官方技能体系与编写自定义技能的首选参考。
+
+## 核心特性
+
+- **技能即文件夹**：`SKILL.md` 含 YAML frontmatter（`name`、`description`）与可执行指令，Claude 动态加载以完成可重复任务
+- **多场景示例库**：`skills/` 覆盖创意设计、开发测试、企业沟通，以及 docx / pdf / pptx / xlsx 文档处理能力
+- **官方规范与模板**：`spec/` 定义跨平台技能标准；`template/` 提供最小可运行起点
+- **Claude Code 插件市场**：通过 `/plugin marketplace add anthropics/skills` 安装 `document-skills` 或 `example-skills`
+- **多入口支持**：Claude.ai 付费计划、Claude API Skills 接口，以及 skills.sh 技能目录均可发现与分发
+- **生产级文档技能参考**：文档子技能为 source-available，展示复杂技能在 Claude 产品中的实际形态
+
+## 对用户价值
+
+通用大模型擅长泛化对话，却难以稳定复现「按品牌规范写文档」「按组织流程分析数据」等专有流程。Agent Skills 把领域知识、步骤与工具调用封装成可版本化、可分享的技能包，让 Claude 在触发相关任务时自动遵循同一套方法。本仓库既是官方范例集，也是自建技能与对接 API 的落地样板，降低从「写 prompt」到「交付可维护能力模块」的门槛。
+
+## 与替代方案
+
+- 相比 [Superpowers](https://github.com/obra/superpowers) 等第三方方法论技能库，本仓库代表 **Anthropic 官方标准与实现**，并与 Claude Code 插件市场、API Skills 深度集成。
+- 相比项目级 `CLAUDE.md` 或 Cursor Rules 等静态规则，Skills 支持 **按任务动态加载**、独立版本管理与跨宿主分发（见 agentskills.io）。
+- 相比 MCP 工具服务器，Skills 侧重 **指令、流程与资源编排**；复杂工具调用可与之组合，而非互相替代。
+- 文档类子技能（docx / pdf / pptx / xlsx）为 source-available，**并非全部 Apache 2.0 开源**；商用或二次分发前请逐技能核对许可。
+
+## 适应人群
+
+- 使用 Claude Code、Claude.ai 或 Claude API，希望编写或安装自定义技能的开发者。
+- 需要参考生产级文档处理技能实现的产品与平台工程师。
+- 正在评估 Agent Skills 标准、打算在团队内统一技能包格式的 Tech Lead。
+
+## 如何使用
+
+### 前置条件
+
+- 使用 Claude Code、Claude.ai 付费计划，或具备 Skills API 访问权限的 Claude API 账户。
+- 自建技能时熟悉 Markdown 与 YAML frontmatter；部分示例技能依赖 Python 等运行时（见各技能目录 README）。
+- 理解仓库免责声明：示例仅供演示与教育，生产环境需自行充分测试。
+
+### 安装方式
+
+**Claude Code：注册插件市场并安装**
+
+```
+/plugin marketplace add anthropics/skills
+```
+
+浏览安装 `document-skills` 或 `example-skills`，或直接：
+
+```
+/plugin install document-skills@anthropic-agent-skills
+/plugin install example-skills@anthropic-agent-skills
+```
+
+**自建技能：从模板复制**
+
+```bash
+git clone https://github.com/anthropics/skills.git
+cp -r skills/template/template-skill my-skill-name
+# 编辑 my-skill-name/SKILL.md 中的 name、description 与正文指令
+```
+
+**Claude API**：参阅 [Skills API Quickstart](https://docs.claude.com/en/api/skills-guide#creating-a-skill) 上传自定义技能或使用预置能力。
+
+### 首次运行
+
+在 Claude Code 安装 `document-skills` 后，可尝试：「Use the PDF skill to extract the form fields from `path/to/file.pdf`」。自建技能时，将文件夹放入宿主支持的技能目录，或在对话中明确提及技能 `name` 以触发加载。
+
+### 验证是否成功
+
+确认 Claude 能识别技能描述并按 `SKILL.md` 步骤执行；插件安装后应在 Claude Code 插件列表中看到 `anthropic-agent-skills`。API 集成时检查技能创建与调用接口返回无错误。
+
+### 常见坑 / 注意事项
+
+- 仓库根目录无单一 SPDX 许可证；**多数示例为 Apache 2.0**，文档子技能为 source-available，不可一律视为可自由商用。
+- Claude.ai 已内置部分示例技能；本仓库主要用于学习模式、自定义扩展与 Claude Code / API 场景。
+- 技能行为以你当前 Claude 版本与宿主实现为准，与仓库演示可能存在差异；关键任务务必在自有环境回归验证。
+- 规范与生态持续演进，跨平台实现请优先对齐 [agentskills.io](https://agentskills.io) 与官方支持文档。

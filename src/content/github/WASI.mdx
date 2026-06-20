@@ -1,0 +1,99 @@
+---
+title: WASI
+description: WebAssembly 系统接口标准，为 Wasm 模块提供类 POSIX 的宿主能力，正由 WebAssembly 社区推进标准化。
+repo: https://github.com/WebAssembly/WASI
+homepage: https://webassembly.org/
+repoDescription: "WebAssembly System Interface"
+avatarUrl: https://avatars.githubusercontent.com/u/11578470?v=4
+tags:
+  - 开发工具
+  - 系统编程
+  - 跨平台
+language: Rust
+stars: 5694
+forks: 324
+openIssues: 249
+contributors: 1
+license: NOASSERTION
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: Wasm 运行时选型、serverless 沙箱与插件隔离、跨语言可移植组件的接口标准与提案进展追踪。
+---
+
+## 项目介绍
+
+WASI（WebAssembly System Interface）是由 [WebAssembly Community Group](https://www.w3.org/community/webassembly/) 旗下 **WASI Subgroup** 制定的一套系统级 API 标准，目标是为 WebAssembly 模块提供安全、可移植的宿主能力（文件、时钟、网络、HTTP 等），设计思路深受 POSIX 与 [CloudABI](https://cloudabi.org/) 影响。本仓库承载**总体讨论、治理流程与高层目标**；各具体 API 在独立提案仓库中演进，可在 [Proposals 列表](https://github.com/WebAssembly/WASI/blob/main/docs/Proposals.md) 查阅。当前主线为 **WASI 0.3**（Preview 3），在 0.2 模块化 Wit 接口基础上引入 Component Model 原生的 `async` 能力。
+
+## 核心特性
+
+- **分阶段标准化流程**：提案经历 Phase 0–5（预提案 → 标准化），与 WebAssembly CG 流程对齐，便于社区审阅与实现跟进
+- **三代预览演进**：Preview 1（witx IDL，已广泛部署）→ [WASI 0.2](https://github.com/WebAssembly/WASI/tree/wasi-0.2)（[Wit IDL](https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md) 模块化 API）→ WASI 0.3（`future` / `stream` 原生异步）
+- **模块化 API 集合**：Phase 3 实现中的核心包包括 CLI、Clocks、Filesystem、Random、Sockets、HTTP 等；另有 KV、TLS、SQL、机器学习（wasi-nn）等扩展提案
+- **跨语言与可虚拟化**：Wit 类型系统比 witx 更具表达力，支持更多源语言编译目标，并强调接口可被宿主虚拟化以实现安全沙箱
+- **开放提案机制**：新 API 通过 [wasi-proposal-template](https://github.com/WebAssembly/wasi-proposal-template) 发起，遵循 [Contributing 指南](https://github.com/WebAssembly/WASI/blob/main/CONTRIBUTING.md) 与 [Charter](https://github.com/WebAssembly/WASI/blob/main/Charter.md) 范围约束
+
+## 对用户价值
+
+若你需要让 WebAssembly 模块在浏览器之外运行——云函数、边缘节点、插件系统、嵌入式沙箱——WASI 提供了**与宿主解耦的标准契约**，避免每个运行时各自发明 syscall。对运行时开发者（[Wasmtime](https://github.com/bytecodealliance/wasmtime)、[WasmEdge](https://github.com/WasmEdge/WasmEdge) 等），WASI 是能力对齐的参照；对应用与工具链作者，可按预览版本选择目标接口并评估迁移成本。本仓库本身不提供可执行运行时，而是规范与治理的「单一信息源」。
+
+## 与替代方案
+
+- 相比 **各运行时私有 syscall**（如早期 Emscripten 定制接口），WASI 推动跨实现一致性与可移植二进制，降低「换运行时就要改集成」的成本；代价是标准化周期长，前沿能力往往先以提案形式存在。
+- 相比 **直接 POSIX / 完整操作系统 API**，WASI 刻意裁剪权限（能力安全、最小暴露面），更适合不可信代码沙箱；需要完整系统调用或遗留 C 库直链时，原生 POSIX 或容器仍更合适。
+- 相比 **[WASI Preview 1（witx）](https://github.com/WebAssembly/WASI/tree/wasi-0.1)**，0.2/0.3 基于 Component Model 与 Wit，模块边界与异步模型更清晰；大量生产环境仍停留在 Preview 1，升级需对照各运行时的 0.2/0.3 支持矩阵。
+- 相比 **浏览器 Web API**（Fetch、WebCrypto 等），WASI 面向非浏览器宿主；在浏览器内运行 Wasm 通常走 JS/Wasm 互操作而非完整 WASI 栈。
+- 边界说明：实现 WASI 的是**运行时与 SDK**，本 repo 用于读规范、跟提案与参与标准讨论，而非 `apt install wasi` 一类安装。
+
+## 适应人群
+
+- 维护或选型 Wasm 运行时、serverless 平台、插件市场的基础设施工程师，需要跟踪 HTTP/Sockets/Filesystem 等 API 成熟度。
+- 使用 Rust、C/C++、TinyGo 等将程序编译为 Wasm 并部署到边缘/云端的系统开发者，需理解目标预览版本与工具链支持。
+- 希望向 WebAssembly 社区提交新系统 API、参与 Phase 流程或实现提案的标准贡献者与架构师。
+
+## 如何使用
+
+### 前置条件
+
+- 了解 [WebAssembly](https://webassembly.org/) 基础概念；跟进 0.2/0.3 时建议先阅读 [Component Model](https://github.com/WebAssembly/component-model) 与 [Wit 文档](https://component-model.bytecodealliance.org/)。
+- 参与提案讨论需熟悉 [WASI Contributing](https://github.com/WebAssembly/WASI/blob/main/CONTRIBUTING.md) 与 [Phase Process](https://github.com/WebAssembly/WASI/blob/main/CONTRIBUTING.md#the-phase-process)。
+- **运行 Wasm 程序**需单独安装实现 WASI 的运行时（如 Wasmtime）；本仓库仅为规范与元数据，不包含可执行二进制。
+
+### 安装方式
+
+**克隆本仓库（阅读规范与提案索引）**
+
+```bash
+git clone https://github.com/WebAssembly/WASI.git
+cd WASI
+```
+
+浏览 `docs/Proposals.md` 获取各 API 独立仓库链接；历史预览可切换分支/tag：`wasi-0.1`、`wasi-0.2`。
+
+**安装 WASI 运行时（实际执行 Wasm 模块，以 Wasmtime 为例）**
+
+```bash
+curl https://wasmtime.dev/install.sh -sSf | bash
+```
+
+其他实现见 [Bytecode Alliance](https://bytecodealliance.org/) 与 [WasmEdge 文档](https://wasmedge.org/docs/)；选型时核对目标 WASI 预览版本支持情况。
+
+### 首次运行
+
+1. 在 `docs/Proposals.md` 中定位所需 API（如 `wasi-http`、`wasi-filesystem`），进入对应提案仓库阅读 Wit 定义与示例。
+2. 使用工具链将代码编译为带 WASI 目标的 Wasm（例如 `cargo build --target wasm32-wasip1` 或各语言文档推荐命令）。
+3. 用已安装的运行时执行产物，例如：`wasmtime run ./app.wasm`（具体标志因预览版本而异，以运行时文档为准）。
+
+### 验证是否成功
+
+- 能在 Proposals 列表中找到目标 API 的 Phase 与版本列（如是否纳入 WASI 0.3）。
+- 运行时 `--version` 或文档标明支持的 WASI 预览级别，且示例 Wasm 可正常启动、访问声明的能力（文件/网络等）。
+- 若参与社区流程：可在 [WASI Issues](https://github.com/WebAssembly/WASI/issues) 检索相关 `P-*` 标签提案讨论是否活跃。
+
+### 常见坑 / 注意事项
+
+- **预览版本混用**：Preview 1（witx）与 0.2/0.3（Wit + Component Model）ABI 不兼容；构建目标、运行时与依赖需同一预览线，否则易出现链接或启动失败。
+- **本仓库非实现仓库**：具体 API 的 breaking change 发生在各 `wasi-*` 提案仓库；订阅读取本 repo README 不足以集成生产，需跟进子仓库 Releases。
+- **能力安全模型**：WASI 强调最小权限；默认可能无网络或文件系统访问，需在宿主配置中显式授予 capability。
+- **许可证**：仓库元数据显示 `NOASSERTION`；各提案子仓库许可证可能不同，商业集成前请逐包核对。
+- **异步迁移（0.3）**：0.3 用 Component Model 的 `future`/`stream` 替代早期显式 poll 接口；升级路径与运行时支持仍在演进，生产环境宜保守锁定版本。

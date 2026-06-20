@@ -1,0 +1,118 @@
+---
+title: "Sink"
+description: 基于 Cloudflare 的轻量短链服务，含访问分析与 AI 生成 Slug，100% Serverless 部署。
+repo: "https://github.com/miantiao-me/Sink"
+homepage: "https://sink.cool"
+repoDescription: "A Simple / Speedy / Secure Link Shortener with Analytics, 100% run on Cloudflare."
+avatarUrl: "https://avatars.githubusercontent.com/u/2959393?v=4"
+tags:
+  - 开发工具
+  - 自动化
+  - AI 编程
+language: "TypeScript"
+stars: 6800
+forks: 4800
+openIssues: 13
+license: "AGPL-3.0"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 需要自托管短链、访问统计与社交预览，又不想维护传统服务器的站长与独立开发者。
+---
+
+## 项目介绍
+
+[Sink](https://sink.cool) 是一款完全运行在 [Cloudflare](https://www.cloudflare.com/) 上的短链接服务：用 Workers KV 存链、Analytics Engine 做统计，Nuxt 构建管理后台与跳转页。它把「缩短 URL → 自定义 Slug → 查看点击分析 → 生成社交预览」收成一套 Serverless 方案，无需自建 VPS 或数据库。项目曾登上 Hacker News 与 HelloGitHub，提供在线 Demo（[sink.cool/dashboard](https://sink.cool/dashboard)）与浏览器扩展、Raycast、iOS App 等生态扩展。
+
+## 核心特性
+
+- **短链与自定义 Slug**：压缩长 URL，支持个性化路径、UTM 参数与大小写敏感设置
+- **访问分析**：实时事件日志、3D 地球可视化、按链接导出 CSV，满足基础营销归因需求
+- **链接管控**：过期时间、访问密码、不安全链接警告页；按设备或国家智能跳转
+- **社交预览**：自定义 OpenGraph 标题、描述与图片；可选 R2 存储 OG 图片
+- **AI 辅助**：基于 Cloudflare Workers AI 从页面内容生成 Slug 与 OG 元数据
+- **批量迁移**：JSON 导入/导出链接；内置 API 与 OpenAPI 文档，可接 MCP 代理
+- **多语言**：管理后台与跳转页完整 i18n；附带 QR 码生成
+
+## 对用户价值
+
+自建短链往往要在「付费 SaaS」「PHP 自托管」与「手写 Workers 脚本」之间取舍：前者按量计费且数据不在自己手里，后者运维成本高或功能单薄。Sink 把短链、分析、预览与 AI 能力打包进 Cloudflare 免费/低成本套餐，Fork 后按文档绑定 KV、Analytics Engine 即可上线独立域名。对个人站长，它适合博客外链、活动落地页与社交分享；对团队，统一 API 与批量导入降低从 Bitly 等平台的迁移摩擦。AGPL-3.0 许可意味着若你修改后对外提供网络服务，需开放相应源码。
+
+## 与替代方案
+
+- 相比 **Bitly、Dub.co** 等**商业短链 SaaS**，Sink **自托管、数据在自家 Cloudflare 账号**，无按点击量阶梯定价，但需自行维护 Fork 与环境变量，且无官方托管 SLA。
+- 相比 **YOURLS、Shlink** 等**传统 PHP 自托管**，Sink **无服务器、无 MySQL**，冷启动与全球边缘跳转更轻，但深度依赖 Cloudflare 生态（KV、Analytics Engine、可选 Workers AI / R2）。
+- 相比**纯 Workers 脚本或 n8n 拼出来的跳转**，Sink 提供完整 Dashboard、实时分析、密码/过期/地理路由与 OG 定制，适合不想从零写管理界面的场景。
+- 若只需**内网或极简跳转**、不需要统计与后台，手写 `wrangler` 路由或静态重定向更轻；若需要企业级团队协作与合规审计，商业平台仍更合适。
+
+## 适应人群
+
+- 拥有 Cloudflare 账号、希望用自有域名提供短链与基础分析的博主与独立开发者。
+- 从 Bitly 等平台迁移、需要批量导入与 API 集成的运营或增长同学。
+- 已使用 Nuxt / Cloudflare Workers 技术栈、愿意 Fork 定制跳转逻辑与 AI Slug 规则的前端或全栈工程师。
+
+## 如何使用
+
+### 前置条件
+
+- [Cloudflare](https://dash.cloudflare.com/) 账号与可绑定的自定义域名（或使用 `*.workers.dev` 子域）
+- [GitHub](https://github.com/) 账号，用于 Fork 仓库并连接 Cloudflare 构建
+- Node.js **≥ 22**（本地构建或调试时；Cloudflare 构建环境会按项目配置执行 `pnpm run build` 或 `npm run build`）
+- 在 Cloudflare 控制台创建 **KV 命名空间**；启用 **Analytics Engine**（免费档即可）
+- 准备至少 8 位的 `NUXT_SITE_TOKEN`（Dashboard 登录令牌）、`NUXT_CF_ACCOUNT_ID` 与具备 Analytics 权限的 `NUXT_CF_API_TOKEN`
+
+### 安装方式
+
+**推荐：Cloudflare Workers 部署**
+
+1. Fork 仓库：[miantiao-me/Sink](https://github.com/miantiao-me/Sink/fork)
+2. 在 Cloudflare 创建 [KV 命名空间](https://developers.cloudflare.com/kv/)，将 `wrangler.jsonc` 中的 `kv_namespaces` ID 替换为你的命名空间 ID
+3. （可选）创建名为 `sink` 的 [R2 桶](https://developers.cloudflare.com/r2/)用于 OG 图片上传；不需要可在 `wrangler.jsonc` 注释 `r2_buckets`
+4. 在 [Cloudflare Workers](https://developers.cloudflare.com/workers/) 新建项目，连接 Fork 后的 `Sink` 仓库：
+   - **Build command**：`pnpm run build` 或 `npm run build`
+   - **Deploy command**：`npx wrangler deploy`
+5. 部署后在 **Settings → Variables and Secrets** 添加环境变量（见下方「首次运行」）
+6. 在账号侧启用 **Analytics Engine**，数据集名 `sink`（或通过 `NUXT_DATASET` 自定义，并同步 `wrangler.jsonc`）
+7. 重新部署使绑定与变量生效
+
+**备选：Cloudflare Pages 部署**
+
+详见仓库 [Pages 部署文档](https://github.com/miantiao-me/Sink/blob/master/docs/deployment/pages.md)：选择 Nuxt 预设，绑定 KV / Analytics Engine /（可选）Workers AI 与 R2，并设置 Compatibility flag `nodejs_compat`。
+
+**本地开发（可选）**
+
+```bash
+git clone https://github.com/miantiao-me/Sink.git
+cd Sink
+pnpm install
+cp .env.example .env   # 按 docs/configuration.md 填写
+pnpm dev
+```
+
+### 首次运行
+
+1. 完成 Workers 或 Pages 部署并绑定 KV、Analytics Engine
+2. 在环境变量中设置：
+   - `NUXT_SITE_TOKEN`：Dashboard 访问令牌（≥ 8 字符）
+   - `NUXT_CF_ACCOUNT_ID`：Cloudflare 账户 ID
+   - `NUXT_CF_API_TOKEN`：至少含 `Account.Account Analytics` 权限的 API Token
+3. 带 `NUXT_PUBLIC_` 前缀的变量（如 `NUXT_PUBLIC_HOME_URL` 自定义首页）在 Workers 场景下需同时配置在 **Build** 与 **Runtime** 的 Variables and Secrets
+4. 打开 `https://<你的域名>/dashboard`，使用 `NUXT_SITE_TOKEN` 登录
+5. 创建第一条短链，可选开启 AI 生成 Slug（需绑定 Workers AI）或自定义 OG 预览
+
+### 验证是否成功
+
+- 访问生成的短链 URL，确认跳转到目标长链且状态码符合预期（默认 301，可通过 `NUXT_REDIRECT_STATUS_CODE` 调整）
+- 在 Dashboard 的 **Analytics** 中看到点击事件与实时日志
+- 调用 [API 文档](https://github.com/miantiao-me/Sink/blob/master/docs/api.md) 中的接口（携带 Site Token）能创建/列出链接
+- 在线 Demo 可参考官方站点：Token `SinkCool` 登录 [sink.cool/dashboard](https://sink.cool/dashboard)
+
+### 常见坑 / 注意事项
+
+- **Analytics 无数据**：确认已启用 Analytics Engine 并完成数据集绑定，修改后需重新部署
+- **Workers 环境变量分层**：`NUXT_PUBLIC_*` 在 Worker 部署下要同时配 Build 与 Runtime，否则前端读不到
+- **KV 批量导入上限**：默认单次 KV 操作上限 50（`NUXT_PUBLIC_KV_BATCH_LIMIT`），大批量迁移需分批
+- **链接缓存延迟**：`NUXT_LINK_CACHE_TTL` 默认 60 秒，改链后可能不会立即生效
+- **AGPL-3.0**：对外提供修改版网络服务时需遵守 Affero 开源义务；仅内部使用或不做网络分发则约束较轻
+- **Demo 模式**：`NUXT_PUBLIC_PREVIEW_MODE` 下链接 5 分钟过期且不可编辑，勿在生产误开
+- 更多问题见仓库 [FAQs](https://github.com/miantiao-me/Sink/blob/master/docs/faqs.md) 与 [配置说明](https://github.com/miantiao-me/Sink/blob/master/docs/configuration.md)

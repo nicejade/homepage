@@ -1,0 +1,113 @@
+---
+title: React
+description: 用于构建 Web 与原生界面的 JavaScript UI 库，声明式组件、渐进式接入，官方文档见 react.dev。
+repo: https://github.com/react/react
+homepage: https://react.dev
+repoDescription: The library for web and native user interfaces.
+avatarUrl: https://avatars.githubusercontent.com/u/102812?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: JavaScript
+stars: 245964
+forks: 51075
+openIssues: 1282
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 前端框架选型、组件化 UI 开发，以及 React Native 跨端方案评估的开发者与工程团队。
+---
+
+## 项目介绍
+
+React 是由 Meta 维护的 JavaScript UI 库，用于构建 Web 与 [React Native](https://reactnative.dev/) 原生界面。采用声明式编程与组件化模型：你为应用的每种状态设计简洁视图，数据变化时 React 高效更新并渲染对应组件。库本身不绑定完整技术栈，可渐进式接入现有项目，也可配合 Vite、Next.js 等工具链搭建现代前端应用。本仓库为 React 核心源码；用户文档与教程见 [react.dev](https://react.dev)。
+
+## 核心特性
+
+- **声明式 UI**：以状态驱动视图，让界面逻辑更可预测、易理解、易调试
+- **组件化**：封装自带状态的组件，通过组合构建复杂界面；逻辑用 JavaScript 编写，便于在应用内传递丰富数据
+- **Learn Once, Write Anywhere**：可渲染 Web（含 Node SSR），也可配合 React Native 开发移动应用，无需重写已有代码即可增量采用
+- **渐进式接入**：从 [Quick Start](https://react.dev/learn) 入门、嵌入现有页面，到经官方推荐框架创建完整工程
+- **完善官方文档**：含 Tutorial、Thinking in React、Hooks/API Reference，以及 React Compiler 等前沿能力说明
+
+## 对用户价值
+
+复杂界面若直接操作 DOM，状态与视图容易纠缠，维护成本高。React 把 UI 拆成可复用组件，用声明式更新降低心智负担；庞大生态（组件库、状态管理、全栈框架）使从原型到生产的工具链选择丰富。团队若需同时覆盖 Web 与移动端，React 与 React Native 共享组件思维模式，降低跨端协作成本。日常开发通常通过 npm 安装 `react` / `react-dom` 并参阅 react.dev，而非 fork 本仓库自行编译。
+
+## 与替代方案
+
+- 相比 [Vue](https://vuejs.org/)，React 以 JSX/JavaScript 表达 UI 更灵活，Hooks 成为主流范式；Vue 的单文件组件与模板语法对部分团队更直观，上手曲线因背景而异。
+- 相比 [Svelte](https://svelte.dev/)，React 依赖虚拟 DOM 与运行时，包体积通常更大，但生态、招聘市场与第三方集成成熟度更高。
+- 相比 [Angular](https://angular.dev/)，React 聚焦视图层，路由与状态等需自行组合；Angular 提供企业级一体化框架，规范更统一但约束更多。
+- 边界说明：本仓库是 **React 核心源码**；应用脚手架与推荐创建方式见 [Start a New React Project](https://react.dev/learn/start-a-new-react-project)（如 Next.js、Remix、Expo 等），勿将 clone 本 repo 等同于安装使用 React。
+
+## 适应人群
+
+- 需要构建交互式 Web 界面，并希望组件可复用、可测试的前端工程师。
+- 评估前端框架选型或维护 React 技术栈，需了解核心演进（如 Concurrent Features、React Compiler）的技术负责人。
+- 计划用 React Native 做跨端移动开发，希望 Web 与移动端共享思维模型的全栈团队。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+（以 [react.dev 安装文档](https://react.dev/learn/installation) 与所选脚手架要求为准）。
+- npm、pnpm 或 Yarn 等包管理器。
+- 快速体验可无需本地环境，使用 [Quick Start](https://react.dev/learn) 在线示例；生产项目推荐通过官方列举的框架创建。
+
+### 安装方式
+
+**方式一：新建 React 项目（官方推荐，经框架脚手架）**
+
+```bash
+npm create vite@latest my-app -- --template react
+cd my-app
+npm install
+npm run dev
+```
+
+更多官方推荐方案（Next.js、Remix 等）见 [Start a New React Project](https://react.dev/learn/start-a-new-react-project)。
+
+**方式二：在现有项目中添加 React**
+
+```bash
+npm install react react-dom
+```
+
+配置打包工具（Vite、Webpack 等）的 JSX 与 Fast Refresh，步骤见 [Add React to an Existing Project](https://react.dev/learn/add-react-to-an-existing-project)。
+
+### 首次运行
+
+Vite 模板项目启动开发服务器：
+
+```bash
+npm run dev
+```
+
+浏览器打开终端输出的本地地址（通常 `http://localhost:5173`）。修改 `src/App.jsx` 后应看到热更新。最小示例（来自官方 README）：
+
+```jsx
+import { createRoot } from 'react-dom/client';
+
+function HelloMessage({ name }) {
+  return <div>Hello {name}</div>;
+}
+
+const root = createRoot(document.getElementById('container'));
+root.render(<HelloMessage name="Taylor" />);
+```
+
+### 验证是否成功
+
+- 浏览器打开 dev server URL，页面无控制台报错。
+- 修改组件文案或交互状态，保存后界面应热更新。
+- 运行 `npm run build` 成功产出生产构建；若脚手架提供 `npm run preview`，可本地预览构建结果。
+
+### 常见坑 / 注意事项
+
+- **源码仓库 vs npm 包**：日常开发安装 `react`/`react-dom` 即可；clone 本仓库用于贡献或与 React 编译器/内部包开发，构建流程见 [Contributing Guide](https://legacy.reactjs.org/docs/how-to-contribute.html)。
+- **Create React App 已非首选**：官方文档现推荐 Vite、Next.js、Remix 等，选型时对照 [react.dev](https://react.dev/learn/start-a-new-react-project)。
+- **React 18+ API**：新应用应使用 `createRoot` 而非已废弃的 `ReactDOM.render`；开发模式下 Strict Mode 可能双重调用 effect，属预期行为。
+- **React 与 React Native**：Web 用 `react-dom`，移动端用 `react-native`，共享概念但包与 API 不同，勿混装。

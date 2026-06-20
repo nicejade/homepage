@@ -1,0 +1,106 @@
+---
+title: "Arya"
+description: "基于 Vditor 的在线 Markdown 编辑器，支持流程图、图表与 PPT 预览，可自托管。"
+repo: "https://github.com/nicejade/markdown-online-editor"
+homepage: "https://markdown.lovejade.cn"
+repoDescription: "📝 基于 Vue2、Vditor，所构建的在线 Markdown 编辑器，支持绘制流程图、甘特图、时序图、任务列表、echarts 图表、五线谱，以及 PPT 预览、视频音频解析、HTML 自动转换为 Markdown 等功能。https://www.niceshare.site"
+avatarUrl: "https://avatars.githubusercontent.com/u/15773463?v=4"
+tags:
+  - 知识管理
+  - 开发工具
+  - 工作流
+language: "CSS"
+stars: 3702
+forks: 569
+openIssues: 28
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: "适合需要公众号排版、技术文档写作与本地化部署的写作者和前端团队。"
+---
+
+## 项目介绍
+
+Arya（二丫）是由 nicejade 基于 Vue2 与 [Vditor](https://github.com/Vanessa219/vditor) 构建的开源在线 Markdown 编辑器。它把所见即所得编辑、分屏预览、流程图与 ECharts 图表、PPT 预览、HTML 转 Markdown 等能力整合在一个浏览器页面里，既可直接使用官方托管站点，也支持 Docker 或静态托管自部署。
+
+## 核心特性
+
+- 完整 Markdown 语法支持，含流程图、甘特图、时序图与任务列表
+- 所见即所得、即时渲染、分屏预览三种编辑模式，可快捷键切换
+- 粘贴 HTML 自动转 Markdown，支持 ECharts 图表、五线谱与部分音视频嵌入
+- 内置 Reveal.js PPT 预览，可导出带样式 PDF、PNG、JPEG 与 Word（.docx）
+- 编辑内容本地存储防丢失，支持导入本地 `.md` 与复制到微信公众号
+- 提供 Docker 镜像、PM2 与 Cloudflare Pages 等多种部署方式
+
+## 对用户价值
+
+Arya 把「写 Markdown」和「排版发布」放在同一界面：技术文档可即时预览图表与代码块，内容创作者可一键适配公众号格式，团队则可用 Docker 或静态托管在内网快速落地，无需订阅商业编辑器的高级功能。
+
+## 与替代方案
+
+- 相比 Typora、Obsidian 等桌面客户端，Arya 是浏览器优先方案，零安装即可使用，自托管后可完全掌控数据。
+- 相比 StackEdit、HackMD 等在线编辑器，Arya 基于 Vditor，在 ECharts、PPT 预览、HTML 转换与公众号导出上功能更完整，且 MIT 开源可 Fork。
+- 相比仅做预览的 marked/showdown 类库，Arya 是开箱即用的完整编辑器；若只需 CLI 转换，轻量工具链可能更合适。
+
+## 适应人群
+
+- 需要写技术文档、博客草稿并即时预览图表的开发者。
+- 经常向微信公众号等平台排版发布的内容创作者。
+- 希望在内网或 Cloudflare Pages 上自托管 Markdown 编辑器的团队。
+
+## 如何使用
+
+### 前置条件
+
+- **在线使用**：现代浏览器即可，无需安装。
+- **本地开发**：Node.js >= 16 且 < 18，推荐 yarn 或 pnpm。
+- **Docker 部署**：已安装 Docker（可选 Docker Compose）。
+
+### 安装方式
+
+**Docker 快速启动（推荐）：**
+
+```shell
+docker run -d -p 8866:80 nicejade/markdown-online-editor:latest
+```
+
+**源码构建 + PM2 部署：**
+
+```bash
+git clone https://github.com/nicejade/markdown-online-editor.git
+cd markdown-online-editor
+yarn
+yarn global add pm2
+yarn build
+yarn release
+```
+
+**本地开发：**
+
+```bash
+git clone https://github.com/nicejade/markdown-online-editor.git
+cd markdown-online-editor
+yarn
+yarn start
+```
+
+### 首次运行
+
+- Docker：浏览器访问 `http://localhost:8866`。
+- 开发模式：`yarn start` 后按终端提示打开本地地址。
+- 清空编辑区默认文档即可开始写作；默认所见即所得模式，可用 `⌘-⇧-M`（Windows/Linux：`Ctrl-⇧-M`）切换编辑模式。
+
+### 验证是否成功
+
+- 输入 Markdown 文本，确认实时预览正常渲染。
+- 插入流程图或任务列表语法，检查图表是否正确显示。
+- 尝试导出 PDF 或复制到微信公众号，确认输出格式符合预期。
+
+### 常见坑 / 注意事项
+
+- 本地开发要求 Node.js < 18；Cloudflare Pages 构建需设置 `NODE_VERSION=18` 与 `NODE_OPTIONS=--openssl-legacy-provider`。
+- PPT 预览暂不支持各类图表渲染，幻灯片用 `---`（水平）与 `--`（垂直）分隔，详见 [Reveal.js Markdown 文档](https://revealjs.com/markdown/)。
+- Docker 映射端口可自定义，生产环境建议配合反向代理与 HTTPS。
+- 项目基于 Vue2，长期维护需关注上游 Vditor 与依赖安全更新。

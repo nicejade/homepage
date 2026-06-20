@@ -1,0 +1,114 @@
+---
+title: PostgreSQL
+description: 成熟的开源对象关系型数据库，支持 ACID 事务、扩展 SQL 与 JSON/地理空间等高级能力。
+repo: https://github.com/postgres/postgres
+homepage: https://www.postgresql.org/
+repoDescription: Mirror of the official PostgreSQL GIT repository. Note that this is just a *mirror* - we don't work with pull requests on github. To contribute, please see https://wiki.postgresql.org/wiki/Submitting_a_Patch
+avatarUrl: https://avatars.githubusercontent.com/u/177543?v=4
+tags:
+  - 开发工具
+  - 系统工具
+  - 自托管
+language: C
+stars: 21199
+forks: 5715
+openIssues: 0
+contributors: 1
+license: PostgreSQL
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 后端服务、数据分析与事务型持久化场景的 DBA 与架构师选型参考。
+---
+
+## 项目介绍
+
+PostgreSQL 是全球使用最广泛的开源对象关系型数据库管理系统（ORDBMS）之一，由全球开发者社区持续维护三十余年。本 GitHub 仓库为官方 Git 源码镜像，涵盖完整数据库内核与 C 语言绑定；生产环境通常优先使用 [postgresql.org](https://www.postgresql.org/download/) 提供的二进制包，而非直接编译镜像仓库。需要向项目贡献代码时，请遵循 [PostgreSQL 官方补丁提交流程](https://wiki.postgresql.org/wiki/Submitting_a_Patch)，本镜像不接受 Pull Request。
+
+## 核心特性
+
+- **ACID 与 MVCC**：完整事务语义，多版本并发控制减少读写锁争用
+- **扩展 SQL 能力**：CTE、窗口函数、外键、子查询、触发器与用户自定义类型/函数
+- **半结构化与检索**：原生 JSON/JSONB、全文检索、数组与范围类型
+- **可扩展架构**：通过扩展（如 PostGIS、pgvector）按需增强地理空间、向量检索等能力
+- **复制与高可用**：物理/逻辑流复制、分区表与成熟 HA 生态（Patroni 等）
+
+## 对用户价值
+
+PostgreSQL 把关系模型的严谨性与现代数据类型、扩展机制结合，既能承载传统 OLTP 业务，也能支撑分析查询、GIS 与 AI 向量检索等混合负载。BSD 风格的 PostgreSQL License 允许商业部署与二次分发，社区文档、托管厂商与 ORM 生态极为成熟。对团队而言，它是 MySQL 之外最常被选中的「默认严肃数据库」，也是云厂商托管数据库（RDS、Cloud SQL 等）的常见底层引擎。
+
+## 与替代方案
+
+- 相比 **MySQL / MariaDB**，PostgreSQL 在复杂查询、扩展类型、标准 SQL 合规与并发模型上通常更完整；MySQL 在只读扩展与部分 Web 托管场景仍更常见。
+- 相比 **SQLite**，PostgreSQL 面向多用户、网络访问与大规模并发，SQLite 更适合嵌入式、单文件与边缘本地存储。
+- 相比 **MongoDB**，PostgreSQL 的 JSONB 可覆盖许多文档型需求，同时保留关系约束与事务；纯文档模型与水平分片极致场景 MongoDB 仍具优势。
+- 相比 **云厂商专有数据库**，自建或自托管 PostgreSQL 换云成本低、行为可预期，但需要自行负责备份、升级与高可用。
+
+## 适应人群
+
+- 需要可靠事务型存储的后端开发者与全栈工程师。
+- 负责 schema 设计、性能调优、备份复制与升级的 DBA 与运维工程师。
+- 评估数据层架构、合规与长期许可成本的技术负责人与数据平台团队。
+
+## 如何使用
+
+### 前置条件
+
+- 生产环境优先通过 [官方下载页](https://www.postgresql.org/download/) 或发行版包管理器安装预编译二进制，而非直接依赖 GitHub 镜像编译。
+- 从源码构建需 GCC、GNU make、readline、zlib 等依赖；详见 [安装文档](https://www.postgresql.org/docs/current/installation.html)。
+- macOS、Linux、Windows 均受支持；容器部署可使用官方 Docker 镜像或 Helm Chart。
+
+### 安装方式
+
+**macOS（Homebrew，推荐日常开发）**
+
+```bash
+brew install postgresql@17
+brew services start postgresql@17
+```
+
+**Debian / Ubuntu（系统包）**
+
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl enable --now postgresql
+```
+
+**从本仓库源码构建（开发/定制编译）**
+
+```bash
+git clone https://github.com/postgres/postgres.git
+cd postgres
+./configure
+make
+sudo make install
+```
+
+### 首次运行
+
+使用包管理器安装后，通常已有 `postgres` 系统用户与默认集群。创建数据库与用户示例：
+
+```bash
+sudo -u postgres psql -c "CREATE USER myapp WITH PASSWORD 'secret';"
+sudo -u postgres psql -c "CREATE DATABASE myapp OWNER myapp;"
+psql -h localhost -U myapp -d myapp
+```
+
+源码安装后需按文档执行 `initdb` 初始化数据目录，再启动 `postgres` 进程。
+
+### 验证是否成功
+
+```bash
+psql -c "SELECT version();"
+psql -c "CREATE TABLE t(id serial PRIMARY KEY, payload jsonb); INSERT INTO t(payload) VALUES('{\"ok\": true}'); SELECT * FROM t;"
+```
+
+能返回版本号并成功读写即表示核心功能正常。
+
+### 常见坑 / 注意事项
+
+- **GitHub 仅为镜像**：Issue/PR 不在此处理；安全与缺陷报告请走 [PostgreSQL 社区流程](https://www.postgresql.org/support/security/)。
+- **版本与扩展兼容性**：大版本升级需 `pg_upgrade` 或逻辑迁移；PostGIS、pgvector 等扩展需匹配 PostgreSQL 主版本。
+- **认证配置**：默认 `pg_hba.conf` 可能仅允许本地 peer 认证；远程访问需显式配置 host 规则与防火墙。
+- **生产运维**：定期 `pg_dump`/物理备份、监控连接数与慢查询，并在大版本发布前阅读 [Release Notes](https://www.postgresql.org/docs/current/release.html)。

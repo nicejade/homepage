@@ -1,0 +1,135 @@
+---
+title: "Marker"
+description: 高精度将 PDF 及 Office 文档转为 Markdown/JSON，支持表格、公式、图片提取与多语言 OCR。
+repo: "https://github.com/datalab-to/marker"
+homepage: "https://www.datalab.to"
+repoDescription: "Convert PDF to markdown + JSON quickly with high accuracy"
+avatarUrl: "https://avatars.githubusercontent.com/u/176631703?v=4"
+tags:
+  - 知识管理
+  - 开发工具
+  - 自动化
+language: "Python"
+stars: 36230
+forks: 2500
+openIssues: 420
+contributors: 1
+license: "GPL-3.0"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 需要批量解析论文、合同或扫描件，并接入 RAG/知识库流水线的开发者与数据团队。
+---
+
+## 项目介绍
+
+[Marker](https://github.com/datalab-to/marker) 是 Datalab 开源的文档智能工具，可将 PDF、图片及常见 Office 格式快速转换为 Markdown、JSON、HTML 或分块文本。项目在表格、公式、表单与多栏版式等复杂场景上表现突出，支持 GPU/CPU/MPS 本地推理，也可通过 `--use_llm` 接入 Gemini 或 Ollama 进一步提升准确率，适合构建 RAG 语料、知识库导入或文档自动化流水线。
+
+## 核心特性
+
+- **多格式输入**：支持 PDF、图片、PPTX、DOCX、XLSX、HTML、EPUB，覆盖多语言文档
+- **结构化输出**：可导出 Markdown、JSON、HTML 或 chunks，保留表格、链接、参考文献与代码块
+- **版式与公式处理**：格式化表格与表单，支持行内/块级公式转 LaTeX，可提取并保存嵌入图片
+- **智能清理**：自动去除页眉页脚等版面噪声，可选强制 OCR 或剥离已有 OCR 文本
+- **可扩展架构**：处理器与转换器可自定义；支持按 JSON Schema 做结构化抽取（beta）
+- **混合模式**：`--use_llm` 可合并跨页表格、修正表单字段、优化行内数学公式
+- **批处理与多 GPU**：`marker` 支持文件夹批量转换；`marker_chunk_convert` 可跨多卡并行，H100 上理论吞吐约 25 页/秒
+
+## 对用户价值
+
+扫描件、学术论文、合同与幻灯片往往难以直接喂给 LLM 或检索系统。Marker 把「版面理解 → 结构化文本」收成一条本地可复现的流水线，比手工复制或简单 `pdftotext` 更能保留表格与公式语义。对需要私有化部署的团队，可在自有 GPU 上批量跑转换，避免把敏感文档上传第三方 SaaS；对研究者与工程师，输出的 Markdown/JSON 可直接接入向量库、笔记工具或下游 ETL。官方还提供 [Playground](https://www.datalab.to/playground) 与托管 API，便于先验证效果再决定是否自托管。
+
+## 与替代方案
+
+- 相比 **[LlamaParse](https://www.llamaindex.ai/llamaparse)**、**Mathpix** 等云服务，Marker 可完全本地运行，数据不出内网；云方案运维更轻、但按量计费且依赖外网。
+- 相比 **[PyMuPDF](https://pymupdf.readthedocs.io/)**、**pdfplumber** 等纯文本抽取库，Marker 针对复杂版式、表格与公式做了端到端模型推理，准确率更高，但资源占用也更大（单 worker 峰值约 5GB VRAM）。
+- 相比 **[Unstructured](https://github.com/Unstructured-IO/unstructured)** 等通用文档解析框架，Marker 更聚焦「高质量 Markdown/JSON 输出」与 PDF 场景，并内置 OCR（Surya）与可选 LLM 后处理。
+- 同团队的 **[Chandra](https://github.com/datalab-to/chandra)** 准确率更高，适合对质量极度敏感的场景；Marker 仍是当前 GitHub 上最成熟、社区最广的开源入口。
+- **许可注意**：代码为 GPL-3.0，模型权重采用修改版 OpenRAIL-M（研究/个人/年收入或融资低于 200 万美元的创业团队可免费使用）；更广的商业自托管需向 Datalab 购买许可。
+
+## 适应人群
+
+- 需要把 PDF 论文、报告、手册批量转为 Markdown/JSON 以构建 RAG 或知识库的数据工程师与 AI 应用开发者。
+- 希望在本地 GPU 上私有化处理合同、扫描件等敏感文档、且对表格/公式还原有要求的法务、金融或研究机构。
+- 正在评估文档解析方案、希望用开源工具对标 LlamaParse/Mathpix 并保留自托管能力的工程团队。
+
+## 如何使用
+
+### 前置条件
+
+- Python 3.10 及以上
+- 已安装 [PyTorch](https://pytorch.org/get-started/locally/)（支持 CUDA、MPS 或 CPU）
+- 若需处理 PDF 以外的格式（PPTX、DOCX 等），需安装 `[full]` 额外依赖
+- 使用 `--use_llm` 时需配置 Gemini API Key 或可访问的 Ollama 服务
+
+### 安装方式
+
+```shell
+pip install marker-pdf
+```
+
+处理 PDF 以外格式时：
+
+```shell
+pip install marker-pdf[full]
+```
+
+可选：安装 Streamlit 以使用图形界面
+
+```shell
+pip install streamlit streamlit-ace
+```
+
+### 首次运行
+
+转换单个 PDF 或图片：
+
+```shell
+marker_single /path/to/file.pdf
+```
+
+指定输出格式与目录：
+
+```shell
+marker_single /path/to/file.pdf --output_format markdown --output_dir ./output
+```
+
+批量转换文件夹：
+
+```shell
+marker /path/to/input/folder --workers 4
+```
+
+启动交互式 GUI：
+
+```shell
+marker_gui
+```
+
+启用 LLM 混合模式（默认 Gemini 2.0 Flash，需配置 API）：
+
+```shell
+marker_single /path/to/file.pdf --use_llm
+```
+
+多 GPU 并行（示例：4 卡、每卡 15 worker）：
+
+```shell
+NUM_DEVICES=4 NUM_WORKERS=15 marker_chunk_convert ../pdf_in ../md_out
+```
+
+### 验证是否成功
+
+- 命令结束后，`--output_dir` 下应生成 `.md`、`.json` 或 `.html` 文件及提取的图片目录
+- 打开 Markdown 输出，检查表格、标题层级、公式（`$...$` 或 `$$...$$`）是否与原文一致
+- 对扫描件可尝试 `--force_ocr` 或 `--strip_existing_ocr`，对比 OCR 质量
+- 运行 `marker_single --help` 可列出全部处理器与配置项；`config --help` 可查看可定制的 builder/processor 列表
+
+### 常见坑 / 注意事项
+
+- **显存占用**：每个 worker 峰值约 5GB VRAM，批量时勿盲目拉高 `--workers`，否则易 OOM
+- **数字 PDF 乱码**：部分 PDF 内嵌字体异常，需加 `--force_ocr` 强制 OCR；若需保留原有数字文本并去掉劣质 OCR，用 `--strip_existing_ocr`
+- **行内公式**：对 inline math 敏感的场景，建议 `--force_ocr` 或配合 `--use_llm --redo_inline_math`
+- **商业使用**：代码 GPL-3.0，模型 OpenRAIL-M 对大型商业主体有限制；广泛商用或去 GPL 义务需联系 [Datalab 定价页](https://www.datalab.to/pricing)
+- **LLM 模式成本**：`--use_llm` 会调用外部模型 API，大批量文档前请估算 token 费用
+- **首次运行下载模型**：需联网拉取权重，内网环境需提前缓存 artifact 或参考文档离线配置

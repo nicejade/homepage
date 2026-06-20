@@ -1,0 +1,128 @@
+---
+title: Bun
+description: 一体化 JavaScript/TypeScript 工具链，集运行时、包管理、测试与打包于一体，可作为 Node.js 的高性能替代。
+repo: https://github.com/oven-sh/bun
+homepage: https://bun.com
+repoDescription: "Incredibly fast JavaScript runtime, bundler, test runner, and package manager – all in one"
+avatarUrl: https://avatars.githubusercontent.com/u/108928776?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 后端
+language: Rust
+stars: 93326
+forks: 4716
+openIssues: 7188
+contributors: 1
+license: Other
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: Node 替代运行时选型、CI 安装加速、全栈 TypeScript 单二进制工作流，以及追求启动速度与包管理一体化的团队。
+---
+
+## 项目介绍
+
+Bun 是由 [Oven](https://github.com/oven-sh) 维护的一体化 JavaScript/TypeScript 工具链，以单个可执行文件 `bun` 交付。其核心是 **Bun 运行时**——用 Zig 编写、基于 JavaScriptCore，定位为 Node.js 的 drop-in 替代，显著降低启动耗时与内存占用。同一 CLI 还内置兼容 npm 的包管理器、测试运行器、脚本执行器与打包器，让开发、安装、测试与构建尽量收敛到一条命令线。
+
+## 核心特性
+
+- **高性能运行时**：原生支持 TypeScript、JSX 与多种文件类型加载器，无需额外转译配置即可 `bun run index.tsx`
+- **一体化 CLI**：`bun install`、`bun test`、`bun run`、`bunx` 覆盖依赖安装、测试、脚本与一次性包执行
+- **Node.js 兼容层**：持续完善 `node:*` 模块、CommonJS/ESM 解析与 npm 生态兼容，可在多数现有 Node 项目中低改动接入
+- **内置打包与 HTTP 服务**：`Bun.build` 打包前端与全栈资源；`Bun.serve` 提供 HTTP/WebSocket 路由与热更新
+- **原生数据与 I/O API**：内置 `bun:sqlite`、`Bun.sql`（PostgreSQL）、`Bun.redis`、`Bun.s3` 等，减少常见后端场景的额外依赖
+
+## 对用户价值
+
+若你厌倦「Node + npm/pnpm + Jest/Vitest + esbuild」的多工具拼装，Bun 把运行时与日常开发命令收进一个二进制，安装与 CI 缓存更简单，本地反馈通常更快。对全栈 TypeScript 团队，从 `bun init` 到 `bun test` 再到 `bun build` 可保持统一工具链；对已有 Node 项目，可先替换 `npm install` 或 `node` 启动路径做渐进迁移，在兼容边界内换取速度与简化配置。代价是部分 Node 原生模块、边缘 API 与企业级 LTS 承诺仍不如 Node.js 成熟，生产落地需对照 [Node.js 兼容文档](https://bun.com/docs/runtime/nodejs-compat) 验证。
+
+## 与替代方案
+
+- 相比 [Node.js](https://nodejs.org/)，Bun 在冷启动、包安装与测试执行上通常更快，工具链更集中；Node.js 生态规模、第三方包验证广度、LTS 发布节奏与企业支持经过更长生产检验，关键业务系统更常选 Node。
+- 相比 [Deno](https://deno.com/)，Bun 更强调 npm 生态与 Node 兼容、一体化 dev 体验；Deno 默认权限沙箱与 Web 标准 API 取向更明显，适合对安全隔离有强需求的 greenfield 项目。
+- 相比单独使用 [pnpm](https://pnpm.io/) / [Vitest](https://vitest.dev/) / [esbuild](https://esbuild.github.io/)，Bun 用单一运行时承载多角色，减少版本冲突与配置面；若团队已深度定制各工具链或依赖特定插件生态，拆分方案仍可能更灵活。
+- 边界说明：Bun 不是容器编排或部署平台；复杂 monorepo、特定 Node 原生扩展或冷门 `node:*` API 需在目标环境实测，不宜假设 100% 兼容。
+
+## 适应人群
+
+- 新建或迁移 TypeScript 全栈/脚本项目，希望用一条 CLI 覆盖安装、运行、测试与打包的个人开发者与小团队。
+- 在 CI 中追求更快 `install` 与测试反馈、愿意在兼容范围内尝试 Node 替代运行时的前端与后端工程师。
+- 维护 npm 生态项目、需要评估 Bun 作为开发/测试加速器（生产仍用 Node）的技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- 支持平台：Linux（x64 / arm64）、macOS（x64 / Apple Silicon）、Windows（x64 / arm64）。
+- Linux 建议内核 **5.6+**（最低 5.1）；x64 若遇 illegal instruction，参阅 [CPU 要求与 baseline 构建](https://bun.com/docs/installation#cpu-requirements-and-baseline-builds)。
+- 已有 Node 项目迁移前，建议阅读 [Node.js 兼容性](https://bun.com/docs/runtime/nodejs-compat) 与项目依赖中的原生模块清单。
+
+### 安装方式
+
+**方式一：官方安装脚本（推荐）**
+
+```bash
+curl -fsSL https://bun.com/install | bash
+```
+
+**Windows（PowerShell）**
+
+```powershell
+powershell -c "irm bun.sh/install.ps1 | iex"
+```
+
+**其他方式**
+
+```bash
+# npm 全局安装
+npm install -g bun
+
+# Homebrew（macOS）
+brew tap oven-sh/bun
+brew install bun
+
+# Docker
+docker pull oven/bun
+docker run --rm --init --ulimit memlock=-1:-1 oven/bun
+```
+
+升级至最新稳定版：
+
+```bash
+bun upgrade
+```
+
+### 首次运行
+
+```bash
+# 验证 CLI
+bun --version
+
+# 新建项目（交互式）
+bun init
+
+# 或在现有 package.json 项目中安装依赖
+bun install
+
+# 运行入口或 package.json 脚本
+bun run index.ts
+bun run start
+```
+
+### 验证是否成功
+
+```bash
+bun --version          # 应输出版本号
+bun test               # 若有测试文件，应执行测试套件
+bun run index.tsx      # TypeScript/JSX 应能直接运行
+```
+
+确认 `~/.bun/bin`（或安装脚本提示的路径）已加入 `PATH`，新开终端后 `which bun` 可找到可执行文件。
+
+### 常见坑 / 注意事项
+
+- **Node API 兼容非 100%**：部分 `node:*` 模块、Worker 行为或原生 addon 可能与 Node 不一致，迁移前在 staging 跑通核心路径。
+- **许可证为 Other**：商用前阅读仓库 LICENSE 与法律条款，勿默认等同 MIT。
+- **Canary 构建**：`bun upgrade --canary` 跟踪 `main` 最新提交，适合尝鲜，生产环境建议锁定稳定版。
+- **Linux 内核与 CPU**：老旧内核或不符合要求的 x64 CPU 可能导致安装后无法启动，优先对照官方安装文档排查。

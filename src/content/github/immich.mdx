@@ -1,0 +1,95 @@
+---
+title: Immich
+description: 高性能自托管照片与视频库，Google Photos 开源替代，支持手机自动备份与人脸检索。
+repo: https://github.com/immich-app/immich
+homepage: https://immich.app
+repoDescription: "High performance self-hosted photo and video management solution."
+avatarUrl: https://avatars.githubusercontent.com/u/109746326?v=4
+tags:
+  - 自动化
+  - 工作流
+  - 本地模型
+language: TypeScript
+stars: 103785
+forks: 5892
+openIssues: 649
+contributors: 464
+license: AGPL-3.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 适合 Homelab 与家庭用户搭建私有相册，替代 Google Photos 并保留原始文件控制权。
+---
+
+## 项目介绍
+
+Immich 是面向个人与家庭的高性能自托管照片与视频管理方案，常被视作 Google Photos 的开源替代。它提供 Web 界面与 iOS/Android 客户端，支持后台自动备份、相册共享与人脸聚类，让珍贵影像留在自有服务器而非公有云。
+
+## 核心特性
+
+- 移动端打开即自动备份，支持选择性相册、去重与 Live Photo / Motion Photo
+- Web 与 App 均可浏览、下载照片与视频，支持 RAW 与 360° 影像
+- 人脸聚类、CLIP 语义搜索、EXIF 与地图视图，便于按人物、地点或内容检索
+- 多用户、共享相册、伴侣共享、公开链接与 OAuth 登录
+- 虚拟滚动与离线浏览（移动端），大库浏览体验接近商业相册产品
+- 官方 Docker Compose 部署模板，文档与 Demo 站点完善
+
+## 对用户价值
+
+手机相册越拍越多，云厂商容量与隐私条款却不可控。Immich 把「备份 → 整理 → 检索 → 共享」放在自管服务器上，原始文件与元数据归你所有；配合 3-2-1 备份策略，比单纯依赖单一云相册更可持续。
+
+## 与替代方案
+
+- 相比 Google Photos / iCloud，Immich 数据留在私有基础设施，无订阅容量限制，但需自行维护服务器、HTTPS 与备份。
+- 相比 PhotoPrism，Immich 更强调移动端自动备份与现代相册交互（Memories、伴侣共享等），社区增长更快；PhotoPrism 在索引与权限模型上更偏「图库服务器」路线。
+- 相比 Nextcloud Photos，Immich 专注影像场景，人脸与 CLIP 搜索、移动备份体验更完整；若已深度使用 Nextcloud 生态，集成相册可能更省事。
+- 项目采用 AGPL-3.0；商业托管或二次分发需留意许可义务。官方强调遵循 3-2-1 备份，勿把 Immich 当作唯一副本。
+
+## 适应人群
+
+- 想从 Google Photos 迁移、又希望保留自动备份与「几年前今天」回忆功能的家庭用户。
+- 已有 NAS / Homelab，愿意用 Docker 跑一套私有影像库的 self-host 爱好者。
+- 摄影爱好者需要 RAW 支持、地图与人脸整理，又不想把原片长期托管在公有云的人。
+
+## 如何使用
+
+### 前置条件
+
+- 推荐 Linux 64 位主机，已安装 Docker Engine 与 **Docker Compose 插件**（命令为 `docker compose`，非旧版 `docker-compose`）。
+- 硬件建议：至少 6GB RAM（8GB 更稳）、4 核 CPU；`UPLOAD_LOCATION` 与 Postgres 数据目录需足够磁盘，缩略图与转码通常额外占库容 10–20%。
+- Postgres 数据建议放本地 SSD，避免网络盘；Windows/macOS 可用 Docker Desktop，但官方更推荐 Linux 生产部署。
+
+### 安装方式
+
+官方推荐 Docker Compose。创建目录并下载最新 Compose 与环境文件：
+
+```bash
+mkdir ./immich-app && cd ./immich-app
+wget -O docker-compose.yml https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml
+wget -O .env https://github.com/immich-app/immich/releases/latest/download/example.env
+```
+
+编辑 `.env`：设置 `UPLOAD_LOCATION`（照片存储路径）、`DB_PASSWORD`（建议 `A-Za-z0-9`）、时区 `TZ` 等，然后启动：
+
+```bash
+docker compose up -d
+```
+
+完整说明见 [官方安装文档](https://docs.immich.app/install/docker-compose)。
+
+### 首次运行
+
+容器启动后，浏览器访问 `http://<服务器IP>:2283`（默认端口以 `.env` 为准），创建管理员账户。在 App Store / Google Play 安装 Immich 客户端，将「服务器地址」指向你的实例，登录后开启自动备份并选择相册范围。
+
+### 验证是否成功
+
+- Web UI 可登录，上传测试照片后能在时间线中看到缩略图。
+- 移动端备份任务正常，重复文件不会被二次入库。
+- 人脸/搜索索引需一定时间；可在管理界面查看机器学习任务是否完成。
+
+### 常见坑 / 注意事项
+
+- Ubuntu 自带 `docker.io` 可能导致 `docker compose` 异常，应改用 [Docker 官方仓库](https://docs.docker.com/engine/install/) 安装 Engine。
+- 数据库 healthcheck 若报 `start_interval` 需 Docker Engine v25+，可暂时注释 `docker-compose.yml` 中 database 段对应行。
+- 仅 4GB 内存时可禁用机器学习功能，但人脸与 CLIP 搜索将不可用。
+- **务必实施 3-2-1 备份**（官方 README 强调）；升级前阅读 [Post Installation](https://docs.immich.app/install/post-install) 与 [Upgrading](https://docs.immich.app/install/upgrading) 指南。

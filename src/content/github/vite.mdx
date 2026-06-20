@@ -1,0 +1,107 @@
+---
+title: Vite
+description: 下一代前端构建工具，开发时原生 ESM 极速冷启动与 HMR，生产构建默认 Rolldown 输出优化静态资源。
+repo: https://github.com/vitejs/vite
+homepage: https://vite.dev
+repoDescription: Next generation frontend tooling. It's fast!
+avatarUrl: https://avatars.githubusercontent.com/u/65625612?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: TypeScript
+stars: 81548
+forks: 8318
+openIssues: 731
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 前端工程化选型、Webpack 迁移或 React/Vue 新项目脚手架评估时的首选构建工具参考。
+---
+
+## 项目介绍
+
+Vite 是由 [vitejs](https://github.com/vitejs) 维护的下一代前端构建工具，面向现代 Web 项目提供更快、更轻量的开发体验。它由两部分组成：**开发服务器**基于原生 ES 模块，配合依赖预构建实现毫秒级冷启动与极速 HMR；**生产构建**默认使用 [Rolldown](https://rolldown.rs) 打包并输出高度优化的静态资源。本仓库为 Vite 核心、`create-vite` 脚手架及 `@vitejs/plugin-*` 官方插件 monorepo，并通过 Plugin API 与 JavaScript API 提供完整 TypeScript 类型支持。
+
+## 核心特性
+
+- **极速开发服务器**：利用浏览器原生 ESM，跳过传统打包式 dev server 的整包编译，冷启动与热更新响应极快
+- **依赖预构建**：使用 esbuild 将 CommonJS/UMD 依赖转为 ESM 并合并请求，兼顾兼容性与加载性能
+- **Rolldown 生产构建**：默认 Rolldown 打包，输出 tree-shaking、代码分割与资源优化后的生产产物
+- **框架无关与插件生态**：官方提供 Vue、React、Svelte 等模板；社区插件覆盖 SSR、Legacy 浏览器、PWA 等场景
+- **完整类型化 API**：`vite.config.ts`、`defineConfig` 与 Plugin/JavaScript API 均提供 TypeScript 类型提示
+
+## 对用户价值
+
+传统 Webpack 开发模式往往在项目变大后，dev server 启动与 HMR 成为日常摩擦。Vite 把「开发时不打包、按需编译」作为默认路径，让本地反馈接近源码编辑速度，同时生产构建仍走成熟打包管线。对团队而言，这意味着更短的 onboarding（`create vite` 即可跑通）、更低的配置负担，以及 Astro、Nuxt、SvelteKit 等主流框架对 Vite 的深度集成——选 Vite 等于对齐当前前端工具链的主流方向。
+
+## 与替代方案
+
+- 相比 [Webpack](https://webpack.js.org/)，Vite 开发阶段无需整包打包，冷启动与 HMR 通常显著更快；Webpack 在复杂自定义 loader/插件链与遗留项目迁移上历史积累更深，大型存量项目切换需评估成本。
+- 相比 [Parcel](https://parceljs.org/) 等零配置打包器，Vite 在框架集成、插件市场与生态文档上更成熟，且生产构建已转向 Rolldown；Parcel 适合追求「开箱即用、少配置」的小型项目。
+- 相比 [esbuild](https://github.com/evanw/esbuild) 单独使用，Vite 提供完整 dev server、HMR、插件体系与框架模板；esbuild 更适合作为底层转译/压缩工具嵌入自定义流水线。
+- 相比 [Next.js](https://nextjs.org/)、[Nuxt](https://nuxt.com/) 等全栈框架内置工具链，Vite 是**通用构建底座**，适合 SPA、组件库、文档站或需要自选路由/状态方案的项目；若产品需要 App Router、SSR 约定式路由等，对应框架往往更自然。
+- 边界说明：Vite 不是后端框架或部署平台；Node 服务端渲染需配合框架适配器（如 `@vitejs/plugin-react` + SSR 配置），复杂 monorepo 与微前端场景需额外规划。
+
+## 适应人群
+
+- 新建 React、Vue、Svelte 等 SPA 或组件库，希望快速获得现代 dev/build 体验的前端工程师。
+- 维护 Webpack 存量项目、评估迁移到 Vite 以缩短本地反馈与 CI 构建时间的团队。
+- 使用 Astro、Vitest 等同生态工具，希望统一 Vite 配置与插件投资的全栈与平台同学。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 20.19+ 或 22.12+（以 [官方 Getting Started](https://vite.dev/guide/#scaffolding-your-first-vite-project) 当前要求为准；部分模板可能要求更高版本）。
+- npm、pnpm、Yarn 或 Bun 等包管理器。
+- 可选：浏览器访问 [vite.new](https://vite.new/) 或 [StackBlitz](https://vite.new/vanilla) 在线体验，无需本地安装。
+
+### 安装方式
+
+**方式一：脚手架新建项目（推荐）**
+
+```bash
+npm create vite@latest
+```
+
+使用 pnpm 时：
+
+```bash
+pnpm create vite
+```
+
+按提示选择框架（Vanilla、Vue、React、Svelte 等）与 TypeScript 选项。
+
+**方式二：手动安装到现有目录**
+
+```bash
+npm install -D vite
+```
+
+在 `package.json` 中添加 `"dev": "vite"`、`"build": "vite build"`，并创建 `index.html` 作为入口（见 [官方手动安装指南](https://vite.dev/guide/#manual-installation)）。
+
+### 首次运行
+
+进入项目目录启动开发服务器：
+
+```bash
+npm run dev
+```
+
+终端会输出本地预览 URL（默认 `http://localhost:5173`）。修改 `src/` 下源码或根目录 `index.html` 后应触发热更新。
+
+### 验证是否成功
+
+- 浏览器打开 dev server URL，页面正常渲染且无控制台阻塞性错误。
+- 保存源码后 HMR 应在数百毫秒内反映变更。
+- 运行 `npm run build` 成功产出 `dist/`；`npm run preview` 可本地预览生产构建结果。
+
+### 常见坑 / 注意事项
+
+- **Node 版本**：低于官方要求的 Node 版本会导致 create-vite 或 dev server 报错，升级后重试。
+- **CommonJS 依赖**：部分 npm 包未提供 ESM 出口时，可能需在 `optimizeDeps` 或 `ssr.noExternal` 中显式配置；查阅 [依赖预构建文档](https://vite.dev/guide/dep-pre-bundling)。
+- **路径别名与环境变量**：`@` 别名需在 `vite.config.ts` 的 `resolve.alias` 中声明；客户端可用变量须以 `VITE_` 前缀暴露。
+- **Legacy 浏览器**：生产默认面向现代浏览器；需支持旧版浏览器时安装 [@vitejs/plugin-legacy](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy)。
+- **求助渠道**：查阅 [vite.dev 文档](https://vite.dev/)、[Vite Discord](https://chat.vite.dev)，或搜索 [awesome-vite](https://github.com/vitejs/awesome-vite) 社区资源。

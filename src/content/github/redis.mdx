@@ -1,0 +1,128 @@
+---
+title: Redis
+description: 面向实时应用的内存数据结构存储，集缓存、消息队列、全文与向量检索于一体。
+repo: https://github.com/redis/redis
+homepage: https://redis.io
+repoDescription: For developers, who are building real-time data-driven applications, Redis is the preferred, fastest, and most feature-rich cache, data structure server, and document and vector query engine.
+avatarUrl: https://avatars.githubusercontent.com/u/1529926?v=4
+tags:
+  - 开发工具
+  - 缓存
+  - 系统工具
+language: C
+stars: 74995
+forks: 24675
+openIssues: 2853
+contributors: 1
+license: RSALv2 / SSPL
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 后端缓存、Session、队列与 GenAI 向量检索场景的基础设施选型参考。
+---
+
+## 项目介绍
+
+Redis 是全球使用最广泛的内存数据结构服务器之一，主打亚毫秒级读写延迟，适合缓存、会话、队列、实时分析与 AI 向量检索等场景。自 v8.0 起，原 Redis Community Edition 更名为 **Redis Open Source**；本仓库为官方源码，生产环境通常优先使用 Docker 镜像、Homebrew、Snap 等二进制分发或 [Redis Cloud](https://cloud.redis.io/)，而非自行编译。Redis Ltd. 另提供 Redis Software 与 Redis Cloud 等企业/托管产品线。
+
+## 核心特性
+
+- **高性能内存引擎**：数据主要驻留内存，读写延迟极低，适合实时响应型应用
+- **丰富数据结构**：String、Hash、List、Set、Sorted Set、JSON、Stream、Time Series 等，并支持事务与 Lua 脚本
+- **检索与 AI 能力**：Redis Search 支持全文、地理空间与向量检索；Vector Set 可用于 RAG、语义缓存等 GenAI 场景
+- **消息与事件**：Pub/Sub、Stream 与消费者组，可充当轻量消息中间件与事件存储
+- **可扩展模块**：Modules API 可扩展命令与能力；从源码完整构建需 `BUILD_WITH_MODULES=yes` 以启用 Bloom Filter 等模块特性
+
+## 对用户价值
+
+Redis 把「极快缓存」与「多用途数据层」合二为一：既能减轻主库压力、加速 API，也能承载 Session、排行榜、限流、任务队列与实时推荐。协议简单、客户端生态覆盖 Python、Node.js、Go、Java、.NET 等主流语言，几乎每种后端栈都有成熟集成方案。对团队而言，它是 MySQL/PostgreSQL 之外最常见的基础设施组件之一，也是云托管与 K8s 部署的常规选项。
+
+## 与替代方案
+
+- 相比 **Memcached**，Redis 不仅做纯 KV 缓存，还提供持久化、复杂数据结构与 Pub/Sub，功能面更广；Memcached 在极简纯缓存场景仍足够轻量。
+- 相比 **KeyDB / Valkey**（Redis 分支），Redis Open Source 由 Redis Ltd. 主导演进，Search、JSON、向量等能力集成更完整；Valkey 在 Linux 基金会生态下强调开源治理与兼容性，适合对许可与治理有明确偏好的团队。
+- 相比 **RabbitMQ / Kafka**，Redis Stream 与 Pub/Sub 适合轻量队列与实时通知；高吞吐、长期日志留存与复杂消费语义仍更偏向专用消息系统。
+- 相比 **Elasticsearch / 专用向量库**，Redis Search 适合与现有 Redis 集群复用、低延迟混合检索；超大规模全文或向量专库场景专用引擎仍具优势。
+
+## 适应人群
+
+- 需要缓存、Session 或分布式锁的后端开发者与全栈工程师。
+- 负责中间件选型、容量规划与高可用的架构师与 SRE/运维工程师。
+- 在 RAG、语义缓存、实时推荐等场景中评估内存数据层的 AI 应用开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 日常开发推荐 Docker、Homebrew 或 [官方二进制分发](https://redis.io/docs/latest/develop/get-started/)，生产环境需规划持久化、内存上限、网络 ACL 与备份策略。
+- 从源码完整构建需 GCC、make、OpenSSL、CMake（≤ 3.31.6）等依赖；启用全部数据结构与模块时需设置 `BUILD_WITH_MODULES=yes` 等环境变量（详见 README）。
+- 注意 **RSALv2 / SSPL** 许可边界：商业托管与再分发前请阅读 [官方许可说明](https://redis.io/legal/licenses/)。
+
+### 安装方式
+
+**Docker（最快上手）**
+
+```bash
+docker run -d -p 6379:6379 --name redis redis:latest
+```
+
+**macOS（Homebrew）**
+
+```bash
+brew tap redis/redis
+brew install redis
+brew services start redis
+```
+
+**从本仓库源码构建（开发/定制，含模块）**
+
+```bash
+git clone https://github.com/redis/redis.git
+cd redis
+export BUILD_TLS=yes BUILD_WITH_MODULES=yes INSTALL_RUST_TOOLCHAIN=yes
+make -j "$(sysctl -n hw.ncpu 2>/dev/null || nproc)" all
+```
+
+### 首次运行
+
+Docker 或包管理器安装后，默认监听 `6379`。使用 `redis-cli` 连接：
+
+```bash
+redis-cli ping
+redis-cli set foo bar
+redis-cli get foo
+```
+
+从源码构建时，在仓库根目录启动：
+
+```bash
+./src/redis-server redis-full.conf
+```
+
+另开终端执行 `./src/redis-cli` 进行交互。
+
+### 验证是否成功
+
+```bash
+redis-cli ping
+# 期望返回 PONG
+
+redis-cli set mykey hello
+redis-cli get mykey
+# 期望返回 "hello"
+
+redis-cli incr counter
+redis-cli incr counter
+redis-cli get counter
+# 期望返回 "2"
+```
+
+应用侧可用对应语言客户端（如 [redis-py](https://redis.io/docs/latest/develop/clients/redis-py/)、[node-redis](https://redis.io/docs/latest/develop/clients/nodejs/)）执行相同读写测试。
+
+### 常见坑 / 注意事项
+
+- **内存与持久化**：默认全内存，需配置 `maxmemory` 与淘汰策略；RDB/AOF 持久化会影响性能与磁盘占用，生产环境应显式规划。
+- **安全暴露**：勿将无认证实例暴露公网；设置 `requirepass` 或 ACL，并限制 bind 地址与防火墙规则。
+- **完整模块构建**：Bloom Filter、Redis Search 等带 `*` 标记的特性需 `BUILD_WITH_MODULES=yes`；Ubuntu 26.04 等较新系统对 CMake/clang 版本有额外约束，见 README 对应章节。
+- **开源 vs 商业**：Redis Open Source 与 Redis Software/Cloud 功能与 SLA 不同；企业合规、多活与托管需求请对照 [官方对比文档](https://redis.io/technology/advantages/)。
+- **版本升级**：大版本升级前阅读 [Release Notes](https://github.com/redis/redis/releases)，关注命令行为变更与模块兼容性。

@@ -1,0 +1,113 @@
+---
+title: gstack
+description: YC CEO Garry Tan 的 Claude Code 技能集，23 个斜杠命令覆盖从产品规划到发布上线。
+repo: https://github.com/garrytan/gstack
+repoDescription: "Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Designer, Eng Manager, Release Manager, Doc Engineer, and QA"
+avatarUrl: https://avatars.githubusercontent.com/u/19957?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: TypeScript
+stars: 111392
+forks: 16559
+openIssues: 705
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 技术创始人与 Tech Lead 想把 Claude Code 用成虚拟工程团队时的完整配装。
+---
+
+## 项目介绍
+
+gstack 是 Y Combinator CEO [Garry Tan](https://x.com/garrytan) 开源的 **AI 结对编程工厂**：一套面向 Claude Code 的 23 个斜杠命令（Slash Skills），把单人会话拆成 CEO、设计师、工程经理、Staff 审查、QA、安全官、发布工程师等角色，按「思考 → 规划 → 构建 → 审查 → 测试 → 发布 → 复盘」的冲刺节奏串联。所有技能以 Markdown 定义、MIT 许可，支持 Claude Code 原生安装，也可通过 `./setup --host` 适配 Cursor、Codex、OpenCode 等十余种 Agent 宿主。
+
+## 核心特性
+
+- **产品澄清**：`/office-hours` 用六个强制问题重述需求，产出设计文档并喂给下游技能
+- **多角色规划**：`/plan-ceo-review`、`/plan-eng-review`、`/plan-design-review`、`/plan-devex-review` 分别从战略、架构、视觉与开发者体验角度挑战方案
+- **设计与原型**：`/design-consultation`、`/design-shotgun`、`/design-html` 覆盖设计系统、多方案探索与可上线 HTML 输出
+- **质量与安全**：`/review` 自动修复明显问题；`/investigate` 强制根因排查；`/cso` 做 OWASP + STRIDE 审计；`/qa` 在真实浏览器中回归并补测试
+- **发布闭环**：`/ship` 跑测试并开 PR；`/land-and-deploy`、`/canary`、`/benchmark` 覆盖合并、生产验证与性能基线
+- **多宿主支持**：`./setup` 自动检测已安装 Agent，或通过 `--host cursor|codex|opencode|factory` 等定向安装
+- **团队模式**：`gstack-team-init` 让共享仓库的队友自动获得一致技能版本，每小时静默检查更新
+
+## 对用户价值
+
+很多人用 Claude Code 时仍停留在「空白提示词 + 直接写代码」，缺少产品推敲、架构锁定、设计把关与发布纪律。gstack 把 Garry Tan 日常 ship 产品的流程固化成可复用命令：从 `/office-hours` 纠正「你要做的其实不是这个功能」开始，到 `/review` 与 `/qa` 在 CI 之外抓生产级 bug，再到 `/ship` 统一测试与 PR。对个人 builder，它提供接近小团队的节奏；对技术创始人，它把 CEO 视角的产品挑战编码进工作流，减少 AI 产出「能跑但不对」的 slop。
+
+## 与替代方案
+
+- 相比 [Superpowers](https://github.com/obra/superpowers) 等**方法论型技能库**，gstack 更偏 **Garry Tan 个人工程工厂**：角色划分更细（含 CEO 审阅、设计 shotgun、CSO 安全、SRE canary），且内置浏览器 QA 与发布流水线命令。
+- 相比通用 Cursor Rules 或零散 prompt，gstack 提供**可安装的斜杠命令与团队同步机制**（`gstack-team-init`），技能之间有明确上下游（设计 doc → 规划 → 审查 → QA → ship）。
+- 相比 Cline、Aider 等**以编辑/终端为中心**的 Agent 客户端，gstack 是**技能包而非 IDE**；若你需要深度 IDE 集成或本地模型路由，应继续用宿主工具，把 gstack 作为流程层叠加上去。
+- 与 OpenClaw 等**多会话编排**可组合：OpenClaw 通过 ACP 拉起已装 gstack 的 Claude Code 会话；ClawHub 另有 4 个原生 OpenClaw 方法论技能（office-hours、ceo-review 等）。
+
+## 适应人群
+
+- 仍在亲自写代码的技术创始人、CEO，希望用结构化角色替代「想到哪写到哪」的 Claude Code 会话。
+- 第一次使用 Claude Code，想要开箱即用的 `/office-hours` → `/review` → `/qa` 入门路径的开发者。
+- Tech Lead / Staff 工程师，需要在每个 PR 上强制执行架构审查、浏览器 QA、安全审计与发布检查的团队。
+
+## 如何使用
+
+### 前置条件
+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code)（主路径）；多宿主用户需已安装目标 Agent（Cursor、Codex CLI 等）。
+- [Git](https://git-scm.com/)、[Bun](https://bun.sh/) v1.0+；Windows 另需 [Node.js](https://nodejs.org/)。
+- 对目标项目有 Git 读写权限；`/qa`、`/browse` 等技能需要可访问的 staging URL 或浏览器环境。
+
+### 安装方式
+
+**Claude Code（个人，约 30 秒）**
+
+在 Claude Code 中粘贴以下指令，由 Claude 执行克隆与 `./setup`：
+
+```text
+Install gstack: run git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup then add a "gstack" section to CLAUDE.md that lists available skills: /office-hours, /plan-ceo-review, /review, /qa, /ship, /autoplan, /cso, and others from the gstack README.
+```
+
+或手动执行：
+
+```bash
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+cd ~/.claude/skills/gstack && ./setup
+```
+
+**团队模式（推荐共享仓库）**
+
+```bash
+(cd ~/.claude/skills/gstack && ./setup --team) && ~/.claude/skills/gstack/bin/gstack-team-init required && git add .claude/ CLAUDE.md && git commit -m "require gstack for AI-assisted work"
+```
+
+将 `required` 改为 `optional` 可改为软性提示而非强制。
+
+**Cursor / Codex / 其他宿主**
+
+```bash
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+cd ~/gstack && ./setup --host cursor   # 或 codex、opencode、factory 等
+```
+
+### 首次运行
+
+1. 在 Claude Code 中运行 `/office-hours`，描述你正在构建的产品或功能。
+2. 对想法运行 `/plan-ceo-review`，在已有分支上运行 `/review`。
+3. 若有 staging 环境，对 URL 运行 `/qa https://your-staging-url`。
+4. 完成上述四步即可判断 gstack 是否适合你的工作流；完整冲刺可继续 `/autoplan` → 实现 → `/ship`。
+
+### 验证是否成功
+
+- `~/.claude/skills/gstack`（或对应宿主技能目录）存在且 `./setup` 无报错。
+- 输入 `/office-hours` 等命令时 Claude 按技能文档提问并产出设计文档，而非忽略斜杠命令。
+- 团队模式下，队友克隆仓库后新 Claude Code 会话会自动拉取 gstack 更新（每小时节流检查）。
+
+### 常见坑 / 注意事项
+
+- gstack 技能链偏**完整产品冲刺**；修 README 错别字等小事不必强行走全套流程。
+- `/browse` 与 Chrome MCP 有互斥约定：README 建议在 CLAUDE.md 中声明优先使用 gstack 的 `/browse`，避免与 `mcp__claude-in-chrome__*` 冲突。
+- 多宿主需分别 `./setup --host <name>`；技能安装路径因 Agent 而异，见 README 宿主表。
+- 仓库 star 增长极快，安装命令与技能列表以 [官方 README](https://github.com/garrytan/gstack) 为准；升级可用 `/gstack-upgrade` 或重新 clone。
+- OpenClaw 用户见 [docs/OPENCLAW.md](https://github.com/garrytan/gstack/blob/main/docs/OPENCLAW.md)；ClawHub 有四项独立方法论技能可单独安装。

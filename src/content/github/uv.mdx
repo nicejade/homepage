@@ -1,0 +1,113 @@
+---
+title: uv
+description: 极快的 Rust 版 Python 包与项目管理器，可替代 pip、Poetry、pyenv 等一整套工具。
+repo: https://github.com/astral-sh/uv
+homepage: https://docs.astral.sh/uv
+repoDescription: An extremely fast Python package and project manager, written in Rust.
+avatarUrl: https://avatars.githubusercontent.com/u/115962839?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 自动化
+language: Rust
+stars: 86573
+forks: 3224
+openIssues: 2729
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 日常用 Python 开发、想统一依赖安装与环境管理并显著提速的工程师与团队。
+---
+
+## 项目介绍
+
+uv 是由 Astral（Ruff 与 ty 的出品方）用 Rust 编写的 Python 包与项目管理器，目标是用一个工具替代 `pip`、`pip-tools`、`pipx`、`poetry`、`pyenv`、`virtualenv` 等常见组件。它提供项目级 lockfile、工作区、脚本内联依赖、Python 版本管理与 pip 兼容接口，在缓存命中场景下安装速度可比 pip 快 10–100 倍，并支持 macOS、Linux 与 Windows。
+
+## 核心特性
+
+- **一站式工具链**：项目管理（`uv init` / `add` / `sync` / `lock`）、脚本运行、CLI 工具（`uvx`）、Python 版本安装与切换
+- **极速依赖解析与安装**：Rust 实现 + 全局缓存去重，warm cache 下常见操作可达毫秒级
+- **通用 lockfile**：跨平台可复现的依赖锁定，支持 Cargo 风格 workspaces
+- **脚本内联元数据**：单文件脚本可通过 `uv add --script` 声明依赖，`uv run` 自动创建隔离环境
+- **pip 兼容层**：`uv pip compile` / `sync` / `venv` 等命令可渐进迁移现有 pip 工作流
+
+## 对用户价值
+
+uv 把「装 Python、建虚拟环境、锁依赖、跑脚本、装 CLI 工具」收敛到一个二进制里，显著减少工具碎片化与等待时间。对已有 pip/requirements 流程的团队，可通过 `uv pip` 接口无痛提速；对新项目，可直接采用 `pyproject.toml` + `uv.lock` 的现代项目管理方式。全局缓存还能节省磁盘，适合多项目并行开发。
+
+## 与替代方案
+
+- 相比 **pip + venv + pip-tools**，uv 速度更快、功能更全（含 Python 版本管理与工具安装），且提供等价的 `uv pip` 迁移路径。
+- 相比 **Poetry**，两者都强调项目与 lockfile 管理；uv 额外覆盖 pyenv/pipx 场景，性能更突出，Poetry 则在部分生态插件与历史项目迁移上更成熟。
+- 相比 **pipx**，uv 的 `uv tool install` / `uvx` 提供类似的一次性/持久化工具运行能力，并与其他 uv 子命令共享缓存。
+- 相比 **rye**，uv 由 Astral 持续投入、社区体量更大；若团队已深度绑定 rye 工作流，迁移需评估 lockfile 与脚本差异。
+
+## 适应人群
+
+- 日常维护多个 Python 项目、厌倦 pip 慢速与工具拼凑的开发者。
+- 希望统一 CI/CD 依赖安装流程、缩短构建时间的工程团队。
+- 从 pip/requirements 渐进迁移、或新建项目想直接采用现代 Python 工具链的技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- macOS、Linux 或 Windows 任一受支持平台。
+- 网络可访问 PyPI（或已配置私有 index / mirror）。
+- 无需预装 Rust；独立安装器也不依赖本机已有 Python。
+
+### 安装方式
+
+**macOS / Linux（推荐）：**
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows：**
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**通过 PyPI：**
+
+```bash
+pip install uv
+# 或
+pipx install uv
+```
+
+安装后可用 `uv self update` 自更新。更多方式见 [官方安装文档](https://docs.astral.sh/uv/getting-started/installation/)。
+
+### 首次运行
+
+**新建项目：**
+
+```bash
+uv init myproject
+cd myproject
+uv add ruff
+uv run ruff check
+```
+
+**在现有 requirements 流程中试用：**
+
+```bash
+uv venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+uv pip compile requirements.in -o requirements.txt
+uv pip sync requirements.txt
+```
+
+### 验证是否成功
+
+执行 `uv --version` 应输出版本号。`uv run python --version` 或 `uvx cowsay hello` 能正常完成即表示核心路径可用。项目管理场景下 `uv lock` 与 `uv sync` 无报错即表示环境与 lockfile 一致。
+
+### 常见坑 / 注意事项
+
+- **渐进迁移**：`uv pip` 与 `uv add`/`sync` 是两套入口，混用时需明确团队约定，避免 lockfile 与 requirements 双轨漂移。
+- **私有源配置**：企业内网 PyPI 需在 `pyproject.toml` 或环境变量中配置 index，详见 [文档](https://docs.astral.sh/uv/configuration/indexes/)。
+- **许可证**：项目采用 Apache-2.0 与 MIT 双许可，贡献默认按双许可处理。
+- **生产就绪**：官方声明 uv 已稳定并广泛用于生产，但大版本升级前仍建议阅读 [版本策略](https://docs.astral.sh/uv/reference/versioning/) 与 Release Notes。

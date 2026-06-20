@@ -1,0 +1,118 @@
+---
+title: Tailwind CSS
+description: 实用优先的 CSS 框架，用工具类快速搭建定制界面，零运行时，与 Vite 等现代构建链深度集成。
+repo: https://github.com/tailwindlabs/tailwindcss
+homepage: https://tailwindcss.com
+repoDescription: A utility-first CSS framework for rapid UI development.
+avatarUrl: https://avatars.githubusercontent.com/u/67109815?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: TypeScript
+stars: 95666
+forks: 5298
+openIssues: 68
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 前端样式体系选型、原子化 CSS 与 Utility-First 工作流，以及 Vite/React/Vue 项目集成 Tailwind 的开发者。
+---
+
+## 项目介绍
+
+Tailwind CSS 是由 [Tailwind Labs](https://tailwindcss.com) 维护的实用优先（utility-first）CSS 框架：你在 HTML 或组件中直接使用语义化的工具类（如 `flex`、`pt-4`、`text-center`），框架扫描源码后生成对应的静态 CSS，而非预置固定组件样式。Tailwind CSS v4 采用零运行时设计，通过 `@tailwindcss/vite` 等插件与 Vite、PostCSS 及主流前端框架深度集成。本仓库为框架源码；完整文档与安装指南见 [tailwindcss.com](https://tailwindcss.com)。
+
+## 核心特性
+
+- **实用优先工具类**：以原子化 class 组合界面，减少手写 CSS 与命名负担，设计变更时直接在 markup 中调整
+- **零运行时、构建时生成**：扫描 HTML/JS/模板中的 class 名，产出精简静态 CSS，不增加浏览器端 JS 开销
+- **现代构建链集成**：官方提供 Vite 插件（`@tailwindcss/vite`）、PostCSS、CLI 及 Next.js、Nuxt、SvelteKit 等框架指南
+- **可定制设计系统**：通过 CSS 变量与 `@theme` 配置色板、间距、断点等，兼顾一致性与项目级品牌扩展
+- **活跃社区与文档**：含完整 [Installation](https://tailwindcss.com/docs/installation)、[Framework Guides](https://tailwindcss.com/docs/installation/framework-guides) 与 GitHub Discussions 讨论区
+
+## 对用户价值
+
+传统 CSS 常因全局命名冲突、样式层级膨胀与「改一处动全身」而拖慢迭代。Tailwind 把样式决策收敛到组件 markup 旁，配合 IDE 补全与官方文档，原型到生产的样式迭代更快；构建时 purge 未使用的 class，避免整库 CSS 打进 bundle。团队若已采用 React、Vue、Svelte 等组件化栈，Tailwind 与组件模型天然契合，设计 token 可通过配置统一，降低设计与工程协作成本。日常开发通过 npm 安装 `tailwindcss` 并参阅官方文档即可，无需 fork 本仓库。
+
+## 与替代方案
+
+- 相比 [Bootstrap](https://getbootstrap.com/)，Tailwind 不提供固定 UI 组件库，而是提供可组合的工具类，界面定制自由度更高；Bootstrap 适合快速套用成熟组件，Tailwind 适合需要独特视觉的产品。
+- 相比 [Bulma](https://bulma.io/) 等语义化 CSS 框架，Tailwind 的 utility-first 写法初期类名较多，但减少在 HTML 与 CSS 文件间跳转；Bulma 的 class 语义更直观，学习曲线因团队背景而异。
+- 相比手写 [Sass/Less](https://sass-lang.com/) 或 CSS Modules，Tailwind 内置 spacing、color、responsive 等设计约束，减少「魔法数字」；纯 CSS 方案在极端定制场景下有时更灵活，但需自行维护设计 token 与 purge 策略。
+- 边界说明：本仓库是 **Tailwind CSS 核心源码**；应用集成请按 [官方安装文档](https://tailwindcss.com/docs/installation) 选择 Vite、PostCSS 或 CLI，勿将 clone 本 repo 等同于在项目中启用 Tailwind。
+
+## 适应人群
+
+- 需要快速搭建定制界面、并希望样式与组件 markup 共处的前端工程师。
+- 评估原子化 CSS 或设计系统落地方式，需在 Bootstrap 与 utility-first 之间做技术选型的团队负责人。
+- 使用 Vite、Next.js、Nuxt、SvelteKit 等现代栈，希望统一 spacing、配色与响应式断点工作流的全栈开发者。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+（以 [tailwindcss.com 安装文档](https://tailwindcss.com/docs/installation) 与所选脚手架要求为准）。
+- npm、pnpm 或 Yarn 等包管理器。
+- 已有 Vite 项目，或计划通过 `npm create vite@latest` 创建新项目；其他构建方式见 [Framework Guides](https://tailwindcss.com/docs/installation/framework-guides)。
+
+### 安装方式
+
+**方式一：Vite 插件（官方推荐，Tailwind CSS v4）**
+
+```bash
+npm create vite@latest my-project
+cd my-project
+npm install tailwindcss @tailwindcss/vite
+```
+
+在 `vite.config.ts` 中注册插件：
+
+```ts
+import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [tailwindcss()],
+})
+```
+
+在 CSS 入口文件（如 `src/style.css`）添加：
+
+```css
+@import "tailwindcss";
+```
+
+**方式二：PostCSS 或 CLI**
+
+见 [Using PostCSS](https://tailwindcss.com/docs/installation/using-postcss) 与 [Tailwind CLI](https://tailwindcss.com/docs/installation/tailwind-cli)。快速原型可试用 [Play CDN](https://tailwindcss.com/docs/installation/play-cdn)（仅适合开发演示，不推荐生产）。
+
+### 首次运行
+
+启动开发服务器：
+
+```bash
+npm run dev
+```
+
+在 HTML 或组件中使用工具类，例如：
+
+```html
+<h1 class="text-3xl font-bold underline">Hello world!</h1>
+```
+
+确保页面已引入编译后的 CSS（Vite 会通过 `import './style.css'` 或框架默认配置处理）。
+
+### 验证是否成功
+
+- 浏览器打开 dev server 地址，标题应呈现 `text-3xl`、`font-bold`、`underline` 等样式。
+- 修改 class（如改为 `text-red-500`），保存后应热更新生效。
+- 运行 `npm run build` 成功产出生产构建；检查产物 CSS 体积合理且未包含未使用的工具类冗余。
+
+### 常见坑 / 注意事项
+
+- **源码仓库 vs npm 包**：日常项目在依赖中安装 `tailwindcss`（及 `@tailwindcss/vite` 等）即可；clone 本仓库用于贡献或与 Tailwind 内部包开发，见 [Contributing](https://github.com/tailwindlabs/tailwindcss/blob/main/.github/CONTRIBUTING.md)。
+- **v3 与 v4 差异**：v4 默认 `@import "tailwindcss"` 与 Vite 插件路径，迁移旧项目请对照 [Upgrade Guide](https://tailwindcss.com/docs/upgrade-guide)。
+- **class 扫描范围**：构建工具需能扫描到所有含 Tailwind class 的模板与组件路径；Monorepo 或动态 class 字符串可能导致样式缺失，需按文档配置 content/source。
+- **Play CDN 限生产**：CDN 方式便于 CodePen 式试用，生产环境应使用构建时生成以控制体积与缓存策略。

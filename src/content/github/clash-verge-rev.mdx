@@ -1,0 +1,98 @@
+---
+title: "Clash Verge Rev"
+description: 基于 Tauri 2 的跨平台 Clash Meta (mihomo) 图形客户端，延续 Clash Verge 生态，支持系统代理与 TUN。
+repo: "https://github.com/clash-verge-rev/clash-verge-rev"
+homepage: "https://www.clashverge.dev"
+repoDescription: "A modern GUI client based on Tauri, designed to run in Windows, macOS and Linux for tailored proxy experience"
+avatarUrl: "https://avatars.githubusercontent.com/u/152534467?v=4"
+tags:
+  - 开发工具
+  - 桌面应用
+  - 网络工具
+language: "TypeScript"
+stars: 126677
+forks: 9211
+openIssues: 416
+contributors: 1
+license: "GPL-3.0"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 需要跨平台 Clash Meta GUI、可视化规则编辑与 WebDAV 配置同步的代理用户与进阶玩家。
+---
+
+## 项目介绍
+
+[Clash Verge Rev](https://www.clashverge.dev) 是原 [Clash Verge](https://github.com/zzzgydi/clash-verge) 的社区延续版，基于 Rust 与 Tauri 2 构建，内置 [mihomo (Clash.Meta)](https://github.com/MetaCubeX/mihomo) 内核，面向 Windows、macOS 与 Linux 提供统一的代理管理界面。它在保留 Clash 规则分流能力的同时，把配置编辑、系统代理守卫、TUN 虚拟网卡与主题定制收进一款轻量桌面应用，适合不愿长期手写 YAML 却仍想精细控制路由策略的用户。
+
+## 核心特性
+
+- **Tauri 2 + mihomo 内核**：Rust 后端与 Web 前端结合，内置 Clash.Meta 内核，并可切换 Alpha 版本内核
+- **可视化配置管理**：支持 Merge / Script 增强、语法提示，以及节点与规则的可视化编辑
+- **系统级接管**：系统代理与代理守卫、TUN（虚拟网卡）模式，适配全局或分应用分流场景
+- **界面与主题定制**：明暗主题、自定义主题色、代理组/托盘图标，以及 CSS Injection
+- **配置备份同步**：通过 WebDAV 备份与同步配置文件，便于多设备迁移
+- **多语言与文档**：简体中文、English 等七种语言 README；[官方文档站](https://clash-verge-rev.github.io/) 覆盖安装与 FAQ
+
+## 对用户价值
+
+Clash 系工具功能强大，但纯命令行或简陋 GUI 往往让「导入订阅 → 选节点 → 开 TUN → 调规则」变成反复改 YAML 的体力活。Clash Verge Rev 把高频操作图形化：托盘一键切换、规则/节点面板直编、Merge 与 Script 在不破坏原配置的前提下叠加策略。对个人用户，它降低从 Clash for Windows 或停更版 Clash Verge 迁移的学习成本；对进阶用户，WebDAV 同步与内核版本切换让实验新特性与多机保持一致更省事。GPL-3.0 开源且社区活跃（12 万+ Star），适合希望客户端可控、可审计的长期使用者。
+
+## 与替代方案
+
+- 相比 **[Clash for Windows](https://github.com/Fndroid/clash_for_windows_pkg)**（已停更），Clash Verge Rev 基于 Tauri 2 持续维护，内置 mihomo 内核，跨平台覆盖 Win / macOS / Linux，并延续 Verge 系的 Merge、Script 与主题定制能力。
+- 相比原 **[zzzgydi/clash-verge](https://github.com/zzzgydi/clash-verge)**，Rev 为社区接力版本，修复与功能迭代更活跃；界面与配置思路相近，老用户迁移成本较低。
+- 相比 **[ClashX Pro](https://github.com/yichengchen/clashX)**、**[ClashX.Meta](https://github.com/MetaCubeX/ClashX.Meta)** 等 **macOS 专用客户端**，Clash Verge Rev 强调三端一致体验，适合同时使用 Windows 与 macOS 的用户。
+- 相比 **[sing-box](https://github.com/SagerNet/sing-box)** 系 GUI（如 SFM、GUI.for.SingBox），Clash Verge Rev 绑定 Clash/Meta 配置与规则语法；若你已有大量 Clash 订阅与规则，无需重写配置链。
+- 相比 **纯 mihomo 命令行**，GUI 提供系统代理守卫、托盘切换与可视化编辑；若只需 headless 网关或服务器侧转发，命令行或 Docker 方案更轻。
+
+## 适应人群
+
+- 从 Clash for Windows 或停更 Clash Verge 迁移、需要现代跨平台 GUI 的代理用户。
+- 希望可视化编辑节点与规则、使用 TUN/系统代理守卫的进阶玩家。
+- 需要在多台设备间通过 WebDAV 同步 Clash 配置、并愿意跟进社区版迭代的长期使用者。
+
+## 如何使用
+
+### 前置条件
+
+- **Windows**：x64 或 x86
+- **macOS**：11 及以上（Intel 或 Apple Silicon）
+- **Linux**：x64 或 arm64 的主流发行版
+- 自备合法可用的代理订阅或配置文件（Clash / Meta 格式）；客户端本身不提供节点服务
+
+### 安装方式
+
+从 [GitHub Releases](https://github.com/clash-verge-rev/clash-verge-rev/releases) 下载对应平台安装包：
+
+| 版本 | 说明 |
+| :--- | :--- |
+| **Stable** | 正式版，适合日常使用（推荐） |
+| **AutoBuild** | 滚动构建，适合尝鲜反馈，可能存在缺陷 |
+| **Alpha** | 已废弃，仅作发布流程测试 |
+
+平台支持：Windows (x64/x86)、Linux (x64/arm64)、macOS 11+ (Intel/Apple)。
+
+详细安装步骤与常见问题见 [官方文档](https://clash-verge-rev.github.io/)。
+
+### 首次运行
+
+1. 安装并启动 Clash Verge Rev。
+2. 在配置页**导入订阅链接**或本地 YAML 配置文件。
+3. 在代理页选择节点或策略组；按需开启**系统代理**或 **TUN 模式**（TUN 通常需管理员/root 权限）。
+4. 可选：在设置中配置 Merge/Script 增强、主题与 WebDAV 备份。
+
+### 验证是否成功
+
+- 托盘图标显示已连接，系统代理或 TUN 状态为开启（若你启用了对应模式）。
+- 浏览器访问 [ip.sb](https://ip.sb) 或同类检测页，确认出口 IP 与所选节点一致。
+- 在应用内查看连接日志/规则命中，确认分流符合预期。
+- 若启用 WebDAV，执行一次备份后检查远端是否出现配置文件。
+
+### 常见坑 / 注意事项
+
+- **TUN 无法启动**：Windows 需安装虚拟网卡驱动并以管理员运行；macOS/Linux 需相应权限，详见 [文档 FAQ](https://clash-verge-rev.github.io/faq/windows.html)。
+- **订阅导入失败**：检查链接是否有效、格式是否为 Clash Meta 兼容；部分机场需手动更新 User-Agent 或转换订阅。
+- **规则不生效**：确认未与其他代理客户端（如 CFW 残留服务）冲突；切换内核版本后建议重启应用。
+- **AutoBuild 稳定性**：日常主力环境请优先 Stable；AutoBuild 仅建议测试环境使用。
+- **许可证**：GPL-3.0 开源；二次分发或修改衍生版本需遵守 GPL 义务。

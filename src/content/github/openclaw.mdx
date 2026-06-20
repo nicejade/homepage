@@ -1,0 +1,114 @@
+---
+title: OpenClaw
+description: 自托管个人 AI 助手，Gateway 统一接入 WhatsApp、Telegram 等频道，本地常驻、数据自主。
+repo: https://github.com/openclaw/openclaw
+homepage: https://openclaw.ai
+repoDescription: "Your own personal AI assistant. Any OS. Any Platform. The lobster way. 🦞"
+avatarUrl: https://avatars.githubusercontent.com/u/252820863?v=4
+tags:
+  - Agent
+  - 自动化
+  - AI 编程
+language: TypeScript
+stars: 379506
+forks: 79445
+openIssues: 6441
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 适合在自己设备上跑常驻助手、用手机消息频道远程对话的个人用户。
+---
+
+## 项目介绍
+
+OpenClaw 是一款**自托管的个人 AI 助手**：你在自己的设备上运行 Gateway 控制平面，助手则在 WhatsApp、Telegram、Slack、Discord、Signal、iMessage、微信、QQ 等你已在用的频道里回复你。它支持 macOS/iOS/Android 上的语音唤醒与对话、可渲染由 Agent 驱动的 Live Canvas，并提供 Windows Hub、macOS 菜单栏等可选伴侣应用。定位是**单人、本地感强、始终在线**的私人助理——Gateway 只是控制面，产品核心是助手本身。
+
+## 核心特性
+
+- **Local-first Gateway**：单一控制平面，统一管理会话、频道、工具与事件
+- **多频道收件箱**：覆盖 20+ 消息平台（含 WhatsApp、Telegram、Slack、Discord、Teams、Matrix、飞书、LINE、WebChat 等）及 macOS/iOS/Android 节点
+- **多 Agent 路由**：按频道、账号或对话方将流量路由到隔离的 Agent（独立 workspace 与会话）
+- **Voice Wake + Talk Mode**：macOS/iOS 唤醒词、Android 连续语音（ElevenLabs + 系统 TTS 回退）
+- **Live Canvas**：Agent 驱动的可视化工作区（A2UI）
+- **一等公民工具**：浏览器、Canvas、节点、cron、会话管理、Discord/Slack 动作等
+- **Onboarding 向导 + Skills**：`openclaw onboard` 引导配置；技能可通过 [ClawHub](https://clawhub.ai) 扩展
+
+## 对用户价值
+
+不想把日常对话绑在单一聊天网页、又希望**数据留在自己机器上**的用户，可以用 OpenClaw 把熟悉的 IM 变成 AI 入口。Gateway 以 daemon（launchd/systemd）常驻，手机发一条 Telegram 或 WhatsApp 即可触发本地 Agent 执行工具链。多 Agent 路由适合「工作号 / 私人号 / 不同项目」隔离；默认 DM 配对策略降低陌生消息直接驱动 Agent 的风险。对开发者，TypeScript 单体仓库 + 丰富文档，也便于二次集成频道或自定义技能。
+
+## 与替代方案
+
+- 相比 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 等强调**自进化技能与跨会话记忆**的方案，OpenClaw 更侧重**多频道 Gateway 编排、伴侣应用生态与 Canvas/语音节点**；Hermes 提供 `hermes claw migrate` 从 OpenClaw 迁移，二者可对照评估而非简单替代。
+- 相比 [Cline](https://github.com/cline/cline)、[Aider](https://github.com/Aider-AI/aider) 等**IDE/终端结对编程**工具，OpenClaw 是**生活与工作流助理**：主战场是消息频道、语音、cron 与浏览器工具，而非深度编辑器集成。
+- 相比 [Dify](https://github.com/langgenius/dify)、[n8n](https://github.com/n8n-io/n8n) 等**可视化工作流/应用平台**，OpenClaw 是**单人助理运行时**，配置路径以 CLI 向导与 Gateway 配置为主，不适合多租户 SaaS 或复杂可视化编排。
+- 相比纯云端聊天机器人，OpenClaw **自托管、频道可扩展、工具在主机执行**（主会话默认全权限）；若需公网暴露 Gateway，必须按官方安全与沙箱文档收紧策略。
+
+## 适应人群
+
+- 希望用 **WhatsApp、Telegram、Slack** 等已有频道与 AI 对话，且偏好**本地 Gateway** 的个人用户。
+- 需要 **macOS/iOS/Android 语音唤醒、Canvas 或节点能力** 的进阶玩家。
+- 想搭建**多 Agent 隔离**（不同频道/账号对应不同 workspace）的开发者或小团队。
+- 已使用 OpenClaw 生态、评估迁移到 Hermes 或并行维护两套配置的技术用户。
+
+## 如何使用
+
+### 前置条件
+
+- **Node.js**：推荐 Node 24，或 Node 22.19+。
+- **包管理器**：npm、pnpm 或 bun 均可；全局安装推荐 npm/pnpm。
+- **模型访问**：支持多家提供商（含 OpenAI OAuth 订阅）；建议选用你信任且已在用的旗舰模型，见 [Onboarding 文档](https://docs.openclaw.ai/start/wizard)。
+- 接入真实消息频道前，请阅读 [安全指南](https://docs.openclaw.ai/gateway/security) 与 [Gateway 暴露 runbook](https://docs.openclaw.ai/gateway/security/exposure-runbook)；默认 DM 为配对模式，陌生发件人需 `openclaw pairing approve` 批准。
+
+### 安装方式
+
+```bash
+npm install -g openclaw@latest
+# 或: pnpm add -g openclaw@latest
+
+openclaw onboard --install-daemon
+```
+
+`--install-daemon` 会安装 Gateway 用户级 daemon（launchd/systemd），保持后台运行。Windows 桌面用户可先使用原生 [Windows Hub](https://docs.openclaw.ai/platforms/windows) 完成设置。Docker、Nix 等路径见 [官方安装文档](https://docs.openclaw.ai/start/getting-started)。
+
+### 首次运行
+
+推荐 daemon 模式：
+
+```bash
+openclaw onboard --install-daemon
+openclaw gateway status
+```
+
+调试时可前台启动：
+
+```bash
+openclaw gateway stop
+openclaw gateway --port 18789 --verbose
+```
+
+与助手对话或发测试消息：
+
+```bash
+openclaw message send --target +1234567890 --message "Hello from OpenClaw"
+openclaw agent --message "Ship checklist" --thinking high
+```
+
+按 [Getting started](https://docs.openclaw.ai/start/getting-started) 完成频道授权与配对。
+
+### 验证是否成功
+
+- `openclaw gateway status` 显示 Gateway 正常运行。
+- `openclaw doctor` 无高风险 DM 策略或配置告警。
+- 在已连接频道收发消息，或 `openclaw agent --message "..."` 能收到合理回复。
+- 可选：`openclaw nodes …` 验证 iOS/Android 节点配对（若已配置）。
+
+### 常见坑 / 注意事项
+
+- Gateway 连接的是**真实消息面**，入站 DM 应视为不可信输入；公开 DM 需显式设置 `dmPolicy="open"` 并在 allowlist 中加入 `"*"`，否则保持默认配对模式。
+- 主会话工具默认在**主机全权限**运行；群聊/频道等非主会话建议配置 `agents.defaults.sandbox.mode: "non-main"` 并使用 Docker 等沙箱后端。
+- 远程暴露 Gateway 前务必阅读沙箱、Tailscale 与暴露 runbook，勿在无认证环境公网裸奔。
+- 升级后运行 `openclaw doctor` 并查阅 [Updating 指南](https://docs.openclaw.ai/install/updating)；模型与认证 failover 见 [Model failover](https://docs.openclaw.ai/concepts/model-failover)。
+- 从源码开发需使用 **pnpm workspace**（`pnpm install`、`pnpm gateway:watch`），仓库根目录 plain `npm install` 不受支持。

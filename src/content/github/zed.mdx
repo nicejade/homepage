@@ -1,0 +1,96 @@
+---
+title: Zed
+description: Rust 原生高性能代码编辑器，内置 AI Agent 与多人协作，出自 Atom 与 Tree-sitter 团队。
+repo: https://github.com/zed-industries/zed
+homepage: https://zed.dev
+repoDescription: Code at the speed of thought – Zed is a high-performance, multiplayer code editor from the creators of Atom and Tree-sitter.
+avatarUrl: https://avatars.githubusercontent.com/u/79345384?v=4
+tags:
+  - 开发工具
+  - AI 编程
+  - Agent
+language: Rust
+stars: 85597
+forks: 9157
+openIssues: 3389
+license: GPL-3.0-or-later
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 追求原生速度与实时结对编辑、想在单一 IDE 里跑 Agent 与 MCP 的开发者。
+---
+
+## 项目介绍
+
+Zed 是由 Atom 与 Tree-sitter 原班团队用 Rust 打造的下一代代码编辑器，强调极低延迟的编辑体验与内置多人协作。它不只是更快的 IDE：官方已把 Zed Agent、并行 Agent 线程、MCP 工具链与外部 Agent（ACP）整合进同一工作区，适合把日常编码、结对调试与 AI 辅助开发放在同一套界面里完成。
+
+## 核心特性
+
+- **Rust 原生性能**：GPU 加速渲染与 Tree-sitter 语法分析，大仓库滚动与跳转响应快
+- **多人协作**：频道、联系人、私密通话与共享编辑，支持远程结对
+- **Zed Agent**：内置 Agent 面板，可接 API Key、订阅、网关或本地模型，并支持 Skills、Instructions 与 MCP
+- **并行 Agent**：Threads Sidebar 中同时跑多条 Agent 或 Terminal Threads（终端内 Agent CLI）
+- **AI 编辑辅助**：Inline Assistant、Edit Prediction 与 Git 提交信息生成
+- **跨平台**：macOS、Linux、Windows 官方安装包；支持远程开发与 Dev Containers
+
+## 对用户价值
+
+Zed 解决的是「编辑器慢、协作靠屏幕共享、AI 工具散落各处」的割裂感：原生性能让日常导航与编辑更顺，协作能力让结对不必再切 Zoom + VS Code，而 Agent 与 MCP 又减少在终端、插件与 IDE 之间来回切换。对重视响应速度与工作流一体化的开发者，它是比 Electron IDE 更轻、比纯终端编辑器更完整的 GUI 方案。
+
+## 与替代方案
+
+- 相比 **VS Code**，Zed 是 Rust 原生而非 Electron，启动与滚动通常更快；协作与 Agent 为内置能力，而非依赖大量扩展拼装。
+- 相比 **Cursor** 等 AI 优先 IDE，Zed 开源可审计（GPL-3.0-or-later），模型接入路径更灵活，但生态与插件数量仍不及 VS Code 系。
+- 相比 **Neovim**，Zed 提供图形界面、内置协作与 Agent 面板；若你重度依赖 Vim 插件生态，迁移成本需评估（Zed 支持 Vim/Helix 键位模式）。
+- 若只需轻量补全、不需要完整 IDE 或协作，**Continue** 插件或 **Copilot** 可能更省事。
+
+## 适应人群
+
+- 对大仓库编辑延迟敏感、希望换用原生编辑器的开发者。
+- 需要实时结对或频道协作的小团队与远程工程师。
+- 想在单一 IDE 内配置 Agent、MCP 与并行任务流的 AI 编程用户。
+
+## 如何使用
+
+### 前置条件
+
+- **macOS** 12+（Monterey 及以上协作功能更完整；旧版 macOS 屏幕共享能力受限）
+- **Linux** 或 **Windows** 满足 [官方平台要求](https://zed.dev/docs/linux)（Linux 需合适 GPU 驱动）
+- 使用 AI 功能时需准备模型 API Key、订阅或本地模型端点（见 [AI Quick Start](https://zed.dev/docs/ai/quick-start)）
+
+### 安装方式
+
+- **macOS（Homebrew）**：
+
+```sh
+brew install --cask zed
+```
+
+- **Linux（官方脚本）**：
+
+```sh
+curl -f https://zed.dev/install.sh | sh
+```
+
+- **Windows（winget）**：
+
+```sh
+winget install -e --id ZedIndustries.Zed
+```
+
+- 也可从 [zed.dev/download](https://zed.dev/download) 直接下载安装包；各平台包管理器说明见 [安装文档](https://zed.dev/docs/installation)。
+
+### 首次运行
+
+启动 Zed 后打开一个本地项目，熟悉 Command Palette 与 Project Panel。若需 AI，在设置中配置 [LLM Provider](https://zed.dev/docs/ai/llm-providers)，打开 Agent Panel 发起一次小任务（如解释文件或生成测试）。
+
+### 验证是否成功
+
+确认编辑器能正常索引项目、LSP 诊断可用；若启用 AI，Agent 能读取上下文并返回 diff 或终端输出。协作功能需登录 Zed 账户后邀请联系人或加入频道验证。
+
+### 常见坑 / 注意事项
+
+- 源码以 **GPL-3.0-or-later** 为主（部分组件 Apache-2.0）；商业分发或二次开发需留意许可边界。
+- AI 与 Zed 托管模型涉及账户、计费与数据策略，部署前阅读 [AI Privacy](https://zed.dev/docs/ai/privacy-and-security)。
+- 从 VS Code 迁移可参考 [官方迁移指南](https://zed.dev/docs/migrate/vs-code)；扩展生态仍在成长，关键插件缺失时需提前核对。
+- 自编译见仓库 `docs/src/development/`，依赖 Rust 工具链与平台特定构建步骤，门槛高于直接安装包。

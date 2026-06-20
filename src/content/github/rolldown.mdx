@@ -1,0 +1,126 @@
+---
+title: Rolldown
+description: 用 Rust 编写的 JS/TS 打包器，Rollup 兼容 API，计划作为 Vite 下一代底层引擎，主打极致构建速度。
+repo: https://github.com/rolldown/rolldown
+homepage: https://rolldown.rs
+repoDescription: Fast Rust bundler for JavaScript/TypeScript with Rollup-compatible API.
+avatarUrl: https://avatars.githubusercontent.com/u/94954945?v=4
+tags:
+  - 开发工具
+  - 工作流
+  - CLI
+language: Rust
+stars: 13784
+forks: 793
+openIssues: 296
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 前端构建提速、从 Rollup/esbuild 迁移评估，或关注 Vite 新引擎路线的团队。
+---
+
+## 项目介绍
+
+Rolldown 是由 VoidZero 团队用 Rust 编写的 JavaScript/TypeScript 打包器，目标是成为 [Vite](https://vitejs.dev/) 未来的默认底层打包引擎。它在 API 与插件体系上保持与 Rollup 兼容，但在功能范围上更接近 esbuild，并依托 Rust 与 [oxc](https://github.com/oxc-project/oxc) 生态追求更高的构建吞吐。对多数应用而言，官方更推荐通过 Vite 使用 Rolldown，以获得完整的开发服务器、HMR 与生产构建体验。
+
+## 核心特性
+
+- **Rollup 兼容 API**：配置、插件接口与 JavaScript API 与 Rollup 对齐，便于迁移现有 Rollup 插件与构建脚本
+- **Rust 高性能核心**：解析、解析依赖与 sourcemap 等底层能力依托 oxc，面向大规模代码库优化构建速度
+- **CLI 与配置文件**：支持 `rolldown` 命令行，以及 `.js` / `.ts` 等格式的 `rolldown.config.*`，推荐 `defineConfig` 获得类型提示
+- **内置能力与插件生态**：许多场景无需额外插件；同时兼容大部分 Rollup 社区插件，并列出 Vite Plugin Registry 中的社区方案
+- **Watch 与多构建配置**：提供与 Rollup 兼容的 `watch` API，并支持在同一配置文件中并行执行多组构建
+- **跨平台预编译二进制**：为主流 macOS、Linux、Windows 架构分发原生 binding；冷门平台可回退 Wasm 或从源码构建
+
+## 对用户价值
+
+前端项目在依赖增多后，Rollup 构建往往成为 CI 与本地开发的瓶颈。Rolldown 在保持 Rollup 心智模型的前提下，用 Rust 重写打包热路径，让团队在不推翻现有插件投资的情况下评估更快的构建方案。若你已在用 Vite，关注 Rolldown 等于提前对齐下一代工具链；若你维护库或定制构建流水线，也可单独安装 `rolldown` 做对比基准或渐进迁移。
+
+## 与替代方案
+
+- 相比 [Rollup](https://github.com/rollup/rollup)，Rolldown 强调**构建性能**与 Vite 生态整合，API 兼容但实现与发布节奏独立；复杂 Rollup 插件在边缘场景下仍需实测兼容性。
+- 相比 [esbuild](https://github.com/evanw/esbuild)，Rolldown 功能范围更接近「完整打包器」而非仅转译与压缩，并保留 Rollup 式插件与多输出配置，适合需要细粒度打包控制的团队。
+- 相比直接选用 [Vite](https://github.com/vitejs/vite) 内置的现有打包后端，单独使用 Rolldown 更适合**库打包、定制 CLI 流水线或性能对比**；完整应用开发仍建议按官方文档通过 Vite 接入。库场景还可关注同生态的 [tsdown](https://tsdown.dev/)。
+
+## 适应人群
+
+- 使用 Vite 或 Rollup，希望提前了解并试验下一代打包引擎的前端工程师。
+- 负责 CI 构建耗时优化、需要在 Rollup 插件资产与构建速度之间权衡的基础设施 / 平台同学。
+- 维护 npm 库或内部工具链，需要 Rollup 兼容 API 且对 Rust 工具链性能感兴趣的技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 环境，以及 npm、pnpm、yarn 或 bun 等包管理器之一。
+- 确认目标平台在[预编译二进制支持列表](https://rolldown.rs/guide/getting-started)内；若为冷门架构，需准备 Wasm 回退或源码编译方案。
+- 若计划用于生产应用而非实验，建议对照官方文档确认当前发布渠道（`latest` 1.x 或 `pkg.pr.new` 预览版）的稳定性预期。
+
+### 安装方式
+
+在项目目录安装为开发依赖：
+
+```bash
+pnpm add -D rolldown
+```
+
+或使用 npm：
+
+```bash
+npm install -D rolldown
+```
+
+### 首次运行
+
+验证 CLI 是否可用：
+
+```bash
+./node_modules/.bin/rolldown --version
+```
+
+创建最小示例并打包：
+
+```bash
+mkdir -p src
+printf "export function hello() { console.log('Hello Rolldown!'); }\n" > src/hello.js
+printf "import { hello } from './hello.js';\nhello();\n" > src/main.js
+./node_modules/.bin/rolldown src/main.js --file bundle.js
+node bundle.js
+```
+
+更推荐在 `package.json` 中配置脚本，并使用配置文件：
+
+```javascript
+// rolldown.config.js
+import { defineConfig } from 'rolldown';
+
+export default defineConfig({
+  input: 'src/main.js',
+  output: {
+    file: 'bundle.js',
+  },
+});
+```
+
+```json
+{
+  "type": "module",
+  "scripts": {
+    "build": "rolldown -c"
+  }
+}
+```
+
+### 验证是否成功
+
+- `rolldown --version` 输出版本号且无模块加载错误。
+- `pnpm run build`（或等价命令）生成预期产物（如 `bundle.js`），`node bundle.js` 行为符合源码逻辑。
+- 若使用 Rollup 插件，在目标配置上跑一遍完整构建并检查输出格式、external 与 sourcemap 是否符合预期。
+
+### 常见坑 / 注意事项
+
+- **平台二进制**：无对应预编译包时 Rolldown 会尝试回退 Wasm；也可设置 `NAPI_RS_FORCE_WASI=error` 强制 Wasm，或在 yarn/pnpm 中配置 `supportedArchitectures` 以安装 Wasm binding。
+- **插件兼容性**：虽声明 Rollup 插件 API 兼容，但并非所有社区插件在 Rolldown 上均已验证；迁移前应针对你的配置做回归构建。
+- **Watch API 差异**：`watch` 的 `close()` 返回 Promise，与 Rollup 行为略有不同，集成长时间监听流程时需注意异步收尾。
+- **库打包场景**：应用开发优先走 Vite；若目标是发布 npm 库，官方文档指向 [tsdown](https://tsdown.dev/) 等专用方案，避免误用 CLI 承担不适合的职责。

@@ -1,0 +1,134 @@
+---
+title: Pinia
+description: Vue 官方推荐的状态管理库，以 Store 为核心提供类型安全、模块化、轻量的全局状态方案。
+repo: https://github.com/vuejs/pinia
+homepage: https://pinia.vuejs.org
+repoDescription: "🍍 Intuitive, type safe, light and flexible Store for Vue using the composition api with DevTools support"
+avatarUrl: https://avatars.githubusercontent.com/u/6128107?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: TypeScript
+stars: 14615
+forks: 1185
+openIssues: 28
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: Vue 3 / Nuxt 应用中管理跨组件共享状态、从 Vuex 迁移或选型全局状态方案的前端团队。
+---
+
+## 项目介绍
+
+Pinia 是 [Vue.js 官方](https://vuejs.org/guide/scaling-up/state-management.html#pinia) 推荐的状态管理库，由 Vue Router 作者维护，定位为 Vuex 的继任者。它以独立的 Store 为单位组织状态，API 直观、TypeScript 友好，并完整支持 Vue DevTools。当前主分支面向 Vue 3；维护 Vue 2 项目请使用仓库 [v2 分支](https://github.com/vuejs/pinia/tree/v2)。Pinia 同时提供 [Nuxt 模块](https://pinia.vuejs.org/ssr/nuxt.html)，可在 SSR 场景下开箱集成。
+
+## 核心特性
+
+- **直观 API**：通过 `defineStore` 定义 Store，state、getters、actions 结构清晰，心智负担低于传统 Vuex 的 mutations 与 modules 嵌套
+- **类型安全**：TypeScript 一等公民，Store 定义与 `storeToRefs` 等工具在 IDE 中可获得完整类型推导
+- **模块化设计**：每个 Store 独立文件、按需导入，通过 [组合多个 Store](https://pinia.vuejs.org/cookbook/composing-stores.html) 替代动态模块，兼顾灵活与类型安全
+- **DevTools 集成**：支持 Vue DevTools 调试时间旅行、状态快照与 action 追踪
+- **轻量可扩展**：包体积极小，同时支持 Options API 与 Composition API；提供插件机制扩展持久化、日志等能力
+
+## 对用户价值
+
+组件间共享用户会话、购物车、主题偏好等状态时，仅靠 props 逐层传递或事件总线很快变得难以维护。Pinia 把全局状态收敛到命名清晰的 Store，组件通过 `useXxxStore()` 按需订阅，避免「上帝对象」式单例。相比 Vuex，省去 mutations 样板代码，actions 可直接异步请求并修改 state；相比在组件内用 `ref`/`reactive` 手写全局单例，Pinia 提供 DevTools、SSR 与 Nuxt 官方集成，更适合中大型 Vue 应用。
+
+## 与替代方案
+
+- 相比 [Vuex](https://vuex.vuejs.org/)，Pinia 是 Vue 官方文档明确推荐的继任方案：无 mutations、模块无需嵌套注册，TypeScript 体验更好；Vuex 4 仍可用于 Vue 3 遗留项目，但新项目应优先 Pinia。
+- 相比 [Redux](https://redux.js.org/) / [Zustand](https://github.com/pmndrs/zustand)（React 生态），Pinia 深度绑定 Vue 响应式系统，与 `setup()`、`computed` 自然协作；跨框架选型时勿强行类比，应按技术栈选择。
+- 相比组件内 [provide/inject](https://vuejs.org/guide/components/provide-inject.html) 或 Composable 单例，Pinia 适合**跨路由、跨深层组件树**的共享状态；仅限父子或局部子树的轻量状态，可能不必引入全局 Store。
+- 边界说明：Pinia 不提供动态模块（出于类型安全考虑）；需要「多实例」场景时，应创建多个独立 Store 或在 action 中传参，而非复刻 Vuex 动态 register 模式。
+
+## 适应人群
+
+- 使用 Vue 3 或 Nuxt 3 构建中后台、电商、SaaS 等需要跨页面共享状态的前端工程师。
+- 维护 Vuex 2/3/4 遗留代码库、计划迁移到官方推荐方案的技术负责人。
+- 希望全局状态具备 TypeScript 推导、DevTools 调试与 SSR 友好集成的 Vue 全栈开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 已具备 Vue 3 项目（Vite、Vue CLI 或 `create-vue` 脚手架），或 Nuxt 3 应用。
+- Node.js 与 npm、pnpm 或 Yarn 包管理器。
+- 浏览器安装 [Vue DevTools](https://devtools.vuejs.org/) 以便调试 Store（可选但推荐）。
+
+### 安装方式
+
+在现有 Vue 3 项目中安装：
+
+```bash
+npm install pinia
+```
+
+使用 pnpm 或 Yarn 时，将 `npm install` 替换为 `pnpm add pinia` 或 `yarn add pinia`。
+
+**Nuxt 3** 请按[官方 SSR 文档](https://pinia.vuejs.org/ssr/nuxt.html)配置 `@pinia/nuxt` 模块，而非仅手动 `app.use`。
+
+**新建项目** 可在 `npm create vue@latest` 向导中勾选 Pinia，脚手架会生成 `stores/` 目录与示例 Store。
+
+### 首次运行
+
+在应用入口注册 Pinia 插件：
+
+```js
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+
+const pinia = createPinia()
+const app = createApp(App)
+
+app.use(pinia)
+app.mount('#app')
+```
+
+创建第一个 Store（建议放在 `src/stores/`）：
+
+```ts
+import { defineStore } from 'pinia'
+
+export const useCounterStore = defineStore('counter', {
+  state: () => ({ count: 0 }),
+  getters: {
+    double: (state) => state.count * 2,
+  },
+  actions: {
+    increment() {
+      this.count++
+    },
+  },
+})
+```
+
+在组件中使用：
+
+```ts
+import { useCounterStore } from '@/stores/counter'
+import { storeToRefs } from 'pinia'
+
+const store = useCounterStore()
+const { count, double } = storeToRefs(store)
+```
+
+也可在 [StackBlitz Vue 3 示例](https://stackblitz.com/github/piniajs/example-vue-3-vite) 或 [Nuxt 3 示例](https://stackblitz.com/github/piniajs/example-nuxt-3) 中在线体验，无需本地安装。
+
+### 验证是否成功
+
+- 应用启动无控制台报错，`app.use(pinia)` 后页面正常渲染。
+- 在组件中调用 `useCounterStore()` 并执行 `increment()`，界面与 `count` 同步更新。
+- 打开 Vue DevTools 的 Pinia 面板，可看到 Store 名称、state 与 action 调用记录。
+- TypeScript 项目中，`storeToRefs` 解构的字段应具备正确类型提示。
+
+### 常见坑 / 注意事项
+
+- **Vue 版本**：主分支仅支持 Vue 3；Vue 2 项目请锁定 [v2 分支](https://github.com/vuejs/pinia/tree/v2) 对应版本，勿混用。
+- **响应式解构**：直接解构 Store 会丢失响应式，应使用 `storeToRefs()`；actions 可直接从 store 实例解构。
+- **SSR / Nuxt**：服务端渲染需按[官方 Nuxt 指南](https://pinia.vuejs.org/ssr/nuxt.html)配置，避免 hydration 不一致；勿在服务端随意访问仅客户端存在的 API。
+- **Setup Store 写法**：除 Options 式 `defineStore` 外，还支持 Setup 函数风格（类似 Composition API）；团队应统一一种风格，避免混用增加阅读成本。
+- **从 Vuex 迁移**：对照 [Pinia 文档迁移章节](https://pinia.vuejs.org/cookbook/migration-vuex.html) 逐步替换 modules/mutations；大型项目建议按 Store 边界分批迁移而非一次性重写。

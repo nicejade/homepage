@@ -1,0 +1,117 @@
+---
+title: Rust
+description: 系统级编程语言，以所有权模型实现内存与线程安全，兼顾高性能与可靠交付。
+repo: https://github.com/rust-lang/rust
+homepage: https://www.rust-lang.org
+repoDescription: "Empowering everyone to build reliable and efficient software."
+avatarUrl: https://avatars.githubusercontent.com/u/5430905?v=4
+tags:
+  - 开发工具
+  - 系统编程
+  - 后端
+language: Rust
+stars: 113976
+forks: 14997
+openIssues: 12471
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 系统编程选型、内存安全与零成本抽象权衡、嵌入式/WebAssembly/基础设施团队的技术栈评估参考。
+---
+
+## 项目介绍
+
+Rust 是由 [Rust Foundation](https://rustfoundation.org/) 与社区维护的开源系统级编程语言，目标是在不牺牲性能的前提下，通过所有权（ownership）与借用检查（borrow checker）在编译期消除内存与数据竞争问题。本仓库为 Rust **编译器（rustc）、标准库与官方文档** 的主源码库；日常开发通常通过 [rustup](https://rustup.rs/) 安装工具链，学习路径与发布节奏以 [rust-lang.org](https://www.rust-lang.org/) 为准。
+
+## 核心特性
+
+- **高性能与低开销**：零成本抽象、无 GC，适合关键服务、嵌入式与需与其他语言 FFI 集成的场景
+- **编译期内存与线程安全**：丰富类型系统 + 所有权模型，在编译期捕获空指针、悬垂引用与数据竞争
+- **完整工具链**：包管理与构建工具 [Cargo](https://github.com/rust-lang/cargo)、格式化 [rustfmt](https://github.com/rust-lang/rustfmt)、静态分析 [Clippy](https://github.com/rust-lang/rust-clippy)、IDE 支持 [rust-analyzer](https://github.com/rust-lang/rust-analyzer)
+- **稳定发布节奏**：6 周一个稳定版（Stable），Beta/Nightly 通道供尝鲜与贡献；Edition 机制平滑语言演进
+- **开放治理**：RFC 流程透明，[rustc-dev-guide](https://rustc-dev-guide.rust-lang.org/) 详述编译器架构与贡献路径
+
+## 对用户价值
+
+若你需要在 C/C++ 的性能区间内获得更强的内存安全保证，或构建 CLI、Web 后端、区块链节点、浏览器引擎、游戏引擎与嵌入式固件，Rust 是当前主流且生态快速增长的选项。Cargo 与 crates.io 让依赖管理与跨平台构建成本极低；编译器诊断与文档质量高，降低系统编程入门门槛。代价是学习曲线（所有权与生命周期）与部分场景下编译时间；团队需预留 onboarding 与 CI 缓存策略。
+
+## 与替代方案
+
+- 相比 **C/C++**，Rust 在默认路径上消除大量内存安全类 bug，标准库与包生态更现代；C/C++ 在遗留代码库、特定硬件 SDK 与极致底层控制上仍占主导，迁移存量项目成本较高。
+- 相比 **[Go](https://go.dev/)**，Rust 提供更细粒度的性能与内存控制、无 GC 停顿，适合系统组件与嵌入式；Go 上手更快、并发模型简单，适合网络服务与快速迭代的云原生业务。
+- 相比 **[Zig](https://ziglang.org/)**，Rust 生态（crates.io、async 运行时、WebAssembly 工具链）更成熟；Zig 强调 C 互操作与编译器简洁，适合追求极简工具链的 greenfield 系统项目。
+- 相比 **Java / C#**，Rust 无运行时与 GC，二进制部署轻量，适合基础设施与性能敏感组件；企业级框架、ORM 与托管生态仍更偏向 JVM / .NET 栈。
+- 边界说明：本仓库用于**贡献 Rust 编译器/标准库**或从源码构建；应用开发安装 rustup 即可，无需 clone 本 repo。
+
+## 适应人群
+
+- 构建 CLI、API 服务、区块链节点、数据库引擎或 WebAssembly 模块，需要性能与安全兼顾的后端与系统工程师。
+- 维护嵌入式、IoT、操作系统组件或需与 C 库 FFI 集成的底层开发者。
+- 希望深入编译器、LLVM 后端、语言设计或参与 Rust 核心贡献的研究者与高级工程师（需阅读 [CONTRIBUTING.md](https://github.com/rust-lang/rust/blob/master/CONTRIBUTING.md) 与 rustc-dev-guide）。
+
+## 如何使用
+
+### 前置条件
+
+- 操作系统：macOS、Windows、Linux 及主流 Unix 变体（完整列表见 [rustup 文档](https://rustup.rs/)）。
+- 日常开发推荐 **Stable** 通道；Nightly 仅用于尝鲜语言特性或编译器贡献。
+- 从源码构建 rustc 需大量磁盘空间、C/C++ 编译工具链与数小时编译时间，复杂度远高于 rustup 安装（见 [INSTALL.md](https://github.com/rust-lang/rust/blob/master/INSTALL.md)）。
+
+### 安装方式
+
+**方式一：rustup（推荐大多数用户）**
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+按提示选择默认安装（Stable）。Windows 亦可从 [rustup.rs](https://rustup.rs/) 下载 `rustup-init.exe`。
+
+**方式二：包管理器（部分平台）**
+
+```bash
+# Homebrew（macOS / Linux）
+brew install rust
+```
+
+```bash
+# Windows（winget）
+winget install Rustlang.Rustup
+```
+
+更多平台安装选项见 [The Book — Installation](https://doc.rust-lang.org/book/ch01-01-installation.html)。
+
+### 首次运行
+
+```bash
+rustc --version
+cargo --version
+```
+
+创建并运行首个项目：
+
+```bash
+cargo new hello_rust --bin
+cd hello_rust
+cargo run
+```
+
+终端应输出 `Hello, world!`。
+
+### 验证是否成功
+
+- `rustc --version` 与 `cargo --version` 输出版本号，无 PATH 或权限错误。
+- `cargo run` 在新建项目中成功编译并打印 `Hello, world!`。
+- 运行 `rustup show` 确认 active toolchain 为 `stable`（或你预期的通道）。
+- 查阅 [doc.rust-lang.org](https://doc.rust-lang.org/) 确认本地文档版本与工具链一致（`rustup doc` 可打开本地 Book）。
+
+### 常见坑 / 注意事项
+
+- **Stable vs Nightly**：生产与团队协作应锁定 Stable；依赖 Nightly 特性的 crate 会导致工具链不一致，CI 需显式 `rustup override`。
+- **源码仓库 vs 日常使用**：clone 本 repo 不等于「安装 Rust」；贡献编译器需遵循 [INSTALL.md](https://github.com/rust-lang/rust/blob/master/INSTALL.md)，流程复杂且耗资源。
+- **编译时间与 CI**：首次 `cargo build` 与依赖较多时编译较慢，建议启用 [sccache](https://github.com/mozilla/sccache) 或 CI 缓存 `~/.cargo/registry` 与 `target/`。
+- **所有权学习曲线**：借用检查报错是常态，善用编译器提示与 [Rust By Example](https://doc.rust-lang.org/rust-by-example/)；避免过早使用 `unsafe` 绕过检查。
+- **中国大陆网络**：crates.io 下载缓慢可配置 [镜像源](https://rustwiki.org/zh-CN/development-guide/starting/Developing.html#china-cratesio-index)（如 rsproxy、ustc）；rustup 组件更新亦可切换镜像。
+- **许可证**：Rust 以 MIT / Apache-2.0 双许可分发（见仓库 LICENSE 文件）；商标使用须遵循 [Rust Foundation 商标政策](https://rustfoundation.org/policy/rust-trademark-policy/)。

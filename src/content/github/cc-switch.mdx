@@ -1,0 +1,112 @@
+---
+title: "CC Switch"
+description: 跨平台桌面工具，一键切换 Claude Code、Codex、Gemini CLI 等七种 AI 编程客户端的供应商与 MCP 配置。
+repo: "https://github.com/farion1231/cc-switch"
+homepage: "https://ccswitch.io"
+repoDescription: "A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI & Hermes Agent. Only official website: ccswitch.io"
+avatarUrl: "https://avatars.githubusercontent.com/u/44939412?v=4"
+tags:
+  - 开发工具
+  - AI 编程
+  - CLI
+language: "Rust"
+stars: 104626
+forks: 6915
+openIssues: 1509
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 同时用多款 AI 编程 CLI、厌倦手写 JSON 与 .env 的配置党与多账号切换用户。
+---
+
+## 项目介绍
+
+[CC Switch](https://ccswitch.io) 是一款基于 Tauri 2 的跨平台桌面应用，把 Claude Code、Claude Desktop、Codex、Gemini CLI、OpenCode、OpenClaw 与 Hermes 七种 AI 编程工具的供应商配置收进同一界面。你不必再分别编辑 JSON、TOML 或 `.env`，也不必为切换 API 中继或官方账号而手动改多处文件；托盘菜单可秒切供应商，SQLite 原子写入与自动备份降低配置损坏风险。项目 MIT 开源，macOS 版本已通过 Apple 公证。
+
+## 核心特性
+
+- **七种工具、五十余预设**：覆盖 Claude Code / Desktop、Codex、Gemini CLI、OpenCode、OpenClaw、Hermes；含 AWS Bedrock、NVIDIA NIM 与社区中继，一键导入 API Key
+- **通用供应商**：一份配置可同时同步到 Claude Code、Codex 与 Gemini CLI
+- **统一 MCP、Prompts 与 Skills**：单面板管理多应用的 MCP 服务器、CLAUDE.md / AGENTS.md / GEMINI.md 提示词，以及从 GitHub 或 ZIP 一键安装的技能包
+- **本地代理与故障转移**：格式转换、熔断、健康检查与按应用/供应商粒度的代理接管
+- **托盘快切与云同步**：系统托盘即时切换；支持 Dropbox、OneDrive、iCloud、WebDAV 跨设备同步供应商数据
+- **用量与成本看板**：按模型自定义单价，追踪请求、Token 与花费趋势
+- **会话与工作区**：浏览、搜索并恢复多源对话历史；OpenClaw 场景下可编辑 AGENTS.md、SOUL.md 等代理文件
+
+## 对用户价值
+
+现代 AI 编程往往同时使用多款 CLI，但每套工具的配置格式、MCP 目录与 Skills 路径互不兼容，换供应商意味着重复劳动，还容易漏改某处导致「明明切了 Key 却仍走旧路由」。CC Switch 把「加供应商 → 启用 → 托盘切换 → MCP/Skills 同步」收成可视化流程：首次启动可导入现有 CLI 配置为默认供应商，切换后除 Claude Code 支持热切换外，其余工具重启终端即可生效。对个人开发者，它降低多账号、多中继试错成本；对重度用户，统一 MCP 与 Skills 面板避免在七个工具间各维护一套清单。
+
+## 与替代方案
+
+- 相比**手写配置文件**（直接改 `~/.claude/settings.json`、Codex TOML、Gemini `.env` 等），CC Switch 提供预设库、导入导出、共享配置片段与备份，并减少误删导致 CLI 不可用的风险（始终保留至少一个活跃供应商）。
+- 相比 **Continue、Cline** 等**内置模型路由的 IDE/终端 Agent**，CC Switch 是**配置管理层**而非编码助手本身；适合已选定 Claude Code / Codex 等宿主，只想集中管 Key、端点与中继的场景。
+- 相比各 CLI **自带的官方登录 OAuth**，CC Switch 便于在「官方预设」与「第三方中继预设」之间来回切换，Codex 还支持多个 Plus/Team 官方账号切换；但若你只需单一官方订阅且从不换供应商，直接官方登录更轻量。
+- 与 **OpenClaw、Superpowers** 等可组合：CC Switch 管供应商与 MCP/Skills 同步，编排与工作流仍由各自工具承担。
+
+## 适应人群
+
+- 同时在 Claude Code、Codex、Gemini CLI 等多款 AI 编程 CLI 间切换的个人开发者。
+- 使用 API 中继、Bedrock、NIM 或自建网关，需要快速 A/B 供应商与监控用量的效率型用户。
+- 希望用统一面板管理 MCP 服务器、Prompts 与 Skills，并跨设备同步配置的重度 AI 编程用户。
+
+## 如何使用
+
+### 前置条件
+
+- **Windows**：Windows 10 及以上
+- **macOS**：macOS 12 (Monterey) 及以上
+- **Linux**：Ubuntu 22.04+ / Debian 11+ / Fedora 34+ 等主流发行版
+- 已安装至少一种受支持工具（如 [Claude Code](https://docs.anthropic.com/en/docs/claude-code)、Codex CLI、Gemini CLI 等）；切换供应商后除 Claude Code 外通常需**重启终端或对应 CLI**
+
+### 安装方式
+
+**macOS（推荐 Homebrew）**
+
+```bash
+brew install --cask cc-switch
+```
+
+更新：
+
+```bash
+brew upgrade --cask cc-switch
+```
+
+**macOS 手动安装**：从 [Releases](https://github.com/farion1231/cc-switch/releases) 下载 `.dmg`（推荐）或 `.zip`。
+
+**Windows**：从 Releases 下载 `CC-Switch-v{version}-Windows.msi` 安装包，或 `Windows-Portable.zip` 便携版。
+
+**Linux**：从 Releases 选择 `.deb`（Debian/Ubuntu）、`.rpm`（Fedora/RHEL）或 `.AppImage`（通用）。
+
+**Arch Linux**：
+
+```bash
+paru -S cc-switch-bin
+```
+
+### 首次运行
+
+1. 启动 CC Switch；首次打开可**导入现有 CLI 配置**作为默认供应商。
+2. 点击「添加供应商」→ 选择预设或自定义 API Key / 端点 → 保存。
+3. 在主界面选中供应商并点击「启用」，或从**系统托盘**直接点击供应商名称完成快切。
+4. 重启终端或对应 CLI 使配置生效（Claude Code 可热切换，无需重启）。
+5. 可选：在「MCP」「Prompts」「Skills」面板添加服务器、提示词预设或从 GitHub 安装技能包。
+
+### 验证是否成功
+
+- 托盘或主界面显示当前启用的供应商名称。
+- 打开对应 CLI（如 `claude`），确认请求走预期模型或端点。
+- 检查数据目录 `~/.cc-switch/cc-switch.db` 与 `~/.cc-switch/backups/` 是否已创建（表示数据库与自动备份正常）。
+- 在用量看板中发起一次请求，确认统计有记录（若已配置定价）。
+
+### 常见坑 / 注意事项
+
+- **切换后未生效**：多数工具需重启终端；仅 Claude Code 支持供应商热切换。
+- **插件配置丢失**：使用「编辑供应商 → 共享配置面板 → 从当前供应商提取」保存通用片段；新建供应商时默认勾选「写入共享配置」。
+- **无法删除当前活跃供应商**：设计为至少保留一份配置，避免对应 CLI 完全不可用；不常用的工具可在设置中隐藏。
+- **回到官方登录**：从预设添加「官方登录」供应商并切换，再执行对应 CLI 的 Log out / Log in 或 OAuth 流程。
+- **数据位置**：数据库 `~/.cc-switch/cc-switch.db`，本地设置 `settings.json`，Skills 默认符号链接到各应用目录；升级前可查看 [CHANGELOG](https://github.com/farion1231/cc-switch/blob/main/CHANGELOG.md)。
+- **Flatpak**：官方 Release 不含 Flatpak 包，需自行从 `.deb` 构建（见仓库 `flatpak/README.md`）。

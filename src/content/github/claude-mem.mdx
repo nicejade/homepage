@@ -1,0 +1,114 @@
+---
+title: "claude-mem"
+description: 跨会话持久记忆插件，自动捕获代理行为、AI 压缩摘要并注入后续上下文。
+repo: "https://github.com/thedotmack/claude-mem"
+homepage: "https://claude-mem.ai"
+repoDescription: "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More"
+avatarUrl: "https://avatars.githubusercontent.com/u/683968?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - 知识管理
+language: "JavaScript"
+stars: 83233
+forks: 7203
+openIssues: 187
+contributors: 1
+license: "Apache-2.0"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: Claude Code / OpenClaw 长期项目里，需要跨会话记住决策与上下文的开发者。
+---
+
+## 项目介绍
+
+claude-mem 是由 Alex Newman（thedotmack）维护的**跨会话持久记忆系统**，最初为 Claude Code 设计，现已扩展到 OpenClaw、Codex、Gemini、Hermes、Copilot、OpenCode 等多种 Agent 宿主。它通过生命周期钩子自动捕获工具调用与观察记录，用 AI 生成语义摘要并压缩存储，在新会话启动时按「渐进式披露」策略注入相关上下文，让代理在会话结束或重连后仍能延续对项目的认知。
+
+## 核心特性
+
+- **持久化记忆**：上下文跨会话保留，无需手动复制粘贴历史对话
+- **渐进式披露**：分层检索记忆并展示 token 成本，避免一次性灌入过多上下文
+- **mem-search 技能与 MCP 搜索**：支持自然语言查询项目历史，三层工作流（search → timeline → get_observations）控制 token 开销
+- **Web 查看器**：`http://localhost:37777` 实时浏览记忆流、引用观察 ID、切换稳定版与 Beta 渠道
+- **隐私控制**：用 `<private>` 标签排除敏感内容，不写入本地存储
+- **混合检索架构**：SQLite + FTS5 关键词搜索，配合 Chroma 向量库做语义检索
+- **多宿主安装**：支持 `npx claude-mem install`、Claude Code 插件市场、Gemini CLI / OpenCode 专用参数，以及 OpenClaw 一键脚本
+
+## 对用户价值
+
+AI 编程助手每次开新会话都会「失忆」，重复解释架构决策、踩过的坑和进行中的任务。claude-mem 在后台自动记录并压缩这些观察，下次会话启动时把真正相关的片段注入上下文，减少重复对齐成本。对个人开发者，它相当于给 Agent 装上项目级长期记忆；对团队，本地 SQLite 存储便于审计与隐私控制，不必把完整对话历史交给第三方云服务。
+
+## 与替代方案
+
+- 相比在仓库里手写 `CLAUDE.md` / Cursor Rules 等静态上下文，claude-mem 提供**动态、可检索**的会话记忆，能覆盖工具调用细节与跨天工作轨迹，而非仅描述项目约定。
+- 相比 [Mem0](https://github.com/mem0ai/mem0) 等通用 Agent 记忆框架，claude-mem 深度绑定 Claude Code 钩子与 Worker 服务，开箱即用；若你需要跨语言 SDK、云端托管或多租户记忆池，Mem0 等方案更灵活，但集成成本更高。
+- 相比依赖 IDE 内置聊天历史或手动导出对话，本方案通过**压缩摘要 + 向量搜索**控制 token 预算，并支持引用 ID 回溯原始观察；代价是需要本地运行 Worker（端口 37777）并配置 AI 模型用于摘要生成。
+
+## 适应人群
+
+- 长期使用 Claude Code、Cursor 或 OpenClaw，在同一代码库上跨多天推进功能的开发者。
+- 希望 Agent 记住「上次改了什么、为什么这样设计」而不仅是 README 内容的效率型用户。
+- 对数据出境敏感、倾向本地 SQLite 存储与 `<private>` 隐私标签的团队或个人。
+
+## 如何使用
+
+### 前置条件
+
+- **Node.js ≥ 20.0.0**（Windows 需确保 `npm` 在 PATH 中）
+- 目标 Agent 宿主：Claude Code（插件支持）、Gemini CLI、OpenCode，或 OpenClaw Gateway
+- Bun、uv 会在安装时自动拉取（Worker 与向量搜索依赖）；SQLite 已捆绑
+- 摘要生成需配置 AI 提供商（安装向导或 `~/.claude-mem/settings.json` 中设置）
+
+### 安装方式
+
+**Claude Code（推荐）**
+
+```bash
+npx claude-mem install
+```
+
+或在 Claude Code 会话内：
+
+```text
+/plugin marketplace add thedotmack/claude-mem
+/plugin install claude-mem
+```
+
+**Gemini CLI**
+
+```bash
+npx claude-mem install --ide gemini-cli
+```
+
+**OpenCode**
+
+```bash
+npx claude-mem install --ide opencode
+```
+
+**OpenClaw Gateway**
+
+```bash
+curl -fsSL https://install.cmem.ai/openclaw.sh | bash
+```
+
+> 注意：`npm install -g claude-mem` 仅安装 SDK 库，**不会**注册插件钩子或启动 Worker；请始终使用 `npx claude-mem install` 或 `/plugin` 命令。
+
+### 首次运行
+
+安装后重启 Agent 宿主。Worker 默认监听 `http://localhost:37777`，可在 Web 查看器中确认记忆流是否正常写入。中文用户可在 `~/.claude-mem/settings.json` 设置 `"CLAUDE_MEM_MODE": "code--zh"` 后重启 Claude Code。
+
+### 验证是否成功
+
+- 完成一次含工具调用的会话，结束后再开新会话，应能看到先前上下文的自动注入
+- 浏览器访问 `http://localhost:37777`，确认会话与观察记录出现
+- 在对话中询问「之前做过什么」，mem-search 技能或 MCP `search` 工具应返回带 ID 的历史索引
+
+### 常见坑 / 注意事项
+
+- 全局 `npm install -g` 不等于完整安装；缺少 Worker 时记忆不会持久化。
+- Worker 占用本地端口 37777，多项目或 CI 环境需注意端口冲突与进程管理。
+- 敏感内容务必用 `<private>` 包裹，避免写入本地数据库。
+- Beta 渠道（如 Endless Mode）可在 Web 查看器 Settings 中切换，稳定性不如主版本。
+- 故障排查可让 Claude 调用内置 troubleshoot 技能，或查阅[官方故障排除文档](https://docs.claude-mem.ai/troubleshooting)；Bug 报告可运行 `npm run bug-report`（在插件目录下）。

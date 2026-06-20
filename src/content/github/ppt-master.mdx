@@ -1,0 +1,125 @@
+---
+title: "ppt-master"
+description: "用 AI 从任意文档生成原生可编辑 PowerPoint，支持模板复用、动画与旁白。"
+repo: "https://github.com/hugohe3/ppt-master"
+homepage: "https://hugohe3.github.io/ppt-master/"
+repoDescription: "AI generates a real, editable PowerPoint from any document — native shapes & animations, speaker notes voiced as audio narration, and the option to follow your own .pptx template, not slide images · by Hugo He"
+avatarUrl: "https://avatars.githubusercontent.com/u/188330578?v=4"
+tags:
+  - AI 编程
+  - 工作流
+  - 自动化
+language: "Python"
+stars: 29341
+forks: 2567
+openIssues: 4
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: "不愿把材料上传到在线 PPT SaaS、又要在 PowerPoint 里继续改稿的职场人与咨询顾问。"
+---
+
+## 项目介绍
+
+PPT Master 是 Hugo He 开源的 **AI 演示文稿生成工作流（Skill）**：在 Claude Code、Cursor、VS Code Copilot 等 Agent IDE 里对话，即可把 PDF、DOCX、图片或粘贴文本转成 **原生 DrawingML 形状** 的可编辑 `.pptx`，而非每页一张大图。项目以 Python 脚本负责 SVG 生成、PPTX 导出、图片检索与旁白合成；模型负责内容分析与视觉设计。除 16:9 幻灯片外，还支持小红书、公众号等十余种画布格式。
+
+## 核心特性
+
+- **真 PowerPoint**：输出可在 PowerPoint / Keynote / WPS 中逐元素点击编辑的形状、文本框与图表，带原生翻页过渡与入场动画
+- **任意素材输入**：支持 PDF、DOCX、Markdown、网页、图片或聊天粘贴；也可把既有 `.pptx` 当模板填充或风格参考
+- **本地流水线**：除调用 AI 模型外，生成与导出在本地完成，无需把源文件上传到第三方 PPT 平台
+- **实时预览与可视化微调**：生成时在 `localhost:5050` 浏览器预览，可拖拽改字色字号，或标注后让 AI 重写区域
+- **旁白与视频**：可将演讲备注转为逐页语音（默认 edge-tts），嵌入 PPTX 后由 PowerPoint 导出带同步旁白的 MP4
+- **多模型与多宿主**：推荐 Claude Opus + `gpt-image-2` 达质量上限；亦支持 GPT、Gemini、Kimi 等；可通过 `npx skills add` 或 Claude 插件市场安装
+
+## 对用户价值
+
+多数 AI 演示工具输出的是「每页一张图」或网页 Deck，进 PowerPoint 后几乎无法改稿。PPT Master 瞄准 **可继续打磨的原生 PPTX**：把内容分析、版式、配图、动画、导出拆成可复用工作流，让你用对话完成 80% 体力活，再在 Office 里精修。成本仅模型用量，无额外 PPT 订阅；对经常做汇报、路演、培训课件但不想被 SaaS 锁定的职场人，它把「Agent + Python」落到一件具体可交付的事上。
+
+## 与替代方案
+
+- 相比 **Gamma、Beautiful.ai、Tome** 等在线 AI PPT SaaS，PPT Master **不上传源文件到其服务器**，输出是本地 `.pptx` 而非托管网页；你需要自备 Agent IDE 与模型 API，学习曲线更高，但无平台锁定。
+- 相比 **Microsoft Copilot for PowerPoint**，Copilot 深度集成 Office 订阅生态；PPT Master 是开源 Harness，可在 Cursor / Claude Code 等环境运行，并支持自定义模板、旁白克隆与 SVG 级视觉风格（见官方 six-style 示例）。
+- 相比 **把 HTML/Reveal.js 当演示稿**，PPT Master 专注 **PPTX 交付物**；若团队只接受网页演示或只需模板填空，应选更轻量的路线。
+- 作者强调这是 **工具而非许愿池**：模型越便宜，人工打磨越多；质量上限由模型（尤其长上下文 Claude + 图像生成）决定，而非脚本本身。
+
+## 适应人群
+
+- 咨询、投资、产品、培训等需要频繁做 Deck，且必须在 PowerPoint 里二次编辑的职场用户。
+- 已在用 Claude Code、Cursor、Cline 等 Agent，想把「做 PPT」固化成可重复 Skill 的开发者。
+- 重视数据留在本地、愿为可编辑交付物支付模型费用而非 PPT 月费的技术型用户。
+
+## 如何使用
+
+### 前置条件
+
+- **Python 3.10+**（唯一硬性系统依赖）
+- 具备读写文件、执行命令、多轮对话能力的 **Agent 宿主**（Cursor、Claude Code、VS Code + Copilot、Cline 等）
+- 可访问的 **大模型 API**（质量优先：Claude Opus + `gpt-image-2`；性价比可试 Gemini 3.5 Flash）
+- 可选：Pexels / Pixabay API Key（提升配图质量）；ElevenLabs 等（语音克隆旁白）
+- Windows 用户建议先读官方 [Windows 安装指南](https://github.com/hugohe3/ppt-master/blob/main/docs/windows-installation.md)
+
+### 安装方式
+
+**方式 A — Git 克隆（完整仓库）**
+
+```bash
+git clone https://github.com/hugohe3/ppt-master.git
+cd ppt-master
+pip install -r requirements.txt
+```
+
+**方式 B — 技能市场（仅 Skill 文件，仍需 pip 安装脚本依赖）**
+
+```bash
+npx skills add hugohe3/ppt-master
+# 在安装目录执行：pip install -r requirements.txt
+```
+
+Claude Code 内也可：
+
+```bash
+/plugin marketplace add hugohe3/ppt-master
+/plugin install ppt-master@ppt-master
+```
+
+**方式 C — 下载 ZIP**：在 GitHub 页面 Code → Download ZIP，解压后同样执行 `pip install -r requirements.txt`。
+
+旧版 `.doc` / `.odt` 等格式需额外安装 Pandoc；`.docx` / `.html` / `.epub` 等由 Python 原生处理。
+
+### 首次运行
+
+1. 将 PDF、DOCX 等素材放入 `projects/` 目录（或准备在聊天中直接粘贴文本）。
+2. 在 Agent 对话中说明需求，例如：
+
+```text
+请根据 projects/q3-report/sources/report.pdf 做一份 PPT
+```
+
+3. AI 会先确认设计规格（模板、画幅、页数等），随后自动完成分析、配图、SVG 与导出。
+4. 生成过程中可打开 `http://localhost:5050` 查看实时预览并做可视化微调。
+5. 成品位于 `exports/<name>_<timestamp>.pptx`；`svg_output/` 会备份到 `backup/<timestamp>/` 便于重导出。
+
+若需配图 API，可复制环境变量：
+
+```bash
+cp .env.example .env
+# 或技能安装场景：
+mkdir -p ~/.ppt-master && cp .env.example ~/.ppt-master/.env
+```
+
+### 验证是否成功
+
+- 用 PowerPoint 或 WPS 打开 `exports/` 下最新 `.pptx`，确认元素可单独选中编辑（非整页图片）。
+- 浏览 [官方示例](https://hugohe3.github.io/ppt-master/) 或 `examples/` 目录，对比版式与动画是否符合预期。
+- 运行 `python3 skills/ppt-master/scripts/image_gen.py --list-backends` 检查图像后端是否配置正确（若使用 AI 生图）。
+
+### 常见坑 / 注意事项
+
+- **别指望一键完美**：README 明确这是 Harness，`harness + model = agent`；结果不满意先换更强模型，而非归咎于工具。
+- **AI 跑偏时**：让它重读 `skills/ppt-master/SKILL.md`；复杂问题查 [FAQ](https://github.com/hugohe3/ppt-master/blob/main/docs/faq.md)。
+- **复用既有 PPT 模板**：需明确说「用 template-fill 填充这份 pptx」或走 `/create-template` 流程，否则 AI 默认自由设计。
+- **技能市场安装**：只拉取 Skill 文件，必须在安装路径执行 `pip install -r requirements.txt`，否则后处理脚本无法运行。
+- **许可证**：MIT 开源；商用与模型 API 费用、配图版权（CC 署名等）需自行合规。

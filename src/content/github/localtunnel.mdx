@@ -1,0 +1,135 @@
+---
+title: "localtunnel"
+description: 将本机 localhost 暴露为公网 HTTPS URL，无需改 DNS 或部署即可分享与联调。
+repo: "https://github.com/localtunnel/localtunnel"
+homepage: "https://localtunnel.me"
+repoDescription: "expose yourself"
+avatarUrl: "https://avatars.githubusercontent.com/u/13612933?v=4"
+tags:
+  - 开发工具
+  - CLI
+  - 自动化
+language: "JavaScript"
+stars: 22338
+forks: 1557
+openIssues: 166
+license: "MIT"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 需要让外网访问本地服务做 Webhook 回调、移动端联调或临时演示的开发者。
+---
+
+## 项目介绍
+
+[localtunnel](https://localtunnel.me) 是一款经典的内网穿透客户端：在本地启动后，它会连到公共隧道服务器，把 `localhost` 上的端口映射成一个可分享的 HTTPS 公网地址。适合 Webhook 回调联调、让同事或测试工具访问你本机上的服务，而不用为了演示去改 DNS 或临时部署到云端。项目提供 CLI（`lt`）与 Node.js API，生态里还有 Go、.NET、Rust 等第三方客户端。
+
+## 核心特性
+
+- **一行启动**：`npx localtunnel --port 8000` 或 `lt --port 8000` 即可拿到公网 URL，会话期间地址保持有效
+- **自动重连**：本地服务重启后，客户端会检测并自动重新连接隧道
+- **自定义子域**：`--subdomain` 可请求固定子域名（视服务器可用性而定）
+- **灵活代理目标**：`--local-host` 可把流量转发到非 `localhost` 的主机名；支持本地 HTTPS 与自签证书选项
+- **程序化 API**：`localtunnel(port, options)` 返回 Promise，便于测试脚本与 CI 集成
+- **多语言客户端**：官方 Node 客户端之外，社区提供 Go、C#/.NET、Rust 等实现
+
+## 对用户价值
+
+本地开发最常卡在外部系统「必须回调公网 URL」：支付网关、Twilio、OAuth、移动端真机调试、Browserling 等浏览器测试工具，都要求一个能从互联网访问的地址。自建反向代理或买 VPS 成本高、流程重；localtunnel 用托管隧道服务器把这件事收成一条命令。对个人开发者，它是快速分享 Demo 与验证 Webhook 的零配置方案；对团队，固定子域与 API 模式也方便写进自动化测试。MIT 许可，可自由嵌入项目或二次封装。
+
+## 与替代方案
+
+- 相比 **[ngrok](https://ngrok.com/)**，localtunnel **完全开源、可自托管服务端**（见 [localtunnel/server](https://github.com/localtunnel/server)），默认公共实例免费且无需注册；ngrok 在稳定性、Inspect 面板与企业功能上更成熟，但免费档有会话与连接限制。
+- 相比 **[Cloudflare Tunnel (cloudflared)](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)**，localtunnel **上手更轻、一条命令即用**，适合临时联调；Cloudflare Tunnel 更适合长期绑定自有域名、走 Zero Trust 的生产流量，但配置与账号依赖更重。
+- 相比 **[serveo](https://serveo.net/)** 等 SSH 隧道方案，localtunnel **基于 Node/npm 生态**，对前端与 Node 开发者更顺手；SSH 方案无需安装 Node，但子域与稳定性依赖第三方服务政策。
+- 若需要**生产级 SLA、固定自定义域名与访问审计**，应选 ngrok 付费档或 Cloudflare Tunnel；若只需**内网互通**、不需要公网入口，直接用局域网 IP 或 mDNS 更简单。
+
+## 适应人群
+
+- 需要在本地跑服务并让外网（或手机）访问的 Web / 全栈开发者。
+- 对接 Twilio、Stripe、GitHub Webhook 等必须公网回调的集成与自动化工程师。
+- 希望用 Node API 把隧道写进 E2E 测试或演示脚本的技术写作者。
+
+## 如何使用
+
+### 前置条件
+
+- 本机已安装 **Node.js**（用于 `npx` / `npm`）或 **Homebrew**（macOS 可选安装方式）
+- 本地有一个正在监听端口的 HTTP/HTTPS 服务（例如 `8000`、`3000`）
+- 网络可访问默认上游服务器 `https://localtunnel.me`（企业环境若被墙或拦截，需改用自托管 [localtunnel/server](https://github.com/localtunnel/server) 并配置 `host` 选项）
+
+### 安装方式
+
+**无需安装（推荐快速试用）**
+
+```bash
+npx localtunnel --port 8000
+```
+
+**全局安装 CLI**
+
+```bash
+npm install -g localtunnel
+```
+
+**作为项目依赖**
+
+```bash
+yarn add localtunnel
+# 或
+npm install localtunnel
+```
+
+**macOS Homebrew**
+
+```bash
+brew install localtunnel
+```
+
+### 首次运行
+
+1. 在终端启动你的本地服务，确认端口可访问（例如 `http://localhost:8000`）。
+2. 另开终端执行：
+
+```bash
+lt --port 8000
+```
+
+3. 终端会输出分配的公网 URL（形如 `https://<subdomain>.loca.lt` 或历史文档中的 `localtunnel.me` 域名，以当前客户端输出为准）。
+4. 把该 URL 填到 Webhook 配置、手机浏览器或协作方的测试工具中即可访问你本机服务。
+5. 可选参数示例：
+
+```bash
+lt --port 8000 --subdomain my-demo
+lt --port 3000 --local-host 127.0.0.1
+PORT=3000 lt
+```
+
+**Node.js API 示例**
+
+```js
+const localtunnel = require("localtunnel");
+
+(async () => {
+  const tunnel = await localtunnel({ port: 3000 });
+  console.log(tunnel.url);
+  tunnel.on("close", () => {
+    // 隧道已关闭
+  });
+})();
+```
+
+### 验证是否成功
+
+- CLI 启动后应打印公网 URL，且无持续报错。
+- 在**另一台设备或手机 4G 网络**打开该 URL，应能访问你本地对应端口的页面或 API。
+- 若配置了 Webhook，在外部服务后台触发一次事件，本地服务日志应收到回调请求。
+- 重启本地服务后，保持 `lt` 进程运行，确认隧道能自动恢复（README 描述的行为）。
+
+### 常见坑 / 注意事项
+
+- **公共实例非生产用途**：默认 `localtunnel.me` 为共享服务，适合开发联调；敏感数据、长期在线或高可用场景请自托管 server 或改用 ngrok / Cloudflare Tunnel。
+- **子域不保证可用**：`--subdomain` 请求的名称可能被占用或拒绝，失败时换名或使用随机子域。
+- **HTTPS 与证书**：代理本地 HTTPS 时需按 README 配置 `local_https`、`local_cert`、`local_key` 等；自签证书可配合 `allow_invalid_cert`。
+- **会话生命周期**：URL 通常在 `lt` 进程存活期间有效，关闭终端或 `tunnel.close()` 后外网地址失效，Webhook 需同步更新。
+- **仓库 Issues 较多**：社区反馈连接稳定性、域名变更等问题时，优先查阅 [Issues](https://github.com/localtunnel/localtunnel/issues) 与 server 仓库文档；联调关键路径建议准备备用隧道方案。

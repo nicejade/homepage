@@ -1,0 +1,105 @@
+---
+title: protobuf
+description: Google 出品的跨语言结构化数据序列化方案，含 protoc 编译器与多语言运行时。
+repo: https://github.com/protocolbuffers/protobuf
+homepage: https://protobuf.dev
+repoDescription: Protocol Buffers - Google's data interchange format
+avatarUrl: https://avatars.githubusercontent.com/u/2563945?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 自动化
+language: C++
+stars: 71297
+forks: 16143
+openIssues: 296
+contributors: 370
+license: BSD-3-Clause
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 微服务与 gRPC 接口契约、跨语言数据模型与 CI 代码生成场景的工程师与平台团队。
+---
+
+## 项目介绍
+
+Protocol Buffers（protobuf）是 Google 开源的语言中立、平台中立结构化数据序列化机制。开发者用 `.proto` 文件描述消息与 RPC 服务，再通过 `protoc` 编译器生成 C++、Java、Python、Go 等语言的类型安全代码。其二进制格式紧凑、解析速度快，是 gRPC 的默认载荷格式，也广泛用于微服务接口契约、配置与持久化存储。
+
+## 核心特性
+
+- **Schema 驱动**：以 `.proto` 定义消息字段、枚举与服务，编译期生成强类型 API，减少手写序列化代码
+- **跨语言生态**：官方维护 C++、Java、Python、C#、Ruby、PHP、Objective-C 等运行时，Go/JavaScript 等由姊妹仓库提供
+- **高效二进制编码**：相较 XML/JSON 体积更小、解析更快，适合高吞吐 RPC 与移动端场景
+- **可演进的数据模型**：通过字段编号与 `optional`/`repeated` 等规则支持向后兼容的 schema 演进
+- **工具链成熟**：`protoc` 预编译包、Bazel 模块（Bzlmod/WORKSPACE）集成，以及 [protobuf.dev](https://protobuf.dev) 完整文档与教程
+
+## 对用户价值
+
+protobuf 把「数据结构定义」提升为团队可共享的契约：一份 `.proto` 可在多语言服务间复用，避免各端各自维护 JSON 结构导致的不一致。代码生成降低样板代码与运行时错误，配合 gRPC 可快速搭建类型安全的 RPC 栈。对需要高性能序列化、明确版本演进策略的后端与基础设施团队，它是事实上的行业标准之一。
+
+## 与替代方案
+
+- 相比 **JSON**，protobuf 二进制更小、解析更快，且 schema 在编译期校验；JSON 更易人工阅读与调试，适合对外 REST API 或日志，二者常并存（如 gRPC 对内、JSON 对外）。
+- 相比 **Apache Avro**，两者都强调 schema 与演进；Avro 在 Hadoop/Kafka 大数据生态更常见，protobuf 在 gRPC、移动端与 Google 系工具链中渗透更深。
+- 相比 **Cap'n Proto / FlatBuffers**，后者偏向零拷贝、低延迟读取；protobuf 生态与语言支持更广，工具链与社区体量更大，选型需权衡延迟敏感性与集成成本。
+- 相比 **MessagePack**，MessagePack 更轻量但缺少 `.proto` 级别的跨语言契约与 `protoc` 代码生成体系。
+
+## 适应人群
+
+- 使用 gRPC 或需要跨语言 RPC/消息契约的后端与平台工程师。
+- 维护多语言微服务、希望统一数据模型并自动生成客户端/服务端代码的团队。
+- 在 CI/CD 中集成 `protoc` 代码生成、管理 `.proto` 版本与兼容性的基础设施开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 明确目标语言（C++、Java、Python 等）与对应的 protobuf 运行时包。
+- 非 C++ 用户通常只需预编译的 `protoc` 二进制；C++ 或需改源码时，需 Bazel/g++ 或 CMake 等构建环境（见 [C++ 安装说明](https://github.com/protocolbuffers/protobuf/blob/main/src/README.md)）。
+- 生产环境建议锁定 [Releases](https://github.com/protocolbuffers/protobuf/releases) 版本，避免直接跟踪 `main` 分支带来的不兼容变更。
+
+### 安装方式
+
+**安装 protoc 编译器（推荐：预编译包）**
+
+从 [GitHub Releases](https://github.com/protocolbuffers/protobuf/releases) 下载对应平台的 `protoc-$VERSION-$PLATFORM.zip`，解压后将 `bin/protoc` 加入 `PATH`。旧版本也可在 [Maven 仓库](https://repo1.maven.org/maven2/com/google/protobuf/protoc/) 查找。
+
+**Python 运行时（多数用户）**
+
+```bash
+pip install protobuf
+```
+
+**从源码构建 protoc（C++ / 需定制时）**
+
+```bash
+git clone https://github.com/protocolbuffers/protobuf.git
+cd protobuf
+git submodule update --init --recursive
+bazel build :protoc :protobuf
+# Linux 示例：cp bazel-bin/protoc /usr/local/bin
+```
+
+各语言运行时安装路径见仓库 README 中的 [语言目录表](https://github.com/protocolbuffers/protobuf#protobuf-runtime-installation)。
+
+### 首次运行
+
+1. 编写 `person.proto` 等 schema 文件（可参考 [官方教程](https://protobuf.dev/getting-started)）。
+2. 用 `protoc` 生成目标语言代码，例如 Python：`protoc --python_out=. person.proto`。
+3. 在应用中 import 生成模块并序列化/反序列化消息；gRPC 用户需额外使用对应语言的 gRPC 插件生成 stub。
+
+仓库 `examples/` 目录提供多语言示例，[protobuf.dev 入门指南](https://protobuf.dev/getting-started) 是最佳学习路径。
+
+### 验证是否成功
+
+- 执行 `protoc --version` 应输出版本号。
+- Python：`python -c "import google.protobuf; print(google.protobuf.__version__)"` 无报错。
+- 对示例 `.proto` 运行 `protoc` 生成代码后，能完成一次 `SerializeToString` / `ParseFromString`（或等价 API）即表示工具链可用。
+
+### 常见坑 / 注意事项
+
+- **版本对齐**：`protoc` 主版本应与各语言 `protobuf` 运行时包匹配；混用易导致生成代码与库不兼容。
+- **勿跟踪 main**：README 明确警告从 `main` 构建可能遭遇破坏性变更；生产与库依赖应 pin 到 release 分支上的 tag。
+- **Python 实现后端**：可通过环境变量 `PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION` 选择 `upb`/`cpp`/`python`；默认自动选择，性能差异见 [python/README](https://github.com/protocolbuffers/protobuf/blob/main/python/README.md)。
+- **Bazel 集成**：Bazel 8+ 推荐 Bzlmod（`bazel_dep(name = "protobuf", version = ...)`）；旧 WORKSPACE 流程在 30.x 后需额外加载 `rules_java` / `rules_python`。
+- **许可证**：源码采用 BSD-3-Clause；商业使用前请阅读仓库 LICENSE 与 [版本支持策略](https://protobuf.dev/version-support/)。

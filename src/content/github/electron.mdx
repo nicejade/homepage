@@ -1,0 +1,114 @@
+---
+title: Electron
+description: 基于 Node.js 与 Chromium 的跨平台桌面应用框架，用 Web 技术构建 macOS、Windows 与 Linux 原生应用。
+repo: https://github.com/electron/electron
+homepage: https://electronjs.org
+repoDescription: ":electron: Build cross-platform desktop apps with JavaScript, HTML, and CSS"
+avatarUrl: https://avatars.githubusercontent.com/u/13409222?v=4
+tags:
+  - 开发工具
+  - 桌面应用
+  - 跨平台
+language: C++
+stars: 121684
+forks: 17256
+openIssues: 866
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 桌面客户端选型、VS Code 类编辑器/工具类产品技术栈评估，以及 Web 团队转桌面开发的工程负责人。
+---
+
+## 项目介绍
+
+Electron 是 OpenJS Foundation 维护的跨平台桌面应用框架，将 [Node.js](https://nodejs.org/) 与 [Chromium](https://www.chromium.org) 结合，让你用 JavaScript、HTML 和 CSS 编写可在 macOS、Windows、Linux 上运行的桌面程序。Visual Studio Code、Slack、Discord 等知名产品均基于 Electron 构建。本仓库为 Electron 核心源码；日常开发通常通过 npm 安装 `electron` 包，文档与教程见 [electronjs.org](https://electronjs.org/docs)。
+
+## 核心特性
+
+- **Web 技术栈开发桌面应用**：沿用前端技能与生态，主进程/渲染进程模型清晰，可访问 Node.js API 与浏览器能力
+- **跨平台二进制分发**：每个版本提供 macOS（Intel / Apple Silicon）、Windows（ia32 / x64 / arm64）与 Linux 预构建包
+- **成熟文档与社区**：官方文档覆盖 Quick Start、安全指南、打包发布；[Electron Fiddle](https://github.com/electron/fiddle) 可快速试验 API 与版本
+- **可编程调用**：在 Node 脚本中 `require('electron')` 获取二进制路径，便于自动化测试与 CI 集成
+- **版本化发布策略**：遵循 [Electron 版本管理](https://www.electronjs.org/docs/latest/tutorial/electron-versioning) 与 Chromium 升级节奏，便于企业级应用规划升级窗口
+
+## 对用户价值
+
+若团队已有 Web 前端能力，Electron 可显著降低桌面客户端的启动成本，避免为每个平台单独维护原生 UI 栈。Chromium 渲染层保证 CSS/Canvas/WebGL 等能力一致，Node.js 侧便于对接文件系统、本地进程与现有 npm 生态。对于需要快速迭代、跨平台一致体验的工具类产品（编辑器、IM、协作软件），Electron 是经过大量生产验证的路径；代价是安装包体积与内存占用通常高于原生方案，需在选型阶段权衡。
+
+## 与替代方案
+
+- 相比 [Tauri](https://tauri.app/)，Electron 生态更成熟、第三方集成与招聘市场更广，但包体积与内存占用通常更大；Tauri 用 Rust 后端 + 系统 WebView，更轻量，适合对体积敏感的新项目。
+- 相比 [NW.js](https://nwjs.io/)（原 node-webkit），两者思路相近；Electron 社区规模、文档与主流 IDE/工具链支持更占优，NW.js 在部分遗留项目仍有使用。
+- 相比 Flutter Desktop / Qt 等原生 UI 框架，Electron 复用 Web 技能与组件库，开发效率高；原生框架在性能、系统集成与包体积上通常更优，但跨端 UI 与团队技能迁移成本更高。
+- 边界说明：本仓库是 **Electron 核心源码**；应用开发安装 npm 包即可，勿将 clone 本 repo 等同于「开始使用 Electron」。贡献源码需阅读 [CONTRIBUTING.md](https://github.com/electron/electron/blob/main/CONTRIBUTING.md)。
+
+## 适应人群
+
+- 希望用 React/Vue/Svelte 等 Web 技术栈交付 macOS、Windows、Linux 桌面客户端的前端或全栈工程师。
+- 评估 VS Code、Slack 类产品技术路线，或维护现有 Electron 应用升级与安全策略的技术负责人。
+- 需要快速验证桌面 API（窗口、菜单、Tray、原生对话框）的原型团队，可配合 Electron Fiddle 降低试错成本。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 与 npm（或 pnpm、Yarn），版本以 [官方安装文档](https://www.electronjs.org/docs/latest/tutorial/installation) 为准。
+- 目标平台：macOS Ventura+、Windows 10+、或 Ubuntu 18.04+ / Fedora 32+ / Debian 10+ 等受支持 Linux 发行版。
+- 中国大陆网络环境若下载二进制缓慢，可配置 [npmmirror 镜像](https://npmmirror.com/mirrors/electron/)。
+
+### 安装方式
+
+**方式一：在项目中安装 Electron（常规应用开发）**
+
+```sh
+npm install electron --save-dev
+```
+
+**方式二：在 Node 脚本中获取 Electron 二进制路径**
+
+```javascript
+const electron = require('electron')
+const proc = require('node:child_process')
+
+console.log(electron) // 打印 Electron 可执行文件路径
+const child = proc.spawn(electron)
+```
+
+更多安装选项、版本管理与镜像配置见 [Installation](https://www.electronjs.org/docs/latest/tutorial/installation) 与 [Electron versioning](https://www.electronjs.org/docs/latest/tutorial/electron-versioning)。
+
+### 首次运行
+
+1. 新建项目目录并安装依赖（见上）。
+2. 创建 `main.js` 作为**主进程**入口，创建 BrowserWindow 加载 HTML 页面。
+3. 在 `package.json` 中设置 `"main": "main.js"`，通过 `npx electron .` 启动。
+
+最小示例（摘自官方 Quick Start 思路）：
+
+```javascript
+// main.js
+const { app, BrowserWindow } = require('electron')
+
+function createWindow() {
+  const win = new BrowserWindow({ width: 800, height: 600 })
+  win.loadFile('index.html')
+}
+
+app.whenReady().then(createWindow)
+```
+
+也可使用 [Electron Fiddle](https://github.com/electron/fiddle) 零配置试验 API 与不同 Electron 版本。
+
+### 验证是否成功
+
+- 运行 `npx electron .` 后应弹出应用窗口，无阻塞性控制台报错。
+- 修改 `index.html` 或渲染进程脚本，重启后界面应反映变更。
+- 查阅 [官方文档 Quick Start](https://www.electronjs.org/docs/latest/tutorial/quick-start) 完成主进程/渲染进程/预加载脚本的基本结构验证。
+
+### 常见坑 / 注意事项
+
+- **源码仓库 vs npm 包**：日常开发安装 `electron` 即可；clone 本仓库用于贡献或与 Chromium 同步相关的底层开发，构建流程复杂，见 CONTRIBUTING。
+- **安全模型**：启用 `nodeIntegration`、禁用 `contextIsolation` 等旧模式存在 XSS 风险；新项目应遵循 [Security](https://www.electronjs.org/docs/latest/tutorial/security) 指南，通过 preload 暴露最小 API。
+- **包体积与内存**：Chromium + Node 带来较大安装包与运行时占用；若产品对体积敏感，可评估 Tauri 等替代方案。
+- **版本升级**：Electron 大版本随 Chromium 升级可能移除旧 OS 支持（如 Electron 23 起不再支持 Windows 7/8/8.1）；升级前阅读 [Release Notes](https://www.electronjs.org/blog) 与 CHANGELOG。
+- **打包发布**：开发依赖安装不等于可分发的安装包；生产发布需配合 [electron-builder](https://www.electron.build/) 或 [electron-forge](https://www.electronforge.io/) 等工具，并处理代码签名与自动更新策略。
