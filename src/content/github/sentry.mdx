@@ -1,0 +1,131 @@
+---
+title: Sentry
+description: 面向开发者的错误追踪与性能监控平台，聚合线上异常、链路追踪与告警，加速定位与修复。
+repo: https://github.com/getsentry/sentry
+homepage: https://sentry.io
+repoDescription: "Developer-first error tracking and performance monitoring"
+avatarUrl: https://avatars.githubusercontent.com/u/1396951?v=4
+tags:
+  - 开发工具
+  - 后端
+  - 自动化
+language: Python
+stars: 44136
+forks: 4727
+openIssues: 2132
+contributors: 1
+license: FSL
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 需集中捕获前后端异常、配置 Release 告警与性能瓶颈排查的后端、SRE 与全栈团队。
+---
+
+## 项目介绍
+
+Sentry 是面向开发者的调试与可观测性平台，帮助团队检测、追踪并修复线上问题。本仓库（`getsentry/sentry`）是 Sentry 服务端核心源码，基于 Python/Django 构建，涵盖错误监控、分布式追踪、性能剖析、日志与指标等能力。多数团队通过官方 SaaS（sentry.io）或自托管（`getsentry/self-hosted`）接入，再在应用里嵌入对应语言的官方 SDK，将异常与性能数据上报到统一控制台。
+
+## 核心特性
+
+- **错误监控（Issues）**：自动捕获未处理异常、Promise rejection 与自定义消息，附带堆栈、面包屑与用户上下文
+- **分布式追踪（Tracing）**：跨前端、API 与微服务关联请求链路，定位慢调用与级联故障
+- **性能剖析（Profiling）**：无需大量手工埋点即可发现 CPU/内存热点函数
+- **日志与指标**：将应用日志、自定义 metrics 与错误/性能事件关联，便于统一检索与告警
+- **多语言 SDK 生态**：官方维护 JavaScript、Python、Go、Java、Rust、Mobile 等 20+ 平台 SDK，框架集成（Django、FastAPI、React 等）开箱即用
+- **Release 与告警**：按版本对比错误率，对接 Slack、PagerDuty 等通知渠道，支持 Cron 监控与 Feature Flag 上下文
+
+## 对用户价值
+
+生产环境仅靠日志往往难以还原用户侧异常，更无法把前端报错与后端慢查询串成一条链路。Sentry 把「捕获—聚合—分派—回归验证」收敛到单一平台：开发者在代码里几行 SDK 初始化即可上线监控，On-call 工程师在 Issue 详情页直接看到堆栈、Release 差异与受影响用户数，显著缩短 MTTR。对需要数据驻留或内网合规的团队，Fair Source 许可下的自托管方案提供了与 SaaS 接近的功能面（Billing、部分 AI 能力等除外）。
+
+## 与替代方案
+
+- 相比 **Rollbar / Bugsnag**，Sentry 在分布式追踪、性能剖析与开源自托管上更完整，社区与 SDK 覆盖面更广；后两者更轻量，适合仅需基础错误通知的小项目。
+- 相比 **Datadog / New Relic**，Sentry 以开发者工作流为中心（Issue 分组、Release 对比、源码上下文），APM 深度略逊但上手更快、定价对中小团队更友好；若已全面使用 Datadog 且需要统一基础设施监控，可优先评估其 Error Tracking 模块。
+- 相比 **GlitchTip**（开源 Error Tracking），Sentry 功能栈更全（Tracing、Profiling、Crons 等）且生态成熟，但自托管资源占用更高、许可为 FSL 而非传统 OSI 开源。
+- **边界说明**：`getsentry/sentry` 是服务端源码；实际自托管部署应使用 [`getsentry/self-hosted`](https://github.com/getsentry/self-hosted) 的 Docker Compose 方案。许可为 **FSL（Functional Source License）**：可自由部署与使用，但不得将自托管实例作为 SaaS 对外售卖，亦不得作为 Sentry 直接竞争对手使用其 FSL 代码；约 2 年后转为 Apache 2.0。
+
+## 适应人群
+
+- 维护 Web、Mobile 或 API 服务，需要统一捕获线上异常并关联 Release 的全栈与后端工程师。
+- 负责 On-call 与 SLA 的 SRE / DevOps 团队，希望用告警、Issue 归属与性能追踪降低故障恢复时间。
+- 有数据合规或内网部署要求，愿意承担 Docker 集群运维成本、评估 FSL 许可边界的工程组织。
+
+## 如何使用
+
+### 前置条件
+
+**SDK 接入（最常见路径）：**
+
+- 拥有 Sentry 账号与项目（[sentry.io](https://sentry.io) 注册，或使用已部署的自托管实例）。
+- 应用运行时与对应官方 SDK 兼容（如 Python 3.8+、Node.js 等，见 [平台文档](https://docs.sentry.io/platforms/)）。
+
+**自托管部署：**
+
+- 服务器：至少 4 核 CPU、16 GB RAM + 16 GB swap、20 GB 磁盘（官方建议 32 GB RAM）。
+- Docker ≥ 19.03.6，Docker Compose ≥ 2.32.2。
+- 推荐 Debian/Ubuntu；RHEL 系需额外处理 SELinux，Alpine 不受支持。
+
+### 安装方式
+
+**方式一：在应用中安装 SDK（以 Python 为例）：**
+
+```bash
+pip install "sentry-sdk"
+```
+
+其他语言见 [官方 SDK 列表](https://github.com/getsentry/sentry#official-sentry-sdks) 或 [docs.sentry.io/platforms](https://docs.sentry.io/platforms/)。
+
+**方式二：自托管 Sentry 服务端：**
+
+```bash
+VERSION=$(curl -Ls -o /dev/null -w %{url_effective} https://github.com/getsentry/self-hosted/releases/latest)
+VERSION=${VERSION##*/}
+git clone https://github.com/getsentry/self-hosted.git
+cd self-hosted
+git checkout ${VERSION}
+./install.sh
+docker compose up --wait
+```
+
+默认 Web 界面绑定 `9000` 端口。完整说明见 [Self-Hosted Sentry 文档](https://develop.sentry.dev/self-hosted/)。
+
+### 首次运行
+
+**SDK 接入：** 在应用入口尽早初始化 SDK（DSN 取自 Sentry 项目设置页）：
+
+```python
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://<key>@o<orgId>.ingest.sentry.io/<projectId>",
+    send_default_pii=True,
+    traces_sample_rate=1.0,  # 生产环境请按流量调低采样率
+)
+```
+
+**自托管：** `./install.sh` 完成后执行 `docker compose up --wait`，浏览器访问 `http://127.0.0.1:9000` 创建管理员账号，再在控制台新建 Organization / Project 获取 DSN。
+
+### 验证是否成功
+
+**SDK：**
+
+```python
+division_by_zero = 1 / 0
+```
+
+运行后等待数秒，在 Sentry 项目 **Issues** 页应出现对应错误事件；Tracing 可手动创建 transaction 验证 **Traces** 页是否有数据。
+
+**自托管：**
+
+- 访问 `http://127.0.0.1:9000` 能正常登录。
+- 负载均衡/反向代理场景下，对 `/_health/` 端点做 HTTP 健康检查应返回 200。
+- 将测试 SDK 的 DSN 指向自托管实例域名，确认事件能写入本地项目。
+
+### 常见坑 / 注意事项
+
+- **采样率**：`traces_sample_rate=1.0` 仅适合开发/验证；生产高流量场景务必调低，否则成本与存储压力激增。
+- **自托管资源**：Sentry 单机 Docker 栈含 Kafka、ClickHouse 等组件，磁盘 I/O 敏感；`iowait > 10%` 通常表示机器扛不住负载，需扩容或迁外部对象存储（S3/GCS）。
+- **许可合规**：FSL 禁止将自托管 Sentry 作为对外 SaaS 售卖，闭源竞品使用 FSL 代码亦受限；商用前请阅读 [Licensing](https://develop.sentry.dev/self-hosted/#licensing) 说明。
+- **功能差异**：自托管不含 Billing 配额、Spike Protection、Seer 等 AI 能力；iOS 符号化、部分游戏平台支持亦受限于闭源组件或合作伙伴协议。
+- **生产化**：公网暴露前应在负载均衡后配置 TLS，并同步修改 `config.yml` 的 `system.url-prefix` 与 `sentry.conf.py` 中的 SSL/CSRF 相关设置，否则集成 OAuth 等操作可能报 CSRF 错误。

@@ -1,0 +1,122 @@
+---
+title: QuickJS
+description: Fabrice Bellard 维护的轻量可嵌入 JavaScript 引擎，极低启动开销，支持 ES2025 与 qjsc 编译为无依赖可执行文件。
+repo: https://github.com/bellard/quickjs
+homepage: https://bellard.org/quickjs
+repoDescription: "Public repository of the QuickJS Javascript Engine."
+avatarUrl: https://avatars.githubusercontent.com/u/639469?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 后端
+language: C
+stars: 10743
+forks: 1108
+openIssues: 64
+contributors: 20
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 嵌入式 JS 运行时选型、IoT/桌面壳层脚本、qjsc 单文件编译与 ES2025 合规验证，以及需要极小体积 C 嵌入解释器的系统开发者。
+---
+
+## 项目介绍
+
+QuickJS 是由 [Fabrice Bellard](https://bellard.org/) 与 Charlie Gordon 维护的小型 **可嵌入 JavaScript 引擎**，以少量 C 源文件实现、无外部依赖，适合嵌入桌面应用、工具链、脚本宿主或资源受限环境。它提供 `qjs` 命令行解释器与 `qjsc` 编译器，可将脚本编译为**无外部依赖的独立可执行文件**；官方站点 [bellard.org/quickjs](https://bellard.org/quickjs) 提供 tarball、Cosmopolitan 跨平台二进制及预编译工具链（如 TypeScript/Babel）。本 GitHub 仓库为官方源码镜像，详细规范见 `doc/quickjs.html`。
+
+## 核心特性
+
+- **极小体积、易嵌入**：仅数个 C 文件、无第三方依赖；简单 hello world 可执行体在 x86 上约数百 KiB 量级
+- **低启动延迟**：完整 runtime 生命周期可低于 300 微秒；单核桌面环境可在约 2 分钟内跑完 ECMAScript Test Suite 相关测试
+- **接近完整的 ES2025 支持**：含模块、异步生成器与 Annex B（legacy web 兼容）；选定 ES2025 特性时 test262 通过率接近 100%
+- **qjsc 单文件编译**：将 JavaScript 编译为独立二进制，部署时无需附带引擎动态库
+- **引用计数 GC + 循环回收**：内存占用可控、行为更可预测，适合嵌入式与确定性场景
+- **内置 C API 与标准库**：`std` / `os` 模块及 libregexp、libunicode 等可复用子库，便于在 C/C++ 项目中挂载脚本层
+
+## 对用户价值
+
+若你需要在 C/C++ 应用里嵌入脚本能力，又不想引入 V8/Node 级别的体积与复杂度，QuickJS 以 MIT 许可、单 Makefile 构建和清晰的 C API 降低集成成本。`qjsc` 可把脚本「烤」成独立可执行文件，适合分发 CLI 工具、配置生成器或一次性自动化程序。对追求 ES 标准合规与启动速度的实验性运行时（官方亦提供基于 QuickJS 编译的 TypeScript/Babel 二进制），它是轻量基座；代价是 npm 生态、Node 兼容 API 与 JIT 峰值性能均不如 Node.js/V8，不适合直接替代通用 Web 后端运行时。
+
+## 与替代方案
+
+- 相比 [Node.js](https://nodejs.org/) / [V8](https://v8.dev/)，QuickJS 体积极小、启动极快、嵌入友好；Node/V8 拥有完整 npm 生态、JIT 优化与企业级运维经验，通用服务端与前端构建链仍首选 Node。
+- 相比 [QuickJS-NG](https://github.com/quickjs-ng/quickjs)（原项目活跃期的社区 fork），上游 bellard/quickjs 更贴近 Fabrice Bellard 的极简路线与 tarball 发布节奏；NG 侧重 CMake 跨平台、更开放的 PR 流程与持续 ES 特性迭代，若需要 Windows 原生构建或社区驱动发布，可评估 NG。
+- 相比 [Duktape](https://duktape.org/) / [JerryScript](https://jerryscript.net/) 等嵌入式引擎，QuickJS 在 ES2025 标准覆盖与 test262 成绩上更激进；Duktape/Jerry 在超小 MCU 场景历史更久，需按目标芯片内存与 ES 版本需求实测选型。
+- 边界说明：QuickJS 不是包管理器或 Web 框架；无内置 npm、`node:*` 模块或浏览器 DOM，迁移 Node 脚本需重写 I/O 与依赖层。
+
+## 适应人群
+
+- 在 C/C++ 桌面应用、游戏引擎、网络设备或工具软件中嵌入 JavaScript 脚本层的系统开发者。
+- 需要 `qjsc` 将脚本编译为单文件 CLI、或评估 ES2025 合规解释器实现的运行时/语言工具作者。
+- 关注 Fabrice Bellard 系极轻量基础软件、愿意从源码或官方 tarball 集成的个人开发者与小团队。
+
+## 如何使用
+
+### 前置条件
+
+- **从源码构建**：Linux 或 macOS 上需 `make` 与 C 编译器（gcc/clang）；Windows 可通过 Linux 主机上的 MinGW 交叉编译（见官方文档）。
+- **预编译二进制**：若不想编译，可从 [bellard.org/quickjs 下载页](https://bellard.org/quickjs/) 获取 tarball、Cosmopolitan zip 或各平台 binary release。
+- 部分系统若报 atomic 相关链接错误，需在 `Makefile` 的 `LIBS` 增加 `-latomics`，或在 `quickjs.c` 禁用 `CONFIG_ATOMICS`（见官方 Installation 说明）。
+
+### 安装方式
+
+**方式一：官方 tarball（推荐，与发布版本对齐）**
+
+```bash
+# 以 2026-06-04 发布为例，版本号请对照 https://bellard.org/quickjs/ 最新页
+curl -fsSLO https://bellard.org/quickjs/quickjs-2026-06-04.tar.xz
+tar xf quickjs-2026-06-04.tar.xz
+cd quickjs-2026-06-04
+make
+# 可选：sudo make install   # 安装到 /usr/local
+```
+
+**方式二：GitHub 源码仓库**
+
+```bash
+git clone https://github.com/bellard/quickjs.git
+cd quickjs
+make
+```
+
+构建成功后当前目录生成 `qjs`（解释器）与 `qjsc`（编译器）。
+
+### 首次运行
+
+运行自带示例脚本：
+
+```bash
+./qjs examples/hello.js
+```
+
+启动交互式 REPL：
+
+```bash
+./qjs
+```
+
+使用编译器生成无依赖可执行文件：
+
+```bash
+./qjsc -o hello examples/hello.js
+./hello
+```
+
+### 验证是否成功
+
+```bash
+./qjs --help          # 应列出命令行选项
+./qjs -e "1+2"        # 应输出 3
+./qjsc -o /tmp/qjstest examples/hello.js && /tmp/qjstest   # 编译产物可独立运行
+```
+
+若执行 `make install`，确认 `/usr/local/bin`（或 Makefile 配置前缀）已在 `PATH` 中，新开终端后 `qjs -e "1+1"` 可得到 `2`。
+
+### 常见坑 / 注意事项
+
+- **与 QuickJS-NG 勿混用 API 假设**：社区 fork 在构建系统、部分 API 与发布节奏上与上游不同，迁移或对比 benchmark 时需标明具体版本与分支。
+- **atomic / 架构差异**：ARM 或部分 Linux 发行版可能需调整 `Makefile` 中 `LIBS` 或 `CONFIG_ATOMICS`；交叉编译 Windows 需 MinGW 工具链，非开箱即用。
+- **非 Node 运行时**：无 `require('fs')` 等 Node 内置模块语义；I/O 通过 QuickJS `std` / `os` 模块或宿主 C API 提供，勿直接搬运 npm 包。
+- **unicode 表重建**：完整重建 unicode 表需额外下载 [quickjs-extras](https://bellard.org/quickjs/) tarball；日常编译官方 release 通常不必自行重建。
+- **版本号以 bellard.org 为准**：GitHub 镜像推送节奏与 tarball 发布可能不同步，生产集成建议锁定 tarball 版本号并记录 CHANGELOG。

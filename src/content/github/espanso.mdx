@@ -1,0 +1,115 @@
+---
+title: Espanso
+description: 隐私优先的跨平台文本展开器，在任何应用里用触发词自动替换常用片段。
+repo: https://github.com/espanso/espanso
+homepage: https://espanso.org
+repoDescription: A Privacy-first, Cross-platform Text Expander written in Rust
+avatarUrl: https://avatars.githubusercontent.com/u/64536333?v=4
+tags:
+  - 开发工具
+  - 自动化
+  - CLI
+language: Rust
+stars: 13972
+forks: 418
+openIssues: 520
+contributors: 1
+license: GPL-3.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 客服、写作者与开发者需要跨 Chrome/Slack/IDE 统一邮件签名与代码片段时。
+---
+
+## 项目介绍
+
+Espanso 是用 Rust 编写的跨平台文本展开器：当你输入预设触发词（trigger）时，它会在系统级把关键词替换成更长文本、日期、emoji、图片甚至脚本输出。数据 100% 本地处理、无云端追踪，可在 Windows、macOS 与 Linux（含实验性 Wayland）的几乎任意输入框中工作，适合把重复打字变成可版本管理的 YAML 配置。
+
+## 核心特性
+
+- **跨平台系统级展开**：在浏览器、IDE、聊天工具、邮件客户端等任意应用中生效，不依赖单个编辑器插件
+- **隐私优先**：配置与展开逻辑完全本地运行，无账号、无遥测，适合处理敏感文案与内部模板
+- **Match 规则引擎**：支持多触发词、正则、表单输入、日期变量、Shell 命令与自定义脚本
+- **包管理与 Hub**：内置 `espanso install` 从 [Espanso Hub](https://hub.espanso.org/) 安装社区片段包（emoji、代码片段等）
+- **应用级配置**：按窗口标题或进程为不同软件加载不同 match/config（如 VS Code 专用代码片段）
+- **搜索栏与快捷操作**：`Alt+Space`（macOS 为 `Option+Space`）打开搜索栏快速插入片段；退格可撤销误触发展开
+
+## 对用户价值
+
+重复输入邮件落款、工单回复、API 文档链接或 emoji 组合会拖慢写作与客服节奏。Espanso 把这些内容沉淀为可共享的 YAML 与 Hub 包，一次配置后在所有应用生效，比在每个工具里单独维护 Snippets 更省事。相对云端文本展开 SaaS，它避免把常用话术上传到第三方，也适合离线环境与对 GPL 开源许可有要求的团队。
+
+## 与替代方案
+
+- 相比 **TextExpander / aText** 等商业文本展开器，Espanso 开源免费、全本地、跨三平台；代价是 UI 以文件配置与 CLI 为主，上手曲线更偏极客，且无官方移动端同步。
+- 相比 **Alfred / Raycast Snippets**，Espanso 不绑定特定启动器，Windows 与 Linux 同样可用，片段逻辑更完整（正则、表单、脚本）；若你已在 macOS 深度使用 Alfred 且只需简单替换，后者集成更轻。
+- 相比 **AutoHotkey**（Windows）或 **Karabiner + 脚本**，Espanso 专注「触发词 → 替换」与可移植 YAML，开箱即用的片段管理更省心；复杂 GUI 自动化或游戏宏仍应选专用工具。
+- 若只需 IDE 内代码片段，VS Code / JetBrains 内置 Snippets 足够；Espanso 更适合需要跨应用统一话术的场景。
+
+## 适应人群
+
+- 每天大量回复邮件、工单或 IM，希望用 `:sig`、`:addr` 等触发词统一模板的客服、运营与写作者。
+- 需要在 Chrome、Slack、终端与 IDE 之间共享代码片段、命令模板与 emoji 快捷键的开发者。
+- 重视数据留在本机、希望用 Git 管理片段配置、并可接受 YAML 编辑的学习型效率用户。
+
+## 如何使用
+
+### 前置条件
+
+- **macOS** 10.13+（Intel / Apple Silicon Universal 包或 Homebrew）
+- **Windows** 10+ x64（安装包、便携 zip，或 winget/choco/scoop）
+- **Linux**：需先确认桌面环境为 X11 或 Wayland（`echo $XDG_SESSION_TYPE`），再选对应 DEB/RPM/AppImage 包；Wayland 支持仍为实验性质
+- 配置文件为 YAML，建议用带缩进的编辑器；可选 [EspansoEdit](https://espanso.org/docs/) 或 VS Code + Red Hat YAML 扩展配合官方 schema
+
+### 安装方式
+
+- **macOS（Homebrew）**：
+
+```bash
+brew install espanso
+```
+
+若从 0.7.x 旧 tap 升级，可能需要先执行 `brew untap federico-terzi/espanso` 或 `brew untap espanso/espanso`。
+
+- **macOS / Windows**：也可从 [espanso.org/install](https://espanso.org/install) 下载 App 包或安装程序。
+
+- **Windows（winget）**：
+
+```cmd
+winget install --id=Espanso.Espanso -e
+```
+
+- **Linux**：按发行版与 X11/Wayland 选择 DEB、Terra RPM 或 AppImage，详见 [官方 Linux 安装文档](https://espanso.org/docs/install/linux/)。
+
+### 首次运行
+
+安装后启动 Espanso（macOS/Windows 看菜单栏或任务栏图标；Linux 可执行 `espanso start`）。在任意文本框输入内置触发词 `:espanso`，应展开为 `Hi there!`。编辑默认片段：
+
+```bash
+espanso edit
+```
+
+或直接修改 `$CONFIG/match/base.yml`（路径可用 `espanso path` 查看）。示例自定义 match：
+
+```yaml
+matches:
+  - trigger: ":br"
+    replace: "Best Regards,\nYour Name"
+```
+
+保存后 Espanso 会自动重载配置；也可手动 `espanso restart`。
+
+### 验证是否成功
+
+- 菜单栏/任务栏出现 Espanso 图标，或 `espanso status` 显示正在运行
+- 输入 `:espanso` 能正确展开
+- 修改 `base.yml` 后新 trigger 生效；`espanso install basic-emojis` 后 emoji 包可用
+- `Alt+Space`（macOS：`Option+Space`）能打开搜索栏
+
+### 常见坑 / 注意事项
+
+- **权限与无障碍**：macOS 需在「系统设置 → 隐私与安全性 → 辅助功能」中允许 Espanso；首次打开可能遇到 Gatekeeper 提示，按官方 macOS 安装页操作。
+- **Windows SmartScreen**：签名较新的安装包可能弹出警告，需点「更多信息」→「仍要运行」。
+- **Linux Wayland**：与 X11 安装包/特性不完全相同，Fedora Wayland 等场景请跟文档选 `espanso-wayland` 或源码编译 feature。
+- **YAML 缩进**：match 必须正确缩进，混用 Tab 易导致静默失败；可用 schema 链接校验。
+- **许可**：GPL-3.0；若要把内部片段打包进闭源分发物，需自行评估合规。
+- **误触发展开**：展开后立即按 `Backspace` 可撤销；可在 `config/default.yml` 设置 `undo_backspace: false` 关闭。

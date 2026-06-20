@@ -1,0 +1,143 @@
+---
+title: zx
+description: Google 出品的 JavaScript Shell 脚本工具，跨平台封装子进程调用、自动转义参数，用 `$` 模板语法替代复杂 Bash。
+repo: https://github.com/google/zx
+homepage: https://google.github.io/zx/
+repoDescription: "A tool for writing better scripts"
+avatarUrl: https://avatars.githubusercontent.com/u/1342004?v=4
+tags:
+  - CLI
+  - 开发工具
+  - 自动化
+language: JavaScript
+stars: 45549
+forks: 1268
+openIssues: 53
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: CI/CD 脚本迁移、Node 生态自动化任务、Bash 复杂逻辑改写为 JavaScript 的前端与 DevOps 团队。
+---
+
+## 项目介绍
+
+[zx](https://google.github.io/zx/) 是 Google 开源的 JavaScript Shell 脚本工具，目标是在保留 Shell 执行能力的同时，用 JavaScript 的语法与生态替代难以维护的 Bash 脚本。它围绕 `child_process` 提供跨平台封装，自动转义参数、给出合理默认值，并通过 `$` 模板标签让命令调用接近原生 Shell 写法。项目支持 Node.js、Bun、Deno 等多种运行时，适用于 CI 流水线、发布脚本与本地自动化任务。
+
+## 核心特性
+
+- **`$` 模板语法**：用 `` await $`git branch --show-current` `` 执行命令，支持变量插值与管道，写法接近 Bash 但具备 JavaScript 控制力
+- **跨平台 child_process 封装**：统一处理参数转义、stdout/stderr 捕获与退出码，减少 Windows / macOS / Linux 差异带来的脚本分支
+- **异步与并行**：原生 `async/await` 与 `Promise.all` 并行执行多条命令，适合部署、构建等多步骤流水线
+- **多运行时与模块格式**：兼容 Node.js ≥ 12.17、Bun、Deno、GraalVM；同时提供 CJS 与 ESM 入口，支持 TypeScript
+- **多种安装渠道**：npm 包、全局 CLI、`npx` 零安装运行、Homebrew、Docker 镜像，以及轻量版 `zx@lite`
+
+## 对用户价值
+
+当你需要把「几行 Bash」扩展成带条件分支、错误处理、HTTP 请求或 JSON 解析的自动化脚本时，zx 让你留在 JavaScript 生态内完成，而不必在 Bash 与 Node 之间来回切换。CI 配置、发布脚本、代码生成器、本地开发工具链都能受益：团队若已熟悉 JS/TS，维护成本低于纯 Shell；相比手写 `child_process`，zx 处理了转义、默认 shell 与常见边界情况。代价是需要 Node（或 Bun/Deno）运行时，且极简单的单行命令仍可能直接用 Bash 更轻。
+
+## 与替代方案
+
+- 相比 **原生 Bash / sh**，zx 更适合复杂逻辑、结构化数据处理与 npm 生态集成；纯文件操作或系统级 one-liner 仍可能 Bash 更直接。
+- 相比 **[execa](https://github.com/sindresorhus/execa)**，zx 提供 `$` 语法糖、全局 CLI 与文档化的脚本工作流；execa 更偏库级 API，适合嵌入应用而非独立脚本文件。
+- 相比 **[shelljs](https://github.com/shelljs/shelljs)**，zx 基于现代异步模型与 Promise，API 与维护节奏更贴近当前 Node 生态；shelljs 偏同步、历史包袱较多。
+- 相比 **Python [Invoke](https://www.pyinvoke.org/) / Fabric**，zx 复用前端与 Node 团队已有技能栈；Python 方案在数据科学与运维 Ansible 场景可能更自然。
+- 边界说明：非 Google 官方支持产品；Windows 需 WSL、Git Bash 或切换 `usePowerShell()` / `usePwsh()`。
+
+## 适应人群
+
+- 维护 CI/CD、发布脚本或 monorepo 工具链，希望用 JavaScript 统一自动化逻辑的前端与 DevOps 工程师。
+- 已熟悉 Node.js，想把复杂 Bash 脚本迁移为可读、可测试的 JS/TS 脚本的个人开发者与小团队。
+- 需要在脚本中并行调用 CLI、处理 Git 分支/部署参数，并追求跨平台一致行为的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 操作系统：Linux、macOS 或 Windows（Windows 建议 WSL、Git Bash，或配置 PowerShell）。
+- JavaScript 运行时（任选其一）：Node.js ≥ 12.17.0、Bun ≥ 1.0.0、Deno 1.x/2.x，或 GraalVM Node.js。
+- 系统需可用 bash 或 PowerShell（zx 默认查找 bash，可通过 API 切换 shell）。
+
+### 安装方式
+
+**方式一：项目依赖（推荐）**
+
+```bash
+npm install zx
+# 或
+pnpm add zx
+yarn add zx
+bun install zx
+```
+
+**方式二：零安装运行**
+
+```bash
+npx zx script.mjs
+npx zx@8.6.0 script.mjs   # 锁定版本
+```
+
+**方式三：全局 CLI**
+
+```bash
+npm install -g zx
+# 或 macOS
+brew install zx
+```
+
+**轻量版**（功能精简、体积更小）：`npm install zx@lite`
+
+更多渠道见 [Setup 文档](https://google.github.io/zx/setup)（Docker、Deno JSR、GitHub pkg registry 等）。
+
+### 首次运行
+
+创建脚本文件并添加 shebang，在文件顶部导入 `$`：
+
+```js
+#!/usr/bin/env zx
+
+await $`cat package.json | grep name`
+
+const branch = await $`git branch --show-current`
+await $`echo deploying branch: ${branch}`
+```
+
+赋予执行权限后直接运行：
+
+```bash
+chmod +x deploy.mjs
+./deploy.mjs
+```
+
+或通过 CLI：
+
+```bash
+zx deploy.mjs
+```
+
+TypeScript 用法与类型定义见 [官方 TS 文档](https://google.github.io/zx/typescript)；示例集合见 [examples/](https://github.com/google/zx/tree/main/examples)。
+
+### 验证是否成功
+
+```bash
+# 快速验证安装
+npx zx -e="console.log(await \$`echo hello`.stdout.trim())"
+# 期望输出: hello
+```
+
+或在项目中：
+
+```bash
+node -e "import('$').then(async ({ $ }) => console.log((await \$`echo ok`).stdout.trim()))"
+```
+
+确认命令 stdout 符合预期、非零退出码时脚本能按预期抛出或处理即可。
+
+### 常见坑 / 注意事项
+
+- **Windows shell**：默认依赖 bash；纯 PowerShell 环境需调用 `usePowerShell()` 或 `usePwsh()`，否则可能找不到 shell。
+- **TypeScript 类型**：使用 TS 时需额外安装 `@types/node` 与 `@types/fs-extra`（见 Setup 文档）。
+- **版本渠道**：`latest` / `lite` / `dev` / `legacy` 功能集不同，生产脚本建议锁定主版本（如 `npx zx@8.x`）。
+- **安全**：脚本内勿硬编码密钥；`$` 会执行真实 shell 命令，对用户输入做转义或校验后再插值。
+- **免责声明**：Apache-2.0 许可，但 README 标明非 Google 官方支持产品，企业采纳前请自行评估 SLA 与维护风险。

@@ -1,0 +1,95 @@
+---
+title: Memos
+description: 开源自托管轻量笔记，Markdown 原生，时间线优先，快速捕获碎片想法。
+repo: https://github.com/usememos/memos
+homepage: https://usememos.com
+repoDescription: Open-source, self-hosted note-taking tool built for quick capture. Markdown-native, lightweight, and fully yours.
+avatarUrl: https://avatars.githubusercontent.com/u/95764151?v=4
+tags:
+  - 知识管理
+  - 本地优先
+  - 开发工具
+language: Go
+stars: 60928
+forks: 4500
+openIssues: 14
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 适合 Homelab 与开发者部署私有碎片笔记库，替代公网社交化笔记应用。
+---
+
+## 项目介绍
+
+Memos 是一款开源、可自托管的轻量笔记工具，围绕「打开即写、写完即走」设计。界面以时间线为中心，不强调文件夹层级；笔记以 Markdown 存储，数据完全留在你的基础设施上，适合把 fleeting thoughts 快速沉淀成可检索的私有知识流。
+
+## 核心特性
+
+- **即时捕获** — 时间线优先 UI，打开页面即可记录，无需在目录间跳转
+- **数据自主** — 自托管部署，Markdown 存储、零遥测，笔记可随时导出迁移
+- **极简部署** — 单个 Go 二进制，Docker 镜像约 20MB，一条命令即可跑起来
+- **多数据库后端** — 支持 SQLite、MySQL、PostgreSQL，从轻量个人到生产环境均可适配
+- **开放集成** — MIT 许可，提供完整 REST 与 gRPC API，便于二次开发与自动化
+
+## 对用户价值
+
+碎片想法往往死在聊天窗口或临时便签里，既难检索又不可控。Memos 把「快速记录 → 时间线浏览 → 全文搜索」压缩成极轻流程，同时避免把私人笔记交给公有云。对开发者和小团队来说，它是比 Notion 更轻、比纯文本文件更易用的自托管中间层。
+
+## 与替代方案
+
+- 相比 **Logseq / Obsidian**，Memos 不做双链图谱与复杂知识库结构，强项是低摩擦捕获与时间线回顾，学习成本更低。
+- 相比 **Notion / 飞书文档**，Memos 不面向协作文档与块级排版，而是个人或小型团队的私有碎片笔记；需要富文本协作时应选云端套件。
+- 相比 **Flomo 等公网闪念工具**，Memos 数据留在自有服务器，隐私与合规可控，但需要自行维护部署与备份。
+- 若需求是 OCR 扫描归档或企业文档管理，应评估 Paperless-ngx 等 DMS 方案；Memos 聚焦短笔记而非文件库。
+
+## 适应人群
+
+- 想自建私有「闪念 / 日记 / 技术备忘」流，又不想维护重型知识库的开发者。
+- 已有 Homelab、NAS 或 VPS，希望用 Docker 快速跑一套轻量笔记服务的 self-host 用户。
+- 需要 REST/gRPC API 把笔记接入自动化脚本、Bot 或内部工具链的工程团队。
+
+## 如何使用
+
+### 前置条件
+
+- 推荐环境：任意可运行 Docker 的 Linux/macOS 主机，或支持原生二进制的桌面系统。
+- 默认端口 `5230` 需可访问；持久化目录用于存放 SQLite 数据或挂载外部数据库配置。
+- 了解 MIT 许可；生产环境请限制公网暴露、启用 HTTPS，并定期备份数据卷。
+
+### 安装方式
+
+Docker（官方推荐）：
+
+```bash
+docker run -d \
+  --name memos \
+  -p 5230:5230 \
+  -v ~/.memos:/var/opt/memos \
+  neosmemo/memos:stable
+```
+
+原生二进制（Linux / macOS / Windows）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/usememos/memos/main/scripts/install.sh | sh
+```
+
+生产环境还可选用 [Docker Compose](https://usememos.com/docs/deploy)、预编译包、Kubernetes Helm 或源码构建，详见[官方部署文档](https://usememos.com/docs/deploy)。
+
+### 首次运行
+
+容器或二进制启动后，浏览器访问 `http://localhost:5230`，按引导创建首个管理员账号。在首页时间线直接输入 Markdown 内容并发布，确认笔记出现在列表中。
+
+### 验证是否成功
+
+- Web UI 可正常登录，新建笔记即时出现在时间线。
+- 重启容器或进程后，历史笔记仍可从挂载的 `~/.memos` 数据目录恢复。
+- 可选：调用 REST API 列出 memo，确认集成路径可用（见[文档](https://usememos.com/docs)）。
+
+### 常见坑 / 注意事项
+
+- 未挂载 `-v ~/.memos:/var/opt/memos` 时，容器删除会导致 SQLite 数据丢失。
+- 从 SQLite 迁移到 MySQL/PostgreSQL 需按官方文档操作，勿直接拷贝数据库文件。
+- Memos 不是团队 Wiki 或双链知识库，复杂结构化知识仍建议配合 Logseq、Obsidian 等工具。
+- 升级前建议备份数据卷；可先访问[在线 Demo](https://demo.usememos.com/) 体验交互再决定是否自托管。

@@ -1,0 +1,113 @@
+---
+title: fish
+description: 开箱即用的交互式命令行 Shell，自带语法高亮、自动建议与智能补全，零配置即可上手。
+repo: https://github.com/fish-shell/fish-shell
+homepage: https://fishshell.com
+repoDescription: "The user-friendly command line shell."
+avatarUrl: https://avatars.githubusercontent.com/u/1828073?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 自动化
+language: Rust
+stars: 33712
+forks: 2312
+openIssues: 551
+contributors: 1
+license: GPL-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 厌倦反复调 bash/zsh 补全与提示符、想要更直观终端体验的 macOS/Linux 开发者。
+---
+
+## 项目介绍
+
+fish（friendly interactive shell）是一款面向 macOS、Linux 及类 Unix 平台的交互式命令行 Shell，以「开箱即用」著称。它在 Rust 核心之上提供语法高亮、输入时自动建议、无需配置的 Tab 补全，以及 Web 配置工具 `fish_config`，让日常终端操作比传统 bash/zsh 更直观，同时仍可与现有脚本和 POSIX 工具链共存。
+
+## 核心特性
+
+- **语法高亮与自动建议**：命令与参数在输入时即着色，历史与路径会灰显建议，按右方向键即可采纳
+- **智能 Tab 补全**：基于命令与 man 页生成补全，多数场景无需手写 `complete` 规则
+- **Web 配置界面**：运行 `fish_config` 可在浏览器中预览主题、调整提示符与快捷键
+- **友好脚本语法**：变量、函数与条件分支语法更贴近现代语言，内置 `help` 与在线文档降低学习成本
+- **跨平台安装渠道**：Homebrew、各发行版包管理器、官方安装包与 WSL/Cygwin 均有支持
+
+## 对用户价值
+
+bash 与 zsh 的补全、提示符与插件往往需要大量 `.rc` 配置才能接近现代 IDE 的输入体验。fish 把高亮、建议与补全作为默认能力，减少「换机器就要重装 Oh My Zsh 插件」的维护成本。对脚本作者，fish 仍可作为日常交互 Shell 使用，复杂自动化可继续交给 bash/sh；对新手，官方教程与 `help` 命令降低了 Shell 入门门槛。
+
+## 与替代方案
+
+- 相比 **[bash](https://www.gnu.org/software/bash/)**，fish 交互体验更现代（高亮、建议、补全开箱即用），但 **不是 POSIX 兼容 Shell**，部分 bash 脚本语法与变量展开行为不同，不适合作为系统 `/bin/sh` 或纯 bash 脚本的默认解释器。
+- 相比 **[zsh](https://www.zsh.org/) + [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh)**，fish 零配置即可用，无需管理插件与主题仓库；zsh 生态更大、与 macOS 默认 Shell 迁移成本更低，且可通过插件复刻 fish 式体验。
+- 相比 **[nushell](https://github.com/nushell/nushell)**，fish 更贴近传统 Unix 命令管道模型，学习曲线更缓；nushell 以结构化数据与表格输出见长，适合数据探索型工作流。
+- 相比 **[Starship](https://starship.rs/)** 等跨 Shell 提示符，fish 提供完整 Shell 运行时而非仅美化提示符；若只需统一 bash/zsh/fish 的提示符样式，Starship 更轻量。
+- **边界说明**：fish 默认不读取 `~/.bashrc` / `~/.zshrc`；与 bash 混用时可用 `bash script.sh` 显式调用；GPL-2.0 许可，嵌入闭源产品分发前需评估合规。
+
+## 适应人群
+
+- 日常在 macOS 或 Linux 终端工作、希望减少 Shell 配置时间的开发者与运维工程师。
+- 刚接触命令行、需要直观反馈（高亮、建议、补全）的学习者。
+- 已用 bash/zsh 但想单独保留一套「交互专用 Shell」、脚本仍用 bash 的混合工作流用户。
+
+## 如何使用
+
+### 前置条件
+
+- 操作系统：macOS 10.12+、主流 Linux 发行版，或 Windows 10/11 下的 WSL / Cygwin / MSYS2。
+- 运行 fish 需常见 Unix 工具（`mktemp` 及 coreutils 等）；可选功能依赖 `man`、Python 3.5+（补全生成与 `fish_config`）、剪贴板工具（`pbcopy`/`xclip`/`wl-copy` 等）。
+- 若从源码构建：Rust 1.85+、CMake 3.15+、C 编译器；详见仓库 README。
+
+### 安装方式
+
+**macOS（Homebrew，推荐）：**
+
+```bash
+brew install fish
+```
+
+**Ubuntu / Debian（官方 PPA）：**
+
+```bash
+sudo apt-add-repository ppa:fish-shell/release-4
+sudo apt update
+sudo apt install fish
+```
+
+**Fedora / openSUSE 等**：可从 [openSUSE Build Service](https://software.opensuse.org/download.html?project=shells%3Afish%3Arelease%3A4&package=fish) 获取对应包，或访问 [fishshell.com](https://fishshell.com/) 下载安装包。
+
+**安装后设为默认 Shell（可选）：**
+
+```bash
+# 将 fish 加入 /etc/shells（若尚未登记）
+echo $(which fish) | sudo tee -a /etc/shells
+chsh -s $(which fish)
+```
+
+### 首次运行
+
+在当前终端中直接启动 fish 试用，无需切换默认 Shell：
+
+```bash
+fish
+```
+
+首次进入可运行 `help` 打开文档，或执行 `fish_config` 在浏览器中调整主题与快捷键。
+
+### 验证是否成功
+
+```bash
+fish --version
+echo $FISH_VERSION
+```
+
+应输出版本号（如 `fish, version 4.x.x`）。在 fish 内输入部分命令名，应看到语法高亮与灰色自动建议；按 Tab 应出现上下文补全。
+
+### 常见坑 / 注意事项
+
+- **非 POSIX Shell**：`for i in *.png; echo $i; done` 等 bash 一行写法在 fish 中语法不同；运行旧脚本请用 `bash script.sh` 或 `sh script.sh`。
+- **环境变量**：fish 使用 `set -x NAME value` 而非 `export NAME=value`；从 bash 迁移时需改写 `.profile` 中的导出语句。
+- **默认 Shell 切换**：`chsh` 后需重新登录；macOS 用户若用 Terminal.app，还可在「描述文件 → Shell」中单独指定 fish。
+- **Windows 原生**：官方主要支持 WSL/Cygwin/MSYS2，无独立 Windows 原生 build；WSL 内按 Linux 发行版说明安装即可。
+- **GPL 许可**：fish 主体为 GPL-2.0，商业嵌入或修改分发前请阅读 `COPYING` 与 `doc_src/license.rst`。

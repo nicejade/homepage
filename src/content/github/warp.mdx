@@ -1,0 +1,97 @@
+---
+title: Warp
+description: 从终端演进的 Agent 开发环境，块编辑 UI、内置 Oz 与主流编码 Agent 集成。
+repo: https://github.com/warpdotdev/warp
+homepage: https://www.warp.dev
+repoDescription: Warp is an agentic development environment, born out of the terminal.
+avatarUrl: https://avatars.githubusercontent.com/u/71840468?v=4
+tags:
+  - CLI
+  - 开发工具
+  - Agent
+language: Rust
+stars: 62063
+forks: 5058
+openIssues: 4376
+license: AGPL-3.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 跨平台现代终端 + 云端并行 Agent 编排，替代 iTerm 与散落 CLI Agent 的组合。
+---
+
+## 项目介绍
+
+Warp 是用 Rust 打造的现代终端与 Agent 开发环境，把块级输出、代码编辑与 AI 辅助整合进同一界面。它内置 SOTA Agent **Oz**，也可直接运行 Claude Code、Codex、Gemini CLI 等编码 Agent；**Oz 平台**则支持在云端并行调度可编程、可审计的编码 Agent，解决「传统终端跟不上开发方式、Agent 工具难以超出本机规模」的痛点。客户端以 AGPL-3.0 开源，服务端部分仍闭源。
+
+## 核心特性
+
+- **现代终端 UI**：块编辑、智能补全、Workflows 与主题扩展，支持 bash、fish、zsh、PowerShell
+- **内置 Agent Oz**：终端内原生 AI 辅助，可理解会话上下文并代为执行或解释命令
+- **编码 Agent 集成**：同一环境运行 Claude Code、Codex、Gemini CLI 等 CLI 编码工具
+- **Oz 云端编排**：并行启动大量编码 Agent，可编程、可审计、可 steer，适合自动化重复任务
+- **跨平台**：macOS、Windows、Linux 官方安装包，支持从源码构建 `warp-oss` 开发版
+- **协作与扩展**：Drive、实时协作能力；社区主题与 [Workflows](https://github.com/warpdotdev/workflows) 仓库开放共享
+
+## 对用户价值
+
+传统终端把输出当纯文本流，AI 工具又往往散落在 IDE 插件与多个 CLI 之间。Warp 把「跑命令、看结果、改代码、调 Agent」收进一个原生终端体验：块 UI 让日志与 diff 可读性更高，内置与外部 Agent 减少窗口切换，Oz 则把 Agent 工作流从单机扩展到云端并行。对日常重度命令行 + AI 编程的用户，它是终端换代而非再叠一层插件。
+
+## 与替代方案
+
+- 相比 **iTerm2**，Warp 提供块编辑、AI 原生 UI 与 Agent 集成；iTerm2 开源可审计、tmux/Python 自动化更成熟，但无内置 Agent 与现代编辑体验。
+- 相比 **Alacritty / Ghostty** 等 GPU 终端，Warp 功能更完整（补全、Agent、协作），体积与账户依赖更大；若只需极速纯终端，后者更轻。
+- 相比 **VS Code / Cursor 内置终端**，Warp 是独立终端应用，Oz 与并行云端 Agent 面向「终端即 IDE」工作流；若已在 GUI IDE 内完成大部分编辑，迁移收益需评估。
+- **Oz 云端 Agent** 与本地 CLI Agent 互补：需要大规模并行或脱离本机资源时再上 Oz；纯本地隐私场景可只用开源客户端与自带 Shell。
+
+## 适应人群
+
+- 希望把日常 SSH、构建、调试与 AI 辅助统一进现代终端的全栈与 DevOps 工程师。
+- 已在用 Claude Code、Codex 等 CLI Agent，想要更好终端 UX 与上下文管理的开发者。
+- 需要并行、可编排云端编码 Agent 的小团队或自动化重度用户（Oz 平台）。
+
+## 如何使用
+
+### 前置条件
+
+- **macOS**、**Windows** 或 **Linux**（见 [官方下载页](https://www.warp.dev/download) 平台说明）
+- 默认 Shell：bash、fish、zsh 或 PowerShell（pwsh）；其他 Shell 可能回退到 zsh
+- 首次启动需联网；之后可离线使用基础终端，AI 与协作功能需网络
+- 注册 Warp 账户为可选；使用 Oz 云端 Agent 需按官方策略登录与配置
+- 从源码构建：macOS 需 Xcode、固定 Rust 工具链、`protoc` 等（见仓库 `CONTRIBUTING.md`）
+
+### 安装方式
+
+- **macOS（Homebrew，推荐）**：
+
+```sh
+brew install --cask warp
+```
+
+- **各平台安装包**：从 [warp.dev/download](https://www.warp.dev/download) 下载；尝鲜可用 [Preview 构建](https://www.warp.dev/download-preview)
+
+- **从源码构建（AGPL 客户端）**：
+
+```bash
+git clone https://github.com/warpdotdev/warp.git
+cd warp
+./script/bootstrap
+cargo run
+```
+
+`cargo run` 会启动本地 checkout 构建的 `warp-oss` 二进制；完整依赖与开发流程见仓库 `README.md` 与 `CONTRIBUTING.md`。
+
+### 首次运行
+
+安装后打开 Warp，可选注册账户或跳过。在 Settings > Features > Session 中确认默认 Shell；若从 iTerm2、VS Code 等迁移，可参考 [Migrate to Warp](https://docs.warp.dev/getting-started/migrate-to-warp) 导入设置。需要 AI 时在终端内唤起 Oz 或配置外部编码 Agent CLI。
+
+### 验证是否成功
+
+新建本地会话，运行简单命令（如 `echo`、`ls`）确认块输出与补全正常。若启用 Agent，发起一次小任务（解释命令或生成脚本）并查看响应。从源码构建时确认 `warp-oss` 窗口可启动且无阻塞性编译错误。
+
+### 常见坑 / 注意事项
+
+- GitHub 仓库同时用于 **Issue / 功能请求** 与 **开源客户端源码**；服务端与部分商业能力不在仓库内，部署前阅读 [开源讨论](https://github.com/warpdotdev/Warp/discussions/400) 与许可说明。
+- 客户端为 **AGPL-3.0**，二次分发或修改网络服务相关代码需遵守 Copyleft；部分组件另含 MIT 许可。
+- AI、Oz 与 Drive 涉及账户、计费与数据策略，生产环境使用前查阅 [官方文档](https://docs.warp.dev/) 隐私与登录故障排除页。
+- 自编译门槛高于安装包；依赖平台原生工具链，CI 或无头环境构建需额外配置。

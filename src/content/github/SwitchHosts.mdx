@@ -1,0 +1,105 @@
+---
+title: "SwitchHosts"
+description: 跨平台 hosts 管理桌面应用，快速切换本地、远程与组合 hosts 方案。
+repo: "https://github.com/oldj/SwitchHosts"
+homepage: "https://switchhosts.vercel.app"
+repoDescription: "Switch hosts quickly!"
+avatarUrl: "https://avatars.githubusercontent.com/u/416130?v=4"
+tags:
+  - 开发工具
+  - 桌面应用
+  - 网络工具
+language: "TypeScript"
+stars: 27000
+forks: 2600
+openIssues: 410
+license: "Apache-2.0"
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 需要多套 hosts 方案切换、远程同步或团队联调测试环境的开发者与运维。
+---
+
+## 项目介绍
+
+[SwitchHosts](https://switchhosts.vercel.app) 是一款基于 Tauri 2、React 与 Mantine 的跨平台桌面应用，专门用来管理并切换系统 `hosts` 文件。它把「本地方案、远程订阅、组合规则与文件夹分组」收进同一界面，支持主窗口或系统托盘一键切换，适合需要在开发、测试、内网穿透或临时域名解析之间频繁改 hosts 的用户。项目 Apache-2.0 开源，macOS / Linux / Windows 均可使用，社区 Star 约 2.7 万。
+
+## 核心特性
+
+- **多类型 hosts 条目**：管理系统、本地、远程、组合（Group）与文件夹层级，按需启用不同方案
+- **快速切换**：主界面或系统托盘即时切换当前生效的 hosts 组合
+- **编辑体验**：hosts 语法高亮，跨条目查找与替换
+- **远程 hosts**：支持手动刷新、定时刷新或启动时自动拉取远程内容
+- **导入导出**：导出 hosts 数据备份 JSON，也可从 URL 导入备份；条目可移入回收站后恢复或彻底删除
+- **偏好与扩展**：写入模式、代理、更新检查、开机启动、应用后执行命令，以及本地 HTTP API
+
+## 对用户价值
+
+手动改 `/etc/hosts`（或 Windows 等价路径）容易出错、难回滚，多套环境并存时更要反复注释与复制粘贴。SwitchHosts 把「编辑 → 预览 → 切换 → 备份」流程可视化：远程 hosts 可定时同步，组合条目让「基础屏蔽 + 项目专用域名」一次启用；应用后命令可配合刷新 DNS 或重启依赖服务。对个人开发者，它降低联调与 A/B 域名解析的摩擦；对团队，导出 JSON 便于共享测试 hosts 片段。数据默认落在 `~/.SwitchHosts`，完整备份只需复制该目录。
+
+## 与替代方案
+
+- 相比**直接编辑系统 hosts 文件**，SwitchHosts 提供语法高亮、回收站、远程订阅与一键切换，减少误删系统行或忘记恢复的风险。
+- 相比 **[Gas Mask](https://github.com/2ndalpha/gasmask)**（macOS）等**单平台 hosts 工具**，SwitchHosts 基于 Tauri 覆盖 Win / macOS / Linux，并支持远程 hosts 与 HTTP API。
+- 相比 **dnsmasq、/etc/resolver** 等**本地 DNS 方案**，SwitchHosts 只改 hosts 层，部署更轻、适合临时域名或少数条目；若需复杂分流或 DoH，应使用专业 DNS/代理工具（如 Clash、sing-box），二者可并存但职责不同。
+- 相比 **HostsMan、SwitchHosts 旧版 Electron 分支**，当前 v5 基于 Tauri 2，数据结构与 README 所述 `manifest.json` + `entries/` 布局更清晰；从旧版迁移需关注备份格式差异（建议先完整复制 `~/.SwitchHosts`）。
+
+## 适应人群
+
+- 需要在开发、预发、生产或内网 hosts 方案间频繁切换的前端与后端开发者。
+- 维护远程 hosts 订阅、定时同步测试域名列表的 QA 或运维人员。
+- 希望用图形界面管理多条 hosts、避免手改系统文件出错的 macOS / Windows / Linux 桌面用户。
+
+## 如何使用
+
+### 前置条件
+
+- **macOS / Linux / Windows** 任一受支持桌面系统
+- 修改 hosts 通常需要**管理员 / root 权限**；首次应用方案时按系统提示授权
+- 若从源码构建：需 [Node.js](https://nodejs.org/)、[Rust](https://www.rust-lang.org/tools/install) 及 [Tauri 2 系统依赖](https://v2.tauri.app/start/prerequisites/)
+
+### 安装方式
+
+**预构建版本（推荐）**
+
+从 [GitHub Releases](https://github.com/oldj/SwitchHosts/releases) 或[项目主页](https://switchhosts.vercel.app) 下载对应平台安装包。
+
+**Windows（Chocolatey）**
+
+```powershell
+choco install switchhosts
+```
+
+**从源码构建**
+
+```bash
+git clone https://github.com/oldj/SwitchHosts.git
+cd SwitchHosts
+npm install
+npm run tauri:build
+```
+
+打包产物位于 `./src-tauri/target/release/bundle/`。
+
+### 首次运行
+
+1. 安装并启动 SwitchHosts。
+2. 在界面中新建**本地**或**远程** hosts 条目，或导入已有备份 JSON / URL。
+3. 将需要启用的条目加入**组合（Group）**，在主窗口或托盘选择要应用的方案。
+4. 在偏好设置中确认**写入模式**、是否**开机启动**、**应用后命令**（如刷新 DNS）等选项。
+5. 首次写入系统 hosts 时授予管理员权限。
+
+### 验证是否成功
+
+- 主界面或托盘显示当前已启用的 hosts 方案名称。
+- 打开系统 hosts 文件，确认内容与所选方案一致（路径因系统而异，如 macOS `/etc/hosts`）。
+- 对测试域名执行 `ping` 或 `curl`，验证解析是否指向预期 IP。
+- 检查数据目录 `~/.SwitchHosts/manifest.json` 与 `entries/` 是否已生成（表示本地数据正常落盘）。
+
+### 常见坑 / 注意事项
+
+- **权限不足**：未授权管理员/root 时无法写入系统 hosts；macOS 需在「系统设置 → 隐私与安全性」中允许。
+- **远程 hosts 未更新**：确认网络、代理设置与定时刷新策略；可手动触发刷新排查。
+- **备份范围**：应用内导出的 JSON **仅含 hosts 数据**，不含偏好与历史；完整备份请复制整个 `~/.SwitchHosts` 目录。
+- **与 VPN / 代理 / 本地 DNS 冲突**：多工具同时改解析时，以最后生效的层为准；联调前建议只启用一套方案。
+- **升级 v5**：数据结构相对旧版有变化，升级前建议先备份 `~/.SwitchHosts`，再对照 [Releases](https://github.com/oldj/SwitchHosts/releases) 说明迁移。

@@ -1,0 +1,108 @@
+---
+title: Mastodon
+description: 基于 ActivityPub 的自托管微博社区服务器，可联邦互联各实例用户。
+repo: https://github.com/mastodon/mastodon
+homepage: https://joinmastodon.org
+repoDescription: Your self-hosted, globally interconnected microblogging community
+avatarUrl: https://avatars.githubusercontent.com/u/24979032?v=4
+tags:
+  - 自托管
+  - 后端
+  - 开发工具
+language: Ruby
+stars: 50045
+openIssues: 4460
+contributors: 1008
+license: AGPL-3.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 适合 Homelab 运营独立社群站、对接 Fediverse 或对 Bluesky 做技术对比的运维与社区管理员。
+---
+
+## 项目介绍
+
+Mastodon 是一款基于 [ActivityPub](https://www.w3.org/TR/activitypub/) 协议的开源社交网络服务器，让你可以自建「实例（Instance）」并加入联邦宇宙（Fediverse）。用户可发布文字、链接、图片与视频，关注本实例或跨站点的账号；不同服务器之间可互相关注与互动，无需绑定单一商业平台。项目由 Mastodon GmbH 非营利组织维护，采用 AGPL-3.0 许可。
+
+## 核心特性
+
+- **联邦互联** — 基于开放标准 ActivityPub，与 Pixelfed、PeerTube、Lemmy 等实现互操作，无厂商锁定
+- **实时时间线** — 关注对象的动态按时间顺序实时刷新，支持本地、联邦与公开时间线
+- **富媒体与附件** — 支持图片、视频上传；无音轨视频可当作 GIF 循环播放
+- **安全与 moderation** — 私密帖、锁定账号、关键词过滤、静音/屏蔽、举报与管理员审核工具
+- **OAuth2 与 REST API** — 作为 OAuth2 提供方，第三方客户端可通过 REST 与 Streaming API 接入，生态应用丰富
+
+## 对用户价值
+
+中心化社交平台把社群、算法与数据锁在同一产品里，迁移成本高、规则也不透明。Mastodon 把「社区运营权」交还给实例管理员：你可以为团队、兴趣圈或地区用户搭建独立站点，同时通过联邦协议与全球用户互联。对个人用户，可在 [joinmastodon.org](https://joinmastodon.org/servers) 选择公共实例快速入门；对组织，自托管意味着合规、品牌与 moderation 策略完全自控，代价是需要承担运维、SMTP 与 moderation 人力。
+
+## 与替代方案
+
+- 相比 **Twitter / X、Threads**，Mastodon 无单一母公司控制全局时间线，实例可独立制定规则；但跨站体验依赖各实例 moderation 质量，搜索与推荐不如商业产品「开箱即用」。
+- 相比 **Bluesky（AT Protocol）**，Mastodon 走 ActivityPub 联邦路线，生态更成熟、第三方客户端与实例数量更多；AT 协议在账号可移植性与协议设计上有不同取舍，两者目前并不直接互通。
+- 相比 **Misskey、Pleroma、GoToSocial** 等 ActivityPub 实现，Mastodon 功能最完整、文档与 Docker 部署路径最主流，但资源占用更高；轻量个人节点可评估 GoToSocial 或 Pleroma。
+- 相比 **Discord / Slack**，Mastodon 是公开/半公开微博形态，强项是广播式社交与联邦发现，而非频道式实时协作。
+
+## 适应人群
+
+- 希望为社群、公司或兴趣小组运营独立社交站，并保留数据与 moderation 自主权的系统管理员与社区运营者。
+- 已有 VPS / Homelab，愿意维护 PostgreSQL、Redis、Sidekiq 与反向代理的后端或 DevOps 工程师。
+- 需要 OAuth API 开发第三方客户端、Bot 或联邦集成工具的全栈开发者。
+
+## 如何使用
+
+### 前置条件
+
+- **生产部署**：Linux 服务器（官方文档以 Ubuntu 24.04 / Debian 13 为例）、可解析的域名、可用的 SMTP 邮件服务（注册验证与通知必需）。
+- **Docker 路径**：Docker 与 Docker Compose，以及 Nginx/Caddy 等反向代理处理 HTTPS。
+- **源码路径**：Ruby 3.3+、PostgreSQL 14+、Redis 7.0+、Node.js 22+、FFmpeg 5.1+；详见 [系统要求](https://github.com/mastodon/mastodon#requirements)。
+- 了解 AGPL-3.0：若修改代码并通过网络提供服务，需向用户提供对应源码。
+
+### 安装方式
+
+**Docker Compose（仓库内置配置，适合多数自托管场景）：**
+
+```bash
+git clone https://github.com/mastodon/mastodon.git live && cd live
+git checkout $(git tag -l | grep '^v[0-9.]*$' | sort -V | tail -n 1)
+cp .env.production.sample .env.production
+docker compose run --rm web bundle exec rake mastodon:setup
+docker compose up -d
+```
+
+官方容器镜像：`ghcr.io/mastodon/mastodon`（稳定版如 `v4.6.0`）。`docker-compose.yml` 中请确认 PostgreSQL/Redis 数据卷已持久化，勿在生产环境使用默认 ephemeral 存储。
+
+**从源码安装（Ubuntu/Debian 示例）：**
+
+```bash
+su - mastodon
+git clone https://github.com/mastodon/mastodon.git live && cd live
+git checkout $(git tag -l | grep '^v[0-9.]*$' | sort -V | tail -n 1)
+bundle config deployment 'true'
+bundle config without 'development test'
+bundle install && yarn install
+RAILS_ENV=production bin/rails mastodon:setup
+```
+
+完整逐步说明见 [官方安装文档](https://docs.joinmastodon.org/admin/install/)。Kubernetes 用户可参考 [mastodon/chart](https://github.com/mastodon/chart)。
+
+### 首次运行
+
+- **Docker**：`mastodon:setup` 向导会生成 `.env.production`、创建数据库 schema 并预编译前端资源；完成后 `docker compose up -d` 启动 `web`、`streaming`、`sidekiq` 等服务。
+- **源码**：向导结束后复制 `dist/nginx.conf` 与 `dist/mastodon-*.service` 到系统目录，配置 SSL（如 `certbot`），再 `systemctl enable --now mastodon-web mastodon-sidekiq mastodon-streaming`。
+- 浏览器访问你的域名，注册首个账号；首个注册用户通常自动成为管理员，可在「管理 → 站点设置」中完善实例名称、规则与注册策略。
+
+### 验证是否成功
+
+- 访问 `https://<你的域名>/health` 或首页，确认 Web 界面可加载且无 502。
+- 发布一条测试嘟文，检查本地时间线与媒体附件是否正常。
+- 在「管理 → 仪表盘」查看 Sidekiq 队列无持续积压；可选关注一个外部联邦账号，确认跨站互动可用。
+- API 验证：`curl https://<你的域名>/api/v1/instance` 应返回实例元数据 JSON。
+
+### 常见坑 / 注意事项
+
+- **邮件未配置**：无法完成注册验证与密码重置，SMTP 是生产实例的硬性依赖。
+- **`.env.production` 密钥**：`SECRET_KEY_BASE`、VAPID 密钥等一旦丢失或变更会导致会话失效；Docker 环境下注意引号转义（见 [issue #16895](https://github.com/mastodon/mastodon/issues/16895)）。
+- **资源与 moderation**：Mastodon 栈含 PostgreSQL、Redis、Sidekiq、Streaming 与可选 Elasticsearch，小 VPS 易吃满内存；开放注册实例需投入 moderation，否则垃圾账号与联邦滥用会快速出现。
+- **升级**：务必阅读 [Release Notes](https://github.com/mastodon/mastodon/releases)，Docker 环境通常 `docker compose pull` 后按说明执行 `db:migrate`；生产升级前备份数据库与 `public/system` 媒体目录。
+- **只想使用而非运维**：不必自建，可在 [joinmastodon.org/servers](https://joinmastodon.org/servers) 挑选公共实例注册；自托管适合有明确社群或合规需求的团队。

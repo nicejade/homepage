@@ -1,0 +1,128 @@
+---
+title: Lerna
+description: JavaScript/TypeScript monorepo 构建与发布系统，支持跨包任务编排、版本管理与计算缓存。
+repo: https://github.com/lerna/lerna
+homepage: https://lerna.js.org
+repoDescription: "Lerna is a fast, modern build system for managing and publishing multiple JavaScript/TypeScript packages from the same repository."
+avatarUrl: https://avatars.githubusercontent.com/u/19333396?v=4
+tags:
+  - 开发工具
+  - 自动化
+  - CLI
+language: TypeScript
+stars: 36064
+forks: 2272
+openIssues: 335
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 多包仓库统一版本发布、CI 增量构建、从 npm workspaces 起步搭建 monorepo 的前端与平台团队。
+---
+
+## 项目介绍
+
+Lerna 是面向 JavaScript/TypeScript **monorepo** 的构建与发布系统，自 2016 年起被广泛用于在同一仓库中管理多个 npm 包。2022 年起项目由 [Nx 团队接管维护](https://github.com/lerna/lerna/issues/3121)，核心能力在保留 `lerna version` / `lerna publish` 等经典工作流的同时，接入了 Nx 的任务调度、计算缓存与分布式执行引擎。Lerna **不负责**依赖安装与链接——官方推荐配合 npm、Yarn 或 pnpm 的 **workspaces** 使用，自身专注跨包脚本执行、版本递增与 npm 发布编排。
+
+## 核心特性
+
+- **一键初始化**：`lerna init` 可从零创建带 git 与 workspaces 的 monorepo，也可在现有仓库中接入并识别包路径
+- **跨包任务执行**：`lerna run <script>` 按依赖图顺序在全部或部分包上运行 npm scripts，支持 `--scope`、`--since` 增量执行
+- **版本与发布**：内置 fixed / independent 两种版本策略，可自动生成 CHANGELOG 并将包发布到 npm
+- **计算缓存**：任务结果可本地缓存，避免重复构建；支持与 Nx Cloud 等方案共享远程缓存
+- **项目依赖图**：可视化包间依赖关系，帮助理解任务调度顺序与架构边界
+- **分布式 CI 执行**：在核心包变更导致全量构建时，可并行分发任务到多个 agent 缩短最坏情况下的 CI 时间
+
+## 对用户价值
+
+若你在一个仓库里维护多个相互依赖的 npm 包（组件库、工具包、示例应用等），Lerna 把「改一个包、测相关包、统一 bump 版本、按序发布」串成可脚本化的流程，减少手工协调。`--since=origin/main` 让 PR 只跑受影响的包，配合缓存可显著缩短 CI 时间。对已有 Lerna 4 及以下版本的老项目，升级到 Nx 时代的 Lerna 5+ 可在保留熟悉 CLI 的前提下获得现代任务引擎，迁移路径比整体换栈更平滑。
+
+## 与替代方案
+
+- 相比 **Nx**，Lerna 与 Nx 共享底层任务调度与缓存能力（Lerna 6+ 由 Nx 驱动）；Nx 提供更完整的生成器、插件生态与 IDE 集成（Nx Console），适合从零规划大型 monorepo；Lerna CLI 更轻、语义贴近「多包版本发布」经典场景，学习曲线对老用户更友好。
+- 相比 **Turborepo**，两者都强调任务缓存与 `--filter` / `--since` 式增量构建；Turborepo 以 `turbo.json` pipeline 为中心、与包管理器解耦；Lerna 在 **npm 包版本管理与 publish** 上历史积淀更深，适合需要 fixed/independent versioning 工作流的团队。
+- 相比 **pnpm / npm workspaces  alone**，workspaces 只解决包装依赖与链接，不提供跨包任务编排、版本递增与发布；Lerna 补的是「编排层」，两者通常组合使用而非互斥。
+- 边界说明：Lerna 不是包管理器或 JavaScript 运行时；依赖安装、hoisting 策略仍由 npm/Yarn/pnpm 决定，接入前需先正确配置 workspaces。
+
+## 适应人群
+
+- 在同一仓库维护多个 npm 包、需要统一版本发布与 CHANGELOG 的前端库与平台工程团队。
+- 希望用 `--since` 与任务缓存缩短 monorepo CI 时间、又不愿整体迁移到 Nx 全栈方案的技术负责人。
+- 从 Lerna 4 或纯 workspaces 方案升级、需要现代任务调度与分布式缓存的存量 monorepo 维护者。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 环境（版本要求见 [lerna.js.org 文档](https://lerna.js.org) 与 npm 包说明）。
+- 包管理器已启用 **workspaces**（npm / Yarn / pnpm 均可）；Lerna 不负责 `node_modules` 安装与链接。
+- 若需发布到 npm，需已登录 `npm login` 并拥有对应包的发版权限。
+
+### 安装方式
+
+**方式一：从零创建 monorepo**
+
+```bash
+mkdir ./new-lerna-workspace && cd ./new-lerna-workspace
+npx lerna init --dryRun   # 预览变更
+npx lerna init            # 确认后正式初始化
+```
+
+**方式二：在现有仓库中接入**
+
+```bash
+# 已配置 package manager workspaces 时，直接 init 即可识别包路径
+npx lerna init
+
+# 或手动指定包目录
+npx lerna init --packages="packages/*"
+npx lerna init --packages="foo/*" --packages="bar/*"
+```
+
+**方式三：作为 devDependency 安装**
+
+```bash
+npm install --save-dev lerna
+# 或 pnpm add -D lerna / yarn add -D lerna
+```
+
+### 首次运行
+
+```bash
+# 验证 CLI
+npx lerna --version
+
+# 在所有包上执行 build 脚本（按依赖图排序）
+npx lerna run build
+
+# 仅对 header 包跑 test
+npx lerna run test --scope=header
+
+# 只对相对 main 有改动的包执行任务
+npx lerna run test --since=origin/main
+
+# 递增版本（交互式）
+npx lerna version
+
+# 发布到 npm
+npx lerna publish
+```
+
+### 验证是否成功
+
+```bash
+npx lerna --version                          # 应输出版本号
+npx lerna run build                          # 各包 build 应按序成功，终端显示 ✔ 汇总
+npx lerna list                               # 应列出 workspaces 中的包
+```
+
+确认根目录已生成 `lerna.json`，且 `package.json` 中 workspaces 配置与 `lerna.json` 的 packages 路径一致。
+
+### 常见坑 / 注意事项
+
+- **依赖安装不归 Lerna 管**：`lerna bootstrap` 在 modern Lerna 中已非推荐路径；请用 `npm install` / `pnpm install` / `yarn install` 配合 workspaces，再执行 `lerna run`。
+- **workspaces 与 packages 路径不一致**：`lerna init` 默认读取包管理器的 workspaces 配置；若包未被识别，检查 `lerna.json` 与 `package.json`（或 `pnpm-workspace.yaml`）中的 glob 是否匹配。
+- **Nx 时代的行为变化**：Lerna 5+ 任务引擎由 Nx 驱动，缓存、`.env` 自动加载等行为与旧版不同；升级前阅读 [官方迁移指南](https://lerna.js.org) 与 CHANGELOG。
+- **发布权限与版本策略**：`lerna version` 的 fixed / independent 模式影响 CHANGELOG 与 tag 语义；首次 publish 前在测试 registry 或 `--dry-run` 下验证。
+- **与 Nx 的关系**：项目现由 Nx 团队维护，深度定制任务图、远程缓存或 IDE 集成时可评估是否直接使用 Nx；Lerna 适合保留现有 CLI 习惯的场景。

@@ -1,0 +1,141 @@
+---
+title: pnpm
+description: 高速省磁盘的 Node.js 包管理器，以 content-addressable store 与严格依赖隔离著称。
+repo: https://github.com/pnpm/pnpm
+homepage: https://pnpm.io
+repoDescription: "Fast, disk space efficient package manager"
+avatarUrl: https://avatars.githubusercontent.com/u/21320719?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 自动化
+language: Rust
+stars: 35551
+forks: 1539
+openIssues: 2370
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 多项目 monorepo、CI 依赖缓存提速、从 npm/Yarn 迁移并控制 phantom dependencies 的团队。
+---
+
+## 项目介绍
+
+pnpm 是面向 Node.js 生态的包管理器，自 2016 年起在生产环境广泛使用。它通过 **content-addressable store** 将同一版本的包文件集中存储，再在项目 `node_modules` 中以硬链接/符号链接复用，显著节省磁盘并加快安装。pnpm 同时提供 `pnpm-lock.yaml` 锁定依赖、内置 [workspaces](https://pnpm.io/workspaces) 支持 monorepo，并以严格模式限制包只能访问 `package.json` 中声明的依赖，减少「幽灵依赖」带来的隐患。v11 起核心 CLI 以纯 ESM 分发，并可通过 `pnpm runtime` 管理 Node.js 版本。
+
+## 核心特性
+
+- **安装更快**：官方 benchmark 显示常见场景下可比 npm/Yarn 快约 2 倍，全局 store 命中后重复安装几乎瞬时完成
+- **磁盘高效**：多项目共享同一 store，同一包版本只存一份实体文件，大型 monorepo 可节省数 GB 空间
+- **严格依赖隔离**：非扁平 `node_modules` 结构，子依赖无法被上层「偷偷引用」，更早暴露错误 import
+- **Monorepo 一等公民**：`pnpm-workspace.yaml` + filter 命令支持跨包脚本、依赖与发布编排
+- **可复现 lockfile**：`pnpm-lock.yaml` 锁定完整依赖图，CI 与本地 `pnpm install --frozen-lockfile` 结果一致
+- **Node 版本管理**：`pnpm env` / runtime 可在无 nvm 的情况下安装与切换 Node.js
+
+## 对用户价值
+
+若你维护多个前端/全栈项目，pnpm 的全局 store 能避免每个仓库重复下载相同依赖，本地与 CI 缓存策略也更清晰。对 monorepo 团队，workspaces 与 `pnpm -r` 过滤命令让跨包构建、测试与版本发布保持在 npm 兼容语义下，又比传统扁平 `node_modules` 更可控。严格模式会在开发阶段暴露「用了但没声明」的依赖，减少上线后因环境差异触发的隐蔽 bug。迁移成本通常较低：命令与 npm 高度相似（`pnpm install`、`pnpm add`、`pnpm run`），多数现有 `package.json` 可直接沿用。
+
+## 与替代方案
+
+- 相比 **npm**，pnpm 安装速度与磁盘占用通常更优，依赖隔离更严格；npm 是 Node.js 默认自带、生态文档与第三方教程覆盖最广的选择，团队零学习成本时 npm 仍常见。
+- 相比 **Yarn Classic / Berry**，pnpm 的 store + 链接模型在磁盘复用上更激进，workspaces 与 lockfile 工作流成熟；Yarn Berry 的 Plug'n'Play 与 Zero-Install 等特性适合特定团队，但 PnP 与部分工具链兼容性需额外评估。
+- 相比 **Bun 内置包管理器**，Bun 把 install/run/test 收进单一运行时，追求极致速度；pnpm 专注包管理与 monorepo，与 Node.js 生态、Corepack 及现有 CI 模板兼容面更广，不绑定特定运行时。
+- 边界说明：pnpm 不是 JavaScript 运行时或打包器；部分依赖「扁平 node_modules 副作用」的老旧包、或假设 Yarn/npm hoisting 行为的工具，迁移后可能需要 `shamefully-hoist` 等配置或补丁，宜在目标项目实测。
+
+## 适应人群
+
+- 同时维护多个 Node.js 项目、希望统一依赖缓存并节省磁盘的前端与全栈开发者。
+- 使用 Rush、Nx、Turborepo 等编排工具的 monorepo 团队，需要可靠 workspaces 与 lockfile 的工程组织。
+- 从 npm/Yarn 迁移、希望在 CI 中加速 install 并减少 phantom dependencies 的技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- 支持 Windows、Linux、macOS（Apple Silicon 与 arm64/x64）。
+- 通过 npm/Corepack 安装时需本机已有 Node.js（pnpm 11 建议 Node.js 22+，详见[兼容性表](https://pnpm.io/installation#compatibility)）。
+- 独立安装脚本可在无 Node.js 环境下安装 pnpm；Intel macOS（darwin-x64）不支持 standalone 脚本，请改用 npm、Corepack 或 Homebrew。
+
+### 安装方式
+
+**方式一：独立安装脚本（POSIX，推荐 Apple Silicon / Linux）**
+
+```bash
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+```
+
+**Windows（PowerShell）**
+
+```powershell
+Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
+```
+
+> Windows 上 Defender 可能拦截 standalone 可执行文件，官方更推荐 npm 或 Corepack 安装。
+
+**方式二：Corepack（Node.js 16.13+）**
+
+```bash
+npm install --global corepack@latest
+corepack enable pnpm
+```
+
+在项目中锁定版本：
+
+```bash
+corepack use pnpm@latest-11
+```
+
+**方式三：npm 全局安装**
+
+```bash
+npm install -g pnpm@latest-11
+```
+
+**其他方式**
+
+```bash
+brew install pnpm          # macOS Homebrew
+winget install -e --id pnpm.pnpm   # Windows winget
+```
+
+升级：`pnpm self-update`
+
+### 首次运行
+
+```bash
+# 验证 CLI
+pnpm --version
+
+# 在现有项目中安装依赖
+pnpm install
+
+# 添加依赖
+pnpm add lodash
+
+# 运行 package.json 脚本
+pnpm run dev
+
+# monorepo 根目录执行所有包的 build
+pnpm -r run build
+```
+
+### 验证是否成功
+
+```bash
+pnpm --version                    # 应输出版本号
+pnpm install                      # 应生成/更新 node_modules 与 pnpm-lock.yaml
+pnpm list --depth 0               # 应列出顶层依赖
+```
+
+确认安装脚本提示的 pnpm 路径（如 `~/.local/share/pnpm`）已加入 `PATH`，新开终端后 `which pnpm` 可找到可执行文件。
+
+### 常见坑 / 注意事项
+
+- **严格依赖导致 import 失败**：某些包隐式依赖未声明的 peer/transitive，需在 `package.json` 显式添加，或评估 `.npmrc` 中的 `public-hoist-pattern` / `shamefully-hoist`（迁移期慎用）。
+- **Intel Mac 与 standalone**：darwin-x64 不支持独立脚本，请用 npm、Corepack 或 Homebrew；详见 [#11423](https://github.com/pnpm/pnpm/issues/11423)。
+- **Linux 最小镜像缺 libatomic**：Alpine 等 musl 环境或精简 glibc 镜像若报 `libatomic.so.1` 缺失，需安装对应系统包（如 Debian/Ubuntu：`apt-get install -y libatomic1`）。
+- **Windows Defender 拖慢安装**：可将 `pnpm store path` 输出目录加入 Defender 排除列表以改善 I/O 性能。
+- **v11 纯 ESM**：若全局安装路径或旧脚本仍假设 CJS 入口，升级后遇到 `MODULE_NOT_FOUND` 可参照[官方排错文档](https://pnpm.io/installation#troubleshooting)清理旧 CLI 后重装。

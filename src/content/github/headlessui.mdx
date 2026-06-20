@@ -1,0 +1,119 @@
+---
+title: Headless UI
+description: 无样式、全可访问的 React/Vue 组件库，专注交互逻辑与键盘导航，与 Tailwind CSS 深度配合定制界面。
+repo: https://github.com/tailwindlabs/headlessui
+homepage: https://headlessui.com
+repoDescription: Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS.
+avatarUrl: https://avatars.githubusercontent.com/u/67109815?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: TypeScript
+stars: 28627
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 无障碍 React/Vue 组件选型、Dialog/Dropdown 等交互层与 Tailwind 样式组合的前端开发者。
+---
+
+## 项目介绍
+
+Headless UI 是由 [Tailwind Labs](https://tailwindlabs.com) 维护的无样式（headless）UI 组件库，提供 React（`@headlessui/react`）与 Vue（`@headlessui/vue`）两套实现。组件只负责焦点管理、键盘导航、ARIA 属性与开关状态等交互逻辑，不附带任何预设 CSS，便于你用 Tailwind CSS 或自有设计系统完全定制外观。完整文档与示例见 [headlessui.com](https://headlessui.com)；本仓库为 monorepo 源码，日常集成通过 npm 安装对应包即可。
+
+## 核心特性
+
+- **完全无样式**：Dialog、Menu、Listbox、Combobox、Tabs、Popover 等组件零默认皮肤，样式 100% 由你控制
+- **内置无障碍与键盘支持**：自动处理焦点陷阱、Esc 关闭、方向键导航、`aria-*` 属性，降低 a11y 实现成本
+- **状态暴露清晰**：通过 `data-*` 属性（如 `data-open`、`data-focus`）与 render props 暴露 active/focus/selected 等状态，配合 Tailwind 的 `data-*` 修饰符即可写条件样式
+- **React 与 Vue 双栈**：同一套交互模型分别发布 `@headlessui/react` 与 `@headlessui/vue`，便于跨框架团队复用设计模式
+- **与 Tailwind 生态协同**：官方提供 `@headlessui/tailwindcss` 插件；文档示例默认以 Tailwind class 演示，和 Tailwind CSS 工作流天然衔接
+
+## 对用户价值
+
+自建 Dropdown、Modal、Combobox 等交互组件时，焦点顺序、屏幕阅读器语义与键盘行为往往占大量调试时间。Headless UI 把这些易错细节封装在组件内部，你只需关心 markup 结构与视觉样式，原型到生产的交互一致性更高。相比直接套用带皮肤的全量 UI 库，headless 方案在品牌定制与 design token 统一上更灵活；相比从零手写，可显著缩短 a11y 合规与跨浏览器行为对齐的周期。若项目已采用 Tailwind CSS，Headless UI 是同一团队出品、文档与示例风格一致的互补选择。
+
+## 与替代方案
+
+- 相比 [Radix UI](https://www.radix-ui.com/)，Headless UI 同样是无样式、重 a11y 的 primitives，但 API 与 Tailwind 文档示例更紧密；Radix 组件覆盖面更广（含 Accordion、Scroll Area 等），生态与 shadcn/ui 结合更常见，可按组件清单与框架偏好选型。
+- 相比 [React Aria / React Spectrum](https://react-spectrum.adobe.com/react-aria/)（Adobe），Headless UI 更轻量、上手路径更短，适合 Tailwind 栈；React Aria 在国际化、复杂表单与大型设计系统场景下能力更完整。
+- 相比 [Material UI](https://mui.com/)、[Ant Design](https://ant.design/) 等带主题的全量组件库，Headless UI 不提供现成视觉，但避免被 Material/企业风样式绑定，适合需要独特品牌界面、又不愿重复造交互轮子的团队。
+- 边界说明：Headless UI **不是** CSS 框架，也不替代 Tailwind CSS；样式需自行编写。仅支持 React 与 Vue，无 Svelte/Angular 官方包。
+
+## 适应人群
+
+- 使用 React 或 Vue + Tailwind CSS，需要 Dialog、Menu、Listbox 等复杂交互且重视无障碍的前端工程师。
+- 在 Radix UI、React Aria 与 Tailwind 系 headless 组件之间做技术选型的团队负责人。
+- 已有设计系统或 Figma 规范，希望交互层与视觉层解耦、由工程侧完全掌控样式的 UI 开发者。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+（以项目脚手架与 [headlessui.com](https://headlessui.com) 文档要求为准）。
+- 已有 React 或 Vue 应用；若需按文档示例写样式，建议同时安装并配置 [Tailwind CSS](https://tailwindcss.com)。
+- npm、pnpm 或 Yarn 等包管理器。
+
+### 安装方式
+
+**React**
+
+```bash
+npm install @headlessui/react@latest
+```
+
+**Vue**
+
+```bash
+npm install @headlessui/vue@latest
+```
+
+可选：配合 Tailwind 使用 `@headlessui/tailwindcss` 插件（见 [官方文档](https://headlessui.com) 中 Tailwind 集成说明）。
+
+开发版（跟踪 `main` 分支，**不遵循 semver**）：
+
+```bash
+npm install @headlessui/react@insiders
+# 或
+npm install @headlessui/vue@insiders
+```
+
+### 首次运行
+
+以 Dropdown Menu 为例（React）：
+
+```jsx
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+
+function Example() {
+  return (
+    <Menu>
+      <MenuButton>My account</MenuButton>
+      <MenuItems anchor="bottom">
+        <MenuItem>
+          <a className="block data-focus:bg-blue-100" href="/settings">
+            Settings
+          </a>
+        </MenuItem>
+      </MenuItems>
+    </Menu>
+  )
+}
+```
+
+Dialog、Tabs、Combobox 等组件的完整 API 与 Vue 写法见 [headlessui.com/react](https://headlessui.com/react/menu) 与 [headlessui.com/vue](https://headlessui.com/vue/menu)。
+
+### 验证是否成功
+
+- 开发服务器启动后，Menu 点击应展开/收起，键盘 Tab 与方向键可导航菜单项。
+- 打开 Dialog 时焦点应 trapped 在面板内，按 Esc 或点击遮罩应触发 `onClose`。
+- 浏览器 DevTools 中检查触发器与面板节点是否带有合理的 `aria-expanded`、`role` 等属性。
+
+### 常见坑 / 注意事项
+
+- **源码仓库 vs npm 包**：日常项目在依赖中安装 `@headlessui/react` 或 `@headlessui/vue` 即可；clone 本 monorepo 用于贡献或调试 insiders 构建，见 [Contributing](https://github.com/tailwindlabs/headlessui/blob/main/.github/CONTRIBUTING.md)。
+- **无内置样式**：组件默认几乎不可见，必须为 `MenuItem`、`DialogPanel` 等节点添加 class 或 CSS；文档依赖 Tailwind 的 `data-focus:`、`data-open:` 等修饰符。
+- **受控 vs 非受控**：Dialog 等需显式传入 `open` 与 `onClose`；未正确处理会导致 Esc 或点击外部无法关闭。
+- **insiders 版本**：`@insiders` 标签指向 `main` 最新提交，API 可能在正式发布前变动，生产环境请使用 `@latest` 稳定版。
+- **与 Tailwind 版本**：Tailwind CSS v4 的 `@import "tailwindcss"` 与 v3 配置路径不同，集成 Headless UI 时请对照各自官方文档，避免 content 扫描或插件注册遗漏。

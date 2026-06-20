@@ -1,0 +1,112 @@
+---
+title: Oh My Zsh
+description: 社区驱动的 zsh 配置框架，内置 300+ 插件与 140+ 主题，一键装齐终端效率工具。
+repo: https://github.com/ohmyzsh/ohmyzsh
+homepage: https://ohmyz.sh
+repoDescription: "🙃   A delightful community-driven (with 2,500+ contributors) framework for managing your zsh configuration. Includes 300+ optional plugins (rails, git, macOS, hub, docker, homebrew, node, php, python, etc), 140+ themes to spice up your morning, and an auto-update tool that makes it easy to keep up with the latest updates from the community."
+avatarUrl: https://avatars.githubusercontent.com/u/22552083?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 自动化
+language: Shell
+stars: 188143
+forks: 26374
+openIssues: 560
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 刚换 Mac/Linux、想把 zsh 提示符、Git 别名与常用工具链一次性补齐的终端重度用户。
+---
+
+## 项目介绍
+
+Oh My Zsh 是社区维护的 zsh 配置框架，把插件加载、主题切换、自动更新与目录结构约定打包成一套可复制的终端体验。它自带 300+ 可选插件（git、docker、node、python、macOS 等）与 140+ 主题，安装后通过编辑 `~/.zshrc` 即可启用，是 macOS 与 Linux 开发者中最广泛使用的 Shell 增强方案之一。
+
+## 核心特性
+
+- **插件生态**：内置 git、z、docker、kubectl、npm、python 等常用插件，提供别名、补全与上下文提示，可按需在 `plugins=(...)` 中启用
+- **主题系统**：140+ 内置主题（默认 `robbyrussell`），修改 `ZSH_THEME` 即可切换提示符样式；Wiki 提供各主题截图与字体要求说明
+- **自动更新**：`omz update` 从上游拉取框架与插件更新，可配置更新提示详细程度
+- **跨平台支持**：官方兼容 Linux、macOS、FreeBSD、Android 与 Windows WSL2
+- **可扩展目录**：支持自定义插件与主题目录（`ZSH_CUSTOM`），便于团队共享私有配置而不 Fork 主仓库
+
+## 对用户价值
+
+手写 zsh 配置容易在插件路径、加载顺序与别名冲突上耗费大量时间。Oh My Zsh 提供统一目录约定（`~/.oh-my-zsh`）与经过社区验证的默认组合，让新机器或新同事能在几分钟内获得一致的 Git 提示、目录跳转与工具链快捷方式。对已有 `.zshrc` 的用户，安装脚本会备份原文件为 `.zshrc.pre-oh-my-zsh`，降低迁移风险。
+
+## 与替代方案
+
+- 相比 **[Prezto](https://github.com/sorin-ionescu/prezto)**，Oh My Zsh 社区体量更大、插件与主题数量更多、上手文档更丰富；Prezto 更轻量、模块化，适合希望精细控制加载逻辑、不介意较小生态的用户。
+- 相比 **[Zinit](https://github.com/zdharma-continuum/zinit)** / **[Antidote](https://github.com/mattmc3/antidote)** 等插件管理器，Oh My Zsh 是「开箱即用框架」而非纯管理器：默认即带主题与更新工具，但灵活性与按需懒加载不如专用管理器。
+- 相比 **[Starship](https://starship.rs/)** 等跨 Shell 提示符，Oh My Zsh 深度绑定 zsh 并整合插件别名体系；Starship 专注跨 bash/zsh/fish 的统一提示符，不替代完整插件生态。
+- 相比 **手写 `.zshrc`**，框架带来约定与社区维护，但启动时间与配置透明度略逊；极简主义者或性能敏感用户可能更倾向裸 zsh + 少量自管脚本。
+- **边界说明**：Oh My Zsh 仅管理 zsh，不替代终端模拟器（如 iTerm2、Alacritty）；部分主题需安装 Powerline 或 Nerd Font 才能正确显示符号。
+
+## 适应人群
+
+- 刚换 Mac 或 Linux 开发机、希望快速获得 Git 分支提示与常用别名的前端与全栈工程师。
+- 团队需要统一 zsh 插件清单与主题风格，又不愿从零维护 Shell 配置的技术负责人。
+- 已在用 zsh、想从散落脚本迁移到成熟插件生态的 DevOps 与后端开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 **zsh**（建议 5.0.8+；运行 `zsh --version` 确认）。未预装可参考 [Wiki：Installing ZSH](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)。
+- 已安装 `curl` 或 `wget`，以及 `git`（建议 v2.4.11+）。
+- 支持平台：Linux、macOS、FreeBSD、Android、Windows WSL2。
+
+### 安装方式
+
+**一键安装（curl，推荐）：**
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+或使用 wget：
+
+```bash
+sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+若 `raw.githubusercontent.com` 访问受阻（部分国内 ISP），可使用官方镜像：
+
+```bash
+sh -c "$(curl -fsSL https://install.ohmyz.sh/)"
+```
+
+安装前建议先审阅脚本内容；也可手动下载后执行：
+
+```bash
+wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+sh install.sh
+```
+
+### 首次运行
+
+安装完成后**重新打开终端**或执行 `zsh` 进入新 Shell。编辑 `~/.zshrc` 启用插件与主题，例如：
+
+```bash
+ZSH_THEME="agnoster"
+plugins=(git z docker macos)
+```
+
+保存后执行 `source ~/.zshrc` 使配置生效。
+
+### 验证是否成功
+
+- 运行 `echo $ZSH` 应输出 Oh My Zsh 安装路径（通常为 `~/.oh-my-zsh`）。
+- 在 Git 仓库目录中，提示符应显示分支信息（启用 `git` 插件后）。
+- 运行 `omz version` 可查看当前框架版本。
+
+### 常见坑 / 注意事项
+
+- 安装脚本会将现有 `~/.zshrc` **重命名为** `~/.zshrc.pre-oh-my-zsh`；需手动把旧配置合并进新文件。
+- `plugins` 数组中插件名用**空格分隔**，不要用逗号，否则加载失败。
+- 许多主题（如 `agnoster`）需要安装 [Powerline Font](https://github.com/powerline/fonts) 或 [Nerd Font](https://github.com/ryanoasis/nerd-fonts)，否则提示符会出现乱码符号。
+- 主题只控制提示符外观，不改变终端模拟器本身的分屏、配色等能力。
+- 更新框架：`omz update`；卸载可参考官方 [Uninstalling Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh#uninstalling-oh-my-zsh) 章节。

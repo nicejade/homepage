@@ -1,0 +1,130 @@
+---
+title: Git
+description: 分布式版本控制系统，支撑代码协作、分支管理与开源生态的底层工具与官方源码仓库。
+repo: https://github.com/git/git
+homepage: https://git-scm.com
+repoDescription: "Git Source Code Mirror - This is a publish-only repository but pull requests can be turned into patches to the mailing list via GitGitGadget (https://gitgitgadget.github.io/). Please follow Documentation/SubmittingPatches procedure for any of your improvements."
+avatarUrl: https://avatars.githubusercontent.com/u/18133?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 工作流
+language: C
+stars: 61581
+forks: 28032
+openIssues: 378
+contributors: 1
+license: GPL-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 团队协作选型、分支策略设计、源码贡献与版本线维护，以及需要深入理解 Git 内部对象模型的开发者。
+---
+
+## 项目介绍
+
+Git 是由 Linus Torvalds 发起的**分布式版本控制系统（DVCS）**，以快照式对象存储、轻量分支与本地完整仓库著称，已成为现代软件协作的事实标准。它提供从日常 `commit`/`push`/`pull` 到 `rebase`、`cherry-pick`、子模块等高级操作，并暴露 plumbing 命令供工具链深度集成。本仓库为 Git **官方源码镜像**（GitHub 只读发布）；日常安装与文档以 [git-scm.com](https://git-scm.com/) 为准，补丁贡献通过邮件列表与 [GitGitGadget](https://gitgitgadget.github.io/) 流程进行。
+
+## 核心特性
+
+- **分布式架构**：每位开发者拥有完整历史副本，离线可提交、分支与合并，无需持续连接中央服务器
+- **快照式对象模型**：内容寻址的 blob/tree/commit 与 SHA-1/SHA-256 对象库，支持高效增量存储与完整性校验
+- **轻量分支与合并**：分支创建与切换成本极低，内置三路合并、冲突标记与多种合并策略
+- **丰富命令分层**：porcelain 面向日常操作，plumbing 暴露底层对象与引用，便于 IDE、CI 与托管平台集成
+- **开放治理与文档**：GPLv2 许可；[Pro Git](https://git-scm.com/book) 与 `git help` 提供完整命令参考，社区通过 `git@vger.kernel.org` 邮件列表演进
+
+## 对用户价值
+
+若你需要追踪代码变更、并行开发功能分支、审查合并或回滚发布，Git 几乎无可替代。分布式模型让个人与小团队可在本地快速迭代，大型组织则通过 GitHub、GitLab、Gitea 等托管层叠加 PR/MR、权限与 CI。相比集中式 VCS，Git 在分支实验、离线工作与 fork 协作上更灵活；代价是学习曲线（rebase vs merge、reflog、子模块等概念需时间消化），以及大仓库或二进制资产的存储与克隆成本需配合 LFS、稀疏检出等策略。
+
+## 与替代方案
+
+- 相比 **[Mercurial (hg)](https://www.mercurial-scm.org/)**，Git 生态规模、托管平台集成与招聘市场显著更大；Mercurial 命令模型相对线性，适合已深度绑定 hg 工作流的遗留团队，新项目极少再选。
+- 相比 **[Subversion (SVN)](https://subversion.apache.org/)**，Git 的分布式与分支模型更适合并行特性开发与开源协作；SVN 目录级权限与集中式 checkout 在部分传统企业场景仍有存量，但新团队普遍转向 Git。
+- 相比 **Perforce / Plastic SCM**，Git 对开源与互联网团队零许可成本、工具链免费；Perforce 等在大规模二进制与游戏/影视资产场景有专用优化，需按资产规模评估。
+- 相比 **GitHub / GitLab 平台**，Git 是**本地版本控制引擎**，托管平台在其上提供远程仓库、Issue、CI 与权限；学 Git 不等于学 GitHub Flow，但二者在工程实践中通常一起使用。
+- 边界说明：本仓库用于**阅读源码、从源码构建或向 Git 核心贡献**；应用开发者安装 [git-scm.com](https://git-scm.com/downloads) 或系统包管理器即可，无需 clone 本 repo。
+
+## 适应人群
+
+- 需要管理代码历史、功能分支、发布标签与 hotfix 流程的后端、前端、移动端与 DevOps 工程师。
+- 制定团队分支策略（Git Flow、Trunk-Based、GitHub Flow）、Code Review 规范或评估托管平台选型的技术负责人。
+- 希望深入 packfile、refspec、index、hooks 或参与 Git 核心开发的系统级开发者（需阅读 [Documentation/SubmittingPatches](https://github.com/git/git/blob/master/Documentation/SubmittingPatches)）。
+
+## 如何使用
+
+### 前置条件
+
+- 操作系统：macOS、Windows 10+、或主流 Linux 发行版；Windows 可选 [Git for Windows](https://gitforwindows.org/)（含 Git Bash）。
+- 生产协作建议 Git **2.40+**（支持现代默认分支名、`git switch`/`restore` 等）；过旧发行版可能缺少 SHA-256 过渡特性或安全补丁。
+- 从本仓库源码构建需 C 编译器、curl、zlib、OpenSSL 等依赖（见仓库 `INSTALL` 与 `Makefile`），复杂度远高于安装二进制包。
+
+### 安装方式
+
+**方式一：官方安装包（推荐大多数用户）**
+
+从 [git-scm.com/downloads](https://git-scm.com/downloads) 下载对应平台安装包。
+
+**方式二：系统包管理器**
+
+```bash
+# macOS（Homebrew）
+brew install git
+
+# macOS 亦可安装 Xcode Command Line Tools（版本可能偏旧）
+xcode-select --install
+
+# Debian / Ubuntu
+sudo apt update && sudo apt install git
+
+# Fedora
+sudo dnf install git
+```
+
+**方式三：Windows**
+
+下载并运行 [Git for Windows](https://gitforwindows.org/) 安装程序，安装后在 Git Bash 或 PowerShell 中使用 `git`。
+
+**方式四：从源码构建（贡献者与高级用户）**
+
+```bash
+git clone https://github.com/git/git.git
+cd git
+make configure
+./configure --prefix=/usr/local
+make all doc
+sudo make install install-doc install-html
+```
+
+也可参考仓库根目录 `INSTALL` 中的 `profile` 构建以换取少量 CPU 密集型场景性能提升。
+
+### 首次运行
+
+```bash
+git --version
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git config --global init.defaultBranch main
+
+mkdir hello-git && cd hello-git
+git init
+echo "# hello" > README.md
+git add README.md
+git commit -m "Initial commit"
+```
+
+### 验证是否成功
+
+- `git --version` 输出预期版本号（建议 2.40 及以上）。
+- `git config --list --global` 可看到已设置的 `user.name` 与 `user.email`。
+- 上述示例仓库中 `git log --oneline` 显示 Initial commit。
+- `git help tutorial` 或访问 [git-scm.com/doc](https://git-scm.com/doc) 确认文档可访问。
+
+### 常见坑 / 注意事项
+
+- **Git ≠ GitHub**：Git 是本地 VCS；远程协作需自行添加 `remote` 或使用 GitHub/GitLab 等托管服务。
+- **首次提交前必须配置身份**：未设置 `user.name`/`user.email` 会导致 commit 失败或作者信息缺失。
+- **大文件与二进制**：Git 不适合频繁变更的大二进制；应使用 [Git LFS](https://git-lfs.com/) 或外部制品仓库，避免仓库体积膨胀。
+- **rebase 与 force push**：在共享分支上 `rebase` 后 `push --force` 可能覆盖他人历史；团队应约定 protected branch 与 merge/rebase 策略。
+- **源码仓库 vs 日常使用**：clone 本 repo 用于贡献 Git 本身；日常项目只需安装 Git 二进制并在业务仓库中 `git init`/`clone` 即可。
+- **许可证**：Git 以 GPLv2 分发；嵌入或修改分发时需遵守 GPL 义务；作为命令行工具日常使用通常无额外限制。

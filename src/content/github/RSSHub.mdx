@@ -1,0 +1,98 @@
+---
+title: RSSHub
+description: 开源 RSS 路由生成器，为 B 站、微博、Twitter 等数千平台提供统一 RSS 订阅输出。
+repo: https://github.com/DIYgod/RSSHub
+homepage: https://docs.rsshub.app
+repoDescription: Everything is RSSible
+avatarUrl: https://avatars.githubusercontent.com/u/8266075?v=4
+tags:
+  - 自动化
+  - 开发工具
+  - 知识管理
+language: TypeScript
+stars: 45000
+forks: 9900
+openIssues: 325
+contributors: 1300
+license: AGPL-3.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 想把无 RSS 源的平台接入 Feedly、Folo 或自建阅读器的 RSS 重度用户与自托管爱好者。
+---
+
+## 项目介绍
+
+RSSHub 是全球规模最大的开源 RSS 路由网络之一， slogan 是「Everything is RSSible」。它为 B 站、微博、Twitter、Telegram 等原本不提供 RSS 的平台编写抓取路由，输出标准 RSS/Atom 订阅源，方便接入 Folo、FreshRSS、Miniflux 等阅读器。项目采用 AGPL-3.0 许可，拥有 1300+ 贡献者与数千个预置路由，既可使用公共实例，也支持 Docker 或 Node.js 自托管。
+
+## 核心特性
+
+- 数千条预置路由，覆盖社交媒体、新闻、视频、学术等常见信息源
+- 标准 RSS/Atom 输出，兼容主流 RSS 阅读器与自动化工具
+- 支持内容过滤、全文输出等 URL 参数，可按需定制订阅内容
+- Radar 规则与 RSSHub Radar 浏览器扩展，可快速发现当前网站的 RSS 地址
+- 提供 npm 包，可在 Node.js 项目中以 API 方式调用路由
+- Docker Compose 一键部署，可选 bundled Chromium 以支持需 Puppeteer 的路由
+
+## 对用户价值
+
+许多平台不再提供官方 RSS，RSSHub 把「找源 → 写爬虫 → 维护格式」封装成统一路由。用户只需按文档拼出 URL（如 `https://rsshub.app/telegram/channel/awesomeRSSHub`），即可在阅读器里集中追踪分散在各 App 里的更新，减少手动刷信息流的时间成本。
+
+## 与替代方案
+
+- 相比 Feed43、FeedBurner 等在线转制服务，RSSHub 开源可自托管，路由社区维护、覆盖面更广。
+- 相比 Huginn、n8n 等通用自动化平台，RSSHub 专注 RSS 输出，路由即用、对阅读器场景更直接。
+- 相比为每个站点单独写爬虫，RSSHub 提供统一协议与共享路由，但复杂站点仍可能因反爬或页面改版而失效，需关注路由状态或自行维护 fork。
+
+## 适应人群
+
+- 依赖 RSS 追踪资讯、社交动态或 UP 主更新的重度阅读者。
+- 希望自托管订阅基础设施、控制数据与访问频率的技术用户。
+- 需要把多平台内容汇聚到 Folo、FreshRSS 等工作流的开发者与运营者。
+
+## 如何使用
+
+### 前置条件
+
+- 使用公共实例时：任意 RSS 阅读器即可，无需本地环境。
+- 自托管时：Docker 与 Docker Compose（推荐），或 Node.js 与 pnpm；部分路由需 Redis 缓存或 Chromium/Puppeteer 依赖。
+
+### 安装方式
+
+Docker Compose（推荐）：
+
+```bash
+wget https://raw.githubusercontent.com/DIYgod/RSSHub/master/docker-compose.yml
+docker-compose up -d
+```
+
+或单容器快速体验：
+
+```bash
+docker run -d --name rsshub -p 1200:1200 diygod/rsshub
+```
+
+手动部署：
+
+```bash
+git clone https://github.com/DIYgod/RSSHub.git
+cd RSSHub
+pnpm i
+pnpm build
+pnpm start
+```
+
+### 首次运行
+
+浏览器访问 `http://localhost:1200`（自托管）或查阅 [路由文档](https://docs.rsshub.app/) 找到目标平台路径。将实例域名与路由拼接成完整 URL，例如 Telegram 频道 `@awesomeRSSHub` 对应 `/telegram/channel/awesomeRSSHub`，加入阅读器订阅列表。
+
+### 验证是否成功
+
+在阅读器中确认新订阅能拉取到条目；若路由需参数，对照文档检查 username、ID 等占位符是否填写正确。自托管实例可访问 `/api/radar/rules` 查看当前支持的 Radar 规则。
+
+### 常见坑 / 注意事项
+
+- 公共实例 `rsshub.app` 有访问频率限制，高频或生产用途建议自托管。
+- 无 Chromium 的镜像不支持依赖 Puppeteer 的路由，需使用 `diygod/rsshub:chromium-bundled` 或 Docker Compose 完整栈。
+- 部分源会因目标站反爬、登录或页面改版而失效，可查阅 GitHub Issues 或社区 Telegram 获取路由状态。
+- AGPL-3.0 对网络服务部署有传染性要求，商业场景部署前请阅读许可证条款。

@@ -1,0 +1,132 @@
+---
+title: Zustand
+description: React 生态轻量状态管理库，Hook 驱动、无需 Provider，经实战验证的并发与重渲染安全。
+repo: https://github.com/pmndrs/zustand
+homepage: https://zustand.docs.pmnd.rs
+repoDescription: "🐻 Bear necessities for state management in React"
+avatarUrl: https://avatars.githubusercontent.com/u/45790596?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 工作流
+language: TypeScript
+stars: 58351
+forks: 2076
+openIssues: 3
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: React / Next.js 应用中选型全局状态、从 Redux 迁移或需要精细化重渲染控制的前端开发者。
+---
+
+## 项目介绍
+
+Zustand 由 [pmndrs](https://github.com/pmndrs) 维护，是 React 生态中体量极小、下载量极高的状态管理方案。它基于简化的 Flux 思想，以 `create` 返回的 Hook 作为 Store 入口，API 直观、样板代码少，且**不需要**用 Context Provider 包裹应用。项目在 zombie child、React 并发渲染与混合渲染器下的 context 丢失等常见陷阱上投入了大量工程验证，适合作为中大型 React 应用的默认全局状态层。官方提供 [在线 Demo](https://zustand-demo.pmnd.rs/) 与完整 [文档站](https://zustand.docs.pmnd.rs/)。
+
+## 核心特性
+
+- **Hook 即 Store**：`create` 生成 `useXxxStore`，state 可包含原始值、对象与 action 函数；`set` 默认浅合并更新
+- **按需订阅**：组件通过 selector 选取状态切片，仅在所选切片变化时重渲染；支持 `useShallow` 做多字段浅比较
+- **无 Provider 架构**：任意组件直接调用 Store Hook，避免 Context 嵌套与「包裹地狱」
+- **组件外访问**：`getState`、`setState`、`subscribe` 可在事件回调、路由守卫等非组件代码中读写状态
+- **中间件生态**：内置 `persist`、`immer`、`devtools`、`redux` 等中间件，可按需叠加持久化与调试能力
+- **框架无关核心**：`zustand/vanilla` 的 `createStore` 可在无 React 环境使用，再通过 `useStore` 绑定到组件
+
+## 对用户价值
+
+跨页面共享用户会话、购物车、主题或 UI 状态时，仅靠 props 下钻或手写 Context 很快难以维护。Zustand 把全局状态收敛到独立 Store，组件按 selector 精确订阅，避免「整棵子树因一次更新而重渲染」。相比 Redux，省去 action types、reducers 与 Provider 样板；相比纯 Context，具备细粒度订阅与成熟的并发安全处理。对需要 DevTools、持久化或 Redux 式 reducer 的团队，可通过中间件渐进增强，而不必一开始就引入重型架构。
+
+## 与替代方案
+
+- 相比 [Redux](https://redux.js.org/) / [Redux Toolkit](https://redux-toolkit.js.org/)，Zustand 更轻、更少仪式化：默认无 Provider、无强制 reducer 分层；需要 Redux DevTools 或 reducer 风格时可加 `devtools` / `redux` 中间件。大型团队若已深度投入 RTK 生态，迁移需评估现有中间件与规范成本。
+- 相比 [React Context](https://react.dev/reference/react/createContext)，Zustand 减少样板代码，且默认只在 selector 返回值变化时触发重渲染；Context 适合**低频变更、局部子树**的依赖注入，高频全局状态更宜 Zustand。
+- 相比 [Jotai](https://jotai.org/) / [Recoil](https://recoiljs.org/)（原子化状态），Zustand 以单一 Store 对象为中心，心智模型更接近传统 Flux；原子库适合细粒度派生图与组合式依赖，选型取决于团队更习惯「Store 切片」还是「原子图」。
+- 相比 [Pinia](https://github.com/vuejs/pinia)（Vue 生态），Zustand 深度绑定 React Hooks 与并发模型；跨框架项目应按技术栈分别选型，勿强行类比。
+- 边界说明：Zustand 刻意保持「不固执己见」；极复杂的状态机、时间旅行调试或严格单向数据流规范，可能仍需 Redux 或专用方案。在 Next.js App Router 的 Server Components 中，勿在 RSC 内用 `getState`/`setState` 写客户端状态（见官方 [#2200](https://github.com/pmndrs/zustand/discussions/2200) 讨论）。
+
+## 适应人群
+
+- 使用 React 18+ 或 Next.js 构建中后台、电商、SaaS 等需要跨路由共享状态的前端工程师。
+- 觉得 Redux 过重、Context 性能与样板难以接受，希望用最小 API 落地全局状态的团队。
+- 需要 persist、Immer、DevTools 等能力，但希望以中间件按需扩展而非一开始引入完整框架的全栈开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 已具备 React 16.8+ 项目（Vite、Create React App、Next.js 等），Node.js 与 npm、pnpm 或 Yarn。
+- TypeScript 项目建议阅读官方 [TypeScript 指南](https://zustand.docs.pmnd.rs/learn/guides/beginner-typescript)；使用 `devtools` 中间件时需安装 `@redux-devtools/extension` 类型。
+- 浏览器安装 [Redux DevTools 扩展](https://chromewebstore.google.com/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd)（可选，配合 `devtools` 中间件）。
+
+### 安装方式
+
+```bash
+npm install zustand
+```
+
+使用 pnpm 或 Yarn 时，将 `npm install` 替换为 `pnpm add zustand` 或 `yarn add zustand`。
+
+可选中间件无额外安装步骤（如 `persist`、`immer` 从 `zustand/middleware` 导入）；若 Store 内使用 Immer 写法，需另行 `npm install immer`。
+
+### 首次运行
+
+创建第一个 Store（建议放在 `src/stores/` 或 `store/`）：
+
+```jsx
+import { create } from 'zustand'
+
+const useBearStore = create((set) => ({
+  bears: 0,
+  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
+  removeAllBears: () => set({ bears: 0 }),
+}))
+```
+
+在组件中按 selector 订阅：
+
+```jsx
+function BearCounter() {
+  const bears = useBearStore((state) => state.bears)
+  return <h1>{bears} around here ...</h1>
+}
+
+function Controls() {
+  const increasePopulation = useBearStore((state) => state.increasePopulation)
+  return <button onClick={increasePopulation}>one up</button>
+}
+```
+
+TypeScript 项目推荐：
+
+```ts
+import { create } from 'zustand'
+
+interface BearState {
+  bears: number
+  increase: (by: number) => void
+}
+
+const useBearStore = create<BearState>()((set) => ({
+  bears: 0,
+  increase: (by) => set((state) => ({ bears: state.bears + by })),
+}))
+```
+
+也可在 [官方 Demo](https://zustand-demo.pmnd.rs/) 或文档 [快速入门](https://zustand.docs.pmnd.rs/learn/getting-started/introduction) 中在线体验。
+
+### 验证是否成功
+
+- 应用启动无控制台报错，页面正常渲染。
+- 点击触发 `increasePopulation` 后，`BearCounter` 中 `bears` 数值同步更新。
+- 仅订阅 `increasePopulation` 的组件在 `bears` 变化时不应多余重渲染（可用 React DevTools Profiler 观察）。
+- 若启用 `devtools` 中间件，Redux DevTools 中应出现对应 Store 的 `setState` 记录。
+
+### 常见坑 / 注意事项
+
+- **避免全量订阅**：`const state = useBearStore()` 会在任意 state 变化时重渲染该组件；应始终用 selector 选取所需字段。
+- **多字段选择**：构造对象或数组 selector 时用 `useShallow`（`zustand/react/shallow`），否则引用变化会导致多余渲染。
+- **`set` 的替换模式**：`set(partial, true)` 会替换整个 state 而非合并，误用可能清空 actions 等字段。
+- **Next.js RSC**：勿在 Server Components 中通过 `getState`/`setState` 操作客户端 Store；客户端状态应在 Client Component 内初始化与消费。
+- **中间件与 vanilla API**：修改 `set`/`get` 的中间件可能不会作用于 `getState`/`setState` 的 vanilla 调用，跨边界读写时需对照文档。
+- **从 Redux 迁移**：可先保留 reducer 语义（`redux` 中间件或手写 `dispatch`），再逐步简化为直接 `set` 的 action 函数；大型项目建议按 Store 边界分批迁移。

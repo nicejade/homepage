@@ -1,0 +1,99 @@
+---
+title: iTerm2
+description: macOS 上功能最丰富的终端模拟器，集成 tmux、Shell 感知、会话恢复与 AI 聊天。
+repo: https://github.com/gnachman/iterm2
+homepage: https://iterm2.com/
+repoDescription: iTerm2 is a terminal emulator for Mac OS X that does amazing things.
+avatarUrl: https://avatars.githubusercontent.com/u/427546?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 自动化
+language: Objective-C
+stars: 17713
+forks: 1411
+openIssues: 67
+contributors: 1
+license: GPL-2.0
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: macOS 开发者日常 SSH、远程协作与终端自动化的高配默认选项。
+---
+
+## 项目介绍
+
+iTerm2 是 macOS 上长期使用的终端模拟器，在系统自带 Terminal 之上提供 tmux 原生窗口、Shell 深度感知、会话持久化、触发器自动化与内置 AI 聊天等能力。它把「远程开发、多会话管理、终端内可视化」整合进同一套界面，是不少 Mac 开发者换机后最先安装的工具之一。
+
+## 核心特性
+
+- **tmux 集成**：`tmux -CC` 将 tmux 窗口映射为原生 macOS 窗口/标签；崩溃、SSH 断连或升级后仍可恢复会话，并支持多人附着同一会话
+- **Shell Integration**：追踪命令、目录、主机名与用户；支持 SCP 点击下载、拖拽上传、按主机记录命令历史与「frecency」最近目录
+- **会话恢复**：Shell 运行在独立 server 进程；iTerm2 崩溃或重启后可重连到原会话状态
+- **AI Chat**：内置 LLM 聊天窗口，可关联终端会话获取上下文、代为执行命令或注解输出
+- **自动化与扩展**：正则 Triggers、Python Scripting API、可配置状态栏（Git 分支、CPU/内存、自定义组件）
+- **效率交互**：全局热键窗口、按主机/目录/命令自动切换 Profile、Inline 图片（imgcat）、Instant Replay 与 Vim 式 Copy Mode
+
+## 对用户价值
+
+系统 Terminal 适合偶尔开 shell，但难以应对多 SSH 会话、tmux 可视化与复杂自动化。iTerm2 把远程协作、会话保活、目录/主机上下文与终端内 AI 放在同一应用里，减少在 tmux 文本界面、多个窗口与外部工具之间切换。对重度命令行用户，它是「开箱即用的高配终端」而非再搭一套插件生态。
+
+## 与替代方案
+
+- 相比 **macOS 自带 Terminal**，iTerm2 提供分屏、Profile、tmux 集成、触发器、Python API 与 AI Chat，功能深度明显更高；代价是体积更大、学习曲线更陡。
+- 相比 **Warp** 等现代终端，iTerm2 开源可审计（GPL）、可自编译，Python 自动化与 tmux 集成更成熟；Warp 等则在块编辑、AI 原生 UI 上更激进，但闭源且平台策略不同。
+- 相比 **Alacritty / Kitty** 等跨平台 GPU 终端，iTerm2 专注 macOS 原生体验与 tmux/Shell 集成；若你需要 Linux/Windows 统一配置或极致轻量，后者更合适。
+- 若只需在 VS Code / Cursor 内置终端里跑命令，不必强行迁移；iTerm2 更适合独立管理大量 SSH、tmux 与自动化脚本的场景。
+
+## 适应人群
+
+- 每天在 macOS 上管理多个 SSH、tmux 或远程开发会话的后端与 DevOps 工程师。
+- 希望用 Triggers、Python API 或 Shell Integration 做终端自动化与上下文感知的效率型开发者。
+- 需要会话持久化、协作附着或终端内 AI 辅助排查输出的 Mac 命令行重度用户。
+
+## 如何使用
+
+### 前置条件
+
+- **macOS**（iTerm2 仅支持 Mac，无 Windows/Linux 官方版本）
+- 普通使用：从官网下载安装包即可，无需 Xcode
+- 从源码构建：需 macOS 开发环境；`make setup` 会按需安装 Homebrew、Xcode、Rust 等（交互式确认）
+
+### 安装方式
+
+- **推荐：官网安装包**（稳定版）：
+
+从 [iterm2.com/downloads](https://iterm2.com/downloads.html) 下载 `.zip`，拖入「应用程序」文件夹。
+
+- **尝鲜：Nightly 构建**：
+
+[iterm2.com/nightly/latest](https://iterm2.com/nightly/latest)
+
+- **从源码构建**（贡献者 / 高级用户）：
+
+```bash
+git clone https://github.com/gnachman/iTerm2.git
+cd iTerm2
+make setup          # 首次：安装依赖（交互式）
+make paranoid-deps  # 编译 OpenSSL、libsixel 等原生依赖
+make Development
+make run
+```
+
+Universal 二进制：`UNIVERSAL=1 make Development`
+
+### 首次运行
+
+启动 iTerm2 后创建或导入 Profile（颜色、字体、快捷键）。若使用远程开发，建议安装 [Shell Integration](https://iterm2.com/documentation-shell-integration.html) 脚本以启用目录追踪与 frecency。使用 tmux 时可尝试 `tmux -CC` 体验原生窗口模式。
+
+### 验证是否成功
+
+确认新标签可正常打开 shell、分屏与 Profile 切换可用。若已装 Shell Integration，在提示符处应能看到状态标记；`tmux -CC` 下 tmux 窗口应显示为独立 macOS 窗口。源码构建后 `make run` 应能启动 Development 配置的应用。
+
+### 常见坑 / 注意事项
+
+- **仅 macOS**：无法在 Linux/Windows 上运行；跨平台团队需另选终端。
+- **许可**：仓库标注 GPL-2.0（GitHub）；官网 README 亦提及 GPLv3，二次分发或嵌入需自行核对 LICENSE。
+- **Issue 跟踪在 GitLab**：Bug 报告见 [iterm2.com/bugs](https://iterm2.com/bugs)，主 issue 列表在 [GitLab](https://gitlab.com/gnachman/iterm2/issues)，与 GitHub 仓库并存。
+- **源码构建**：Development 构建可能不如正式版稳定；切换 Xcode 版本后需重跑 `make paranoid-deps`。
+- **AI Chat** 涉及 LLM 接入与隐私策略，启用前阅读 [官方文档](https://iterm2.com/documentation.html) 中的相关说明。

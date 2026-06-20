@@ -1,75 +1,120 @@
 ---
-title: "nvm"
-description: "Node Version Manager [ ][3] [ ][4] Table of Contents Intro About Installing and…"
-repo: "https://github.com/nvm-sh/nvm"
+title: nvm
+description: POSIX Shell 实现的 Node.js 版本管理器，按项目或 Shell 会话切换多版本运行时。
+repo: https://github.com/nvm-sh/nvm
 repoDescription: "Node Version Manager - POSIX-compliant bash script to manage multiple active node.js versions"
-avatarUrl: "https://avatars.githubusercontent.com/u/49963700?v=4"
+avatarUrl: https://avatars.githubusercontent.com/u/49963700?v=4
 tags:
-  - CLI
   - 开发工具
-  - 开源项目
-language: "Shell"
+  - CLI
+  - 自动化
+language: Shell
 stars: 93872
 forks: 10237
 openIssues: 393
 contributors: 1
-license: "MIT"
+license: MIT
 featured: false
 publishedAt: "2026-06-20"
 updatedAt: "2026-06-20"
-curationReason: "适合关注CLI、开发工具场景的开发者与团队。"
+curationReason: 维护多 Node 项目、需在 LTS 与最新版间切换，或想用 .nvmrc 统一团队版本的开发者。
 ---
+
 ## 项目介绍
 
-Node Version Manager [ ][3] [ ][4] Table of Contents Intro About Installing and Updating Install & Update Script Additional Notes Installing in Docker Installing in Docker for CICD Jobs Troubleshooting on Linux Troubleshooting on macOS Ansible Verify Installation Important Notes Git Install Manual Install Manual Upgrade Usage Long term Support Migrating Global Packages While Installing Offline Install Default Global Packages From File While Installing io.js System Version of…
+nvm（Node Version Manager）是用 POSIX 兼容 Shell 脚本实现的 Node.js 版本管理器，按用户、按 Shell 会话安装与调用。它可在 Unix、macOS 以及 Windows WSL 上运行，通过 `nvm install` / `nvm use` 快速安装并切换不同 Node 版本，并支持 `.nvmrc` 文件与 LTS 别名，是 Node 生态中最广泛使用的版本管理方案之一。
 
 ## 核心特性
 
-- Installing and Updating
-- Install & Update Script
-- Additional Notes
-- Installing in Docker
-- Installing in Docker for CICD-Jobs
+- **多版本并存与切换**：`nvm install`、`nvm use`、`nvm run`、`nvm exec` 在同一机器上管理多个 Node 版本，无需全局覆盖
+- **LTS 与别名支持**：`nvm install --lts`、`nvm use lts/*` 等命令对齐 Node 官方 LTS 发布节奏；可自定义版本别名
+- **`.nvmrc` 项目约定**：在项目根目录放置 `.nvmrc` 声明目标版本，配合 Shell 集成可进入目录自动切换
+- **全局包迁移**：`--reinstall-packages-from` 在升级 Node 时迁移已安装的全局 npm 包
+- **镜像与离线安装**：支持 `NVM_NODEJS_ORG_MIRROR` 等环境变量指向二进制镜像，适合内网或国内网络环境
 
 ## 对用户价值
 
-Node Version Manager [ ][3] [ ][4] Table of Contents Intro About Installing and…
+不同 Node 项目常锁定不同大版本（Legacy 维护、LTS 生产、Current 尝鲜），系统级单一安装难以兼顾。nvm 让每位开发者在同一台机器上并行维护多版本，并在切换目录或 Shell 时自动对齐项目要求，减少「版本不对导致构建失败」的摩擦。对团队而言，`.nvmrc` 可与 CI 脚本共用同一版本声明，降低本地与流水线环境漂移。
 
 ## 与替代方案
 
-- 与同类工具相比，nvm 的差异点需结合官方定位人工补充。
-- 若你正在评估替代方案，请对照许可证、部署方式、集成成本与团队技能栈。
-- 不确定时建议先 Fork 或小规模试用，再决定是否纳入主力工具链。
+- 相比 **[fnm](https://github.com/Schniz/fnm)**，nvm 社区体量更大、文档与 Stack Overflow 答案更丰富；fnm 用 Rust 实现，启动与切换速度更快，且支持原生 Windows，适合对性能或跨平台有一致需求的用户。
+- 相比 **[n](https://github.com/tj/n)**，nvm 功能更完整（`.nvmrc`、LTS 别名、全局包迁移、Docker 集成文档）；n 更轻量，适合只需简单切换、不介意功能面的个人用户。
+- 相比 **[Volta](https://volta.sh/)**，nvm 是纯 Shell 脚本、无额外二进制依赖；Volta 提供项目级 pin 与工具链（npm/yarn）统一管理，体验更「开箱即用」，但生态与可定制性路径不同。
+- 相比 **[asdf](https://asdf-vm.com/)**，nvm 专注 Node.js；asdf 通过插件管理多语言运行时，适合已用 asdf 统一 Python/Ruby/Node 等版本的全栈团队。
+- **边界说明**：nvm **不支持原生 Windows**（需 WSL）；Docker 非交互 Shell 需额外配置 `BASH_ENV` 或 `source nvm.sh`，详见官方 README。
 
 ## 适应人群
 
-- 正在寻找 nvm 相关开源方案的个人开发者。
-- 希望评估 GitHub 项目质量、社区活跃度与许可信息的工程团队。
-- 想把成熟开源组件接入现有工作流的效率型用户。
+- 同时维护多个 Node 项目、需要在 LTS 与 Current 之间频繁切换的全栈与前端工程师。
+- 希望用 `.nvmrc` 统一团队本地与 CI Node 版本的技术负责人。
+- 在 macOS / Linux / WSL 上工作、偏好 Shell 原生工具链、不想引入额外二进制的开发者。
 
 ## 如何使用
 
 ### 前置条件
 
-- 确认运行环境、依赖版本与网络访问要求（见 README）。
-- 了解项目许可证与商业使用边界。
+- 操作系统：Unix、macOS，或 **Windows WSL**（不支持原生 Windows CMD/PowerShell）。
+- Shell：任意 POSIX 兼容 Shell（bash、zsh、dash、ksh 等）。
+- 安装脚本依赖 `curl` 或 `wget`，以及 `git`（用于 clone 仓库到 `~/.nvm`）。
 
 ### 安装方式
 
-```sh
+**一键安装（推荐）：**
+
+```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.5/install.sh | bash
 ```
 
+或使用 wget：
+
+```bash
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.5/install.sh | bash
+```
+
+安装完成后**重新打开终端**，或手动加载：
+
+```bash
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+```
+
+**升级 nvm 本身**：重新运行上述 install 脚本即可。
+
 ### 首次运行
 
-按照 README 完成初始化配置，并在隔离环境或测试项目中进行首次启动。
+```bash
+nvm install --lts
+nvm use --lts
+node -v
+npm -v
+```
+
+安装指定版本并设为默认：
+
+```bash
+nvm install 22
+nvm alias default 22
+```
+
+在项目根目录创建 `.nvmrc`（示例）：
+
+```bash
+echo "22" > .nvmrc
+nvm use
+```
 
 ### 验证是否成功
 
-确认核心命令可执行、示例流程可跑通，并检查日志中无阻塞性错误。
+- `nvm --version` 输出版本号（如 `0.40.5`）。
+- `nvm ls` 列出已安装版本，当前激活项前有箭头标记。
+- `node -v` 与 `npm -v` 输出与 `nvm use` 所选版本一致。
+- `nvm run node --version` 可在不切换当前 Shell 默认版本的情况下验证指定版本。
 
 ### 常见坑 / 注意事项
 
-- 密钥、凭据与生产数据应单独管理，避免直接写入仓库。
-- 版本升级前阅读 Releases / CHANGELOG，关注破坏性变更。
-- 以下内容需人工核实：具体命令、配置项与平台差异。
+- **Shell 配置未生效**：安装脚本会写入 `~/.bashrc`、`~/.zshrc` 等；若 `nvm: command not found`，检查 profile 是否 source 了 `nvm.sh`，或设置 `PROFILE` 环境变量后重装。
+- **原生 Windows 不可用**：请在 WSL 内安装 nvm，或改用 fnm / Volta 等支持 Windows 的工具。
+- **Docker / CI 非交互 Shell**：常规 profile 不会被加载，需设置 `BASH_ENV` 或在 ENTRYPOINT 中 `source $NVM_DIR/nvm.sh`；官方 README 提供 Dockerfile 示例。
+- **国内下载慢**：可设置 `NVM_NODEJS_ORG_MIRROR` 指向 Node 二进制镜像（如 npmmirror 等）加速 `nvm install`。
+- **与系统 Node 冲突**：`nvm deactivate` 可临时恢复 PATH 中的系统 Node；避免与 Homebrew 全局 `node` 混用时 PATH 优先级混乱。

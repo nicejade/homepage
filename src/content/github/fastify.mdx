@@ -1,0 +1,117 @@
+---
+title: Fastify
+description: 面向 Node.js 的高性能低开销 Web 框架，以 JSON Schema 路由校验与插件生态著称。
+repo: https://github.com/fastify/fastify
+homepage: https://www.fastify.dev
+repoDescription: "Fast and low overhead web framework, for Node.js"
+avatarUrl: https://avatars.githubusercontent.com/u/24939410?v=4
+tags:
+  - 开发工具
+  - 后端
+  - CLI
+language: JavaScript
+stars: 36558
+forks: 2739
+openIssues: 152
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: 构建 REST/GraphQL API、从 Express 迁移求性能、或需 Schema 驱动校验的 Node 后端团队。
+---
+
+## 项目介绍
+
+Fastify 是面向 Node.js 的 Web 框架，设计灵感来自 Hapi 与 Express，但把**低开销与开发体验**放在同等优先级。它通过 hooks、plugins 与 decorators 提供可扩展架构，推荐用 JSON Schema 校验请求与序列化响应，并在内部将 schema 编译为高性能函数。日志默认集成 [Pino](https://github.com/pinojs/pino)，在保持可观测性的同时尽量压低 I/O 成本。当前 `main` 分支对应 **Fastify v5**；仍在 v4 的项目可跟踪 [`4.x` 分支](https://github.com/fastify/fastify/tree/4.x)。
+
+## 核心特性
+
+- **高性能**：官方 benchmark 显示在典型路由场景下可达约 7.6 万 req/s 量级（视代码复杂度而定），是 Node.js 生态中速度领先的框架之一
+- **Schema 驱动**：可选但推荐的 JSON Schema 路由校验与响应序列化，编译后运行时开销极低，接口契约更清晰
+- **插件架构**：hooks、plugins、decorators 三层扩展模型，生态提供 CORS、JWT、Swagger、数据库适配等大量官方与社区插件
+- **内置结构化日志**：默认 Pino 集成，JSON 日志便于 ELK/Loki 等管道采集，生产环境可关闭 pretty 输出
+- **脚手架与 CLI**：`npm init fastify` 一键生成项目，底层由 [create-fastify](https://github.com/fastify/create-fastify) 与 [fastify-cli](https://github.com/fastify/fastify-cli) 驱动
+
+## 对用户价值
+
+若你正在用 Node.js 构建 API 或 BFF，Fastify 能在 Express 熟悉的「路由 + 中间件」心智模型上，提供更高吞吐与更严格的输入输出校验。Schema 先行让前后端与 OpenAPI 文档对齐更容易，减少「字段漏传/类型漂移」类 bug。插件生态覆盖认证、限流、ORM 等常见需求，团队不必从零拼装中间件栈。对已有 Express 项目，迁移路径相对清晰（路由与 handler 语义相近），性能敏感路径可逐步替换。
+
+## 与替代方案
+
+- 相比 **Express**，Fastify 默认性能更高、内置 schema 校验与结构化日志；Express 生态最大、教程与 Stack Overflow 覆盖最广，适合极轻量原型或团队零学习成本场景。
+- 相比 **Koa**，Fastify 开箱即用的插件与 schema 体系更完整，benchmark 通常更快；Koa 中间件洋葱模型更极简，适合喜欢自行组装、追求最小核心的团队。
+- 相比 **Hono**，Hono 强调边缘运行时（Cloudflare Workers、Deno 等）与 Web 标准 API 统一；Fastify 深耕 Node.js 服务端，插件成熟度、企业级中间件与长期 LTS 分支（4.x）更适合传统 VPS/K8s 部署。
+- 边界说明：Fastify 是 HTTP 框架而非 ORM、消息队列或全栈 meta-framework；CPU 密集任务仍需 Worker Threads 或外部服务；`.listen()` 默认绑定 localhost，容器部署需显式 `0.0.0.0` 并评估安全风险。
+
+## 适应人群
+
+- 用 Node.js 构建 REST/GraphQL API、微服务或 BFF 的后端与全栈工程师。
+- 从 Express/Koa 迁移、希望在同等代码复杂度下提升吞吐与可观测性的技术负责人。
+- 需要 JSON Schema 驱动接口契约、并计划对接 OpenAPI/Swagger 文档的 API 设计团队。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 运行环境（v5 详见[官方兼容性说明](https://fastify.dev/docs/latest/Guides/Getting-Started/)）。
+- 包管理器：npm、yarn 或 pnpm 均可；下文以 npm 为例。
+
+### 安装方式
+
+**方式一：脚手架新建项目（推荐首次体验）**
+
+```bash
+mkdir my-app && cd my-app
+npm init fastify
+npm i
+```
+
+**方式二：在现有项目中安装依赖**
+
+```bash
+npm i fastify
+```
+
+### 首次运行
+
+脚手架项目开发模式：
+
+```bash
+npm run dev
+```
+
+生产模式：
+
+```bash
+npm start
+```
+
+最小可运行示例（CommonJS）：
+
+```js
+const fastify = require('fastify')({ logger: true })
+
+fastify.get('/', async (request, reply) => {
+  return { hello: 'world' }
+})
+
+fastify.listen({ port: 3000 }, (err, address) => {
+  if (err) throw err
+})
+```
+
+ESM 项目将 `require` 换为 `import Fastify from 'fastify'` 即可。更多示例见[官方 Getting Started](https://fastify.dev/docs/latest/Guides/Getting-Started/)与 [demo 仓库](https://github.com/fastify/demo)。
+
+### 验证是否成功
+
+- 开发或生产命令启动后无报错退出。
+- 访问 `http://127.0.0.1:3000/` 应返回 `{"hello":"world"}`（或你定义的路由响应）。
+- 若启用 `logger: true`，控制台应出现 Pino 结构化请求日志。
+
+### 常见坑 / 注意事项
+
+- **监听地址**：`.listen()` 默认绑定 `localhost`（`127.0.0.1` / `::1`）；Docker、GCP 等容器内需显式 `{ host: '0.0.0.0', port: 3000 }`，并注意暴露端口的网络安全。
+- **大版本分支**：`main` 为 v5；生产若仍依赖 v4 API，请锁定 4.x 版本并阅读 [迁移指南](https://fastify.dev/docs/latest/Guides/Migration-Guide-V5/)。
+- **Schema 可选但推荐**：跳过 schema 仍可运行，但会失去编译期校验与自动序列化的性能与契约收益。
+- **插件注册顺序**：部分插件（如 `@fastify/cors`、认证插件）对注册顺序敏感，升级插件大版本前请查阅对应 README 与 CHANGELOG。

@@ -1,0 +1,131 @@
+---
+title: Deno
+description: 基于 V8 与 Rust 的现代 JavaScript/TypeScript 运行时，默认权限沙箱，原生支持 TS 与 Web 标准 API。
+repo: https://github.com/denoland/deno
+homepage: https://deno.com
+repoDescription: "A modern runtime for JavaScript and TypeScript."
+avatarUrl: https://avatars.githubusercontent.com/u/42048915?v=4
+tags:
+  - 开发工具
+  - CLI
+  - 后端
+language: Rust
+stars: 107163
+forks: 6073
+openIssues: 1330
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-20"
+updatedAt: "2026-06-20"
+curationReason: Node 替代运行时选型、权限沙箱与 TypeScript 零配置、JSR 包生态，以及 greenfield 全栈 TypeScript 项目。
+---
+
+## 项目介绍
+
+Deno 是由 [Deno Land Inc.](https://deno.com/) 维护的现代 JavaScript、TypeScript 与 WebAssembly 运行时，基于 V8、Rust 与 Tokio 构建。它强调**安全默认值**（显式权限模型）与**开发者体验**（原生 TypeScript、Web 标准 API、单二进制分发），并提供 [Deno Deploy](https://deno.com/deploy) 边缘托管与 [JSR](https://jsr.io/) 包注册表，形成从本地开发到部署的完整链路。
+
+## 核心特性
+
+- **权限沙箱**：文件、网络、环境变量、子进程等能力需 `--allow-*` 显式授权，降低脚本误执行风险
+- **原生 TypeScript**：`.ts` / `.tsx` 可直接 `deno run`，无需单独 tsconfig 或转译步骤（仍可配置）
+- **Web 标准 API**：`fetch`、`Request`/`Response`、`Deno.serve` 等与浏览器对齐，降低前后端心智切换
+- **内置工具链**：`deno fmt`、`deno lint`、`deno test`、`deno compile` 覆盖格式化、静态检查、测试与单文件编译
+- **JSR 与标准库**：官方 [Standard Library](https://jsr.io/@std) 与 JSR 注册表面向现代 ESM/TypeScript 包发布与消费
+
+## 对用户价值
+
+若你希望在新项目中减少「Node + npm + ESLint + Jest + ts-node」的拼装成本，Deno 用单个 `deno` 二进制覆盖运行、测试与常用开发命令，并对 TypeScript 开箱即用。权限模型让 CLI 脚本与第三方依赖的副作用更可审计，适合对安全边界敏感的场景。对已有 npm 生态项目，Deno 持续增强 Node/npm 兼容（`deno install npm:...`），可渐进评估迁移；代价是部分 Node 原生模块、历史 CommonJS 包与企业级 LTS 节奏仍不如 Node.js 成熟，生产落地需对照官方兼容文档验证。
+
+## 与替代方案
+
+- 相比 [Node.js](https://nodejs.org/)，Deno 默认权限沙箱、原生 TypeScript 与 Web API 取向更明显；Node.js npm 生态规模、第三方包验证广度、LTS 发布节奏与企业支持经过更长生产检验，存量项目更常选 Node。
+- 相比 [Bun](https://bun.sh/)，Deno 更强调安全默认值与 Web 标准；Bun 更聚焦 npm 兼容与一体化 dev 速度（安装、测试、打包），适合在 Node 生态内追求极致启动与工具链收敛的团队。
+- 相比单独使用 [TypeScript](https://www.typescriptlang.org/) + [Vitest](https://vitest.dev/) + [esbuild](https://esbuild.github.io/)，Deno 用运行时内置工具减少配置面；若团队已深度定制各工具链或依赖特定 Node 原生扩展，拆分方案仍可能更灵活。
+- 边界说明：Deno 不是容器编排或数据库产品；复杂 monorepo、特定 `node-gyp` 原生 addon 或冷门 Node API 需在目标环境实测，不宜假设 100% 兼容。
+
+## 适应人群
+
+- 新建 greenfield TypeScript 全栈或 CLI 项目，希望零配置运行 TS、并控制脚本权限边界的个人开发者与小团队。
+- 关注 Web 标准 API、边缘部署（Deno Deploy）与 JSR 包发布的现代 JavaScript 工程师。
+- 在 Node 与 Deno 之间做运行时选型、或评估 Deno 作为脚本/工具链加速器的后端与 DevOps 负责人。
+
+## 如何使用
+
+### 前置条件
+
+- 支持平台：macOS、Linux、Windows（x64 / arm64），详见 [安装文档](https://docs.deno.com/runtime/manual/getting_started/installation)。
+- 无需预装 Node.js 或 npm；从源码构建需 Rust 工具链，复杂度远高于安装官方二进制。
+- 运行需网络权限的示例（如 HTTP 服务）时，需显式传入 `--allow-net` 等权限标志。
+
+### 安装方式
+
+**方式一：官方安装脚本（推荐）**
+
+```bash
+# macOS / Linux
+curl -fsSL https://deno.land/install.sh | sh
+```
+
+```powershell
+# Windows PowerShell
+irm https://deno.land/install.ps1 | iex
+```
+
+**其他方式**
+
+```bash
+# Homebrew（macOS）
+brew install deno
+
+# npm（全局）
+npm install -g deno
+```
+
+```powershell
+# Chocolatey / WinGet / Scoop（Windows）
+choco install deno
+winget install --id=DenoLand.Deno
+scoop install main/deno
+```
+
+升级至最新稳定版：
+
+```bash
+deno upgrade
+```
+
+### 首次运行
+
+创建 `server.ts`：
+
+```typescript
+Deno.serve((_req: Request) => {
+  return new Response("Hello, world!");
+});
+```
+
+启动本地 HTTP 服务（需网络权限）：
+
+```bash
+deno run --allow-net server.ts
+```
+
+浏览器访问 `http://localhost:8000` 应看到 `Hello, world!`。
+
+### 验证是否成功
+
+```bash
+deno --version          # 应输出版本号
+deno run --allow-net server.ts   # 本地 8000 端口可响应
+deno test               # 若有 *_test.ts，应执行测试套件
+```
+
+确认 `~/.deno/bin`（或安装脚本提示的路径）已加入 `PATH`，新开终端后 `which deno` 可找到可执行文件。
+
+### 常见坑 / 注意事项
+
+- **权限模型**：未加 `--allow-read` / `--allow-net` 等标志时，文件与网络访问会被拒绝；生产脚本应最小化授权范围，勿习惯性 `--allow-all`。
+- **Node/npm 兼容非 100%**：部分 CommonJS 包、原生 addon 或 Node 专有 API 可能无法直接运行，迁移前查阅 [Node 兼容文档](https://docs.deno.com/runtime/manual/node/) 并在 staging 验证。
+- **模块解析差异**：Deno 默认 ESM 与 URL/import map 取向，与 Node 的 `node_modules` 解析习惯不同；消费 npm 包时优先使用 `npm:` 说明符或 `deno.json` 配置。
+- **从源码构建**：clone 本 repo 用于贡献或定制构建，日常开发安装官方二进制即可，无需自行编译 Rust 工程。
