@@ -8,6 +8,8 @@ import {
   normalizeGithubProject,
   paginateGithubProjects,
   parseGithubPageParam,
+  parseGithubSortParam,
+  sortGithubProjects,
 } from '../src/lib/github-curation.ts';
 import {
   normalizeRepoStats,
@@ -82,6 +84,67 @@ test('filters by curationReason even when phrase is absent from description', ()
 test('filters by selected tag and returns unique sorted tags', () => {
   assert.equal(filterGithubProjects([project], { query: '', selectedTag: 'Agent' }).length, 1);
   assert.deepEqual(getGithubProjectTags([project]), ['AI 编程', 'Agent', '开发工具']);
+});
+
+function makeSortableProject(overrides: {
+  slug: string;
+  title: string;
+  stars: number;
+  publishedAt: string;
+  featured?: boolean;
+}) {
+  return normalizeGithubProject({
+    slug: overrides.slug,
+    data: {
+      title: overrides.title,
+      description: '测试项目',
+      repo: `https://github.com/org/${overrides.slug}`,
+      tags: ['开发工具', 'CLI', '工作流'],
+      language: 'TypeScript',
+      stars: overrides.stars,
+      license: 'MIT',
+      featured: overrides.featured ?? false,
+      publishedAt: overrides.publishedAt,
+      updatedAt: overrides.publishedAt,
+      curationReason: '适合测试排序场景。',
+    },
+  });
+}
+
+test('sorts projects by stars, title, and published date', () => {
+  const projects = [
+    makeSortableProject({ slug: 'beta', title: 'Beta', stars: 100, publishedAt: '2026-06-18' }),
+    makeSortableProject({ slug: 'alpha', title: 'Alpha', stars: 100, publishedAt: '2026-06-20' }),
+    makeSortableProject({
+      slug: 'featured-low',
+      title: 'Featured Low',
+      stars: 10,
+      publishedAt: '2026-06-19',
+      featured: true,
+    }),
+    makeSortableProject({ slug: 'gamma', title: 'Gamma', stars: 500, publishedAt: '2026-06-17' }),
+  ];
+
+  assert.deepEqual(
+    sortGithubProjects(projects, 'stars').map((item) => item.slug),
+    ['gamma', 'alpha', 'beta', 'featured-low'],
+  );
+  assert.deepEqual(
+    sortGithubProjects(projects, 'title').map((item) => item.slug),
+    ['alpha', 'beta', 'featured-low', 'gamma'],
+  );
+  assert.deepEqual(
+    sortGithubProjects(projects, 'published').map((item) => item.slug),
+    ['alpha', 'featured-low', 'beta', 'gamma'],
+  );
+});
+
+test('parseGithubSortParam falls back to stars for invalid values', () => {
+  assert.equal(parseGithubSortParam(null), 'stars');
+  assert.equal(parseGithubSortParam('stars'), 'stars');
+  assert.equal(parseGithubSortParam('title'), 'title');
+  assert.equal(parseGithubSortParam('published'), 'published');
+  assert.equal(parseGithubSortParam('updated'), 'stars');
 });
 
 function makeProjects(count: number) {

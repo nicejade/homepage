@@ -52,6 +52,16 @@ export type GithubProjectFilters = {
 
 export const GITHUB_PAGE_SIZE = 15;
 
+export type GithubSortKey = 'stars' | 'title' | 'published';
+
+export const GITHUB_SORT_DEFAULT: GithubSortKey = 'stars';
+
+export const GITHUB_SORT_OPTIONS: { value: GithubSortKey; label: string }[] = [
+  { value: 'stars', label: '最多 Star' },
+  { value: 'title', label: '标题 A→Z' },
+  { value: 'published', label: '最新收录' },
+];
+
 export type GithubPaginationResult = {
   items: GithubProject[];
   page: number;
@@ -122,6 +132,42 @@ export function filterGithubProjects(
 
 export function getGithubProjectTags(projects: GithubProject[]): string[] {
   return [...new Set(projects.flatMap((project) => project.tags))].sort();
+}
+
+export function parseGithubSortParam(value: string | null): GithubSortKey {
+  if (value === 'title' || value === 'published' || value === 'stars') return value;
+  return GITHUB_SORT_DEFAULT;
+}
+
+function compareGithubProjectsByTitle(a: GithubProject, b: GithubProject): number {
+  return a.title.localeCompare(b.title);
+}
+
+export function sortGithubProjects(
+  projects: GithubProject[],
+  sort: GithubSortKey = GITHUB_SORT_DEFAULT,
+): GithubProject[] {
+  const sorted = [...projects];
+
+  switch (sort) {
+    case 'title':
+      sorted.sort(compareGithubProjectsByTitle);
+      break;
+    case 'published':
+      sorted.sort(
+        (a, b) =>
+          b.publishedAt.localeCompare(a.publishedAt) || compareGithubProjectsByTitle(a, b),
+      );
+      break;
+    case 'stars':
+    default:
+      sorted.sort(
+        (a, b) => b.stars - a.stars || compareGithubProjectsByTitle(a, b),
+      );
+      break;
+  }
+
+  return sorted;
 }
 
 export function parseGithubPageParam(value: string | null): number {

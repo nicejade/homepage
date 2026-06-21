@@ -9,16 +9,22 @@ npm run build
 # 进入生成的文件夹
 cd ./dist
 
-mv _astro/* ./
-rm -rf _astro
+# 将 _astro 构建产物平铺到 dist 根目录（GitHub Pages 托管兼容）
+if [ -d _astro ]; then
+  mv _astro/* ./
+  rm -rf _astro
+fi
 
-mv about/index.html about.html
+# about 页面扁平化为根目录 about.html（与站内 /about 链接一致）
+if [ -f about/index.html ]; then
+  mv about/index.html about.html
+  rmdir about 2>/dev/null || true
+fi
 
-search_string="/_astro"
-replace_string=""
-
-sed -i '' "s#${search_string}#${replace_string}#g" index.html
-sed -i '' "s#${search_string}#${replace_string}#g" about.html
+# 重写所有 HTML 中的 /_astro 资源路径（含 /github/ 列表与详情页）
+find . -name '*.html' -type f -print0 | while IFS= read -r -d '' file; do
+  sed -i '' 's#/_astro##g' "$file"
+done
 
 # 如果是发布到自定义域名
 echo 'niceshare.site' > CNAME

@@ -1,13 +1,22 @@
 <script lang="ts">
+  import {
+    GITHUB_SORT_OPTIONS,
+    type GithubSortKey,
+  } from '../lib/github-curation';
   import { githubTagButtonClass } from '../lib/github-ui';
 
   export let query = '';
   export let selectedTag = '';
+  export let selectedSort: GithubSortKey = 'stars';
   export let tags: string[] = [];
   export let resultCount = 0;
   export let hasFilters = false;
   export let onTagSelect: (tag: string) => void = () => {};
+  export let onSortChange: (sort: GithubSortKey) => void = () => {};
   export let onClearFilters: () => void = () => {};
+
+  const sortSelectClass =
+    'min-h-9 min-w-[9.5rem] cursor-pointer appearance-none rounded-xl border border-black/[0.08] bg-white py-2 pl-3 pr-9 text-sm font-medium text-black outline-none transition-[border-color,box-shadow,background-color] duration-200 focus:border-brand/60 focus:ring-4 focus:ring-brand/10 dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-silver dark:focus:bg-white/[0.06]';
 </script>
 
 <div
@@ -72,26 +81,61 @@
       aria-live="polite"
     >
       <span>共 <span class="font-semibold text-black dark:text-silver">{resultCount}</span> 个结果</span>
-      {#if hasFilters}
-        <button
-          type="button"
-          class="inline-flex min-h-9 cursor-pointer items-center gap-1 rounded-full px-3 font-medium text-brand transition-colors duration-200 hover:bg-brand/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950"
-          on:click={onClearFilters}
-        >
-          <svg
-            class="h-3.5 w-3.5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            aria-hidden="true"
+
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div class="flex shrink-0 items-center gap-2">
+          <label
+            for="github-sort"
+            class="whitespace-nowrap text-grey dark:text-gray-400"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
-          清除筛选
-        </button>
-      {/if}
+            排序
+          </label>
+          <div class="relative">
+            <select
+              id="github-sort"
+              class={sortSelectClass}
+              value={selectedSort}
+              on:change={(event) => onSortChange(event.currentTarget.value as GithubSortKey)}
+            >
+              {#each GITHUB_SORT_OPTIONS as option}
+                <option value={option.value}>{option.label}</option>
+              {/each}
+            </select>
+            <svg
+              class="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey/70 dark:text-gray-500"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </div>
+
+        {#if hasFilters}
+          <button
+            type="button"
+            class="inline-flex min-h-9 cursor-pointer items-center gap-1 rounded-full px-3 font-medium text-brand transition-colors duration-200 hover:bg-brand/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950"
+            on:click={onClearFilters}
+          >
+            <svg
+              class="h-3.5 w-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            清除筛选
+          </button>
+        {/if}
+      </div>
     </div>
   </div>
 </div>

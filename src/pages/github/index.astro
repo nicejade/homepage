@@ -3,15 +3,12 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import { getCollection } from 'astro:content';
 import GithubPageShell from '../../components/GithubPageShell.astro';
 import GithubProjectExplorer from '../../components/GithubProjectExplorer.svelte';
-import { normalizeGithubProject } from '../../lib/github-curation';
+import { normalizeGithubProject, sortGithubProjects } from '../../lib/github-curation';
 
 const entries = await getCollection('github');
-const projects = entries
-	.map((entry) => normalizeGithubProject({ slug: entry.slug, data: entry.data }))
-	.sort((a, b) => {
-		if (a.featured !== b.featured) return a.featured ? -1 : 1;
-		return b.updatedAt.localeCompare(a.updatedAt) || a.title.localeCompare(b.title);
-	});
+const projects = sortGithubProjects(
+	entries.map((entry) => normalizeGithubProject({ slug: entry.slug, data: entry.data })),
+);
 
 const description = '收录 AI 编程、本地模型、工作流自动化与开发者生产力方向的高质量 GitHub 开源项目。';
 ---

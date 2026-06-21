@@ -82,6 +82,8 @@ pnpm astro check
 pnpm build
 ```
 
+Production deploy uses `deploy.sh`, which flattens `_astro/` assets to the site root and rewrites `/_astro` paths in **all** HTML files (not only `index.html` / `about.html`). GitHub 详情页依赖的 `_slug_*.css` 与 Svelte island JS 路径会一并修正；新增 `/github/` 页面后无需再改 deploy 脚本。
+
 6. Report:
    - output file path
    - chosen tags and why they fit filtering

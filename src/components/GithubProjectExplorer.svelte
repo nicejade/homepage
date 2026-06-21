@@ -3,9 +3,13 @@
   import {
     filterGithubProjects,
     getGithubProjectTags,
+    GITHUB_SORT_DEFAULT,
     paginateGithubProjects,
     parseGithubPageParam,
+    parseGithubSortParam,
+    sortGithubProjects,
     type GithubProject,
+    type GithubSortKey,
   } from '../lib/github-curation';
   import GithubEmptyState from './GithubEmptyState.svelte';
   import GithubFilterBar from './GithubFilterBar.svelte';
@@ -16,22 +20,29 @@
 
   let query = '';
   let selectedTag = '';
+  let selectedSort: GithubSortKey = GITHUB_SORT_DEFAULT;
   let requestedPage = 1;
   let gridElement: HTMLDivElement | null = null;
   let lastQuery = '';
   let lastSelectedTag = '';
+  let lastSelectedSort: GithubSortKey = GITHUB_SORT_DEFAULT;
   let urlReady = false;
 
   $: tags = getGithubProjectTags(projects);
   $: filteredProjects = filterGithubProjects(projects, { query, selectedTag });
+  $: sortedProjects = sortGithubProjects(filteredProjects, selectedSort);
   $: hasFilters = query.trim() !== '' || selectedTag !== '';
-  $: pagination = paginateGithubProjects(filteredProjects, requestedPage);
+  $: pagination = paginateGithubProjects(sortedProjects, requestedPage);
   $: visibleProjects = pagination.items;
 
-  $: if (urlReady && (query !== lastQuery || selectedTag !== lastSelectedTag)) {
+  $: if (
+    urlReady &&
+    (query !== lastQuery || selectedTag !== lastSelectedTag || selectedSort !== lastSelectedSort)
+  ) {
     requestedPage = 1;
     lastQuery = query;
     lastSelectedTag = selectedTag;
+    lastSelectedSort = selectedSort;
   }
 
   $: if (urlReady) {
@@ -45,8 +56,10 @@
       selectedTag = tagFromUrl;
     }
     requestedPage = parseGithubPageParam(params.get('page'));
+    selectedSort = parseGithubSortParam(params.get('sort'));
     lastQuery = query;
     lastSelectedTag = selectedTag;
+    lastSelectedSort = selectedSort;
     urlReady = true;
   });
 
@@ -62,6 +75,11 @@
       url.searchParams.set('page', String(page));
     } else {
       url.searchParams.delete('page');
+    }
+    if (selectedSort !== GITHUB_SORT_DEFAULT) {
+      url.searchParams.set('sort', selectedSort);
+    } else {
+      url.searchParams.delete('sort');
     }
     window.history.replaceState({}, '', url);
   }
@@ -87,6 +105,10 @@
   function clearFilters() {
     query = '';
     selectedTag = '';
+  }
+
+  function setSort(sort: GithubSortKey) {
+    selectedSort = sort;
   }
 </script>
 
@@ -119,10 +141,12 @@
   <GithubFilterBar
     bind:query
     {selectedTag}
+    {selectedSort}
     {tags}
     resultCount={filteredProjects.length}
     {hasFilters}
     onTagSelect={setTag}
+    onSortChange={setSort}
     onClearFilters={clearFilters}
   />
 
