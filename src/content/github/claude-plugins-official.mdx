@@ -1,0 +1,87 @@
+---
+title: Claude Code Plugins Official
+description: Anthropic 官方 Claude Code 插件市场，汇集内外部高质量插件与 Skill 包。
+repo: https://github.com/anthropics/claude-plugins-official
+homepage: https://code.claude.com/docs/en/plugins
+repoDescription: Official, Anthropic-managed directory of high quality Claude Code Plugins.
+avatarUrl: https://avatars.githubusercontent.com/u/76263028?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: Python
+stars: 30752
+forks: 3357
+openIssues: 764
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-24"
+updatedAt: "2026-06-24"
+curationReason: 想在 Claude Code 里用官方市场安装 code-review、MCP、LSP 等插件的开发者。
+---
+
+## 项目介绍
+
+这是 Anthropic 维护的 **Claude Code 官方插件目录**：仓库收录经筛选的内部插件（`/plugins`）与合作伙伴、社区提交的外部插件（`/external_plugins`），并通过 Claude Code 内置的 `/plugin` 市场机制一键分发。每个插件可包含 Slash 命令、Agent 定义、Skills、MCP 服务器配置等能力模块，是扩展 Claude Code 工作流的首选官方入口。
+
+## 核心特性
+
+- **双轨插件来源**：`/plugins` 由 Anthropic 团队维护（如 code-review、feature-dev、security-guidance、hookify）；`/external_plugins` 收录 GitHub、Playwright、Linear 等第三方集成
+- **标准插件结构**：`.claude-plugin/plugin.json` 元数据，可选 `commands/`、`agents/`、`skills/`、`.mcp.json` 等目录
+- **Skill-bundle 支持**：无完整 manifest 的远程技能包可通过 `strict: false` 与 `skills` 数组声明，从 Git 子目录拉取 `SKILL.md`
+- **内置市场安装**：在 Claude Code 中通过 `/plugin install {name}@claude-plugins-official` 或 `/plugin > Discover` 浏览安装
+- **LSP 与 MCP 生态**：涵盖多语言 LSP（TypeScript、Rust、Python 等）与 MCP 开发、隧道等工具向插件
+- **外部提交通道**：合作伙伴可通过 [插件目录提交表单](https://clau.de/plugin-directory-submission) 申请上架
+
+## 对用户价值
+
+自行拼装 MCP 服务器、Skills 与命令脚本成本高且难维护。官方目录把常用能力打包成可版本化、可审查的插件单元，降低「从零配置 Claude Code 扩展」的门槛。内部插件代表 Anthropic 推荐实践（代码审查、安全指引、会话报告等），外部插件则连接 GitHub、GitLab、Firebase 等日常工具链，让 Agent 在终端内直接触达团队已有系统。
+
+## 与替代方案
+
+- 相比 [claude-code](https://github.com/anthropics/claude-code) 仓库内嵌的 `plugins/`，本目录是 **独立、可扩展的官方市场源**，并包含第三方合作伙伴插件。
+- 相比 [anthropics/skills](https://github.com/anthropics/skills) 技能仓库，本目录覆盖 **完整插件形态**（命令、Agent、MCP、LSP），不仅限于 `SKILL.md` 技能包。
+- 相比手动克隆插件仓库或自建 marketplace JSON，使用 `@claude-plugins-official` 可获得 **统一命名空间与发现入口**，但插件内容由各作者维护，安装前仍需自行评估信任边界。
+- 若只需单一 MCP 工具，直接配置 `.mcp.json` 可能更轻；需要成套工作流时再选目录内插件。
+
+## 适应人群
+
+- 已使用 Claude Code，希望快速安装代码审查、LSP、MCP 等官方推荐扩展的开发者。
+- 需要将 GitHub、Linear、Playwright 等第三方服务接入 Claude Code 工作流的工程师。
+- 计划向官方市场上架插件的合作伙伴或团队维护者。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装并可正常启动 [Claude Code](https://github.com/anthropics/claude-code) CLI。
+- 理解官方免责声明：Anthropic 不控制插件内 MCP 服务器与外部软件行为，安装前请确认来源可信。
+- 查阅各插件子目录 `README.md` 了解额外依赖（如语言运行时、API 密钥）。
+
+### 安装方式
+
+在 Claude Code 会话中安装指定插件（将 `{plugin-name}` 替换为目录名，如 `code-review`）：
+
+```
+/plugin install {plugin-name}@claude-plugins-official
+```
+
+或在 Claude Code 内打开 **`/plugin > Discover`** 浏览官方市场并选择安装。
+
+浏览可用插件可克隆本仓库查看 `plugins/` 与 `external_plugins/` 目录列表，或参阅 [官方插件文档](https://code.claude.com/docs/en/plugins)。
+
+### 首次运行
+
+安装完成后，根据插件类型尝试对应入口：Slash 命令（如 `/code-review`）、自动触发的 Agent 或 Skills，或插件 README 中说明的 MCP 能力。建议先在一个测试项目中安装单个插件，确认行为符合预期再纳入日常流程。
+
+### 验证是否成功
+
+在 `/plugin` 列表中应能看到已安装的 `@claude-plugins-official` 插件。尝试执行该插件文档中的示例命令或对话触发语，确认无配置错误；若插件依赖 MCP，检查 `.mcp.json` 所需环境变量与网络可达性。
+
+### 常见坑 / 注意事项
+
+- **信任边界**：外部插件可能包含任意 MCP 服务器与脚本，务必阅读各插件 homepage 与许可信息后再用于生产代码库。
+- **许可证分散**：仓库根目录为 Apache-2.0，但各链接插件可能有独立 LICENSE，商用前需逐插件核对。
+- **Skill-bundle 插件**需正确配置 `source`（git-subdir、ref、sha）与 `skills` 路径，否则 Claude Code 无法加载远程 `SKILL.md`。
+- 外部插件上架需通过官方审核；自研插件可参考 `plugins/example-plugin` 与 [plugin-dev](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/plugin-dev) 学习结构，不一定从此市场分发。

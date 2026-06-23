@@ -1,0 +1,114 @@
+---
+title: anime.js
+description: 轻量级 JavaScript 动画库，支持 CSS/SVG/DOM 与对象属性，API 简洁、场景覆盖广。
+repo: https://github.com/juliangarnier/anime
+homepage: https://animejs.com
+repoDescription: JavaScript animation engine
+avatarUrl: https://avatars.githubusercontent.com/u/1268691?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 可视化
+language: JavaScript
+stars: 70294
+forks: 4743
+openIssues: 109
+license: MIT
+featured: false
+publishedAt: "2026-06-24"
+updatedAt: "2026-06-24"
+curationReason: 落地页微交互、SVG 动效与时间轴编排，以及对比 GSAP / CSS Animation 时的前端与创意开发者。
+---
+
+## 项目介绍
+
+anime.js 是由 Julian Garnier 维护的 JavaScript 动画引擎，当前主版本为 V4，定位为快速、多用途且轻量的动画库。它可用简洁 API 驱动 CSS 属性、SVG、DOM 属性以及普通 JavaScript 对象，适合在网页中实现微交互、序列动画与复杂时间轴编排。官方文档与示例集中在 [animejs.com](https://animejs.com)；日常开发通过 npm 安装 `animejs` 并以 ES Module 引入即可。
+
+## 核心特性
+
+- **统一动画 API**：`animate()` 可对选择器、DOM 节点或 JS 对象施加变换，支持 `duration`、`delay`、`ease`、`loop`、`alternate` 等常用参数
+- **多目标类型**：覆盖 CSS 属性、SVG 路径与属性、DOM attribute，以及任意数值对象属性
+- **时间轴与交错**：内置 `timeline` 模块编排多段动画；`stagger()` 为列表元素生成递进延迟，适合卡片、菜单等批量动效
+- **丰富缓动与弹簧**：提供多种 easing（含 cubic-bezier、spring 等），并支持 WAAPI 等浏览器能力适配
+- **模块化分包**：V4 按 `animation`、`timeline`、`timer` 等子路径导出，可按需 tree-shake，减小打包体积
+- **TypeScript 支持**：发布包内含 `.d.ts` 类型声明，便于在 TS 项目中集成
+
+## 对用户价值
+
+手写 CSS `@keyframes` 或原生 Web Animations API 在复杂序列、对象插值与 SVG 路径动画上往往样板代码多、可读性差。anime.js 把「目标 + 属性 + 时间曲线」收敛成声明式配置，让前端与创意开发者能快速实现落地页动效、数据可视化过渡、SVG 图标动画等场景。MIT 许可、无运行时框架绑定，可与 React、Vue、Svelte 或纯原生页面配合；V3 用户可参照官方 [迁移指南](https://github.com/juliangarnier/anime/wiki/Migrating-from-v3-to-v4) 升级。
+
+## 与替代方案
+
+- 相比 [GSAP](https://gsap.com/)，anime.js 更轻量、API 更扁平，MIT 完全免费；GSAP 生态更成熟，ScrollTrigger、Morph 等高级能力更强，部分插件需商业许可，适合大型动效生产管线。
+- 相比 [Motion](https://motion.dev/)（原 Framer Motion 核心），anime.js 不绑定 React，适合多框架或 vanilla JS 项目；Motion 在 React 组件级动画与布局过渡上集成更深。
+- 相比纯 CSS Animation / Transition，anime.js 便于对象属性插值、SVG 路径与多段时间轴编排；简单 hover 或单次过渡仍可直接用 CSS，成本更低。
+- 边界说明：npm 包名为 **`animejs`**（非 `anime`）；V4 与 V3 API 有破坏性变更，旧项目升级前务必阅读迁移文档。
+
+## 适应人群
+
+- 需要为落地页、产品演示或营销站点添加微交互与序列动画的前端工程师与创意开发者。
+- 在 SVG 图标、数据图表或 Canvas/WebGL 场景中，希望用统一 API 驱动属性过渡的 UI 开发者。
+- 评估轻量动画库（与 GSAP、CSS、Motion 对比）并关注 MIT 许可与包体积的技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- 现代浏览器（支持 ES Modules；部分能力依赖 WAAPI 等浏览器 API）。
+- Node.js 与 npm/pnpm/Yarn（用于打包集成）；或可直接通过 CDN 引入 UMD 包做原型验证。
+- 基础 JavaScript 与 DOM/CSS 知识；从 V3 升级需对照官方迁移指南。
+
+### 安装方式
+
+**方式一：npm 安装（推荐）**
+
+```bash
+npm install animejs
+```
+
+**方式二：pnpm / Yarn**
+
+```bash
+pnpm add animejs
+# 或
+yarn add animejs
+```
+
+**方式三：CDN（UMD，适合快速原型）**
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/animejs/dist/bundles/anime.umd.min.js"></script>
+```
+
+### 首次运行
+
+在入口文件中按 V4 方式引入并执行一段基础动画：
+
+```javascript
+import { animate, stagger } from 'animejs';
+
+animate('.square', {
+  x: 320,
+  rotate: { from: -180 },
+  duration: 1250,
+  delay: stagger(65, { from: 'center' }),
+  ease: 'inOutQuint',
+  loop: true,
+  alternate: true,
+});
+```
+
+确保页面存在 `.square` 元素，并在 bundler（Vite、Webpack 等）中正常解析 `animejs` 的 ES Module 导出。完整 API 见 [官方文档](https://animejs.com/documentation)。
+
+### 验证是否成功
+
+- 页面加载后目标元素应产生位移与旋转动画，且循环交替播放。
+- 浏览器开发者工具 Network 面板应成功加载 `animejs` 模块或 UMD 脚本，Console 无模块解析错误。
+- 若使用 TypeScript，IDE 应能识别 `animate`、`stagger` 等导出符号的类型提示。
+
+### 常见坑 / 注意事项
+
+- **包名**：npm 安装为 `animejs`，`import` 路径也是 `'animejs'`，勿与旧版 `anime` 包名混淆。
+- **V3 → V4**：API 与模块结构有变更，旧代码不能直接替换 import；升级前阅读 [Migrating from v3 to v4](https://github.com/juliangarnier/anime/wiki/Migrating-from-v3-to-v4)。
+- **SSR**：在 Next.js 等服务端渲染框架中，动画逻辑应放在客户端生命周期（`useEffect` 或 `'use client'`）内执行，避免 `window`/`document` 在服务端报错。
+- **性能**：大量并发动画或复杂 SVG 路径时建议控制同时运行的实例数量，必要时结合 `requestAnimationFrame` 与 CSS `will-change` 优化。

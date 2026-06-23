@@ -1,0 +1,102 @@
+---
+title: "claude-hud"
+description: Claude Code 状态栏插件，实时展示上下文用量、工具调用、子代理与待办进度。
+repo: "https://github.com/jarrodwatts/claude-hud"
+repoDescription: "A Claude Code plugin that shows what's happening - context usage, active tools, running agents, and todo progress"
+avatarUrl: "https://avatars.githubusercontent.com/u/35651410?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: "JavaScript"
+stars: 25647
+forks: 1169
+openIssues: 6
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-06-24"
+updatedAt: "2026-06-24"
+curationReason: 长时间用 Claude Code 写代码，需要一眼看清上下文余量与会话状态的开发者。
+---
+
+## 项目介绍
+
+claude-hud 是 Jarrod Watts 为 Claude Code 开发的**终端状态栏（statusline）插件**，利用官方 statusline API 在输入框下方常驻显示会话信息。它读取 Claude Code 原生的 token 与用量数据（非估算），并解析 transcript JSONL 以追踪工具调用、子代理运行与 Todo 进度，约每 300ms 刷新，无需额外窗口或 tmux 分屏。
+
+## 核心特性
+
+- **上下文健康度**：彩色进度条（绿→黄→红）显示上下文窗口占用，支持 1M context 等新窗口尺寸
+- **用量与限流**：展示 Claude 订阅用量、重置倒计时与可选 7 日用量阈值提醒
+- **工具与代理追踪**：实时显示 Read/Edit/Grep 等工具活动，以及子代理名称、模型与运行时长
+- **Todo 进度**：同步 Claude Code 内置待办列表的完成状态（如 `2/5`）
+- **Git 与项目路径**：可配置 1–3 级目录深度、分支名、脏状态与 ahead/behind 提示
+- **可定制布局**：`/claude-hud:configure` 引导配置 Full / Essential / Minimal 预设，支持中英文标签与紧凑/展开布局
+
+## 对用户价值
+
+长时间 Agent 会话里，上下文悄悄填满、子代理在后台跑、Todo 进度不可见——这些问题往往要到报错或手动 `/context` 才被发现。claude-hud 把关键指标压进终端底部一行或数行，让你在继续输入前就能判断是否需要压缩上下文、暂停任务或检查代理状态，减少「突然撞墙」的中断成本。
+
+## 与替代方案
+
+- 相比手动执行 `/context` 或翻阅 transcript，本插件提供**持续、低打扰**的可视化，且数据来自 Claude Code 原生 API，比第三方估算更可靠。
+- 相比自建 tmux 分屏或外部监控脚本，claude-hud 直接接入 statusline 管道（stdin JSON → 渲染 → stdout），与 Claude Code 终端体验一体，无需额外窗口管理。
+- 相比 [claude-mem](https://github.com/thedotmack/claude-mem) 等侧重跨会话记忆的插件，claude-hud 专注**当前会话的可观测性**，二者可并存；若你只需要 HUD 而不需要持久记忆，单独安装本插件即可。
+- 局限：仅适用于 Claude Code 且需完成 statusline 配置；非 Claude Code 用户或不需要终端 HUD 的场景不适用。
+
+## 适应人群
+
+- 每天用 Claude Code 在同一代码库上长时间结对编程的开发者。
+- 频繁启用子代理、Skills 或 MCP，需要一眼看清「后台在干什么」的效率型用户。
+- 关心上下文余量与订阅用量，希望在撞限前主动调整会话策略的 Claude 订阅用户。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装并登录 **Claude Code**
+- **Linux**：若插件安装报 `EXDEV: cross-device link not permitted`，需将 `TMPDIR` 指向非 tmpfs 目录（见下方安装说明）
+- **Windows**：运行 `/claude-hud:setup` 前需有 Node.js LTS（可用 `winget install OpenJS.NodeJS.LTS`）
+
+### 安装方式
+
+在 Claude Code 会话内执行：
+
+```text
+/plugin marketplace add jarrodwatts/claude-hud
+/plugin install claude-hud
+/reload-plugins
+```
+
+**Linux 用户**（遇跨设备链接错误时）：
+
+```bash
+mkdir -p ~/.cache/tmp && TMPDIR=~/.cache/tmp claude
+```
+
+在上述会话中再执行安装命令。
+
+配置 statusline（必需）：
+
+```text
+/claude-hud:setup
+```
+
+完成后**完全重启** Claude Code 以加载新的 `statusLine` 配置。
+
+### 首次运行
+
+重启后，输入框下方应出现默认两行 HUD：第一行显示模型、项目路径与 git 分支；第二行显示上下文条与用量条。可选运行 `/claude-hud:configure` 选择预设、切换中文标签（`zh` / `zh-Hans`）或开启工具/代理/Todo 附加行。
+
+### 验证是否成功
+
+- 终端底部出现带彩色 `████░░░░` 上下文条的 statusline
+- `/claude-hud:configure` 可打开引导式配置且预览生效
+- 触发文件读写或子代理时，若已启用对应选项，附加行应随活动更新
+
+### 常见坑 / 注意事项
+
+- 安装后 HUD 不显示：确认已执行 `/claude-hud:setup` 并**完整重启** Claude Code，而非仅 reload 插件。
+- Linux `/tmp` 在 tmpfs 上会导致插件安装失败，按 README 设置 `TMPDIR=~/.cache/tmp` 后再装。
+- Windows 若 setup 提示找不到 JavaScript 运行时，安装 Node.js LTS 后重启 shell 再跑 setup。
+- 高级选项（颜色、阈值、`pathLevels` 等）可编辑 `~/.claude/plugins/claude-hud/config.json`；运行 configure 会保留这些手动设置。

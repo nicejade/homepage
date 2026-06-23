@@ -1,0 +1,126 @@
+---
+title: three.js
+description: 浏览器端 JavaScript 3D 库，支持 WebGL/WebGPU，轻量跨平台，适合 Web 可视化与交互场景。
+repo: https://github.com/mrdoob/three.js
+homepage: https://threejs.org/
+repoDescription: JavaScript 3D Library.
+avatarUrl: https://avatars.githubusercontent.com/u/97088?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 可视化
+language: JavaScript
+stars: 113261
+forks: 36392
+openIssues: 410
+license: MIT
+featured: false
+publishedAt: "2026-06-24"
+updatedAt: "2026-06-24"
+curationReason: 3D Web 可视化、数字孪生与游戏化界面开发，以及对比 Babylon.js 等技术选型时的前端与创意开发者。
+---
+
+## 项目介绍
+
+three.js 是面向浏览器的 JavaScript 3D 库，由 mrdoob 发起并长期维护，目标是提供易用、轻量、跨浏览器、通用场景的 3D 渲染能力。当前构建默认包含 WebGL 与 WebGPU 渲染器，SVG、CSS3D 等渲染器以 addon 形式提供。官方站点 [threejs.org](https://threejs.org/) 汇集海量示例、文档与入门手册；日常开发通过 npm 安装 `three` 即可，无需 clone 完整源码仓库。
+
+## 核心特性
+
+- **场景图模型**：以 Scene、Camera、Mesh、Material、Light 等对象组合 3D 世界，概念直观、上手曲线平缓
+- **多渲染后端**：内置 WebGLRenderer 与 WebGPURenderer；SVGRenderer、CSS3DRenderer 等可作为 addon 按需引入
+- **丰富几何与材质**：BoxGeometry、BufferGeometry、PBR 材质、纹理与后期处理等覆盖常见可视化需求
+- **动画与交互**：`setAnimationLoop`、轨道控制器（OrbitControls 等 addon）、射线拾取支撑交互式 3D 应用
+- **完善学习资源**：官方 [Examples](https://threejs.org/examples/)、[Docs](https://threejs.org/docs/)、[Manual](https://threejs.org/manual/) 与活跃社区（Discord、Discourse）
+
+## 对用户价值
+
+在 Web 上实现 3D 若直接操作 WebGL/WebGPU 底层 API，样板代码多、调试成本高。three.js 把场景搭建、相机、光照、材质与渲染循环封装成统一抽象，让前端与创意开发者能快速产出产品级 3D 体验：数据可视化、产品展示、数字孪生、轻量游戏与创意编程等。生态成熟，与 React（[react-three-fiber](https://github.com/pmndrs/react-three-fiber)）、Vue 等框架均有成熟集成方案；MIT 许可便于商业项目采用。
+
+## 与替代方案
+
+- 相比 [Babylon.js](https://www.babylonjs.com/)，three.js 更偏底层渲染库，API 粒度细、自由度大，需自行组合控制器与物理等能力；Babylon 内置编辑器、物理、粒子等一体化工具链，适合希望「开箱即用」的游戏向项目。
+- 相比 [PlayCanvas](https://playcanvas.com/)，three.js 完全开源、可自托管，无厂商绑定；PlayCanvas 提供云端协作编辑器，更适合团队协作的游戏生产流程。
+- 相比原生 WebGL/WebGPU，three.js 显著降低入门门槛，但抽象层带来一定性能与包体积开销；极致性能或定制管线场景可评估直接调用 GPU API 或更轻量的引擎。
+- 边界说明：本仓库为 **three.js 源码**；应用开发通常 `npm install three` 并参阅 threejs.org，完整 clone 含历史约 2 GB，仅需源码贡献时使用 `--depth=1` 浅克隆。
+
+## 适应人群
+
+- 需要在网页中嵌入 3D 场景、模型展示或数据可视化的前端工程师与创意开发者。
+- 评估 Web 3D 技术栈（与 Babylon.js、原生 WebGL 对比）的技术负责人与架构师。
+- 使用 React/Vue 等框架构建交互式 3D 应用，希望借助成熟库与社区示例加速迭代的团队。
+
+## 如何使用
+
+### 前置条件
+
+- 现代浏览器（支持 WebGL；WebGPU 需浏览器开启相应能力）。
+- Node.js 18+ 与 npm/pnpm/Yarn（用于打包与本地开发）。
+- 基础 JavaScript 与 DOM 知识；3D 概念（场景、相机、网格）有助于理解 API。
+
+### 安装方式
+
+**方式一：npm 安装（推荐，日常开发）**
+
+```bash
+npm install three
+```
+
+**方式二：Vite 等现代打包工具**
+
+创建项目后安装 `three`，在入口文件中 `import * as THREE from 'three'` 即可（需配置 bundler 处理 ES modules）。
+
+**方式三：clone 源码仓库（贡献或研究源码）**
+
+完整历史体积约 2 GB，浅克隆可显著减小下载量：
+
+```bash
+git clone --depth=1 https://github.com/mrdoob/three.js.git
+```
+
+### 首次运行
+
+最小示例（来自官方 README）：创建场景、相机、立方体网格，用 WebGLRenderer 渲染并旋转动画。
+
+```javascript
+import * as THREE from 'three';
+
+const width = window.innerWidth, height = window.innerHeight;
+
+const camera = new THREE.PerspectiveCamera(70, width / height, 0.01, 10);
+camera.position.z = 1;
+
+const scene = new THREE.Scene();
+
+const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+const material = new THREE.MeshNormalMaterial();
+
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(width, height);
+renderer.setAnimationLoop(animate);
+document.body.appendChild(renderer.domElement);
+
+function animate(time) {
+  mesh.rotation.x = time / 2000;
+  mesh.rotation.y = time / 1000;
+  renderer.render(scene, camera);
+}
+```
+
+在线可运行版本见 [jsfiddle 示例](https://jsfiddle.net/w43x5Lgh/)。更多场景见 [threejs.org/examples](https://threejs.org/examples/)。
+
+### 验证是否成功
+
+- 浏览器页面应显示旋转的彩色立方体，控制台无 WebGL 相关报错。
+- 调整 `mesh.rotation` 或相机 `position`，画面应随之变化。
+- 若使用打包工具，确认 `npm run dev` / `npm run build` 无模块解析错误。
+
+### 常见坑 / 注意事项
+
+- **源码仓库 vs npm 包**：产品集成请安装 npm 上的 `three`；clone 本仓库主要用于贡献或阅读源码，勿与日常依赖混为一谈。
+- **版本迁移**：大版本升级前阅读 [Migration Guide](https://github.com/mrdoob/three.js/wiki/Migration-Guide) 与 [Releases](https://github.com/mrdoob/three.js/releases)，关注 API 破坏性变更。
+- **OrbitControls 等 addon**：控制器、加载器（GLTFLoader 等）位于 `examples/jsm/`，需按文档路径单独 import，非 `three` 主包默认导出。
+- **性能与资源**：大模型、高分辨率纹理需关注 draw call、纹理压缩与 LOD；移动端注意内存与帧率，必要时启用 `renderer.setPixelRatio` 上限。
+- **WebGPU**：仍为演进中的渲染路径，生产环境请确认目标浏览器支持情况，并准备 WebGL 回退方案。

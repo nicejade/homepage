@@ -1,0 +1,124 @@
+---
+title: GSAP
+description: 跨框架 JavaScript 动画库，高性能驱动 CSS/SVG/DOM，ScrollTrigger 滚动动效业界标杆。
+repo: https://github.com/greensock/GSAP
+homepage: https://gsap.com
+repoDescription: GSAP (GreenSock Animation Platform), a JavaScript animation library for the modern web
+avatarUrl: https://avatars.githubusercontent.com/u/2386673?v=4
+tags:
+  - 前端
+  - 开发工具
+  - 可视化
+language: JavaScript
+stars: 26045
+forks: 2046
+openIssues: 6
+contributors: 1
+license: Standard License
+featured: false
+publishedAt: "2026-06-24"
+updatedAt: "2026-06-24"
+curationReason: 落地页滚动叙事、品牌动效与 React/Vue 集成选型，以及对比 Anime.js、Framer Motion 时的前端与创意开发者。
+---
+
+## 项目介绍
+
+GSAP（GreenSock Animation Platform）是业界广泛采用的 JavaScript 动画库，框架无关、零依赖，可驱动 CSS 属性、SVG、Canvas、DOM 属性乃至任意 JavaScript 对象。官方宣称在超过 1200 万个站点上验证过稳定性，并主动处理大量浏览器兼容差异。2024 年起在 Webflow 支持下，**包括 ScrollTrigger、SplitText、MorphSVG 等全部插件均已免费**，商业项目亦可使用（详见 [Standard License](https://gsap.com/standard-license)）。
+
+## 核心特性
+
+- **高性能属性插值**：以精确的时间轴更新属性值，官方称较 jQuery 动画最高可达约 20 倍速度
+- **丰富插件生态**：ScrollTrigger（滚动驱动）、MotionPathPlugin（路径动画）、Flip（布局过渡）、Draggable、SplitText、MorphSVG 等可按需注册
+- **响应式与无障碍**：`gsap.matchMedia()` 便于按断点切换动画，支持构建可访问的动效方案
+- **框架无关集成**：原生 JS、React（`@gsap/react` 的 `useGSAP`）、Vue、WebGL 等场景均可使用
+- **完善学习资源**：[gsap.com/docs](https://gsap.com/docs/)、[Demos](https://gsap.com/demos)、[Ease Visualizer](https://gsap.com/docs/v3/Eases) 与活跃社区论坛
+
+## 对用户价值
+
+手写 CSS `@keyframes` 或 `requestAnimationFrame` 难以处理复杂序列、暂停/恢复、时间轴编排与跨浏览器一致性。GSAP 提供 `timeline`、`to`/`from`/`fromTo` 等统一 API，让落地页滚动叙事、产品微交互、数据可视化过渡等场景能以少量代码实现电影级编排。ScrollTrigger 已成为滚动动效的事实标准；与 Anime.js 等轻量库相比，GSAP 在复杂序列控制、插件深度与生产稳定性上更具优势，适合对动效品质有要求的商业项目。
+
+## 与替代方案
+
+- 相比 [Anime.js](https://github.com/juliangarnier/anime)，GSAP API 更重时间轴与插件体系，学习曲线略陡，但复杂编排、滚动联动与 FLIP 布局动画等高级场景工具更完整；Anime.js 更轻量，适合简单属性动画。
+- 相比 [Framer Motion](https://www.framer.com/motion/)（React 生态），GSAP 框架无关、可在任意技术栈复用，ScrollTrigger 等滚动能力更成熟；Framer Motion 与 React 声明式组件模型结合更紧密，适合纯 React 项目的布局/手势动画。
+- 相比纯 CSS 动画，GSAP 提供运行时控制（暂停、反向、seek、stagger）、动态目标与 JS 对象插值，但会增加 JS 包体积；简单 hover/过渡可优先 CSS，复杂叙事再引入 GSAP。
+- 边界说明：部分历史文档仍提及 Club GSAP 付费插件；自 2024 年 4 月起全套工具已免费，集成前请以 [gsap.com/install](https://gsap.com/install) 与 Standard License 为准。
+
+## 适应人群
+
+- 需要为落地页、营销站点或产品界面实现滚动叙事、品牌动效的前端工程师与创意开发者。
+- 在 React/Vue 项目中评估动画方案，希望统一时间轴 API 并接入 ScrollTrigger 的团队。
+- 从 jQuery 动画或 CSS keyframes 迁移，追求更精细的序列控制与跨浏览器一致性的维护者。
+
+## 如何使用
+
+### 前置条件
+
+- 现代浏览器（支持 ES modules 的环境；CDN 方案仅需 HTML）。
+- Node.js 与 npm/pnpm/Yarn（npm 集成时）。
+- 基础 JavaScript；了解 CSS 属性或 DOM 结构有助于编写 `gsap.to()` 目标。
+
+### 安装方式
+
+**方式一：npm（推荐，打包项目）**
+
+```bash
+npm install gsap
+```
+
+```javascript
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+```
+
+也可从 `gsap/all` 一次性导入多个插件（不含 members-only 插件）：
+
+```javascript
+import { gsap, ScrollTrigger, Draggable, Flip, MotionPathPlugin } from "gsap/all";
+
+gsap.registerPlugin(ScrollTrigger, Draggable, Flip, MotionPathPlugin);
+```
+
+**方式二：CDN（快速原型）**
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+```
+
+更多 CDN 与插件链接见 [JSDelivr GSAP 专页](https://www.jsdelivr.com/gsap) 与 [安装指南](https://gsap.com/install)。
+
+**方式三：React 项目**
+
+```bash
+npm install gsap @gsap/react
+```
+
+参阅 [React 指南](https://gsap.com/react) 使用 `useGSAP()` 钩子替代 `useEffect`，自动处理清理逻辑。
+
+### 首次运行
+
+最小示例：将元素在 1 秒内移动到 `x: 200`：
+
+```javascript
+import gsap from "gsap";
+
+gsap.to(".box", { x: 200, duration: 1 });
+```
+
+HTML 中需有对应元素，例如 `<div class="box"></div>`。更完整的入门路径见 [Getting Started](https://gsap.com/get-started/) 与 [Cheat Sheet](https://gsap.com/cheatsheet)。
+
+### 验证是否成功
+
+- 页面加载后目标元素应平滑移动，浏览器控制台无模块解析或 `registerPlugin` 相关报错。
+- 使用 ScrollTrigger 时，滚动页面应触发预期动画；未注册插件时相关 API 会不可用。
+- 打包项目执行 `npm run dev` / `npm run build` 应无 `gsap` 路径错误。
+
+### 常见坑 / 注意事项
+
+- **插件必须注册**：`ScrollTrigger`、`Flip` 等需 `gsap.registerPlugin(...)` 后方能使用，仅 `import gsap` 不够。
+- **许可证变更**：2024 年前部分插件需 Club 会员；当前全套免费，但许可为 GreenSock Standard License 而非 MIT，商业使用前请阅读 [standard-license](https://gsap.com/standard-license)。
+- **React 清理**：在 React 中优先使用 `@gsap/react` 的 `useGSAP`，避免在 `useEffect` 中遗漏 `kill()` 导致内存泄漏或动画叠加。
+- **包体积**：按需 import 单个插件，避免无谓引入 `gsap/all` 中的全部工具。
+- **版本升级**：关注 [Releases](https://github.com/greensock/GSAP/releases) 与 [文档 v3](https://gsap.com/docs/v3/)，GSAP 3.x 与 2.x API 差异较大，迁移需对照官方说明。

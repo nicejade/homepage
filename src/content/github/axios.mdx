@@ -1,0 +1,131 @@
+---
+title: Axios
+description: 基于 Promise 的跨端 HTTP 客户端，统一浏览器与 Node.js 的请求写法，拦截器与 JSON 处理开箱即用。
+repo: https://github.com/axios/axios
+homepage: https://axios-http.com
+repoDescription: "Promise based HTTP client for the browser and node.js"
+avatarUrl: https://avatars.githubusercontent.com/u/32372333?v=4
+tags:
+  - 开发工具
+  - 前端
+  - 后端
+language: JavaScript
+stars: 109084
+forks: 11732
+openIssues: 128
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-24"
+updatedAt: "2026-06-24"
+curationReason: 前端 API 调用选型、Node 出网请求、从 fetch/jQuery 迁移，以及需要统一拦截器与错误处理的全栈团队。
+---
+
+## 项目介绍
+
+Axios 是 JavaScript 生态中最广泛使用的 HTTP 客户端之一，以 Promise API 统一浏览器（XMLHttpRequest）与 Node.js（`http`/`https`）的请求体验。它提供请求/响应拦截器、自动 JSON 序列化与解析、超时与取消机制，以及表单与 multipart 上传等常见能力；官方文档站 [axios-http.com](https://axios-http.com) 覆盖 v1.x 完整 API。项目 MIT 许可，被 React、Vue、Next.js 等无数应用与 SDK 间接依赖，是前后端「发 HTTP 请求」的事实标准库之一。
+
+## 核心特性
+
+- **跨端一致 API**：同一套 `axios.get` / `post` / `request` 写法可在浏览器与 Node.js 中复用，降低全栈代码分裂
+- **拦截器链**：在请求发出前注入 Token、统一 baseURL，在响应后集中处理错误码与数据转换
+- **自动 JSON 与表单**：请求体自动序列化、响应自动解析 JSON；支持 `application/x-www-form-urlencoded` 与 `multipart/form-data`
+- **超时、取消与错误分类**：`timeout` 配置避免请求无限挂起；`AbortController` / Cancel Token 取消在途请求；`AxiosError` 区分网络、超时与 HTTP 状态错误
+- **扩展适配器**：除默认 XHR/Node 适配器外，提供 Fetch adapter、HTTP/2 等进阶选项（见官方文档）
+
+## 对用户价值
+
+若你在前端调用 REST API、在 Node 服务中访问第三方接口，或需要为多个微服务客户端统一鉴权与错误处理，Axios 能以极少样板代码覆盖 90% 场景。拦截器让你把 Token 刷新、日志、重试逻辑集中在一处，而不是在每个 `fetch` 调用里重复。相比裸 `fetch`，Axios 默认处理 JSON、查询参数（`params`）与常见 Content-Type，减少「忘记 `response.json()`」类低级错误。代价是包体积大于原生 `fetch`，且对 Stream、低层 HTTP 细节的控制不如 `node:http` 直接调用灵活。
+
+## 与替代方案
+
+- 相比原生 **fetch**，Axios 提供拦截器、超时、自动 JSON、更广的浏览器兼容策略（IE 需额外 polyfill）；fetch 零依赖、符合 Web 标准，适合现代浏览器/边缘运行时且追求最小 bundle 的场景。
+- 相比 **jQuery.ajax**，Axios 不绑定 DOM、API 更现代（Promise/async-await），体积更小；遗留 jQuery 项目迁移时可逐步替换 ajax 调用。
+- 相比 **got**（Node 专用），Axios 跨端统一；got 在 Node 侧流式下载、重试与 HTTP/2 等能力更专精，纯服务端高吞吐抓取可能更合适。
+- 相比 **ky**（基于 fetch 的轻量封装），Axios 生态与 Stack Overflow 覆盖更广、拦截器模式更成熟；ky 更贴近 fetch 语义、包更轻，适合仅需薄封装的现代项目。
+- 边界说明：Axios 是 HTTP 客户端而非 API 网关、ORM 或 RPC 框架；GraphQL、gRPC 或 WebSocket 实时通道需选用对应专用库。
+
+## 适应人群
+
+- 在 React、Vue、Svelte 等前端项目中调用后端 API、上传文件或处理鉴权刷新的前端与全栈工程师。
+- 用 Node.js 编写脚本、BFF 或微服务、需要稳定出网 HTTP 调用的后端开发者。
+- 维护内部 SDK 或 CLI 工具、希望统一请求配置、错误格式与重试策略的平台/基础设施团队。
+
+## 如何使用
+
+### 前置条件
+
+- **浏览器**：主流现代浏览器（Chrome、Firefox、Safari、Edge 最新版）；IE 不支持 async/await，需额外 polyfill 并谨慎评估。
+- **Node.js**：建议使用当前 LTS；包管理器任选 npm、yarn、pnpm 或 bun。
+- 生产环境应为请求配置 **`timeout`**，避免 stalled 连接无限挂起（见[官方文档](https://axios-http.com/docs/intro)）。
+
+### 安装方式
+
+**方式一：包管理器（推荐）**
+
+```bash
+npm install axios
+```
+
+```bash
+pnpm add axios
+```
+
+```bash
+yarn add axios
+```
+
+```bash
+bun add axios
+```
+
+**方式二：CDN（浏览器脚本，生产请锁定版本号）**
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/axios@1/dist/axios.min.js"></script>
+```
+
+**导入方式（ESM / CommonJS）**
+
+```js
+import axios from "axios";
+// const axios = require("axios");
+```
+
+### 首次运行
+
+```js
+import axios from "axios";
+
+const response = await axios.get(
+  "https://jsonplaceholder.typicode.com/posts/1",
+  { timeout: 5000 }
+);
+
+console.log(response.data);
+```
+
+带查询参数与 POST 示例：
+
+```js
+await axios.get("/user", { params: { ID: 12345 } });
+
+await axios.post("/user", {
+  firstName: "Fred",
+  lastName: "Flintstone",
+});
+```
+
+### 验证是否成功
+
+- `response.status` 为 2xx，`response.data` 包含预期 JSON 结构。
+- 故意访问不存在路径时，`catch` 中应得到 `AxiosError`，且 `error.response?.status` 反映 HTTP 状态码。
+- Node 与浏览器环境下同一套代码均可完成上述 GET 请求（注意 CORS：浏览器直连第三方 API 需服务端允许跨域）。
+
+### 常见坑 / 注意事项
+
+- **未设置 timeout**：无超时配置的请求可能在网络异常时永久 pending；生产务必传入 `timeout` 并处理 `ECONNABORTED` / `ETIMEDOUT`。
+- **错误处理**：Axios 仅在 2xx 时 resolve；4xx/5xx 进入 `catch`，需通过 `error.response` 读取响应体，勿假设 `catch` 一定是网络故障。
+- **CORS 与浏览器**：浏览器端请求跨域资源受同源策略限制；开发环境可配代理，生产需后端设置 CORS 或经 BFF 转发。
+- **默认导出与 named export**：`require("axios")` 仅默认导出可用；部分打包器需 `import { default as axios } from "axios"`。
+- **大版本升级**：v1.x 与 v0.x API 有差异，升级前阅读 [CHANGELOG](https://github.com/axios/axios/blob/master/CHANGELOG.md) 与[迁移说明](https://axios-http.com/docs/migration_guide)。
