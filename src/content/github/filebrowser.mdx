@@ -1,0 +1,130 @@
+---
+title: FileBrowser Quantum
+description: 自托管 Web 文件管理器，支持索引搜索、多源挂载与企业级 SSO 与分享权限。
+repo: https://github.com/gtsteffaniak/filebrowser
+homepage: https://filebrowserquantum.com
+repoDescription: "📂 Web File Browser"
+avatarUrl: https://avatars.githubusercontent.com/u/42989099?v=4
+tags:
+  - 自托管
+  - 工作流
+  - 开发工具
+language: Go
+stars: 7317
+forks: 373
+openIssues: 160
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-28"
+updatedAt: "2026-06-28"
+curationReason: 适合 Homelab 与 NAS 用户通过浏览器管理本地文件、对外分享与多用户权限控制。
+---
+
+## 项目介绍
+
+FileBrowser Quantum 是经典 FileBrowser 的大规模 fork，定位为「最好用的免费自托管 Web 文件管理器」。它用单一可执行文件或轻量 Docker 镜像，把本地目录、NAS 挂载点暴露为现代响应式 Web 界面，并叠加 SQLite 索引搜索、细粒度分享与企业登录集成，适合不想上完整网盘套件、又需要多人协作与外链分享的场景。
+
+## 核心特性
+
+- 多数据源配置：支持多路径、include/exclude 规则，统一 `config.yaml` 管理
+- SQLite 索引与实时搜索：输入即搜，支持文件/文件夹大小与多种筛选；UI 实时刷新
+- 企业级认证：OIDC、LDAP、JWT、密码 + 2FA、反向代理登录
+- 目录级权限：按用户或用户组限定可访问路径
+- 富媒体预览：Office、视频、专辑封面、3D 模型缩略图；文件夹大小与滚动位置记忆
+- 可配置分享：过期时间、匿名/指定用户、主题样式、查看/编辑/上传权限
+- 开发者 API：长期 API Token，启用后可在 `/swagger` 查看接口文档
+- 跨平台：Linux / Windows / macOS 均有独立二进制；Docker 镜像约 60 MB（含 FFmpeg）
+
+## 对用户价值
+
+远程访问 NAS、服务器备份或开发机上的文件，往往要在 SFTP、VPN 和笨重网盘之间取舍。Quantum 用浏览器即可上传、预览、编辑文本与 Office 文件，并通过索引搜索在大目录里快速定位；配合 SSO 与分享链接，小团队无需部署 Nextcloud 也能完成「私有文件门户」。相比原版，它移除了 shell 命令执行能力，安全性更偏「只读/受控文件访问」而非远程终端。
+
+## 与替代方案
+
+- 相比 [filebrowser/filebrowser](https://github.com/filebrowser/filebrowser) 原版，Quantum 增加索引搜索、OIDC/LDAP、多数据源、Office 预览与 API；镜像略大（约 60 MB vs 31 MB），且不再支持 shell 命令。
+- 相比 Filestash，Quantum 专注本地/挂载文件系统，暂无 S3/FTP 连接器；但 SSO、索引搜索与分享定制在对比表中更完整，独立二进制部署更简单。
+- 相比 Nextcloud，Quantum 不做协作办公套件，无移动 App；胜在轻量、专注「浏览 + 分享 + 权限」，Homelab 资源占用更低（官方建议最低约 512 MB 内存）。
+- 部分能力仍在建设中（标签、回收站、活动日志、文档转换等标注为 :construction:），升级前请查阅 [Releases](https://github.com/gtsteffaniak/filebrowser/releases) 与官方文档。
+
+## 适应人群
+
+- 有 NAS / VPS / Homelab，想通过浏览器管理本地文件并对外分享链接的用户。
+- 小团队需要多用户、目录级权限与企业 SSO，但不想维护完整网盘栈的运维者。
+- 已从原版 FileBrowser 迁移或评估 fork 差异的 self-host 爱好者（官方提供 [迁移指南](https://filebrowserquantum.com/en/docs/getting-started/migration/)）。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 Docker Engine 与 Docker Compose 插件，或目标平台的独立二进制运行环境。
+- 准备一个待挂载的本地目录（勿将容器内 `/` 或 `/var` 作为源路径）。
+- v1.3.x 起 Docker 默认以 `filebrowser` 用户（UID:GID 1000:1000）运行；挂载的 `data` 目录需匹配权限。
+
+### 安装方式
+
+**快速试用**（无持久化，重启后配置丢失）：
+
+```bash
+docker run -d \
+  -v $(pwd):/srv \
+  -p 80:80 \
+  gtstef/filebrowser:stable
+```
+
+**推荐：Docker Compose 持久化部署**
+
+```bash
+mkdir -p filebrowser/data && cd filebrowser
+touch ./data/config.yaml
+```
+
+编辑 `./data/config.yaml` 示例：
+
+```yaml
+server:
+  cacheDir: /home/filebrowser/data/tmp
+  sources:
+    - path: /folder
+      config:
+        defaultEnabled: true
+```
+
+创建 `docker-compose.yaml`：
+
+```yaml
+services:
+  filebrowser:
+    image: gtstef/filebrowser:stable
+    volumes:
+      - /path/to/your/folder:/folder
+      - ./data:/home/filebrowser/data
+    ports:
+      - 80:80
+    restart: unless-stopped
+```
+
+```bash
+docker compose up -d
+```
+
+镜像亦可通过 `ghcr.io/gtsteffaniak/filebrowser` 拉取；`stable-slim`（约 15 MB）不含 FFmpeg/文档预览。完整说明见 [官方 Docker 文档](https://filebrowserquantum.com/en/docs/getting-started/docker/)。
+
+### 首次运行
+
+浏览器访问 `http://localhost`（或你映射的主机端口），默认账号 `admin` / `admin`，登录后**立即修改密码**。在管理界面配置用户、数据源与分享策略；若修改了 `server.port`，需同步调整 Compose 端口映射与健康检查。
+
+### 验证是否成功
+
+- 能登录 Web 界面并浏览挂载目录中的文件。
+- 搜索框输入文件名可看到实时索引结果（大目录首次索引可能需要等待）。
+- 访问 `http://localhost/health` 返回正常（若启用健康检查）。
+- 创建测试分享链接，确认权限与过期策略符合预期。
+
+### 常见坑 / 注意事项
+
+- 配置中的 `sources.path` 是**容器内路径**，须与 `volumes` 挂载一致；勿把宿主机根目录 `/` 直接暴露给服务。
+- v1.2.x 及更早版本 Docker 默认 root 用户；v1.3.x 起默认非 root，低权限端口（80/443）在 rootless 环境可能需 `cap_add: [NET_BIND_SERVICE]` 或改用高位端口。
+- 数据库默认位于 `/home/filebrowser/data/database.db`（Docker），需将 `./data` 持久化挂载以免重建容器后丢失用户与索引。
+- 已移除 shell 命令功能；若依赖原版「在容器内执行命令」工作流，需改用其他方案。
+- 官方文档目前主要为英文；生产部署建议配合反向代理配置 HTTPS，参见 [反向代理指南](https://filebrowserquantum.com/en/docs/getting-started/reverse-proxy/)。
