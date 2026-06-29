@@ -1,0 +1,113 @@
+---
+title: Ponytail
+description: 让 AI 编码 Agent 按 YAGNI 原则写最少必要代码的 skill/规则插件，兼容 16+ 主流 Agent。
+repo: https://github.com/DietrichGebert/ponytail
+homepage: https://ponytail.dev
+repoDescription: Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.
+avatarUrl: https://avatars.githubusercontent.com/u/137048761?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: JavaScript
+stars: 66751
+forks: 3426
+openIssues: 140
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-06-29"
+updatedAt: "2026-06-29"
+curationReason: 适合用 Claude Code、Cursor、Copilot 等 Agent 却常被过度工程实现拖累的团队。
+---
+
+## 项目介绍
+
+Ponytail 是一套面向 AI 编码 Agent 的「极简主义」规则与 skill 插件：在动手写代码前，先沿 YAGNI 决策阶梯判断「这件事是否必须存在、能否复用现有代码、能否用标准库或平台原生能力解决」，再写出完成任务所需的最小实现。它不把验证、错误处理、安全与无障碍当作可砍项，目标是用更少、更必要的代码完成同样功能——官方 agentic 基准在真实 FastAPI + React 仓库上测得平均约 54% 更少代码、约 20% 更低成本、约 27% 更快，且安全项保持 100% 通过。
+
+## 核心特性
+
+- **YAGNI 决策阶梯**：先判断必要性 → 复用现有代码 → 标准库 → 平台原生 → 已装依赖 → 一行解法 → 最后才写最小实现
+- **多 Agent 适配**：支持 Claude Code、Codex、Cursor、OpenCode、Gemini CLI、Copilot CLI、Hermes、OpenClaw 等 16+ 宿主，提供插件、规则文件或 `AGENTS.md` 多种接入方式
+- **强度可调**：`lite` / `full` / `ultra` / `off` 四档模式，可用 `/ponytail` 命令或环境变量 `PONYTAIL_DEFAULT_MODE` 切换
+- **审查与审计命令**：`/ponytail-review` 检查当前 diff 过度工程，`/ponytail-audit` 扫描全仓库，`/ponytail-debt` 记录被推迟的简化项
+- **可复现基准**：仓库附带 promptfoo 与 agentic 基准脚本，可对照无 skill、Caveman 控制组与裸 YAGNI prompt 复现实测数据
+
+## 对用户价值
+
+许多 Agent 接到「日期选择器」这类需求时，会顺手装 flatpickr、写包装组件、讨论时区——Ponytail 会优先落到 `<input type="date">` 这类原生解法。对日常 feature 开发，它能抑制「为了显得专业而堆抽象」的冲动，在保持安全边界的前提下减少 token 消耗与 diff 体积，让代码审查更聚焦在真正必要的逻辑上。
+
+## 与替代方案
+
+- 相比 **Caveman** 等「简短文风」控制组，Ponytail 不只压缩措辞，而是用结构化阶梯约束实现路径；官方基准显示 Caveman 在 token/成本上可能反而上升，而 Ponytail 在 LOC、token、成本、耗时四项均下降。
+- 相比裸 **「YAGNI + one-liner」** prompt，Ponytail 保留完整安全护栏（基准中裸 prompt 安全项约 95%），不会为省行数牺牲校验与边界处理。
+- 相比手写 **Cursor Rules / Copilot Instructions**，Ponytail 提供跨 16+ Agent 的统一规则副本、生命周期 hook 与模式切换命令，维护成本更低。
+- 若你更需要 **功能完备性与扩展性**（复杂领域模型、长期演进架构），Ponytail 的极简取向可能过于激进，应配合 `lite` 模式或按需 `off`。
+
+## 适应人群
+
+- 使用 Claude Code、Cursor、Copilot 等 Agent 做日常 feature，但常被过度封装和多余依赖困扰的开发者。
+- 希望在团队内统一「能少写就少写、但不砍安全」编码文化的 Tech Lead 或 Reviewer。
+- 关注 Agent 成本与 diff 体积、愿意用基准数据验证 skill 效果的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- Claude Code / Codex 插件依赖 Node.js 生命周期 hook，需确保 `node` 在非交互 shell 的 PATH 中（Nix/nvm 用户需注意）。
+- 指令型适配（Cursor、Windsurf、Cline 等）只需复制对应规则文件，无需额外运行时。
+- 项目 MIT 许可，可自由用于个人与商业项目。
+
+### 安装方式
+
+**Claude Code（插件市场）：**
+
+```
+/plugin marketplace add DietrichGebert/ponytail
+```
+
+```
+/plugin install ponytail@ponytail
+```
+
+（需分两条消息发送；桌面版无 `/plugin` 命令时，从 Customize → Create plugin → Add from repository 安装。）
+
+**Codex：**
+
+```bash
+codex plugin marketplace add DietrichGebert/ponytail
+codex
+```
+
+在 `/plugins` 安装 Ponytail，并在 `/hooks` 中审核并信任其两个 lifecycle hook，然后新开线程。
+
+**OpenCode（npm 插件）：**
+
+在 `opencode.json` 中添加：
+
+```json
+{ "plugin": ["@dietrichgebert/ponytail"] }
+```
+
+**Cursor / Windsurf / Cline / Copilot（编辑器）等：**
+
+从仓库复制对应规则文件到项目，例如 `.cursor/rules/`、`.windsurf/rules/`、`.clinerules/`、`.github/copilot-instructions.md`，或直接使用根目录 `AGENTS.md`。
+
+更多宿主（Gemini CLI、Hermes、OpenClaw、Pi、Devin 等）见 [官方 README 安装章节](https://github.com/DietrichGebert/ponytail#install)。
+
+### 首次运行
+
+安装完成后，在支持命令的宿主中默认以 `full` 模式生效。可发送 `/ponytail` 查看当前强度，或用 `/ponytail ultra` 在代码库「罪孽深重」时加大约束。给 Agent 一个容易过度实现的日常任务（如表单控件、简单 CRUD）观察 diff 是否更精简。
+
+### 验证是否成功
+
+- 发送 `/ponytail` 应返回当前模式（如 `full`）。
+- 让 Agent 实现一个常见 UI 控件，检查是否优先选用原生/标准库而非新依赖。
+- 可选：运行 `/ponytail-gain` 查看内置基准得分板，或按仓库 `benchmarks/` 说明本地复现 agentic 测试。
+
+### 常见坑 / 注意事项
+
+- Claude Code 安装 marketplace 与 install 必须分两次 prompt，合并发送可能失败。
+- Codex 需在 `/hooks` 显式信任 hook，否则 always-on 激活可能静默失效。
+- `ultra` 模式约束最强，复杂业务若确需较多代码，可临时 `/ponytail off` 或调低档位。
+- 卸载插件后，模式标记与 `~/.config/ponytail/config.json` 等状态可能残留；可在移除插件前运行 `node scripts/uninstall.js` 清理（详见 README Uninstall 章节）。
