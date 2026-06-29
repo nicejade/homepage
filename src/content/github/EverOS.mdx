@@ -1,0 +1,163 @@
+---
+title: EverOS
+description: 本地优先的 Python Agent 记忆运行时：Markdown 真相源 + SQLite/LanceDB，跨应用可移植、用户自持。
+repo: https://github.com/EverMind-AI/EverOS
+homepage: https://evermind.ai/everos
+repoDescription: "One portable memory layer for every AI agent: local-first, Markdown-native, user-owned, and self-evolving across apps, tools, and workflows."
+avatarUrl: https://avatars.githubusercontent.com/u/229275294?v=4
+tags:
+  - Agent
+  - 知识管理
+  - 本地模型
+language: Python
+stars: 9553
+forks: 807
+openIssues: 37
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-06-28"
+updatedAt: "2026-06-28"
+curationReason: 适合跨 Claude Code、Codex 等工具共用持久记忆、且希望用 Markdown 自管数据的 Agent 开发者。
+---
+
+## 项目介绍
+
+EverOS 是 [EverMind](https://evermind.ai) 开源的 **本地优先 Agent 记忆运行时**：以可读、可 diff、可 Git 版本化的 Markdown 作为真相源，在本地用 SQLite 与 LanceDB 建立检索索引，为编程助手、应用、设备与工作流提供**同一套可移植记忆层**。它区分用户侧 `episodes/profile` 与 Agent 侧 `cases/skills` 两条轨道，支持按 `user_id`、`agent_id`、`app_id`、`project_id`、`session_id` 正交检索，并具备离线 Reflection 在会话间合并记忆簇、精炼画像与技能。
+
+## 核心特性
+
+- **Markdown 真相源**：对话、文件与 Agent 轨迹落盘为 `.md`，可直接编辑；文件变更经 cascade watcher 同步回索引，无需依赖专有仪表盘或黑盒数据库
+- **本地三段栈**：Markdown + SQLite + LanceDB，无需 MongoDB、Elasticsearch 或 Redis 等外部服务即可跑通核心记忆循环
+- **双轨记忆模型**：用户记忆（episodes/profile）与 Agent 记忆（cases/skills）分离，检索维度正交，便于多应用、多项目、多会话共用同一运行时
+- **Knowledge Wiki**：可编辑、带来源引用的 Markdown 知识页，带分类法、CRUD API 与主题检索，与底层记忆文件打通
+- **Reflection 自进化**：会话间的离线记忆演化，合并 episode 簇并精炼 profile 与 skills，而非仅做检索型「聊天历史堆叠」
+- **OpenAI 协议兼容**：LLM / Embedding / Rerank 可指向 OpenRouter、vLLM、Ollama、DeepInfra 等，通过 `.env` 切换 `*__BASE_URL`
+- **Demo 与 Live 模式**：`everos demo` 无需 API Key 即可体验记忆生命周期可视化；`everos demo --live` 连接真实服务端完成写入与召回
+
+## 对用户价值
+
+多数 Agent 记忆方案把状态锁在向量库、图谱或 SaaS 仪表盘里，难以审计、迁移或手工修正。EverOS 把**可读 Markdown + 本地索引**作为默认路径：你能打开 `~/.everos` 直接查看记忆文件，也能在 Claude Code、Codex、OpenCode 等不同工具间复用同一记忆层，避免「每个助手各记各的」。对个人开发者，`everos demo` 零配置即可理解 ingest → extract → index → recall 闭环；对团队，Apache-2.0 许可与自托管服务端降低数据出境与供应商锁定顾虑。
+
+## 与替代方案
+
+- 相比 [Mem0](https://github.com/mem0ai/mem0) 等**API/向量中心型**记忆框架，EverOS 强调 **Markdown 真相源与直接文件编辑**，本地栈仅需 SQLite + LanceDB；若你需要托管多租户记忆池或快速云集成，Mem0 更轻接入，但审计与数据自持成本更高。
+- 相比 [Zep](https://www.getzep.com/) 等**商业记忆平台**，EverOS 是**可自托管的开源运行时**，记忆文件落在本地目录、可用 Git 管理；若你接受 SaaS 运维与按量计费，托管方案省去服务端部署。
+- 相比仅用 **LangChain Memory / 自建向量检索** 拼装的方案，EverOS 提供**用户/Agent 双轨、Wiki、Reflection 与完整 REST API**（`/api/v1/memory/*`），减少从零设计记忆 schema 与离线巩固逻辑的工作量；若你只需要极简 RAG 片段，轻量向量库可能够用。
+- 相比把聊天记录留在**各 IDE 插件内部**，EverOS 定位为**跨应用便携层**；它不替代具体编码 Agent，而是作为可被 MCP、Hive Orchestrator 等集成的统一记忆后端。
+
+## 适应人群
+
+- 在 **Claude Code、Codex、Gemini CLI、OpenCode** 等多工具间切换，希望记忆不随应用丢失的 Agent 开发者。
+- 需要**可审计、可手工编辑、可 Git 版本化**记忆文件，而非黑盒向量状态的数据敏感用户或小团队。
+- 正在构建带**长期画像、技能沉淀与跨会话召回**的 Agent 产品，且倾向本地优先部署的工程师。
+- 希望用 **OpenAI 兼容端点**（OpenRouter、Ollama、vLLM 等）灵活切换模型，同时保持记忆层稳定的自建方案评估者。
+
+## 如何使用
+
+### 前置条件
+
+- **Python 3.12+**；推荐用 [uv](https://github.com/astral-sh/uv) 管理依赖。
+- `everos demo`（教育向 TUI 可视化）**无需 API Key**。
+- 运行真实服务端记忆流前，需准备 LLM/多模态与 Embedding/Rerank 的 API Key；默认模板使用 [OpenRouter](https://openrouter.ai/)（`EVEROS_LLM__API_KEY`、`EVEROS_MULTIMODAL__API_KEY`）与 [DeepInfra](https://deepinfra.com/)（`EVEROS_EMBEDDING__API_KEY`、`EVEROS_RERANK__API_KEY`），也可改 `.env` 中 `*__BASE_URL` 指向其他 OpenAI 兼容提供商。
+- 若需摄取 Office 文档（`.doc`/`.ppt`/`.xls` 等），宿主机须安装 **LibreOffice**（`soffice`）；PDF/图片/音频不受影响。
+
+### 安装方式
+
+```bash
+uv pip install everos
+# 或: pip install everos
+```
+
+可选多模态扩展：
+
+```bash
+uv pip install 'everos[multimodal]'
+```
+
+从源码贡献/开发：
+
+```bash
+git clone https://github.com/EverMind-AI/EverOS.git
+cd EverOS
+uv sync
+source .venv/bin/activate
+```
+
+### 首次运行
+
+**1. 先体验 Demo（无需 Key）**
+
+```bash
+everos demo
+# 非交互环境: everos demo --plain
+# 循环展示: everos demo --cinematic
+```
+
+**2. 生成配置并填入 API Key**
+
+```bash
+everos init
+# 或从源码: cp .env.example .env
+# XDG 路径: everos init --xdg
+```
+
+**3. 启动服务端**
+
+```bash
+everos server start
+```
+
+**4. 连接真实记忆的 Live Demo**
+
+```bash
+everos demo --live
+# 非默认地址: everos demo --live --server-url http://127.0.0.1:8000
+```
+
+**5. 写入并召回第一条记忆（第二终端）**
+
+```bash
+TS=$(($(date +%s)*1000))
+
+curl -X POST http://127.0.0.1:8000/api/v1/memory/add \
+  -H 'Content-Type: application/json' \
+  -d "{
+    \"session_id\": \"demo-001\",
+    \"app_id\": \"default\",
+    \"project_id\": \"default\",
+    \"messages\": [
+      {\"sender_id\": \"alice\", \"role\": \"user\", \"timestamp\": $TS, \"content\": \"I love climbing in Yosemite every spring.\"},
+      {\"sender_id\": \"alice\", \"role\": \"user\", \"timestamp\": $((TS+10000)), \"content\": \"My favorite coffee shop is Blue Bottle in SOMA.\"}
+    ]
+  }"
+
+curl -X POST http://127.0.0.1:8000/api/v1/memory/flush \
+  -H 'Content-Type: application/json' \
+  -d '{"session_id":"demo-001","app_id":"default","project_id":"default"}'
+
+curl -X POST http://127.0.0.1:8000/api/v1/memory/search \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "user_id": "alice",
+    "app_id": "default",
+    "project_id": "default",
+    "query": "Where do I like to climb?",
+    "top_k": 5
+  }'
+```
+
+### 验证是否成功
+
+- `curl http://127.0.0.1:8000/health` 返回 `{"status":"ok"}`。
+- 搜索响应中出现 Yosemite 相关记忆；若首次为空，稍等索引后台同步后重试。
+- 打开 `~/.everos`（或你配置的 XDG 路径）可看到生成的 Markdown 记忆文件。
+- 贡献者可在仓库内执行 `make test` 通过测试。
+
+### 常见坑 / 注意事项
+
+- `everos demo` 默认是**本地教学可视化**，不连服务端；要验证真实写入/召回请用 `everos demo --live` 或上述 curl 流程。
+- `everos server start` 按顺序查找 `.env`：`--env-file` → `./.env` → `${XDG_CONFIG_HOME}/everos/.env` → `~/.everos/.env`；Key 放错路径会导致服务启动但调用失败。
+- Markdown 写入同步完成，**LanceDB 索引可能略滞后**于首次搜索，空结果时等待片刻重试。
+- Office 文档解析依赖 LibreOffice；未安装时上传返回 HTTP 415，与 PDF/图片解析无关。
+- 生产环境请单独管理 API Key，勿将 `.env` 提交进仓库；升级前阅读 [Releases](https://github.com/EverMind-AI/EverOS/releases) 与 [文档](https://docs.evermind.ai)。
