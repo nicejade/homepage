@@ -1,0 +1,112 @@
+---
+title: OpenFang
+description: Rust 开源 Agent 操作系统，单二进制部署，内置 Hands 自主任务与 40+ 消息频道适配。
+repo: https://github.com/RightNow-AI/openfang
+homepage: https://www.openfang.sh/
+repoDescription: "Open-source Agent Operating System"
+avatarUrl: https://avatars.githubusercontent.com/u/226207176?v=4
+tags:
+  - Agent
+  - 自动化
+  - 开发工具
+language: Rust
+stars: 17959
+forks: 2279
+openIssues: 113
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 适合需要定时自主任务、多渠道触达与安全沙箱并重的个人开发者与小团队。
+---
+
+## 项目介绍
+
+OpenFang 是一款用 **Rust 从零构建的开源 Agent 操作系统**：不是聊天机器人框架，也不是围绕 LLM 的 Python 封装。它把编排内核、工具运行时、记忆、频道适配与桌面端打成**约 32MB 的单二进制**，一条命令即可启动 Dashboard（默认 `http://localhost:4200`）。核心创新是 **Hands**——可独立运行、按日程触发的自主能力包，让 Agent 在后台持续调研、获客、监控、发帖或执行浏览器工作流，而不必等你每次输入提示词。
+
+## 核心特性
+
+- **Hands 自主能力包**：内置 Clip、Lead、Collector、Predictor、Researcher、Twitter、Browser 等 7 套 Hand，含 `HAND.toml` 清单、多阶段 System Prompt、`SKILL.md` 领域知识与敏感操作审批门
+- **14 crate 模块化内核**：覆盖 kernel 编排、runtime（3 种 LLM 驱动、53 工具、WASM 沙箱、MCP/A2A）、API（140+ REST/WS/SSE、OpenAI 兼容接口）、memory（SQLite + 向量）、channels、skills、desktop（Tauri 2.0）等
+- **40 个频道适配器**：Telegram、Discord、Slack、WhatsApp、Signal、Matrix、Teams、飞书、Mastodon、Webhooks 等，支持按频道模型覆盖、DM/群组策略与限流
+- **16 层安全体系**：WASM 双计量沙箱、Merkle 审计链、污点追踪、Ed25519 签名清单、SSRF 防护、提示注入扫描、循环熔断等
+- **迁移与扩展**：`openfang-migrate` 支持从 OpenClaw、LangChain、AutoGPT 迁移；FangHub 可发布自定义 Hand 与技能
+
+## 对用户价值
+
+若你需要的是**「Agent 替我干活」**而非「我打字它才回」，OpenFang 的 Hands 模型更贴近生产场景：例如 Researcher 跨源调研并输出引用报告，Lead 按 ICP 每日发现线索，Browser Hand 在**强制购买审批**下完成网页自动化。单二进制降低部署与运维成本；相比 Python 系编排框架，官方基准强调更快的冷启动、更小的安装体积与更完整的频道/安全能力。Dashboard + CLI + 可选 Tauri 桌面端，适合在个人机器或小团队内网长期常驻。
+
+## 与替代方案
+
+- 相比 [OpenClaw](https://github.com/openclaw/openclaw)，OpenFang 更强调 **Rust 单体二进制、Hands 定时自主任务与 16 层安全栈**；OpenClaw 侧重多频道个人助理 Gateway 与伴侣应用生态。OpenFang 提供从 OpenClaw 的迁移引擎，二者可对照评估。
+- 相比 [ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw)，二者同为 Rust 单二进制路线；ZeroClaw 偏**极简个人助理基础设施**（更小体积、更快冷启动），OpenFang 偏**完整 Agent OS**（内置 Hands、更多频道适配器、WASM 沙箱与审计链）。选型取决于你是否需要开箱的自主 Hand 与更重安全/编排能力。
+- 相比 [CrewAI](https://github.com/crewAIInc/crewAI)、[AutoGen](https://github.com/microsoft/autogen)、[LangGraph](https://github.com/langchain-ai/langgraph) 等 **Python 多 Agent 编排框架**，OpenFang 是**可常驻运行的系统级运行时**（频道、记忆、工具、沙箱、API 一体），而非库级编排；若团队主力栈是 Python 且只需脚本内编排，框架可能更轻。
+- 相比 [Cline](https://github.com/cline/cline)、[Aider](https://github.com/Aider-AI/aider) 等 **IDE/终端结对编程**工具，OpenFang 主战场是**后台自主任务、多渠道触达与浏览器/获客等工作流**，不是编辑器深度集成。
+
+## 适应人群
+
+- 希望 Agent **按日程自主运行**（调研、线索、监控、社媒等），并能在 Dashboard 查看状态的个人或小团队。
+- 需要 **多消息频道统一接入**、且关注沙箱、审计与审批门的工程团队。
+- 已使用 OpenClaw / LangChain / AutoGPT，想评估迁移到 Rust 单体运行时的开发者。
+- 愿意接受 **pre-1.0** 节奏、可固定 commit 后再上生产的早期采用者。
+
+## 如何使用
+
+### 前置条件
+
+- **操作系统**：支持官方安装脚本的平台（macOS / Linux；Windows 见下方 PowerShell 路径）。
+- **Node.js >= 18**：仅在使用 WhatsApp Web Gateway（QR 码扫码）等 Node 桥接组件时需要。
+- **LLM 访问**：按 `openfang init` 向导配置提供商与 API Key；支持 27+ 提供商（见官方文档 Model Catalog）。
+- **版本预期**：项目仍处 pre-1.0，小版本间可能有破坏性变更；生产环境建议固定到特定 commit，升级前阅读 [Releases](https://github.com/RightNow-AI/openfang/releases) 与 [文档](https://openfang.sh/docs)。
+
+### 安装方式
+
+macOS / Linux：
+
+```bash
+curl -fsSL https://openfang.sh/install | sh
+openfang init
+openfang start
+# Dashboard: http://localhost:4200
+```
+
+Windows（PowerShell）：
+
+```powershell
+irm https://openfang.sh/install.ps1 | iex
+openfang init
+openfang start
+```
+
+### 首次运行
+
+完成 `openfang init` 后启动服务，在 Dashboard 配置模型与频道。激活内置 Hand 示例：
+
+```bash
+openfang hand list
+openfang hand activate researcher
+openfang hand status researcher
+
+# 按日程运行线索 Hand
+openfang hand activate lead
+
+# 暂停但保留状态
+openfang hand pause lead
+```
+
+自定义 Hand 可编写 `HAND.toml` 并发布到 FangHub；从其他框架迁移见官方 `openfang-migrate` 文档。
+
+### 验证是否成功
+
+- `openfang start` 后浏览器访问 `http://localhost:4200`，Dashboard 可加载。
+- `openfang hand list` 列出 7 个内置 Hand；`openfang hand status <name>` 显示运行状态。
+- 激活 Researcher 等 Hand 后，在 Dashboard 或配置的频道（如 Telegram）检查是否有任务输出。
+
+### 常见坑 / 注意事项
+
+- **pre-1.0 稳定性**：README 明确提示功能完整但仍有粗糙边缘；不要在未固定版本的情况下直接用于关键生产。
+- **敏感操作审批**：Browser Hand 等涉及消费的流程有强制审批门；Twitter Hand 默认走审批队列，避免误发帖。
+- **WhatsApp Web Gateway**：需单独在 `packages/whatsapp-gateway` 执行 `npm install` 并启动 Node 网关，同时在 `config.toml` 配置 `[channels.whatsapp] mode = "web"` 及 `WHATSAPP_WEB_GATEWAY_URL`。
+- **密钥管理**：API Key 通过 init/配置写入本地；勿将凭据提交到 Git；利用内置 Secret Zeroization 与能力门控，仍建议最小权限原则。
+- **许可证**：GitHub 元数据为 Apache-2.0；README 对比表中部分条目标注 MIT，以仓库 License 文件与 API 为准。

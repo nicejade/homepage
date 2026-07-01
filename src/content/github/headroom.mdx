@@ -1,0 +1,97 @@
+---
+title: headroom
+description: AI Agent 上下文压缩层：在送入 LLM 前压缩工具输出、日志与 RAG，省 60–95% Token，答案不变。
+repo: https://github.com/headroomlabs-ai/headroom
+homepage: https://headroom-docs.vercel.app/docs
+repoDescription: "Compress tool outputs, logs, files, and RAG chunks before they reach the LLM. 60-95% fewer tokens, same answers. Library, proxy, MCP server."
+avatarUrl: https://avatars.githubusercontent.com/u/294291659?v=4
+tags:
+  - Agent
+  - AI 编程
+  - 开发工具
+language: Python
+stars: 55691
+forks: 4034
+openIssues: 492
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 适合每天用 Claude Code/Cursor 等编码 Agent、想本地降 Token 成本且不改业务代码的开发者。
+---
+
+## 项目介绍
+
+Headroom 是面向 AI Agent 的**上下文压缩层**：在工具输出、日志、RAG 分块、文件与对话历史进入 LLM 之前完成压缩，官方宣称可节省 **60–95%** Token 且保持答案质量。数据默认在本地处理，支持 Python/TypeScript 库内联调用、零改代码的本地代理，以及 MCP 服务器三种接入方式，并可通过 `headroom wrap` 一键包裹 Claude Code、Codex、Cursor、Aider 等主流编码 Agent。
+
+## 核心特性
+
+- **三种接入模式**：`compress(messages)` 库调用、`headroom proxy` 透明代理、MCP 工具（`headroom_compress` / `headroom_retrieve` / `headroom_stats`）
+- **内容感知压缩**：ContentRouter 按类型路由至 SmartCrusher（JSON）、CodeCompressor（多语言 AST）、Kompress-v2-base（文本）等压缩器
+- **可逆压缩（CCR）**：原文本地缓存，模型需要时可按需检索，避免信息不可逆丢失
+- **跨 Agent 共享记忆**：Claude、Codex、Gemini 等 Agent 共用存储，自动去重
+- **Agent 一键包裹**：`headroom wrap claude|codex|cursor|aider|…`，`headroom unwrap` 可撤销
+- **输出 Token 削减**：代理层可裁剪模型回复中的冗余寒暄与重复代码（`HEADROOM_OUTPUT_SHAPER=1`）
+- **框架集成**：支持 Anthropic/OpenAI SDK、Vercel AI SDK、LiteLLM、LangChain、Agno 等
+
+## 对用户价值
+
+编码 Agent 日常会把大量工具返回、日志与检索结果塞进上下文，Token 账单随之膨胀。Headroom 在**不改业务代码**的前提下拦截并压缩这些内容——跑代理或 `wrap` 即可生效，库模式则可嵌入自有流水线。可逆 CCR 让模型在压缩后仍能取回原文，降低「压过头」的风险；跨 Agent 记忆则避免同一信息在 Claude Code 与 Codex 之间重复占用窗口。对个人开发者，这是降低 Opus 等高价模型成本的实用层；对团队，官方还提供企业级托管部署选项。
+
+## 与替代方案
+
+- 相比 **Anthropic/OpenAI 原生 Prompt Caching 或厂商内置压缩**，Headroom 强调**跨 Agent、跨提供商**的统一压缩层，并附带 CCR 可逆检索与内容类型路由；若你只用单一厂商且不需要跨工具记忆，原生方案可能更简单。
+- 相比 **[LLMLingua](https://github.com/microsoft/LLMLingua)** 等**通用 Prompt 压缩研究工具**，Headroom 面向**Agent 工作负载**设计：内置 JSON/代码 AST 压缩器、代理模式、MCP 与 `wrap` 生态，开箱即可接入 Claude Code/Cursor 而非自行拼装流水线。
+- 相比 **手动截断或会话摘要**，Headroom 提供**自动化、可度量**的压缩（`headroom perf`、`headroom dashboard`）与基准测试套件（`python -m headroom.evals suite`），并支持 `headroom learn` 从失败会话挖掘修正写入 `CLAUDE.md` 等。
+- 相比 **仅做请求路由的 LiteLLM**，Headroom 可作为 LiteLLM Callback 叠加使用，专注**输入/输出 Token 削减**而非模型网关本身；二者可组合而非互斥。
+
+## 适应人群
+
+- 每天运行 **Claude Code、Cursor、Codex、Aider** 等编码 Agent，Token 成本敏感且希望零改代码降费的开发者。
+- 需要在**多个 Agent 之间共享上下文记忆**，或希望压缩**工具输出、日志、RAG 分块**的 AI 应用工程师。
+- 构建自有 Agent 流水线、希望通过**库/SDK/代理/MCP** 灵活接入，并重视**本地优先与可逆压缩**的技术团队。
+
+## 如何使用
+
+### 前置条件
+
+- **Python 3.10+**（CLI 与完整功能通过 PyPI 安装）；TypeScript SDK 通过 npm 安装，**不含 `headroom` CLI**。
+- 使用 Kompress-v2-base 等 ML 压缩器时需能访问 Hugging Face；企业网络需配置 `REQUESTS_CA_BUNDLE` 等 CA 信任（见 README 企业环境说明）。
+- `headroom wrap` 与代理模式需在本地运行进程；纯沙箱且无本地进程权限的环境不适用。
+
+### 安装方式
+
+```bash
+pip install "headroom-ai[all]"          # Python，含 headroom CLI
+npm install headroom-ai                 # TypeScript SDK（仅库，无 CLI）
+docker pull ghcr.io/chopratejas/headroom:latest
+```
+
+可选 extras：`[proxy]`、`[mcp]`、`[ml]`、`[code]`、`[memory]`、`[langchain]`、`[agno]` 等；`pipx` 用户建议指定 Python 3.13 以启用仪表盘美元节省统计。
+
+### 首次运行
+
+```bash
+headroom wrap claude                    # 包裹 Claude Code（或其他 Agent）
+# 或
+headroom proxy --port 8787              # 启动透明代理，客户端指向本地端口
+# 或库模式
+python -c "from headroom import compress; print(compress([...]))"
+```
+
+### 验证是否成功
+
+```bash
+headroom doctor                         # 健康检查，确认路由正常
+headroom perf                           # 查看压缩性能与节省比例
+headroom dashboard                      # 实时节省仪表盘（需代理运行中）
+```
+
+### 常见坑 / 注意事项
+
+- **`headroom` CLI 仅随 pip 包提供**，npm 包是 TypeScript 库，不要期望 `npx headroom` 可用。
+- Python 3.14 上 Token 节省可统计，但仪表盘**美元金额**可能显示 `$0.00`（LiteLLM 兼容性限制）；建议 pipx 使用 Python 3.13。
+- 企业 SSL 拦截环境安装失败时，需先安装 Rust 或使用 `--only-binary` 预编译 wheel；运行时还需信任 `cdn.pyke.io`（ONNX）与 `huggingface.co`（模型）。
+- `HEADROOM_OUTPUT_SHAPER` 等环境变量对**已运行代理**需通过 `headroom wrap` 的热同步或重启生效；共享代理上为全局设置。
+- 撤销包裹：`headroom unwrap claude`（支持 claude、copilot、codex、opencode、openclaw 等）。

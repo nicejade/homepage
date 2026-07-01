@@ -1,0 +1,118 @@
+---
+title: ZeroClaw
+description: Rust 单二进制自托管 AI Agent 运行时，多频道多模型，数据与密钥留在本机。
+repo: https://github.com/zeroclaw-labs/zeroclaw
+homepage: https://www.zeroclawlabs.ai/
+repoDescription: "Fast, small, and fully autonomous AI personal assistant infrastructure, any OS, any platform — deploy anywhere, swap anything 🦀"
+avatarUrl: https://avatars.githubusercontent.com/u/261820148?v=4
+tags:
+  - Agent
+  - 本地模型
+  - 开发工具
+language: Rust
+stars: 32117
+forks: 4789
+openIssues: 430
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 适合追求 Rust 轻量运行时、Ollama 本地推理与 GPIO 硬件联动的极客用户。
+---
+
+## 项目介绍
+
+ZeroClaw 是一款用 **Rust 编写的个人 AI Agent 运行时**：单个二进制文件即可配置并运行，对接 Anthropic、OpenAI、Ollama 等约 20 家 LLM 提供商，通过 Discord、Telegram、Matrix、邮件、语音、Webhook、CLI 等 30+ 频道触达用户，并借助 shell、浏览器、HTTP、硬件与自定义 MCP 等工具执行动作。核心理念是**你拥有 Agent、数据与运行机器**——密钥与 workspace 均留在本地，适合希望自托管、可审计、可深度定制的开发者与进阶用户。
+
+## 核心特性
+
+- **多频道统一 Agent 循环**：Discord、Telegram、Matrix、邮件、Webhook、CLI 等入站消息汇聚到同一 Agent，配置见 `[channels.<type>.<alias>]`
+- **Provider 无关与路由**：`[providers.models.<type>.<alias>]` 统一 schema，支持 fallback 链与 OpenAI 兼容端点
+- **安全优先 + 可控放权**：默认 `supervised` 自治级别，中风险需审批、高风险阻断；支持 Landlock / Bubblewrap / Seatbelt / Docker 沙箱与加密 tool receipts
+- **Gateway 与 Dashboard**：HTTP/WebSocket 网关，Web 面板可聊天、浏览记忆、编辑配置、管理 cron 与检视工具调用
+- **SOP 引擎**：MQTT / Webhook / cron / 外设事件触发的标准作业流程，带审批门与可恢复运行
+- **硬件与外设**：通过 `Peripheral` trait 支持 Raspberry Pi、STM32、Arduino、ESP32 的 GPIO / I2C / SPI / USB
+- **ACP 集成**：Agent Client Protocol（JSON-RPC 2.0 over stdio）对接 IDE / 编辑器
+
+## 对用户价值
+
+不想依赖 Node 生态或云端托管、又 snapshot 级部署（预编译二进制数秒安装）的用户，可以用 ZeroClaw 在 Linux、macOS、Windows、FreeBSD、NixOS 或容器里跑常驻助手。Provider 路由与本地 Ollama 支持让**离线或混合云**场景更灵活；SOP 与硬件能力则适合自动化运维、IoT 与边缘设备。相比「聊天网页 + API Key」，ZeroClaw 把频道、工具、记忆与策略收进一份 TOML 配置，便于版本管理与审计。
+
+## 与替代方案
+
+- 相比 [OpenClaw](https://github.com/openclaw/openclaw)（TypeScript Gateway 生态、伴侣应用与 Canvas/语音节点），ZeroClaw 走 **Rust 单二进制、feature 裁剪与 minimal preset（约 6.6 MB）** 路线，强调运行时体积、安全策略与硬件/SOP；二者定位相近但技术栈与扩展方式不同，可按团队语言偏好与部署约束选型。
+- 相比 [Hermes Agent](https://github.com/NousResearch/hermes-agent) 等强调**自进化技能与跨会话记忆**的方案，ZeroClaw 更侧重**多频道运行时、Gateway Dashboard 与 SOP/硬件编排**，而非技能 marketplace 叙事。
+- 相比 [Cline](https://github.com/cline/cline)、[Aider](https://github.com/Aider-AI/aider) 等 **IDE 结对编程**工具，ZeroClaw 是**生活与工作流助理运行时**，主战场是消息频道、cron、浏览器与 shell 工具，ACP 仅作为频道之一。
+- 相比 [Dify](https://github.com/langgenius/dify)、[n8n](https://github.com/n8n-io/n8n) 等**可视化工作流平台**，ZeroClaw 是**单人 Agent 运行时**，以 TOML 配置与 CLI 为主，不适合多租户 SaaS 或拖拽式编排。
+- 开发机可启用 [YOLO mode](https://docs.zeroclawlabs.ai/master/en/getting-started/yolo.html) 跳过部分安全门；生产或公网暴露 Gateway 前务必阅读官方 Security 文档，勿默认裸奔。
+
+## 适应人群
+
+- 偏好 **Rust、单二进制、可裁剪 feature** 的自托管 AI 助手用户。
+- 需要 **Ollama 本地模型 + 多 IM 频道** 统一入口的开发者。
+- 想探索 **GPIO / 嵌入式硬件、SOP 自动化** 与 Agent 结合的极客与创客。
+- 从 OpenClaw 等方案迁移、评估 **更轻运行时或更强沙箱策略** 的技术用户。
+
+## 如何使用
+
+### 前置条件
+
+- **操作系统**：Linux、macOS、Windows、FreeBSD、NixOS 或 Docker；各平台细节见 [官方 Setup 文档](https://docs.zeroclawlabs.ai/master/en/setup/linux.html)。
+- **模型访问**：至少配置一个 provider（Anthropic、OpenAI、Ollama 等）；V3 配置最少需 provider、agent、risk profile 四段式结构，见 [Provider Configuration](https://docs.zeroclawlabs.ai/master/en/providers/configuration.html)。
+- **源码构建**（可选）：需安装 Rust toolchain；可用 `./install.sh --list-features` 查看 feature 列表。
+- 接入真实消息频道前，阅读 [Security overview](https://docs.zeroclawlabs.ai/master/en/security/overview.html)；默认 supervised 模式，中高风险操作需审批。
+
+### 安装方式
+
+一键安装（安装脚本会询问预编译或源码构建）：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/zeroclaw-labs/zeroclaw/master/install.sh | bash
+```
+
+或克隆后本地安装：
+
+```bash
+git clone https://github.com/zeroclaw-labs/zeroclaw.git
+cd zeroclaw
+./install.sh
+```
+
+常用 flags：
+
+```bash
+./install.sh --prebuilt              # 强制预编译二进制
+./install.sh --source                # 强制源码构建
+./install.sh --preset minimal        # 最小 kernel preset（约 6.6 MB）
+./install.sh --skip-quickstart         # 仅安装，稍后手动 quickstart
+./install.sh --dry-run --prebuilt    # 预览安装步骤
+```
+
+### 首次运行
+
+安装完成后通常会自动进入 quickstart；也可手动：
+
+```bash
+zeroclaw quickstart               # 一次性向导：选 provider、生成可用 config
+zeroclaw agent -a <alias>         # 使用 [agents.<alias>] 交互对话
+zeroclaw service install          # 注册 systemd / launchctl / Windows Service
+zeroclaw service start            # 后台常驻运行
+```
+
+配置文件位于 `~/.zeroclaw/config.toml`。完整 walkthrough 见 [Quick start](https://docs.zeroclawlabs.ai/master/en/getting-started/quickstart.html)。
+
+### 验证是否成功
+
+- `zeroclaw agent -a <alias>` 能收到合理回复。
+- `zeroclaw auth status` 显示 provider 认证正常（OpenAI Codex 订阅等场景尤其重要）。
+- 若已安装服务：`zeroclaw service` 相关命令显示运行中；Gateway/Dashboard 可按文档启用并访问。
+- 配置频道后，从 Discord/Telegram 等发送测试消息，确认入站路由到 Agent 循环。
+
+### 常见坑 / 注意事项
+
+- **官方仓库唯一**：仅 `zeroclaw-labs/zeroclaw` 为官方源；留意仿冒仓库与域名（README 有 impersonation 声明）。
+- **OpenAI Codex 订阅**：标准订阅走 stored auth profiles，不必在 provider 条目写 `api_key`；自定义兼容网关才需显式 `api_key` / `uri`。
+- 若日志出现 `provider streaming failed, falling back to non-streaming chat`，ZeroClaw 会自动重试非流式；先查 `zeroclaw auth status` 再改配置。
+- **YOLO mode** 仅适合可信开发机；生产环境保持 supervised 与沙箱策略。
+- 安全漏洞勿公开 issue，应邮件 `security@zeroclaw.dev`；升级前查阅 [Releases](https://github.com/zeroclaw-labs/zeroclaw/releases) 与 CHANGELOG。
