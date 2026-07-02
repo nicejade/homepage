@@ -1,0 +1,121 @@
+---
+title: Claude How To
+description: Claude Code 可视化教程库，从 Slash Commands 到 Agent 编排，附可复制模板与渐进学习路径。
+repo: https://github.com/luongnv89/claude-howto
+homepage: http://luongnv.com/claude-howto/
+repoDescription: A visual, example-driven guide to Claude Code — from basic concepts to advanced agents, with copy-paste templates that bring immediate value.
+avatarUrl: https://avatars.githubusercontent.com/u/3288457?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: Python
+stars: 39120
+forks: 4725
+openIssues: 25
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 周末速成 Claude Code 全特性，含自测与 10 模块渐进路径，适合已安装 CLI 想系统进阶的开发者。
+---
+
+## 项目介绍
+
+Claude How To 是由 luongnv89 维护的 **Claude Code 可视化教程库**，口号是「Master Claude Code in a Weekend」。仓库把官方文档里分散的特性说明，整理成 10 个渐进模块：从 Slash Commands、Memory、Skills 到 Hooks、MCP、Subagents、Plugins 与 Checkpoints，每个模块配有 Mermaid 图解、生产级可复制模板，以及带时间估算的学习路线图。README 提供英、越、中、乌、日多语言版本，并随 Claude Code 2.1+ 持续更新（当前 v2.1.160）。
+
+## 核心特性
+
+- **10 个教程模块**：覆盖 Slash Commands、Memory、Skills、Subagents、MCP、Hooks、Plugins、Checkpoints、Advanced Features 与 CLI Reference
+- **可复制模板**：`.claude/commands/`、`CLAUDE.md`、Hook 脚本、MCP 配置、Subagent 定义与完整 Plugin 包，复制即可用
+- **Mermaid 图解**：说明各特性内部工作原理，强调「为什么」而不只是「怎么用」
+- **渐进学习路径**：初学者到高级用户约 11–13 小时，15 分钟即可跑通第一个 Slash Command
+- **内置自测**：在 Claude Code 内运行 `/self-assessment` 或 `/lesson-quiz [topic]`，定位知识盲区并生成个性化路线
+- **多语言与离线阅读**：含中文 README；可用 `uv run scripts/build_epub.py` 导出 EPUB 电子书
+
+## 对用户价值
+
+很多人装完 Claude Code 只会聊天，不知道如何把 Commands、Hooks、Skills 与 Subagents 串成真正省时的流水线。本仓库解决三个痛点：官方文档偏功能参考、缺少组合示例；学习顺序不清晰；示例过于基础。你可以 15 分钟内复制 `optimize` 命令体验价值，再按路线图逐步搭建代码审查、CI/CD 自动化、文档生成等复合工作流。对团队而言，它是可 Fork 的 onboarding 教材；对个人而言，比零散搜教程更省时间。
+
+## 与替代方案
+
+- 相比 [Anthropic 官方文档](https://code.claude.com/docs)，本库是 **教程 + 模板 + 学习路径**，官方文档更适合查 API 细节；二者互补，建议先学本库再查官方。
+- 相比 [Claude Code Best Practice](https://github.com/shanraisshan/claude-code-best-practice) 等 **社区技巧聚合库**，本库侧重 **模块化渐进教学与可视化图解**，并内置 `/self-assessment` 自测；若你需要工作流横评与 80+ 条 Tips 索引，可配合 Best Practice 使用。
+- 相比 [Superpowers](https://github.com/obra/superpowers) 等 **可安装技能方法论**，这里是 **教程仓库而非 npm 插件**；若目标是开箱即用的 TDD / 子代理技能链，应直接安装 Superpowers，再用本库理解各原语如何组合。
+- 本仓库 **不提供模型路由或 CLI 代理**；跨模型需求需配合 MCP 或第三方 Router 工具。
+
+## 适应人群
+
+- 已安装 Claude Code，想从「会聊天」进阶到编排 Agents、Hooks、Skills 的开发者。
+- 需要为团队建立 Claude Code 培训材料、可复制 `.claude/` 配置模板的 Tech Lead。
+- 偏好可视化教程与渐进路径，希望 15 分钟见效再系统深入的学习型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 [Claude Code CLI](https://code.claude.com/docs/en/quickstart)（v2.1+；`npm install -g @anthropic-ai/claude-code` 或原生二进制均可）并完成 Anthropic 账号认证。
+- 本机有 Git；克隆仓库需访问 GitHub。企业网络需放行 `https://downloads.claude.ai/claude-code-releases`（v2.1.116+ 下载源）。
+- 理解本库定位为 **教程 + 模板**，不是独立 npm 包；核心收益来自阅读模块与复制配置到目标项目。
+
+### 安装方式
+
+克隆仓库到本地：
+
+```bash
+git clone https://github.com/luongnv89/claude-howto.git
+cd claude-howto
+```
+
+将第一个 Slash Command 复制到你的项目（把 `/path/to/your-project` 换成实际路径）：
+
+```bash
+mkdir -p /path/to/your-project/.claude/commands
+cp 01-slash-commands/optimize.md /path/to/your-project/.claude/commands/
+```
+
+可选：一次性完成 1 小时基础配置：
+
+```bash
+cp 01-slash-commands/*.md .claude/commands/
+cp 02-memory/project-CLAUDE.md ./CLAUDE.md
+cp -r 03-skills/code-review-specialist ~/.claude/skills/
+```
+
+在目标项目目录启动 Claude Code：
+
+```bash
+claude
+```
+
+### 首次运行
+
+在 Claude Code 会话中输入：
+
+```bash
+/optimize
+```
+
+或运行自测命令定位学习起点：
+
+```bash
+/self-assessment
+```
+
+按 [LEARNING-ROADMAP.md](https://github.com/luongnv89/claude-howto/blob/main/LEARNING-ROADMAP.md) 从对应等级模块开始；初学者建议从 [01-slash-commands](https://github.com/luongnv89/claude-howto/tree/main/01-slash-commands) 入手。
+
+### 验证是否成功
+
+- `/optimize` 等 Slash Command 能正常触发并执行预期流程。
+- 项目根目录存在从 `02-memory/project-CLAUDE.md` 复制的 `CLAUDE.md`，且 Claude Code 能读取项目记忆。
+- 若已复制 Skill，`code-review-specialist` 等能力可在相关任务中被自动调用。
+- 完成模块后可运行 `/lesson-quiz hooks`（或其他 topic）检验理解程度。
+
+### 常见坑 / 注意事项
+
+- 复制模板时务必区分 **项目级**（`.claude/`、`CLAUDE.md`）与 **用户级**（`~/.claude/skills/`、`~/.claude/hooks/`）路径，混用会导致命令找不到或权限问题。
+- Hook 脚本复制后需 `chmod +x ~/.claude/hooks/*.sh`；MCP 配置常需额外环境变量（如 `GITHUB_TOKEN`）。
+- 企业代理可能阻断 Claude Code 原生二进制下载，需提前放行 `downloads.claude.ai`。
+- 仓库随 Claude Code 版本快速迭代，实施前对照 [CHANGELOG](https://github.com/luongnv89/claude-howto/blob/main/CHANGELOG.md) 与官方 Changelog 核实命令是否仍可用。
+- 全路径约 11–13 小时，不必一次学完；15 分钟复制一个命令即可获得即时价值。
