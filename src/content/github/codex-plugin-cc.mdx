@@ -1,0 +1,110 @@
+---
+title: Codex Plugin for Claude Code
+description: OpenAI 官方 Claude Code 插件，在终端内直接调用 Codex 做代码审查与任务委派。
+repo: https://github.com/openai/codex-plugin-cc
+repoDescription: Use Codex from Claude Code to review code or delegate tasks.
+avatarUrl: https://avatars.githubusercontent.com/u/14957082?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: JavaScript
+stars: 23018
+forks: 1395
+openIssues: 265
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 已用 Claude Code 又想接入 Codex 审查、委派与后台任务管理的双栈开发者。
+---
+
+## 项目介绍
+
+这是 OpenAI 为 **Claude Code** 推出的官方 Codex 插件，让你在熟悉的 Claude Code 工作流里直接调用本地 Codex CLI：做只读代码审查、对抗式设计质询，或把调试与修复任务委派给 Codex 在后台执行。插件通过 Codex App Server 对接本机已安装的 `codex` 二进制，复用同一套登录态与 `config.toml` 配置，适合不想在 Claude 与 Codex 之间来回切换终端的开发者。
+
+## 核心特性
+
+- **Slash 命令审查**：`/codex:review` 对未提交改动或相对 `main` 等基线的分支做只读审查；支持 `--background` 与 `--wait`
+- **对抗式审查**：`/codex:adversarial-review` 可附加聚焦文本，质疑设计取舍、失败模式与替代方案
+- **任务委派与救援**：`/codex:rescue` 通过 `codex:codex-rescue` 子 Agent 调查 Bug、尝试修复或续接上次任务，支持 `--model`、`--effort`、`--resume`
+- **会话与作业管理**：`/codex:transfer` 将 Claude Code 对话导入 Codex 线程；`/codex:status`、`/codex:result`、`/codex:cancel` 管理后台作业
+- **一键环境检测**：`/codex:setup` 检查 Codex 是否就绪，必要时可引导通过 npm 安装
+
+## 对用户价值
+
+Claude Code 擅长交互式结对，Codex 则在审查与长时自主任务上各有优势。本插件把两者串进同一终端会话：审查类工作走只读 Slash 命令，重活可丢给 Codex 后台跑，再用 `codex resume` 在 Codex App 或 TUI 里续写。无需维护两套独立工作区，也无需重复登录——插件直接读取本机 Codex CLI 的鉴权与配置。
+
+## 与替代方案
+
+- 相比 **单独开 Codex CLI**，本插件把审查、委派、状态查询收敛为 Claude Code 内 Slash 命令，并与 Claude 会话上下文联动（如 `/codex:transfer` 导入历史）。
+- 相比 **Claude Code 内置 `/review` 或第三方审查插件**，审查质量对齐 Codex 原生 `/review`；对抗式审查与后台作业管理是 Codex 侧能力，需 ChatGPT 订阅或 API Key 并计入 Codex 用量。
+- 相比 **Continue、Aider 等多模型工具**，本插件深度绑定 OpenAI Codex 生态，不适合只想切换任意 LLM 的场景。
+- 若团队只用 Claude 模型、不打算引入 Codex 账户，Anthropic 官方 [claude-plugins-official](https://github.com/anthropics/claude-plugins-official) 内的 code-review 等插件可能更轻。
+
+## 适应人群
+
+- 已日常使用 Claude Code，同时订阅 ChatGPT 或持有 OpenAI API Key、希望把 Codex 审查与委派纳入同一工作流的开发者。
+- 需要在提交前做分支级代码审查，或希望对架构决策做对抗式压力测试的工程师。
+- 习惯让 Agent 在后台跑长任务，并希望通过 `codex resume` 在 Codex App 中继续审查结果的团队。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装并可正常启动 [Claude Code](https://github.com/anthropics/claude-code) CLI。
+- **ChatGPT 订阅（含 Free）或 OpenAI API Key**；用量计入 [Codex 限额](https://developers.openai.com/codex/pricing)。
+- **Node.js 18.18 或更高版本**（用于安装 Codex CLI）。
+
+### 安装方式
+
+在 Claude Code 中添加插件市场并安装：
+
+```bash
+/plugin marketplace add openai/codex-plugin-cc
+/plugin install codex@openai-codex
+/reload-plugins
+```
+
+然后运行环境检测：
+
+```bash
+/codex:setup
+```
+
+若需手动安装 Codex CLI：
+
+```bash
+npm install -g @openai/codex
+```
+
+若 Codex 已安装但未登录：
+
+```bash
+!codex login
+```
+
+### 首次运行
+
+安装完成后应能看到本文列出的 Slash 命令，以及 `/agents` 中的 `codex:codex-rescue` 子 Agent。建议先做一次后台审查流程：
+
+```bash
+/codex:review --background
+/codex:status
+/codex:result
+```
+
+### 验证是否成功
+
+- `/codex:setup` 报告 Codex 就绪，且 `codex` 命令在 PATH 中可用。
+- `/codex:review` 能对当前改动或 `--base main` 分支返回审查结果。
+- 后台任务可通过 `/codex:status` 查看进度，`/codex:result` 可拿到会话 ID 供 `codex resume` 使用。
+
+### 常见坑 / 注意事项
+
+- 多文件审查可能耗时较长，官方建议优先使用 `--background`，再用 `/codex:status` 轮询。
+- `/codex:review` 与 `/codex:adversarial-review` 均为**只读**，不会自动改代码；修复请用 `/codex:rescue`。
+- 插件使用本机 Codex CLI 与 App Server，项目级 `.codex/config.toml` 仅在 [项目被信任](https://developers.openai.com/codex/config-advanced#project-config-files-codexconfigtoml) 时生效。
+- `/codex:transfer` 要求 Claude 会话文件位于 `~/.claude/projects`，且 Codex 版本需支持外部 Agent 会话导入。
+- 自定义 OpenAI 端点可在 Codex 配置中设置 `openai_base_url`，插件会沿用现有鉴权方式。
