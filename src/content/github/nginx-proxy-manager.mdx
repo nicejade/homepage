@@ -1,0 +1,117 @@
+---
+title: "Nginx Proxy Manager"
+description: Docker 可视化管理 Nginx 反向代理与 Let's Encrypt 证书，Homelab 与家庭自托管的入口网关。
+repo: "https://github.com/NginxProxyManager/nginx-proxy-manager"
+homepage: "https://nginxproxymanager.com"
+repoDescription: "Docker container for managing Nginx proxy hosts with a simple, powerful interface"
+avatarUrl: "https://avatars.githubusercontent.com/u/88089605?v=4"
+tags:
+  - 自托管
+  - 开发工具
+  - 自动化
+language: "TypeScript"
+stars: 33460
+forks: 3809
+openIssues: 923
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 适合 Homelab 与家庭网络用户，用 Web 面板统一托管内网服务的 HTTPS 入口与域名转发。
+---
+
+## 项目介绍
+
+Nginx Proxy Manager（NPM）把 Nginx 反向代理、SSL 终止与域名转发封装进预构建 Docker 镜像，并提供基于 Tabler 的 Web 管理界面。用户无需手写 Nginx 配置，即可为家中或内网运行的 Web 服务添加公网域名、自动申请 Let's Encrypt 证书，并管理重定向、TCP/UDP 流转发与访问控制。项目定位是「低门槛的 Homelab 入口网关」，高级 Nginx 选项对进阶用户仍可选开放。
+
+## 核心特性
+
+- **可视化代理主机**：通过表单创建转发域名、重定向、Stream 与 404 主机，无需了解 Nginx 语法
+- **免费 SSL**：集成 Let's Encrypt 自动续期，也支持上传自定义证书
+- **访问控制**：Access List 与基础 HTTP 认证，可按主机限制访问
+- **用户与审计**：多用户管理、权限分级与操作审计日志
+- **进阶可扩展**：超级用户可编辑自定义 Nginx 配置片段，满足特殊路由需求
+
+## 对用户价值
+
+自托管 Immich、Home Assistant、NAS 面板等服务时，往往要面对「每个应用各自配 HTTPS」「路由器端口转发复杂」「证书续期麻烦」等问题。NPM 把 80/443 入口收敛到单一容器：在管理面板里填域名与内网 IP:端口，即可自动完成反向代理与证书签发，相当于为整个家庭网络提供统一的 TLS 网关。对不熟悉 Nginx 的用户，它把数小时的学习成本压缩到几分钟的表单操作。
+
+## 与替代方案
+
+- 相比 **手写 Nginx**，NPM 上手更快、证书自动化更省心；但复杂 location 规则、性能调优仍建议直接编辑 Nginx 配置。
+- 相比 **Caddy**，NPM 提供完整 GUI 与多用户管理，适合「多人共用 Homelab 面板」；Caddy 配置即代码、自动 HTTPS 更简洁，但缺少同等粒度的 Web 管理体验。
+- 相比 **Traefik**，NPM 更偏传统「域名 → 内网 IP」静态路由，与 Docker 标签/服务发现集成较弱；Traefik 适合 Kubernetes 或动态容器编排场景。
+- 相比 **SWAG**（LinuxServer.io）等同类型 Docker 反代套件，NPM 界面更现代、社区体量更大（3 万+ Star），功能侧重 HTTP/HTTPS 主机与 Stream，而非媒体服务器专用集成。
+
+## 适应人群
+
+- 在家庭宽带或 VPS 上自托管多个 Web 服务，需要统一 HTTPS 入口的 Homelab 爱好者。
+- 不想深入学习 Nginx 配置，但希望用域名访问内网应用的开发者与运维新手。
+- 小团队需要为内部工具快速上线反向代理、访问控制与证书管理的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 [Docker](https://docs.docker.com/install/) 与 Docker Compose 插件。
+- 若需公网访问：路由器已配置 80/443 端口转发至运行 NPM 的主机，域名 DNS 已指向公网 IP（可用 DuckDNS、Cloudflare DDNS 等动态域名服务）。
+- 默认使用容器内 SQLite；大规模或多实例部署可选 MySQL/MariaDB 或 Postgres（见[官方完整部署文档](https://nginxproxymanager.com/setup/)）。
+
+### 安装方式
+
+创建 `docker-compose.yml`（最小可用配置）：
+
+```yaml
+services:
+  app:
+    image: 'docker.io/jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+```
+
+启动：
+
+```bash
+docker compose up -d
+```
+
+生产环境建议固定镜像标签（如 `jc21/nginx-proxy-manager:2.15.1`）并设置 `TZ` 时区；MySQL/Postgres 与 ARM 设备说明见[官方 Setup 指南](https://nginxproxymanager.com/setup/)。
+
+### 首次运行
+
+容器首次启动会生成 JWT 密钥、初始化数据库并创建默认管理员，可能需要等待数分钟（取决于主机熵池与磁盘速度）。
+
+浏览器访问管理界面（默认端口 **81**）：
+
+```
+http://127.0.0.1:81
+```
+
+使用默认凭据登录（**首次登录后系统会强制修改**）：
+
+- 邮箱：`admin@example.com`
+- 密码：`changeme`
+
+登录后在面板中添加 **Proxy Host**：填写域名、转发目标（内网 IP 与端口），开启 SSL 并选择「Request a new SSL Certificate」即可自动申请 Let's Encrypt 证书。
+
+### 验证是否成功
+
+- 管理界面 `http://<主机IP>:81` 可正常登录，且已修改默认密码。
+- 添加测试 Proxy Host 后，通过配置的域名可访问后端服务。
+- 若启用 SSL，浏览器地址栏显示有效 HTTPS 锁标，证书颁发者为 Let's Encrypt。
+- `docker compose ps` 显示 `app` 容器状态为 `running`，`./data` 与 `./letsencrypt` 目录已生成持久化文件。
+
+### 常见坑 / 注意事项
+
+- **端口 81 勿暴露公网**：管理面板默认监听 81，仅应在内网或 VPN 访问；公网只需开放 80/443。
+- **Let's Encrypt 需可达 80 端口**：证书申请依赖 HTTP-01 验证，确保域名解析正确且防火墙/路由器已放行 80。
+- **armv7 已弃用**：2.14+ 不再支持 armhf，旧树莓派等设备需使用 `2.13.7` 镜像标签。
+- **ACL 与后端登录冲突**：对 Proxy Host 启用 HTTP 基础认证后，可能与后端应用自身的登录机制冲突（浏览器只能维护一套 Authorization 头），需二选一或调整应用鉴权方式。
+- **数据备份**：`./data` 含 SQLite 数据库与 JWT 密钥，`./letsencrypt` 含证书；升级或迁移前务必备份这两个卷。

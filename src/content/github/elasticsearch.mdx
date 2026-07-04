@@ -1,0 +1,123 @@
+---
+title: Elasticsearch
+description: 分布式搜索与分析引擎，支持全文检索、日志指标、APM 与向量搜索，Elastic Stack 核心组件。
+repo: https://github.com/elastic/elasticsearch
+homepage: https://www.elastic.co/products/elasticsearch
+repoDescription: Free and Open Source, Distributed, RESTful Search Engine
+avatarUrl: https://avatars.githubusercontent.com/u/6764390?v=4
+tags:
+  - 开发工具
+  - 系统工具
+  - 自托管
+language: Java
+stars: 77271
+forks: 25921
+openIssues: 5928
+contributors: 1
+license: Elastic-2.0 / SSPL
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 日志平台、全文检索、ELK 与 RAG 向量检索场景的基础设施选型参考。
+---
+
+## 项目介绍
+
+Elasticsearch 是 Elastic 开源 Stack 的核心，面向生产级工作负载提供分布式搜索、分析与可扩展数据存储，并内置向量检索能力。它基于 Lucene，支持近实时全文搜索、结构化日志与指标聚合、APM 与安全事件分析，以及面向 RAG 等 GenAI 场景的语义检索。本仓库为官方源码；日常开发可优先用 Docker 一键脚本或 Elastic Cloud 托管，生产自管部署通常从 [elastic.co 下载页](https://www.elastic.co/downloads/elasticsearch) 获取发行包，而非直接编译 GitHub 镜像。
+
+## 核心特性
+
+- **分布式搜索引擎**：倒排索引与分片副本架构，支持近实时全文检索、聚合分析与地理空间查询
+- **统一数据平台**：同一集群可承载日志（ELK）、指标、APM、安全事件与业务搜索等混合负载
+- **向量与 AI 集成**：原生向量搜索与混合检索，可对接 RAG、语义搜索与生成式 AI 应用
+- **REST API 与生态**：HTTP JSON API 为主接口，官方与社区客户端覆盖 Java、Python、Go、Node.js 等主流语言
+- **可观测与扩展**：与 Kibana、Beats、Elastic Agent 等组成 Elastic Stack；部分高级能力需订阅或 Elastic Cloud
+
+## 对用户价值
+
+Elasticsearch 把「搜索」从单一功能扩展为可观测性与数据检索的统一底座：既能做站内搜索、电商筛选与知识库检索，也能作为 ELK 栈核心承载日志分析与告警。REST 接口简单、水平扩展成熟，与 Kibana 可视化、Logstash/Beats 采集链路配合紧密。对团队而言，它是自建日志平台、全文检索与向量检索场景中最常被评估的基础设施之一，云托管（Elastic Cloud）与自管部署均有成熟路径。
+
+## 与替代方案
+
+- 相比 **OpenSearch**（Elasticsearch 分支），Elasticsearch 由 Elastic 主导演进，Search Labs 与 Kibana 等配套更新更快；OpenSearch 在 AWS 生态与 Apache 2.0 许可下强调开放治理，适合对云厂商绑定与许可有明确偏好的团队。
+- 相比 **Solr**，Elasticsearch 在 REST API、分布式运维与实时索引方面更现代；Solr 在纯 Lucene 定制与部分传统企业搜索场景仍有存量用户。
+- 相比 **Meilisearch / Typesense**，Elasticsearch 面向 PB 级集群、复杂聚合与可观测性全栈；轻量站内搜索若只需毫秒级 typo 容忍与小规模部署，专用轻量引擎上手更快。
+- 相比 **ClickHouse / 专用 OLAP**，Elasticsearch 擅长检索、日志与时间序列聚合；大规模纯分析报表与 SQL 复杂 JOIN 仍更偏向列式数据库或数据仓库。
+- 相比 **Redis / 专用向量库**，Elasticsearch 向量检索适合与现有日志、全文数据同集群复用；极低延迟、纯向量专库场景专用引擎仍具优势。
+
+## 适应人群
+
+- 需要全文搜索、日志分析或指标聚合的后端开发者与平台工程师。
+- 负责 ELK/Elastic Stack 部署、容量规划与高可用的 SRE 与运维团队。
+- 评估 RAG、语义检索或可观测性数据层架构的技术负责人与数据平台团队。
+
+## 如何使用
+
+### 前置条件
+
+- 本地快速体验需安装 [Docker Desktop](https://www.docker.com/products/docker-desktop)；Windows 用户建议启用 WSL。
+- 生产自管需规划 JVM 堆内存、磁盘 I/O、分片数量与集群节点角色；详见 [官方 sizing 指南](https://www.elastic.co/guide/en/elasticsearch/reference/current/size-your-shards.html)。
+- 注意 **Elastic License 2.0 / SSPL** 许可边界：部分功能（如高级 ML、部分安全能力）需订阅；商业再分发与托管前请阅读 [Elastic 订阅说明](https://www.elastic.co/subscriptions)。
+
+### 安装方式
+
+**本地开发（官方 `start-local` 脚本，含 Elasticsearch + Kibana）**
+
+```bash
+curl -fsSL https://elastic.co/start-local | sh
+```
+
+脚本会在当前目录创建 `elastic-start-local` 文件夹，并通过 Docker 启动服务。此方式**仅用于本地开发与测试**，勿用于生产。
+
+**生产环境**
+
+- 托管部署： [Elasticsearch Service on Elastic Cloud](https://www.elastic.co/cloud/as-a-service)
+- 自管安装：从 [elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch) 下载对应平台包，按 [安装文档](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html) 配置
+
+### 首次运行
+
+`start-local` 完成后，默认端点：
+
+- Elasticsearch：`http://localhost:9200`
+- Kibana：`http://localhost:5601`
+
+脚本会生成 `elastic` 用户随机密码并写入 `elastic-start-local/.env`，同时生成 API Key。进入目录加载环境变量：
+
+```bash
+cd elastic-start-local
+source .env
+export ES_LOCAL_PASSWORD
+```
+
+创建索引示例（Basic Auth）：
+
+```bash
+curl -u "elastic:${ES_LOCAL_PASSWORD}" \
+  -X PUT "http://localhost:9200/my-new-index" \
+  -H "Content-Type: application/json"
+```
+
+### 验证是否成功
+
+**使用 API Key（推荐，脚本已写入 `.env`）**
+
+```bash
+source .env
+curl "${ES_LOCAL_URL}" -H "Authorization: ApiKey ${ES_LOCAL_API_KEY}"
+```
+
+**使用用户名密码**
+
+```bash
+curl -u "elastic:${ES_LOCAL_PASSWORD}" http://localhost:9200
+```
+
+期望返回包含 `cluster_name` 与 `version` 的 JSON 集群信息。在 Kibana 中打开 **Management → Dev Tools**，执行 `GET /` 亦可验证。
+
+### 常见坑 / 注意事项
+
+- **`start-local` 非生产配置**：HTTPS 关闭、Basic 认证、仅绑定 localhost；生产需 TLS、角色权限与网络隔离。
+- **试用许可**：`start-local` 含一个月全功能试用，之后回退为 Free and open - Basic；高级功能需对照订阅矩阵。
+- **JVM 与分片**：默认堆大小与分片规划不当会导致 GC 压力与集群红态；升级或大索引导入前阅读 [Release Notes](https://github.com/elastic/elasticsearch/releases)。
+- **版本兼容性**：Elasticsearch、Kibana、Beats 主版本需对齐；跨大版本升级需按官方迁移指南执行 reindex 或快照恢复。
+- **许可与分支**：7.11 起源码采用 Elastic License 2.0 + SSPL 双许可；若需 Apache 2.0 兼容分支，可评估 OpenSearch，但 API 与生态已逐步分化。

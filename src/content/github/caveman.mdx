@@ -1,0 +1,109 @@
+---
+title: "Caveman"
+description: "Claude Code 等 AI 编程 Agent 的口语压缩 Skill，输出 token 约省 65%，代码原样保留。"
+repo: "https://github.com/JuliusBrussee/caveman"
+homepage: "https://caveman.so/"
+repoDescription: "🪨 why use many token when few token do trick — Claude Code skill that cuts 65% of tokens by talking like caveman"
+avatarUrl: "https://avatars.githubusercontent.com/u/104168679?v=4"
+tags:
+  - AI 编程
+  - 开发工具
+  - Agent
+language: "JavaScript"
+stars: 83616
+forks: 4664
+openIssues: 354
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-07-04"
+updatedAt: "2026-07-04"
+curationReason: "适合 Claude Code / Cursor 高频对话、想降输出 token 又不愿牺牲技术准确度的开发者。"
+---
+
+## 项目介绍
+
+Caveman 是一款面向 **AI 编程 Agent** 的 Skill / 插件：让 Claude Code、Codex、Gemini、Cursor、Windsurf、Cline、Copilot 等 30+ 工具用「穴居人式」短句作答，**砍掉寒暄与冗余解释**，但代码块、命令行与错误信息 **逐字节保留**。官方基准显示平均 **输出 token 减少约 65%**（10 组任务 22%–87%），技术结论不丢，阅读更快；另有 `/caveman-compress` 可压缩 `CLAUDE.md` 等记忆文件，后续会话 **输入 token 长期省约 46%**。
+
+## 核心特性
+
+- **一键多 Agent 安装**：`install.sh` / `install.ps1` 自动扫描本机 Agent 并写入对应 skill / plugin / rule 路径，约 30 秒完成
+- **六级压缩档位**：`lite` / `full`（默认）/ `ultra` / `wenyan`（文言）等，会话内 `/caveman [level]` 切换；保持用户语言，只压风格不翻译
+- **配套命令**：`/caveman-commit`（≤50 字 Conventional Commit）、`/caveman-review`（单行 PR 评论）、`/caveman-stats`（会话与累计 token / USD 统计）、`/caveman-compress`（记忆文件压缩）
+- **生态扩展**：`caveman-shrink` MCP 中间件压缩 tool 描述；`cavecrew-*` 子 Agent；与 [caveman-code](https://github.com/JuliusBrussee/caveman-code)、[cavemem](https://github.com/JuliusBrussee/cavemem) 等同属「少 token 多干活」工具链
+- **本地优先、无遥测**：安装后 skill 仅为 prompt + 本地 hook，`/caveman-stats` 读本地日志，无账号与后端上报（见 [SECURITY.md](https://github.com/JuliusBrussee/caveman/blob/main/SECURITY.md)）
+
+## 对用户价值
+
+长对话里 Agent 常「解释过多、代码过少」，输出 token 堆在寒暄与重复论证上。Caveman 把 **口语层** 压短，适合按 token 计费的 API 用户、终端窄屏阅读，以及希望 **更快扫完结论再动手改代码** 的开发者。Claude Code 上 hook 可在首条消息起默认启用；状态栏可显示累计节省 `[CAVEMAN] ⛏ 12.4k`。需注意：skill 本身每轮约增 1–1.5k **输入** token，已很简洁的任务可能净收益为负——官方 [HONEST-NUMBERS.md](https://github.com/JuliusBrussee/caveman/blob/main/docs/HONEST-NUMBERS.md) 有完整说明。
+
+## 与替代方案
+
+- 相比手动写「请简短回答」等 **一次性 prompt**，Caveman 提供 **可安装、可统计、可分级** 的 skill + hook，并覆盖 commit / review / 记忆压缩等固定工作流。
+- 相比 [caveman-code](https://github.com/JuliusBrussee/caveman-code)（全栈终端 Agent、端到端约 2× 省 token），本仓库只改 Agent **怎么说**，不改模型与工具链选型；二者可叠加使用。
+- 相比 [Continue](https://github.com/continuedev/continue)、[Cline](https://github.com/cline/cline) 等 **IDE 内置模型与 UI**，Caveman 是 **跨 Agent 的压缩层**，不替代编辑器本身；在 Cursor / Cline 上通过 `npx skills add` 接入。
+- 相比 [Superpowers](https://github.com/obra/superpowers) 等 **流程与 TDD 技能包**，Caveman 专注 **token 效率与可读性**，不编排 brainstorm / plan 等阶段；定位互补而非互斥。
+- **`wenyan` 模式** 故意用文言压缩，与其他档位「保持用户语言」策略不同，选用前需确认团队阅读习惯。
+
+## 适应人群
+
+- 日常使用 **Claude Code、Cursor、Codex、Gemini CLI** 等 AI 编程 Agent 的开发者。
+- 按 **输出 token 计费**、希望在不牺牲代码与命令准确性的前提下降低账单的用户。
+- 维护较大 **`CLAUDE.md` / 项目记忆文件**、想长期削减每会话上下文体积的团队。
+
+## 如何使用
+
+### 前置条件
+
+- **Node.js ≥ 18**（部分安装路径依赖 `npx skills`）。
+- 本机已安装至少一种支持的 Agent（Claude Code、Cursor、Codex、Gemini CLI、Cline 等）；完整矩阵见 [INSTALL.md](https://github.com/JuliusBrussee/caveman/blob/main/INSTALL.md)。
+- macOS / Linux / WSL / Git Bash，或 Windows PowerShell 5.1+。
+
+### 安装方式
+
+**推荐：一键扫描本机所有 Agent 并安装**
+
+```bash
+# macOS · Linux · WSL · Git Bash
+curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash
+```
+
+```powershell
+# Windows · PowerShell 5.1+
+irm https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.ps1 | iex
+```
+
+**单 Agent 示例**（更多见 INSTALL.md）：
+
+```bash
+# Claude Code plugin
+claude plugin marketplace add JuliusBrussee/caveman && claude plugin install caveman@caveman
+
+# Cursor / Windsurf / Cline / Codex 等
+npx skills add JuliusBrussee/caveman -a cursor
+```
+
+OpenClaw 专用：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash -s -- --only openclaw
+```
+
+### 首次运行
+
+- 安装完成后在 Agent 中输入 **`/caveman`** 或说 **「talk like caveman」** 启用；说 **「normal mode」** 关闭。
+- Claude Code、Codex、Gemini 上部分路径 **首条消息即默认启用**，无需每次敲命令。
+- 可选切换档位：`/caveman lite` | `full` | `ultra` | `wenyan`。
+
+### 验证是否成功
+
+- 让 Agent 解释一个技术问题，对比启用前后 **回复长度**；代码块与命令应与原文一致。
+- 运行 **`/caveman-stats`**，查看本会话与累计节省 token / USD；Claude Code 状态栏应出现 `[CAVEMAN] ⛏ …`（可用 `CAVEMAN_STATUSLINE_SAVINGS=0` 关闭）。
+- 对 `CLAUDE.md` 试跑 **`/caveman-compress`**，确认路径与代码片段未被改写。
+
+### 常见坑 / 注意事项
+
+- **65% 主要指输出 token**；输入与 reasoning 不变，且 skill 自带上下文会增加输入——短任务可能 **净省为负**，见 [HONEST-NUMBERS.md](https://github.com/JuliusBrussee/caveman/blob/main/docs/HONEST-NUMBERS.md)。
+- 安装脚本会访问 GitHub 与各 Agent  registry；离线环境需按 INSTALL.md **手动拷贝 skill 文件**。
+- 多 Agent 并存时路径不同，**重复运行 install 安全**；卸载加 `--uninstall`，OpenClaw 仅移除 marker 块与 skill，不删其他 workspace 内容。
+- **caveman-code**（`npm install -g @juliusbrussee/caveman-code`）是独立的全栈终端 Agent，与本 skill 仓库不同产品，勿混淆安装目标。

@@ -1,0 +1,112 @@
+---
+title: AI Berkshire
+description: 面向 Claude Code / Codex 的价值投资 Skill 合集，四大师对抗式分析 + 18 个投研入口。
+repo: https://github.com/xbtlin/ai-berkshire
+homepage: https://github.com/xbtlin/ai-berkshire#readme
+repoDescription: "AI 时代的伯克希尔：基于 Claude Code / Codex 的价值投资研究框架。巴菲特·芒格·段永平·李录四大师方法论 + 多Agent并行研究。| AI-era Berkshire: a value investing research framework built for Claude Code / Codex. 4 masters' methodologies + multi-agent adversarial analysis."
+avatarUrl: https://avatars.githubusercontent.com/u/6993203?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: Python
+stars: 8592
+forks: 1098
+openIssues: 20
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 个人投资者与分析师用 AI Agent 替代散点式 prompt，获得结构化、可复现的投研报告。
+---
+
+## 项目介绍
+
+**AI Berkshire** 是一套同时兼容 **Claude Code** 与 **Codex** 的价值投资研究 Skill 合集。它将巴菲特、芒格、段永平、李录四位大师的方法论系统化，通过多 Agent 并行与结构化流程，把「直接问 AI 得到两面讨好的分析」升级为「可以拿来做决策的投研报告」。仓库提供 18 个按场景划分的 Skill 入口，覆盖深度研究、财报精读、行业筛选、持仓管理与思维工具，并附带 Python 财务校验脚本保证数据精确性。
+
+## 核心特性
+
+- **四大师对抗式分析**：商业模式（段永平）、财务估值（巴菲特）、逆向思考（芒格）、长期确定性（李录）四视角并行，强制输出通过/不通过/灰色地带结论，而非「一方面…另一方面…」
+- **18 个 Skill 入口**：`/investment-team` 多 Agent 并行投研、`/earnings-review` 一手财报精读、`/industry-funnel` 行业漏斗筛选、`/portfolio-review` 组合管理等，按场景即插即用
+- **结构化反偏见机制**：信息丰富度 A/B/C 评级、芒格式逆向检验、8 条快速否决红线、反共识检查与留白原则，降低 AI「看起来对但经不起推敲」的风险
+- **金融数据精确校验**：关键指标用 Python `decimal.Decimal` 计算，至少 2 个独立来源交叉验证；`tools/financial_rigor.py` 可手算校验市值等关键数据
+- **可复现的研究流程**：同样输入产出结构一致、深度一致的报告，支持多公司横向对比与同标的定期复评
+- **双客户端支持**：同一套 canonical workflow，分别提供 Claude Code commands 与 Codex skills / slash prompts 安装脚本
+
+## 对用户价值
+
+直接问 LLM 做投研，往往得到格式随机、结论模糊、数据可能算错的「平衡分析」。AI Berkshire 解决的是**分析质量与决策纪律**问题：强制分层建议与价格区间、四视角制造真实张力、内置防骗机制，并用 Python 工具兜底数值精度。对个人投资者，它相当于「一个人 + Claude Code = 一个投研团队」；对分析师，它提供可版本化、可复现的研究模板，让团队成员之间的输出可以对齐。
+
+## 与替代方案
+
+- 相比直接向 ChatGPT / Claude 提问，本框架强制**结构化结论、多视角对抗与反偏见机制**，避免「看起来对但无法决策」的泛化分析。
+- 相比 [OpenBB](https://github.com/OpenBB-finance/OpenBB) 等**金融数据终端 / SDK**，AI Berkshire 侧重**价值投资方法论 + Agent 工作流**，而非行情数据聚合或量化回测平台。
+- 相比通用 [Superpowers](https://github.com/obra/superpowers) 等**研发方法论 Skill 库**，这里 18 个入口全部围绕**基本面投研场景**定制，含财报、行业漏斗、持仓追踪等垂直流程。
+- 框架作者公开了实盘业绩截图（2024 +69.29%、2025 +66.38%），但 README 明确**历史收益不代表未来**；投资决策仍需自行承担风险，Skill 输出是辅助而非投资建议。
+
+## 适应人群
+
+- 使用 Claude Code 或 Codex，希望把价值投资方法论落地为可重复 Agent 工作流的个人投资者与分析师。
+- 需要深度研究、财报精读、行业筛选或持仓管理结构化流程，而非单次 prompt 的投研用户。
+- 关注 AI Agent 并行协作、金融数据精确校验，想从成熟 Skill 库快速部署投研能力的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 **Claude Code** 或 **Codex** 之一（见下方安装命令）。
+- 克隆仓库需 Git 与 Bash 环境；财务校验脚本依赖 Python 3。
+- Skills 会频繁调用工具；Claude Code 默认逐次授权，可信环境下可用 `claude --dangerously-skip-permissions` 跳过确认（会关闭工具审批保护，请谨慎使用）。
+
+### 安装方式
+
+**Claude Code 用户：**
+
+```bash
+npm install -g @anthropic-ai/claude-code
+git clone https://github.com/xbtlin/ai-berkshire.git
+cd ai-berkshire
+./scripts/install-claude-commands.sh
+```
+
+**Codex 用户：**
+
+```bash
+# macOS / Linux
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+# 或 npm install -g @openai/codex
+
+git clone https://github.com/xbtlin/ai-berkshire.git
+cd ai-berkshire
+./scripts/install-codex-skills.sh
+# 可选：安装 slash prompts 获得接近 Claude Code 的 /investment-research 体验
+./scripts/install-codex-prompts.sh
+```
+
+### 首次运行
+
+在 Claude Code 中直接调用 Skill，例如：
+
+```bash
+/investment-research 腾讯
+/investment-team 美团
+/earnings-review 腾讯 2025Q4
+/industry-funnel AI算力
+```
+
+Codex 用户安装后重启，按 skill 名称描述任务，例如「使用 investment-research 研究腾讯」；若安装了 slash prompts，可用 `/prompts:investment-research 腾讯`。
+
+### 验证是否成功
+
+- Claude Code：`/investment-checklist 茅台, 英伟达, 苹果` 应输出结构化 Checklist 表格。
+- Codex：`codex --version` 正常输出版本号，且 `~/.codex/skills` 下可见已安装的 skill 目录。
+- 财务工具：`python3 tools/financial_rigor.py --help` 可正常显示子命令。
+
+### 常见坑 / 注意事项
+
+- Claude Code 工具授权频繁打断流程；仅在信任仓库与环境时使用 `--dangerously-skip-permissions`。
+- Codex 与 Claude Code 的入口语法不同：Codex 以 skill 名称描述任务，slash prompts 为可选兼容层。
+- LLM 心算不可靠，涉及 PE、市值等关键数据务必走 `financial-data` skill 或 `financial_rigor.py` 校验。
+- 实盘业绩为作者个人案例，**不构成投资建议**；输出结论需结合独立判断与合规要求。
+- 部分 Skill（如 `/deep-company-series`）产出篇幅极长，注意上下文窗口与 API 用量。

@@ -1,0 +1,104 @@
+---
+title: Agency Agents
+description: 收录 230+ 个带人格的 AI 专家角色，可一键安装到 Cursor、Claude Code 等十余种 Agent 工具。
+repo: https://github.com/msitarzewski/agency-agents
+homepage: https://agencyagents.app
+repoDescription: A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a specialized expert with personality, processes, and proven deliverables.
+avatarUrl: https://avatars.githubusercontent.com/u/1972242?v=4
+tags:
+  - Agent
+  - AI 编程
+  - 开发工具
+language: Shell
+stars: 125262
+forks: 20322
+openIssues: 95
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-07-03"
+updatedAt: "2026-07-03"
+curationReason: 按工程、设计、营销、销售等职能挑选专属人设代理，适合厌倦通用提示词模板的团队与个人。
+---
+
+## 项目介绍
+
+**Agency Agents**（The Agency）是一个持续扩充的 AI 专家角色库，源自 Reddit 社区讨论并经多轮实战打磨。仓库收录 **16 个事业部、230+ 位代理**，每位代理都有独立人格、工作流程、可交付物与成功指标——从 React 前端工程师到 Reddit 社区运营、从「趣味注入师」到「现实检验员」，覆盖工程、设计、营销、销售、付费投放、安全等完整职能谱系。配套桌面应用 [agencyagents.app](https://agencyagents.app) 与 `install.sh` 脚本，可将同一套角色一键分发到 Claude Code、Cursor、Codex、Gemini CLI、OpenCode 等十余种 Agent 宿主。
+
+## 核心特性
+
+- **职能专精**：每位代理深耕单一领域，附带具体流程、代码示例与可衡量产出，而非泛泛的 prompt 模板
+- **人格驱动**：独立语气、沟通风格与决策偏好，让 Agent 在对话中保持角色一致性
+- **16 事业部编排**：工程、设计、营销、销售、付费媒体、安全、产品、运营等分工明确，可按团队按需选取
+- **多宿主一键安装**：`convert.sh` 生成各工具格式，`install.sh` 交互式检测已安装工具并写入对应目录（`.cursor/rules`、`~/.claude/agents/` 等）
+- **按需裁剪**：支持 `--division` 按事业部、`--agent` 按单个角色安装，避免一次性灌入全部 230+ 代理
+- **原生桌面应用**：macOS / Linux / Windows 图形化浏览名册、安装与自动更新，无需 clone 仓库
+
+## 对用户价值
+
+通用 AI 助手擅长回答问题，却难以稳定扮演「资深 SRE」「PPC 投放策略师」或「代码审查员」等具体岗位。Agency Agents 把岗位知识、交付标准与沟通方式封装成可版本化、可安装的代理文件，让你在 Cursor 或 Claude Code 中直接「召唤」对应专家，减少每次从零写 system prompt 的重复劳动。对个人开发者，它是开箱即用的角色 playbook；对团队，它提供可共享的 Agent 人设标准，让不同成员获得一致的协作体验。
+
+## 与替代方案
+
+- 相比 [Superpowers](https://github.com/obra/superpowers) 等**方法论技能库**，本仓库侧重**按职能划分的人格化专家角色**（工程、营销、销售等），而非 TDD / 子代理编排等研发流程。
+- 相比 [Anthropic Skills](https://github.com/anthropics/skills) 等**官方技能规范实现**，Agency Agents 提供更大规模的**跨职能角色名册**，并内置 Cursor、Codex、OpenCode 等多宿主格式转换。
+- 相比手写 Cursor Rules 或 `CLAUDE.md`，这里每位代理是**独立 Markdown 文件**，可按岗位组合安装，且附带桌面应用降低分发门槛。
+- 角色内容来自社区共创，**质量与适用场景因代理而异**；生产环境建议先小范围试用，再纳入主力工具链。
+
+## 适应人群
+
+- 使用 Cursor、Claude Code、Codex 等工具，希望按职能切换 Agent 人设的开发者与独立创作者。
+- 需要营销、销售、设计等非工程类 AI 协作角色的中小团队或一人公司。
+- 已厌倦通用 prompt 模板、想从成熟角色库中挑选、裁剪并快速部署的 Agent 效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 至少安装一种 README 支持的 Agent 宿主（Cursor、Claude Code、Codex、Gemini CLI、OpenCode 等）。
+- 使用脚本安装时需 clone 仓库并具备 Bash 环境；macOS 用户也可直接安装桌面应用。
+- OpenCode 用户注意：运行时目前仅注册约 119 个代理，超出部分会被静默丢弃，建议用 `--division` 按需安装。
+
+### 安装方式
+
+**方式一：桌面应用（推荐）**
+
+从 [agencyagents.app](https://agencyagents.app) 或 [GitHub Releases](https://github.com/msitarzewski/agency-agents-app/releases/latest) 下载。macOS 也可：
+
+```bash
+brew install --cask msitarzewski/agency-agents/agency-agents
+```
+
+**方式二：脚本安装（需 clone 仓库）**
+
+```bash
+git clone https://github.com/msitarzewski/agency-agents.git
+cd agency-agents
+./scripts/convert.sh
+./scripts/install.sh
+```
+
+指定工具与事业部：
+
+```bash
+./scripts/install.sh --tool cursor --division engineering,design
+./scripts/install.sh --tool claude-code --agent frontend-developer,ui-designer
+./scripts/install.sh --list teams
+```
+
+### 首次运行
+
+桌面应用：打开后浏览名册，勾选目标代理与宿主工具，点击安装。脚本方式：运行 `install.sh` 后在交互界面勾选已检测到的工具，确认安装路径后写入。在 Cursor 中可在对话里引用已安装规则，例如「以前端开发者模式帮我实现一个 React 组件」。
+
+### 验证是否成功
+
+- Cursor：检查项目或用户目录下 `.cursor/rules/` 是否出现对应 `.mdc` 文件。
+- Claude Code：确认 `~/.claude/agents/` 下有目标 `.md` 代理文件。
+- 在宿主中激活一位代理，观察其是否按角色人格与交付物格式响应。
+
+### 常见坑 / 注意事项
+
+- 全量安装 230+ 代理可能让宿主加载变慢或触发上限（尤其 OpenCode）；优先用 `--division` 或 `--agent` 按需选取。
+- `convert.sh` 与 `install.sh` 支持 `--parallel` 加速，但输出顺序可能不稳定，CI 场景建议去掉该参数。
+- 代理内容为社区贡献的参考 playbook，**不保证适配你的具体业务**；敏感场景需人工审核输出。
+- 桌面应用与脚本安装的是同一套代理；已有手动定制规则时注意备份，避免覆盖。
