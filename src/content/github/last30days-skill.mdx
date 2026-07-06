@@ -1,0 +1,117 @@
+---
+title: "Last30Days Skill"
+description: 跨 Reddit、X、YouTube、HN 等平台并行调研近 30 天热点的 Agent Skill，按真实互动量合成简报。
+repo: "https://github.com/mvanhorn/last30days-skill"
+repoDescription: "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary"
+avatarUrl: "https://avatars.githubusercontent.com/u/455140?v=4"
+tags:
+  - Agent
+  - 工作流
+  - AI 编程
+language: "Python"
+stars: 49576
+forks: 4126
+openIssues: 86
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-07-06"
+updatedAt: "2026-07-06"
+curationReason: 会前背调、竞品横评、旅行攻略前想抓社区真实信号而非 SEO 软文的知识工作者。
+---
+
+## 项目介绍
+
+Last30Days Skill 是一套面向 AI 编码助手的 **多源情报调研技能**，通过 `/last30days` 命令在 Reddit、X、YouTube、Hacker News、Polymarket、GitHub 等平台并行检索近 30 天内容，按点赞、评论、播放量与预测市场赔率等 **真实互动信号** 排序，再由 Agent 合成为带引用的中文或英文简报。v3 引擎新增实体解析（人名→X 账号/GitHub 用户）、跨源聚类合并、竞品对比与可分享的 HTML 简报，适合会议背调、工具选型与热点追踪等需要「社区共识」而非编辑精选的场景。
+
+## 核心特性
+
+- **多源并行检索**：Reddit（含评论）、HN、Polymarket、GitHub 零配置即用；X、YouTube、TikTok、Bluesky 等按需解锁 API 或浏览器会话
+- **v3 实体预研大脑**：运行前解析话题对应的人、公司、子版块与话题标签，避免「Apple」误匹配汽车预测市场等噪音
+- **互动量排序**：按 upvote、播放量、Polymarket 赔率与 GitHub star 等社区信号加权，而非 SEO 排名
+- **跨源聚类与竞品模式**：同一故事在 Reddit/X/YouTube 合并展示；`--competitors` 自动发现同行并做并行对比
+- **可分享 HTML 简报**：`--emit=html` 或自然语言请求，输出离线可用的深色主题简报至 `~/Documents/Last30Days/`
+- **多宿主安装**：Claude Code 插件市场、Agent Skills CLI（Cursor/Codex/Copilot 等 50+ 宿主）、claude.ai 上传、OpenClaw 与 Claude Desktop MCP
+
+## 对用户价值
+
+Google 与通用大模型各自只能触及部分平台，且训练数据往往滞后于社区讨论。Last30Days 把分散在 Reddit 热评、X 线程、YouTube 字幕与预测市场赔率中的信号桥接起来，一次命令即可得到「过去 30 天人们真正在讨论什么」的浓缩视图。对个人，它把原本逐站翻帖的 90 分钟调研压缩到几分钟；对团队，HTML 简报可直接丢进 Slack 或邮件，作为会前背调、竞品评估与选题研究的共同事实基础。
+
+## 与替代方案
+
+- 相比 **Perplexity / 通用 Web Search**，本技能更侧重 **社交平台原始互动数据**（Reddit 评论 upvote、X 热度、YouTube 字幕、Polymarket 赔率），而非单一搜索引擎摘要；Perplexity 可作为可选补充源（需 `PERPLEXITY_API_KEY`）。
+- 相比 **手动逐站搜索**，提供实体解析、跨源去重、每作者上限（最多 3 条）与 1,012 项测试覆盖的 **可重复流水线**，并支持 `--store` + watchlist 做趋势监控。
+- 相比 [Agent Skills](https://github.com/addyosmani/agent-skills) 等 **工程交付类技能**，本仓库专注 **外部情报调研**，不替代规格驱动开发或代码审查流程。
+- 全量多源需自备 API Key 或浏览器 Cookie；**不是**零成本的万能搜索，未配置时自动降级为 Reddit/HN/Polymarket/GitHub 等免费源。
+
+## 适应人群
+
+- 会议、销售拜访或投资人沟通前，需要快速掌握某人/某公司近 30 天公开动态的从业者。
+- 评估 OpenClaw vs Hermes 等工具选型、或追踪 AI 热点时，希望看到社区讨论而非过时博客的开发者。
+- 已在用 Claude Code、Cursor 或 Codex，想把多平台调研嵌入 Agent 工作流的知识工作者。
+
+## 如何使用
+
+### 前置条件
+
+- Python 3.12+（Claude Desktop MCP 与 CLI 引擎均依赖本地解释器）。
+- 任选 README 列出的 Agent 宿主（Claude Code 为推荐路径，支持 marketplace 自动更新）。
+- Reddit、HN、Polymarket、GitHub **无需密钥**即可起步；X、YouTube、TikTok 等扩展源需按 README 配置 Cookie 或 API Key。
+
+### 安装方式
+
+**Claude Code（推荐，自动更新）**
+
+```
+/plugin marketplace add mvanhorn/last30days-skill
+/plugin install last30days
+```
+
+**Cursor、Codex、Copilot、Gemini CLI 等 Agent Skills 宿主**
+
+```bash
+npx skills add mvanhorn/last30days-skill -g
+```
+
+`-g` 全局安装，跨项目可用；仅当前仓库则省略 `-g`。指定宿主示例：
+
+```bash
+npx skills add mvanhorn/last30days-skill -g -a cursor
+npx skills add mvanhorn/last30days-skill -g -a codex
+```
+
+更新：
+
+```bash
+npx skills update last30days -g
+```
+
+**claude.ai 网页版**：从 [Releases](https://github.com/mvanhorn/last30days-skill/releases/latest/download/last30days.skill) 下载 `.skill` 文件，在 Customize → Skills 中上传；需先开启「Code execution and file creation」能力。
+
+### 首次运行
+
+安装后在对话中输入调研命令，例如：
+
+```
+/last30days Peter Steinberger
+/last30days OpenClaw vs Hermes --competitors
+/last30days Cursor IDE --emit=html
+```
+
+首次执行会触发 **30 秒设置向导**，引导解锁 X、YouTube 等扩展源。也可在源码目录预检配置（不读 Cookie、不写文件）：
+
+```bash
+python3 skills/last30days/scripts/last30days.py --preflight
+```
+
+### 验证是否成功
+
+确认 `/last30days` 或等价命令被宿主识别；对简单话题（如公开人物或热门开源项目）应返回带多源引用的合成简报，而非「请查阅 README」。若请求 HTML，检查 `~/Documents/Last30Days/{topic}-brief.html` 是否生成且可离线打开。引擎 stderr 中的降级提示属正常行为，不会写入分享文件。
+
+### 常见坑 / 注意事项
+
+- Claude Code 上 **marketplace 插件与 `npx skills` 安装可并存**，但会显示两个 `/last30days` 入口；建议每台机器只选一种安装方式。
+- Claude Desktop 与 Claude Code 的 **凭据存储相互独立**；在 `~/.config/last30days/.env` 配过的 Key 需在 Desktop 侧重新录入。
+- ScrapeCreators、Perplexity 等为 **按量付费** API；`INCLUDE_SOURCES=perplexity` 等 opt-in 开关用于避免意外扣费。
+- 项目声明 **无官方代币**；任何借用项目名称的加密资产均未获背书。
+- v3 仍在快速迭代，关键决策前建议人工核对引用原文；升级前阅读 [CHANGELOG](https://github.com/mvanhorn/last30days-skill/blob/main/CHANGELOG.md)。

@@ -1,0 +1,110 @@
+---
+title: Gas Town
+description: 面向 Claude Code 等多 Agent 的工作区编排器，用 Git Hook 与 Beads 持久化任务状态。
+repo: https://github.com/gastownhall/gastown
+repoDescription: "Gas Town - multi-agent workspace manager"
+avatarUrl: https://avatars.githubusercontent.com/u/255961667?v=4
+tags:
+  - Agent
+  - AI 编程
+  - CLI
+language: Go
+stars: 16585
+forks: 1534
+openIssues: 284
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-07-06"
+updatedAt: "2026-07-06"
+curationReason: 适合同时跑多个编码 Agent、需要任务派发与状态恢复的进阶开发者。
+---
+
+## 项目介绍
+
+Gas Town（`gt`）是一款**多 Agent 工作区编排器**，让你在同一个 Town 里协调 Claude Code、GitHub Copilot、Codex、Gemini 等编码 Agent 并行处理不同任务。它用 **Git worktree Hooks** 与 **Beads** 账本持久化工作状态，Agent 会话重启后上下文不丢，官方称可稳定扩展到 20–30 个 Agent。入口是 **Mayor**——一个带全量工作区上下文的协调会话，你从这里下达目标即可。
+
+## 核心特性
+
+- **Town / Rig 分层**：Town 为工作区根目录（如 `~/gt/`），Rig 包裹单个 Git 仓库及其 Agent 群
+- **Polecats 工人 Agent**：带持久身份、会话随任务结束；Hooks 用 git worktree 保存产出，崩溃可恢复
+- **Convoys 任务编组**：将多个 Bead 打包派发给 Agent；`mountain` 标签支持自主停滞检测与跳过逻辑
+- **Molecules 工作流模板**：TOML 定义多步流程，支持轻量 wisps 与带检查点的 poured wisps
+- **三层看门狗**：Witness（单 Rig 生命周期）、Deacon（全局巡检）、Dogs（基础设施维护）
+- **Refinery 合并队列**：Polecat 完成后经 Bors 风格队列批量验证并合并到 main
+- **Seance 会话延续**：从 `.events.jsonl` 发现前序会话，向「前任」Agent 追问上下文
+- **Wasteland 联邦协作**：通过 DoltHub 跨 Town 认领任务、提交证据并积累声誉
+
+## 对用户价值
+
+当你从「单 Agent 结对编程」升级到「多 Agent 并行改多个仓库」时，最难的是**协调、状态丢失与合并冲突**。Gas Town 把任务拆成 Bead、用 Convoy 派发、用 Hooks 落盘，再配合 Refinery 统一合并，减少人工盯梢。Escalation（`gt escalate`）把阻塞按严重级别路由给 Deacon、Mayor 或 Overseer；Scheduler 可限制并发派发，缓解 API 限流。对重度 Claude Code / Copilot CLI 用户，这是把「多终端多窗口」升级为**可恢复、可审计**工作流的基础设施。
+
+## 与替代方案
+
+- 相比 [Aider](https://github.com/Aider-AI/aider)、[Cline](https://github.com/cline/cline) 等**单会话 IDE/终端结对**工具，Gas Town 专注**多 Agent 编排与跨仓库状态持久化**，不替代编辑器集成，而是管理 Agent 舰队与合并队列。
+- 相比 [OpenCode](https://github.com/sst/opencode) 等**轻量多模型终端**，Gas Town 更重**组织架构**（Mayor、Rig、Polecat、Witness）与 **Beads/Git 工作流**，适合长期并行而非单次对话。
+- 相比 [n8n](https://github.com/n8n-io/n8n)、[Dify](https://github.com/langgenius/dify) 等**可视化工作流平台**，Gas Town 是**开发者本地 CLI 运行时**，依赖 tmux、git worktree、Dolt 等，上手成本更高，但 Agent 直接在代码库上操作。
+- 若只需 1–2 个 Agent 偶尔改 bug，Gas Town 可能过重；若已稳定使用 Claude Code CLI 并想规模化派发，它填补「多 Agent 混沌」这一空白。
+
+## 适应人群
+
+- 已日常使用 **Claude Code / Copilot CLI / Codex CLI**，希望并行跑多个编码 Agent 的开发者。
+- 维护**多仓库、多分支**并行开发，需要任务账本、合并队列与崩溃恢复的团队。
+- 愿意投入学习 Town/Rig/Polecat/Beads 术语，追求 **20+ Agent 可运维** 的进阶用户。
+- 对 **Wasteland 跨 Town 协作** 或自托管 Docker Compose 仪表盘有兴趣的实验型玩家。
+
+## 如何使用
+
+### 前置条件
+
+- **Go 1.25+**、**Git 2.25+**（worktree）、**Dolt 2.0.7+**、**beads (bd) 0.55.4+**、**sqlite3**、**tmux 3.0+**（推荐）
+- 至少一种 Agent 运行时：**Claude Code CLI**（默认）；可选 Codex CLI、GitHub Copilot CLI
+- macOS 上 `go install` 可能因未签名被 SIGKILL，优先用 Homebrew 安装
+
+### 安装方式
+
+```bash
+# 推荐（macOS）
+brew install gastown
+
+# 或 npm
+npm install -g @gastown/gt
+
+# Linux 源码
+go install github.com/steveyegge/gastown/cmd/gt@latest
+export PATH="$PATH:$HOME/go/bin"
+```
+
+Docker Compose 路径见仓库 README；完整依赖说明见 [docs/INSTALLING.md](https://github.com/gastownhall/gastown/blob/main/docs/INSTALLING.md)。
+
+### 首次运行
+
+```bash
+gt install ~/gt --git
+cd ~/gt
+
+# 添加项目 Rig 与个人 Crew 工作区
+gt rig add myproject https://github.com/you/repo.git
+gt crew add yourname --rig myproject
+cd myproject/crew/yourname
+
+# 启动 Mayor（主协调界面）
+gt mayor attach
+```
+
+### 验证是否成功
+
+```bash
+cd ~/gt
+gt config agent list    # 应列出已配置的 Agent 运行时
+gt mayor attach         # 能进入 Mayor 会话并响应指令
+```
+
+在 Rig 内派发任务后，检查 `gt convoy list` 与 Hooks worktree 是否生成预期文件；合并流程可走 `gt done` 触发 Refinery。
+
+### 常见坑 / 注意事项
+
+- macOS 勿仅用 `go install` 装 `gt`，用 **brew** 或 `make build` 自签构建。
+- 依赖链较长（Dolt、beads、tmux、Claude Code 等），缺一项会导致子命令静默失败，先对照 README Prerequisites。
+- 多 Agent 并行会放大 **API 配额与费用**；可配置 `scheduler.max_polecats` 限制并发派发。
+- 生产密钥与 `~/gt` 工作区应单独备份；Wasteland 联邦功能仍在演进，部署前阅读 [WASTELAND.md](https://github.com/gastownhall/gastown/blob/main/docs/WASTELAND.md)。

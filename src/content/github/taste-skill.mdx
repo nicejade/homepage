@@ -1,0 +1,97 @@
+---
+title: Taste Skill
+description: 面向 AI 编程助手的反「AI 味」前端 Agent Skill，用排版、动效与间距规则提升界面质感。
+repo: https://github.com/Leonxlnx/taste-skill
+homepage: https://tasteskill.dev
+repoDescription: Taste-Skill - gives your AI good taste. stops the AI from generating boring, generic slop
+avatarUrl: https://avatars.githubusercontent.com/u/219127460?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: JavaScript
+stars: 58539
+forks: 3993
+openIssues: 43
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-07-06"
+updatedAt: "2026-07-06"
+curationReason: Vibe Coding 落地页总像模板？用可调设计拨盘与多风格 Skill 让 Cursor / Codex 产出更高级的前端。
+---
+
+## 项目介绍
+
+Taste Skill 是一套可移植的 **Agent Skills**，专门解决 AI 生成前端时常见的「千篇一律、缺乏层次」问题。默认技能会从需求推断设计语言，通过布局方差、动效强度、视觉密度三组拨盘约束排版、字体、间距与 GSAP 动效；仓库还包含极简、高端柔和、工业粗野等多种视觉变体，以及网页/移动端/品牌板的图像生成技能，可与 ChatGPT Images 等工具配合后交给 Codex、Cursor 或 Claude Code 实现。
+
+## 核心特性
+
+- **design-taste-frontend（v2 实验版）**：默认技能，含设计系统映射、反 em-dash 规则、GSAP 代码骨架与交付前检查清单
+- **多风格实现技能**：gpt-taste（更严 Codex 规则）、soft / minimalist / brutalist 等按视觉方向选用
+- **图像优先工作流**：image-to-code 生成参考图再编码；imagegen-frontend-web / mobile / brandkit 专产设计稿
+- **存量项目改造**：redesign-existing-projects 先审计 UI 再修复层级与间距
+- **可调设计拨盘**：DESIGN_VARIANCE、MOTION_INTENSITY、VISUAL_DENSITY（1–10）控制布局实验度与动效深度
+- **Agent Skills 兼容**：通过 `npx skills add` 安装，亦可将 `SKILL.md` 复制到项目或对话中
+
+## 对用户价值
+
+用 AI 写界面时，模型往往输出居中卡片、通用配色与半成品注释。Taste Skill 把反 slop 规则、动效范式与交付纪律写进技能文件，让助手在生成代码前先做设计语言推断与自检，显著减少「看起来像 AI 做的」模板感。图像类技能还能先产出可评审的视觉稿，再进入实现阶段，适合 landing page、产品官网与品牌探索等需要「有品味」的前端任务。
+
+## 与替代方案
+
+- 相比 [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) 的行业设计系统检索，Taste Skill 更侧重 **反模板化前端实现**、GSAP 动效与多视觉人格（极简/粗野/高端），而非大规模配色数据库。
+- 相比 [Anthropic skills](https://github.com/anthropics/skills) 等通用技能规范仓库，本仓库是 **专注前端质感** 的成品技能集，开箱即装，默认 v2 仍在实验迭代。
+- 相比手写 Cursor Rules，技能可按 `--skill` 精确安装单个子能力，并与 vercel-labs agent-skills CLI 生态对齐。
+- 图像技能只产出参考图，**不替代**设计工具的最终交付；框架无关，但动效示例以 GSAP 为主。
+
+## 适应人群
+
+- 用 Cursor、Codex 或 Claude Code 做 landing page / 产品官网，希望界面更精致的开发者。
+- 需要「先出视觉稿再写代码」或改造存量项目 UI 的独立开发者与小团队。
+- 正在搭建多 Agent 前端工作流、希望统一反 slop 设计纪律的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 环境（用于 `npx skills add`）。
+- 已安装目标 AI 编程助手（Cursor、Codex、Claude Code 等）。
+- 使用图像生成技能时，需具备 ChatGPT Images、Codex 图像模式或同类图像生成能力。
+
+### 安装方式
+
+**安装全部技能（推荐）**
+
+```bash
+npx skills add https://github.com/Leonxlnx/taste-skill
+```
+
+**仅安装默认前端技能**
+
+```bash
+npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"
+```
+
+**固定使用 v1 行为（若 v2 实验版影响现有流程）**
+
+```bash
+npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend-v1"
+```
+
+亦可直接将仓库内对应 `SKILL.md` 复制到项目，或粘贴进 ChatGPT / Codex 对话。
+
+### 首次运行
+
+安装默认技能后，用自然语言描述页面需求，例如「为 AI 笔记产品做一个 landing page」。若走图像优先流程，在 prompt 中写明：`follow the skill: generate images, then analyze, then code`。需要特定视觉方向时，额外安装 `high-end-visual-design`、`minimalist-ui` 或 `industrial-brutalist-ui` 等子技能。
+
+### 验证是否成功
+
+确认 `npx skills add` 无报错，且助手对话中能识别技能指令（布局、间距、动效约束明显区别于未安装时）。使用 image-to-code 时，应先后看到参考图分析与对应前端实现，而非跳过图像阶段。
+
+### 常见坑 / 注意事项
+
+- 默认 `design-taste-frontend` 已为 **v2 实验版**，重装会覆盖 v1；依赖旧行为请显式安装 `design-taste-frontend-v1`。
+- `--skill` 参数须使用 SKILL frontmatter 中的 **install name**（如 `design-taste-frontend`），而非文件夹名 `taste-skill`。
+- 项目声明 **无官方代币**；任何借用项目名称的加密资产均未获背书。
+- v2 仍在向稳定版迭代，生产环境关键页面建议人工评审视觉与无障碍；升级前阅读 [CHANGELOG](https://www.tasteskill.dev/changelog)。

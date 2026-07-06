@@ -1,0 +1,116 @@
+---
+title: "Agent Skills"
+description: Addy Osmani 出品的生产级 Agent 工程技能包，24 项工作流与 8 个斜杠命令覆盖从需求到上线全周期。
+repo: "https://github.com/addyosmani/agent-skills"
+repoDescription: "Production-grade engineering skills for AI coding agents."
+avatarUrl: "https://avatars.githubusercontent.com/u/110953?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: "Shell"
+stars: 70464
+forks: 7635
+openIssues: 136
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-07-06"
+updatedAt: "2026-07-06"
+curationReason: 想让 Claude Code / Cursor 按规格驱动、TDD 与质量门禁走完整研发流程的工程师。
+---
+
+## 项目介绍
+
+Agent Skills 是 Addy Osmani 维护的一套 **面向 AI 编码代理的生产级工程技能库**。它将资深工程师在真实项目中使用的规格、任务拆分、增量实现、测试、审查与上线流程，封装成 24 个结构化 `SKILL.md` 工作流，并配套 8 个斜杠命令（`/spec`、`/plan`、`/build` 等）映射完整研发生命周期。技能会在相关场景自动触发，也可被直接引用，帮助 Agent 在「最短路径」之外仍保持可验证的工程纪律。
+
+## 核心特性
+
+- **全生命周期覆盖**：Define → Plan → Build → Verify → Review → Ship 六阶段，含 `spec-driven-development`、`test-driven-development`、`code-review-and-quality` 等 24 项技能
+- **8 个斜杠命令**：`/spec`、`/plan`、`/build`、`/test`、`/review`、`/webperf`、`/code-simplify`、`/ship`；`/build auto` 可在一次批准后自主跑完计划内任务
+- **反合理化设计**：每项技能含常见借口与反驳表、验证门禁与退出标准，「看起来对」不算完成
+- **4 个专业 Agent 人设**：代码审查、测试工程、安全审计、Web 性能审计，可按场景组合编排
+- **多宿主安装路径**：官方推荐 Claude Code 插件市场；同时提供 Cursor、Gemini CLI、Antigravity、Windsurf、OpenCode、Copilot、Kiro 等接入文档
+- **融入 Google 工程实践**：API 设计中的 Hyrum's Law、测试金字塔与 Beyoncé Rule、~100 行变更规范、Trunk-based 开发、Shift Left 与 Feature Flag 等原则嵌入步骤
+
+## 对用户价值
+
+AI 编码助手默认倾向跳过规格、测试与安全审查，产出「能跑但难维护」的代码。Agent Skills 把生产级工程判断编码成可重复执行的工作流：何时写 PRD、如何拆任务、怎样增量提交、合并前过哪些质量门禁。对个人开发者，它减少返工与范围漂移；对团队，它提供可版本化、可跨工具复用的 Agent 行为标准，让结对编程更接近资深工程师的做事方式。
+
+## 与替代方案
+
+- 相比 [Superpowers](https://github.com/obra/superpowers)，本仓库更强调 **Google 风格工程实践与全栈质量门禁**（安全、性能、可观测性、废弃迁移等），并内置 `/webperf` 等专项命令；官方 [comparison.md](https://github.com/addyosmani/agent-skills/blob/main/docs/comparison.md) 提供与 Superpowers、Matt Pocock skills 的并排对比。
+- 相比 [Anthropic Agent Skills](https://github.com/anthropics/skills) 官方规范与示例库，这里侧重 **端到端软件交付流程** 而非文档处理或跨平台技能标准本身；二者可组合——用 agentskills.io 格式分发，用本仓库补齐研发方法论。
+- 相比单文件 [Karpathy Coding Guidelines](https://github.com/multica-ai/andrej-karpathy-skills) 行为准则，本仓库提供 **分阶段可触发的完整工作流与子 Agent 人设**，而非仅约束编码风格与改动范围。
+- 相比项目级 Cursor Rules，Skills 支持 **按任务渐进加载**、反合理化表与明确验证证据，token 开销更可控。
+
+## 适应人群
+
+- 使用 Claude Code、Cursor 或 Gemini CLI，希望 Agent 按规格驱动开发与 TDD 推进功能的开发者。
+- 需要在合并前强制代码审查、安全与性能门禁的 Tech Lead 或 Staff 工程师。
+- 已熟悉基础 Agent 用法，想引入 Google 工程文化式流程编排、减少「直接开写」反模式的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 使用 README 列出的某一 Agent 宿主；Claude Code 为官方推荐路径。
+- 对目标项目有 Git 读写权限；`/build`、`/ship` 等流程假设可运行测试与提交。
+- 接受流程偏向规格先行与测试证明——简单一行修改可能被工作流「包装」，需结合任务复杂度判断。
+
+### 安装方式
+
+**Claude Code（推荐）**
+
+```
+/plugin marketplace add addyosmani/agent-skills
+/plugin install agent-skills@addy-agent-skills
+```
+
+若 marketplace 克隆报 SSH 错误，可改用 HTTPS：
+
+```
+/plugin marketplace add https://github.com/addyosmani/agent-skills.git
+/plugin install agent-skills@addy-agent-skills
+```
+
+本地开发调试：
+
+```bash
+git clone https://github.com/addyosmani/agent-skills.git
+claude --plugin-dir /path/to/agent-skills
+```
+
+**Cursor**
+
+将单个 `SKILL.md` 复制到 `.cursor/rules/`，或引用整个 `skills/` 目录；详见仓库 [docs/cursor-setup.md](https://github.com/addyosmani/agent-skills/blob/main/docs/cursor-setup.md)。
+
+**Gemini CLI**
+
+```bash
+gemini skills install https://github.com/addyosmani/agent-skills.git --path skills
+```
+
+**Antigravity CLI**
+
+```bash
+agy plugin install https://github.com/addyosmani/agent-skills.git
+```
+
+更多宿主（Windsurf、OpenCode、Copilot、Kiro 等）见 [docs/getting-started.md](https://github.com/addyosmani/agent-skills/blob/main/docs/getting-started.md)。
+
+### 首次运行
+
+安装后新开 Agent 会话，对一个中等复杂度功能尝试 `/spec` 或描述新需求。Agent 应触发 `spec-driven-development` 或 `interview-me` 等技能，在写代码前产出 PRD 或澄清问题，而非立即修改文件。
+
+### 验证是否成功
+
+确认斜杠命令可用（Claude Code 插件列表中出现 `addy-agent-skills`）；发起功能请求后 Agent 引用具体 skill 名称并按步骤执行。运行 `/test` 时应看到测试驱动与证据要求，而非仅凭主观判断宣布完成。
+
+### 常见坑 / 注意事项
+
+- Claude Code marketplace 默认通过 SSH 克隆；无 GitHub SSH 密钥时需改用 HTTPS marketplace URL（见上文）。
+- `/build auto` 减少任务间人工 stepping，但**不跳过验证**——失败或高风险步骤仍会暂停，勿误以为完全无人值守。
+- 与 Superpowers 等工作流库存在理念重叠，选型前建议阅读 [docs/comparison.md](https://github.com/addyosmani/agent-skills/blob/main/docs/comparison.md)。
+- Skills 为纯 Markdown，行为取决于宿主实现与模型版本；关键任务请在自有环境回归验证。
+- MIT 许可，可自由用于个人项目与团队工具链集成。
