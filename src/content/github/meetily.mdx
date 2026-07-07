@@ -1,0 +1,101 @@
+---
+title: "Meetily"
+description: "隐私优先的本地 AI 会议助理：实时转录、摘要与录音整理，数据不出本机，支持 macOS/Windows。"
+repo: "https://github.com/Zackriya-Solutions/meetily"
+homepage: "https://meetily.ai"
+repoDescription: "Privacy first, AI meeting assistant with 4x faster Parakeet/Whisper live transcription, speaker diarization, and Ollama summarization built on Rust. 100% local processing. no cloud required. Meetily (Meetly Ai - https://meetily.ai) is the #1 Self-hosted,  Open-source Ai meeting note taker for macOS & Windows."
+avatarUrl: "https://avatars.githubusercontent.com/u/82556810?v=4"
+tags:
+  - 本地模型
+  - 自托管
+  - 知识管理
+language: "Rust"
+stars: 21402
+forks: 2133
+openIssues: 261
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-07-08"
+updatedAt: "2026-07-08"
+curationReason: "适合法务、医疗、国防等敏感场景；关键词：会议纪要、离线转录、Whisper、Ollama、数据主权。"
+---
+
+## 项目介绍
+
+Meetily（Community Edition）是一款隐私优先的桌面 AI 会议助理：在本机捕获音频、实时转写，并可接 Ollama 等模型生成摘要。核心链路基于 Rust / Tauri，转录走 Whisper 或 Parakeet，默认不把会议内容送上公有云，适合把「会议纪要」留在自己设备上的个人与合规敏感团队。
+
+## 核心特性
+
+- 本地优先：录音、转写与摘要默认在本机完成，敏感对话不必托管给第三方会议 AI
+- 实时转写：会议进行中即可看到文字流；也可导入已有音频后离线增强/重转写（Beta）
+- 多模型摘要：推荐 Ollama（本地），也支持 Claude、Groq、OpenRouter 及自建 OpenAI 兼容端点
+- 专业拾音：同时采集麦克风与系统音频，带 ducking 与削波防护，适配 Zoom / Teams 等场景
+- GPU 加速：macOS（Metal / CoreML）、Windows/Linux（CUDA / Vulkan）构建时自动启用
+
+## 对用户价值
+
+云端会议助手好用，但合规、客户保密与跨境数据往往过不了关。Meetily 把「录下来 → 转成字 → 写成纪要」收拢到本地或自管推理栈，用开源模型替代按分钟计费的商业 API，离线也能继续转写；对律师、顾问、医疗与企业高管，核心收益是数据主权，而不仅是「又一个笔记工具」。
+
+## 与替代方案
+
+- 相比 Otter / Fireflies / Notion AI Meeting Notes 等云端助手，Meetily 默认本机处理，隐私与合规边界更清晰，但安装、模型下载与本机算力要自己扛。
+- 相比纯 Whisper CLI / whisper.cpp 流水线，Meetily 提供桌面拾音、实时字幕与摘要编辑的一体化体验，上手成本更低；自定义流水线则 CLI 更灵活。
+- 仓库另有 Meetily PRO / Enterprise（闭源商业产品）提供更高精度转写、导出模板、团队自托管等；社区版承诺继续免费开源，选型时勿把 README 营销功能与 CE 功能混为一谈。
+- 许可证为 MIT；若摘要走 Claude/Groq 等云 API，该段文字会离开本机，需按组织策略单独评估。
+
+## 适应人群
+
+- 需要会议纪要、又不允许把录音送进 SaaS 的法务、医疗、咨询与政府/国防相关从业者。
+- 已在跑 Ollama / 本地 Whisper，希望把转写与摘要收进桌面 App 的隐私向个人用户。
+- 想自托管会议智能能力、愿从 Community Edition 试用再评估 PRO 的小团队。
+
+## 如何使用
+
+### 前置条件
+
+- 操作系统：官方安装包面向 **macOS** 与 **Windows**；Linux 需按文档从源码构建。
+- 硬件：本地 Whisper / Parakeet 转写与摘要对 CPU/GPU 与内存有要求；Apple Silicon 或带 CUDA 的 NVIDIA 卡体验更好。
+- 可选：若要用本地摘要，先准备好 [Ollama](https://ollama.com) 并拉取常用对话模型；若只用云端摘要，准备好对应 API Key。
+
+### 安装方式
+
+**Windows：** 从 [Releases](https://github.com/Zackriya-Solutions/meeting-minutes/releases/latest) 下载最新 `x64-setup.exe` 并运行安装程序。
+
+**macOS：**
+
+1. 下载 `meetily_*_aarch64.dmg`（以 Release 页实际文件名为准）
+2. 打开 `.dmg`，将 Meetily 拖入 Applications
+3. 从「应用程序」启动 Meetily
+
+**Linux（从源码构建，快速参考）：**
+
+```bash
+git clone https://github.com/Zackriya-Solutions/meeting-minutes
+cd meeting-minutes/frontend
+pnpm install
+./build-gpu.sh
+```
+
+完整构建步骤见仓库 [`docs/building_in_linux.md`](https://github.com/Zackriya-Solutions/meetily/blob/main/docs/building_in_linux.md) 与 [`docs/BUILDING.md`](https://github.com/Zackriya-Solutions/meetily/blob/main/docs/BUILDING.md)。注意：Release 资源仍挂在历史仓库名 `meeting-minutes` 下，与当前 `meetily` 仓库指向同一产品线。
+
+### 首次运行
+
+1. 启动 Meetily，在设置中选择系统音频与麦克风设备，确认能同时采集远端与本端声音。
+2. 下载/选择转写模型（Whisper 或 Parakeet），按会议语言配置。
+3. 配置摘要提供方：优先 Ollama 本机；或填入 Claude / Groq / OpenRouter / 自定义 OpenAI 兼容 Base URL 与 Key。
+4. 开一场测试会议或导入一段已有录音，生成转写与摘要并保存。
+
+### 验证是否成功
+
+- 会议进行中转写面板持续出字，无明显长时间卡住。
+- 结束后能生成可读摘要，且录音/转写文件落在本机存储路径（可在设置中核对）。
+- 仅开本地链路时，抓包或防火墙侧不应出现向未知会议 SaaS 上传音频的流量；若配置了云端 LLM，仅摘要请求应发往你指定的端点。
+
+### 常见坑 / 注意事项
+
+- README 功能列表写「支持 Linux」，但桌面安装包当前以 macOS/Windows 为主；Linux 用户请按构建文档操作，勿假设有现成 AppImage/deb。
+- 系统音频采集在 macOS 上常需额外权限或虚拟声卡配置，首次使用务必先做拾音测试。
+- GitHub description 提到 speaker diarization；社区版与 PRO 功能边界仍在演进，正式依赖说话人分离前请对照当前 Release 说明，避免按营销文案选型。
+- Community Edition 与 PRO 是不同产品线；高级导出、自动入会、团队自托管等能力默认属于 PRO，不要期待全部在开源 CE 中可用。
+- 当前 API 返回的 `contributors` 快照偏低，详情页贡献者人数仅作参考，以 GitHub 贡献图为准。

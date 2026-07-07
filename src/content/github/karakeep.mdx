@@ -1,0 +1,104 @@
+---
+title: "Karakeep"
+description: "可自托管的「万物收藏」应用：链接、笔记与图片入库，AI 自动打标签并支持全文检索。"
+repo: "https://github.com/karakeep-app/karakeep"
+homepage: "https://karakeep.app"
+repoDescription: "A self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search"
+avatarUrl: "https://avatars.githubusercontent.com/u/202258986?v=4"
+tags:
+  - 自托管
+  - 知识管理
+  - 本地模型
+language: "TypeScript"
+stars: 27189
+forks: 1336
+openIssues: 659
+contributors: 176
+license: "AGPL-3.0"
+featured: false
+publishedAt: "2026-07-08"
+updatedAt: "2026-07-08"
+curationReason: "Pocket 关停后的自建稍后读方案；适合 Homelab 做链接归档、OCR 与 Ollama 本地打标。"
+---
+
+## 项目介绍
+
+Karakeep（原名 Hoarder）是一款面向「数据囤积者」的开源自托管收藏应用：链接、短笔记、图片与 PDF 都能丢进去。它会自动抓取标题与预览，用 LLM（含 Ollama 本地模型）做自动打标与摘要，再用 Meilisearch 做全文检索。相对纯书签管理器，它更像自建的稍后读 + 私人档案库，也适合给 Agent 通过 CLI / Skills 来读写。
+
+## 核心特性
+
+- **万物收藏** — 链接、笔记、图片、PDF 统一入库；自动抓取标题、描述与预览图
+- **AI 整理** — LLM 自动打标与摘要；支持 OpenAI 等云端模型，也可用 Ollama 做本地推理
+- **全文检索与归档** — Meilisearch 搜全文；monolith 整页归档防失效，yt-dlp 可归档视频
+- **多端入口** — Chrome / Firefox / Safari 扩展，以及 iOS、Android App，还可从 RSS 自动吸入
+- **可扩展集成** — REST API、官方 CLI 与 Agent Skills；支持列表协作、规则引擎、OCR、SSO 与浏览器书签同步（floccus）
+
+## 对用户价值
+
+网上随手看到的文章、工具和视频，往往散落在浏览器书签、聊天记录和临时笔记里，既难找又易失效。Karakeep 把「一键收藏 → AI 归类 → 全文检索 → 整页归档」做成自托管闭环，数据留在自己的服务器上。Pocket 关停之后，它是一条可私有部署、可对接本地模型与 Agent 的稍后读替代路径；不想维护基础设施时，也可使用官方 Cloud。
+
+## 与替代方案
+
+- 相比 **Memos**：Memos 擅长碎片笔记时间线，但不强调链接预览、整页归档与 AI 打标；Karakeep 更适合「收藏互联网内容并可持续找回」。
+- 相比 **Linkwarden / Wallabag / Shiori**：它们更偏传统书签或稍后读；Karakeep 额外内建 LLM 打标、OCR、规则引擎，以及面向 Agent 的 CLI / Skills。
+- 相比 **Raindrop / mymind**：交互更成熟，但主打商业/非自托管；Karakeep 以 self-hosting first 为定位（另有可选 Cloud）。
+- 边界：项目仍处快速迭代；若只要极轻闪念笔记、不需要链接归档与 AI，Memos 往往更省心。
+
+## 适应人群
+
+- Homelab / NAS / VPS 用户，希望自建私有稍后读与书签归档库。
+- 想从 Pocket、Chrome、Omnivore 等导入历史书签，并用扩展/App 持续收藏的人。
+- 需要用 Ollama 本地打标，或让 Agent（如 OpenClaw）通过 CLI / Skills 操作收藏内容的开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 Docker 与 Docker Compose。
+- 默认可访问主机的 `3000` 端口；准备持久化目录存放 compose 与数据卷。
+- 自动打标可选：OpenAI API Key，或按文档配置 Ollama 等其他推理后端。
+- 许可证为 AGPL-3.0；生产环境请改强随机密钥，并限制公网暴露（见[安全说明](https://docs.karakeep.app/security-considerations)）。
+
+### 安装方式
+
+官方推荐 Docker Compose（[部署文档](https://docs.karakeep.app/Installation/docker)）：
+
+```bash
+mkdir karakeep-app && cd karakeep-app
+wget https://raw.githubusercontent.com/karakeep-app/karakeep/main/docker/docker-compose.yml
+```
+
+创建 `.env`（密钥请自行替换）：
+
+```bash
+KARAKEEP_VERSION=release
+NEXTAUTH_SECRET=$(openssl rand -base64 36)
+MEILI_MASTER_KEY=$(openssl rand -base64 36)
+NEXTAUTH_URL=http://localhost:3000
+# 可选：启用云端自动打标
+# OPENAI_API_KEY=sk-...
+```
+
+```bash
+docker compose up -d
+```
+
+不想自托管可试用 [Demo](https://try.karakeep.app)（`demo@karakeep.app` / `demodemo`，只读）或 [Karakeep Cloud](https://cloud.karakeep.app)。
+
+### 首次运行
+
+浏览器打开 `http://localhost:3000`，完成注册/登录。建议先收藏一条链接，确认预览抓取正常；若配置了 OpenAI 或 Ollama，检查是否出现自动标签。可选安装[浏览器扩展或移动端 App](https://docs.karakeep.app/)，并把 `NEXTAUTH_URL` 改成实际访问地址。
+
+### 验证是否成功
+
+- Web UI 可登录，新收藏会出现在首页列表，并带有标题/预览。
+- 搜索框能命中已保存内容的正文或标签。
+- 重启 `docker compose` 后历史数据仍在；可选调用 REST API / CLI 做一次写入验证。
+
+### 常见坑 / 注意事项
+
+- 修改 `.env` 后需重新执行 `docker compose up` 才会生效。
+- `KARAKEEP_VERSION=release` 升级时用 `docker compose up --pull always -d`；建议生产环境锁定具体版本。
+- AI 打标依赖外部或本地推理；未配置时核心收藏仍可用，但自动标签不会出现。
+- 项目迭代快，升级前阅读 Releases；Meilisearch 大版本迁移需单独对照官方排障文档。
+- 曾用名 **Hoarder**，检索旧资料时可用该名称；移动端商店包名可能仍带 `hoarder` 字样。
