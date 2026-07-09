@@ -63,16 +63,27 @@ html[data-theme='dark'] .primary {
   border: 1px solid var(--sl-color-brand);
 }
 
+header.header a.site-title,
+header.header a.site-title span {
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+  line-height: 1.25;
+}
 
-header.header .site-title {
-  font-size: var(--sl-text-base);
-  font-weight: 500;
+header.header a.site-title img {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  object-fit: cover;
+}
+
+.card-grid .link-card h3.link-card__title {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  line-height: 1.5;
 }
 
 .site-title {
   img {
-    width: 1.75rem;
-    height: 1.75rem;
     object-fit: cover;
   }
 }
