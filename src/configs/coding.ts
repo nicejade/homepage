@@ -3,12 +3,6 @@ export default {
   style: 'stagger',
   list: [
     {
-      title: 'Cursor | The AI Code Editor',
-      stars: 5,
-      link: 'https://www.cursor.com/',
-      desc: 'Cursor 是一款结合传统代码编辑器和 AI 功能的创新编程应用。基于 Visual Studio Code，它提供熟悉的编码环境，同时集成强大的 AI 辅助功能。主要特点包括 AI 代码生成、智能代码补全、代码解释、错误诊断、重构建议等。它通过 AI 辅助简化编码过程，提高编程效率，同时保留了传统编辑器的灵活性和功能性。'
-    },
-    {
       title: 'Codex | Codex | OpenAI 打造的 AI 编码助手 | OpenAI',
       stars: 5,
       link: 'https://openai.com/zh-Hans-CN/codex/',
@@ -19,6 +13,18 @@ export default {
       stars: 5,
       link: 'https://www.anthropic.com/claude-code',
       desc: 'Claude Code 是 Anthropic 开发的一款创新的 AI 驱动代码编辑器，专注于提供流畅的编码体验。它提供无限制的 AI 代码补全功能，支持实时代码建议和智能代码生成。独特之处在于其"流畅状态"设计理念，通过智能预测和上下文理解，让开发者保持连贯的编码节奏。提供免费的基础功能，包括代码补全、重构建议和 AI 辅助编程等特性。'
+    },
+    {
+      title: 'Grok Build | 将 Grok 带入你的终端',
+      stars: 5,
+      link: 'https://x.ai/cli',
+      desc: 'Grok Build 是 xAI 推出的终端 AI 编码代理与 CLI，由 Grok 4.5 驱动，面向复杂编程任务。支持计划模式、子代理并行、Skills 工作流、MCP 服务器、AGENTS.md 与 Git 集成，可在终端中完成规划、编码、测试与部署全流程。一条命令即可安装，适用于任意代码库与编程语言，目前可免费试用。'
+    },
+    {
+      title: 'Cursor | The AI Code Editor',
+      stars: 5,
+      link: 'https://www.cursor.com/',
+      desc: 'Cursor 是一款结合传统代码编辑器和 AI 功能的创新编程应用。基于 Visual Studio Code，它提供熟悉的编码环境，同时集成强大的 AI 辅助功能。主要特点包括 AI 代码生成、智能代码补全、代码解释、错误诊断、重构建议等。它通过 AI 辅助简化编码过程，提高编程效率，同时保留了传统编辑器的灵活性和功能性。'
     },
     {
       title: 'Google Antigravity | 下一代集成开发环境',
