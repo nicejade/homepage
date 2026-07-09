@@ -29,6 +29,9 @@ done
 # 如果是发布到自定义域名
 echo 'niceshare.site' > CNAME
 
+# 禁用 Jekyll，防止 _ 开头的构建产物（如 _slug_.xxx.css）被 GitHub Pages 忽略
+touch .nojekyll
+
 git init
 git add -A
 git commit -m '🎉 local build for deploy'
