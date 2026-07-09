@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap'
 import starlightLinksValidator from 'starlight-links-validator'
 import starlightThemeRapide from 'starlight-theme-rapide'
 import tailwindcss from '@tailwindcss/vite'
+import { cssLegacyCompat } from './scripts/vite-css-legacy-compat.mjs'
 
 // https://astro.build/config
 export default defineConfig({
@@ -1140,5 +1141,5 @@ export default defineConfig({
 			],
 		}),
 	],
-	vite: { plugins: [tailwindcss()] },
+	vite: { plugins: [tailwindcss(), cssLegacyCompat()] },
 })

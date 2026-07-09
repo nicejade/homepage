@@ -1,4 +1,7 @@
-@import "tailwindcss";
+/* 分文件导入，避免 @import "tailwindcss" 在部分移动端 Chrome 上因 @layer 支持异常导致样式失效 */
+@import "tailwindcss/theme.css";
+@import "tailwindcss/preflight.css";
+@import "tailwindcss/utilities.css";
 
 @layer base, starlight, theme, components, utilities;
 

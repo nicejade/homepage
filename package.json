@@ -28,6 +28,8 @@
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
+    "browserslist": "^4.28.5",
+    "lightningcss": "^1.32.0",
     "sharp": "^0.33.5",
     "typescript": "^5.8.2"
   }
