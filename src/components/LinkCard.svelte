@@ -37,9 +37,9 @@
   { isDarkMode ? "shadow-custom-dark hover:shadow-custom-dark-xl" : "shadow-custom-white hover:shadow-custom-white-xl" }
   { declining ? 'cursor-not-allowed opacity-60' : '' }">
   <a href="{declining ? 'javascript:void(0)' : link + '?ref=niceshare.site'}" target="_blank" rel="noopener"
-    class="text-xl font-medium no-underline hover:cursor-pointer
+    class="text-lg font-medium no-underline hover:cursor-pointer
     { declining? 'pointer-events-none' : '' }">
-    <h3 class="text-xl font-bold { isDarkMode ? 'text-silver' : 'text-black' } dark:text-white hover:text-brand">{title}</h3>
+    <h3 class="text-lg font-semibold { isDarkMode ? 'text-silver' : 'text-black' } dark:text-white hover:text-brand">{title}</h3>
 		<p class="text-base mt-2 font-normal no-underline { isDarkMode ? 'text-gray-400' : 'text-grey' }">
     	{desc}
   	</p>
