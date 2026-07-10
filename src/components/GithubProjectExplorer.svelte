@@ -114,13 +114,13 @@
 
 <section class="github-curation flex flex-col gap-6" aria-label="开源琅嬛阁项目列表">
   <header class="mx-auto max-w-2xl text-center">
-    <h2
+    <h1
       class="text-3xl font-semibold tracking-tight text-black dark:text-silver sm:text-4xl"
     >
       高质量开源项目精选
-    </h2>
+    </h1>
     <p class="mt-4 text-base leading-relaxed text-grey dark:text-gray-400 sm:text-lg">
-      收录 AI 编程、本地模型、工作流自动化与开发者生产力方向的高质量开源项目。
+      收录 AI Agent、工作流自动化与开发者生产力等高质量开源项目。
     </p>
     <dl class="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3" aria-label="项目统计">
       <div

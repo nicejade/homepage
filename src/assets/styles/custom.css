@@ -80,9 +80,14 @@ html[data-theme='dark'] .primary {
 	color: var(--sl-color-link-accent);
 }
 
-.sl-markdown-content :not(:-webkit-any(a, strong, em, del, span, input, code, br))
+.sl-markdown-content .github-curation :not(:-webkit-any(a, strong, em, del, span, input, code, br))
 	+ :not(:-webkit-any(a, strong, em, del, span, input, code, br, :where(.not-content *))) {
 	margin-top: 0 !important;
+}
+
+/* /github/ 列表页已有自定义标题，隐藏 Starlight 重复的 PageTitle 面板 */
+main:has(.github-curation) > .content-panel:first-child {
+	display: none;
 }
 
 .sl-link-button {

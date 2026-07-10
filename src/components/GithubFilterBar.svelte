@@ -52,7 +52,7 @@
     </div>
 
     <div
-      class="-mx-4 flex items-center gap-2 overflow-x-auto scroll-px-4 px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:flex-wrap sm:overflow-x-visible sm:px-6"
+      class="-mx-4 flex flex-nowrap items-center gap-2 overflow-x-auto scroll-px-4 px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:scroll-px-6 sm:px-6"
       aria-label="标签筛选"
       role="group"
     >
@@ -80,8 +80,10 @@
       class="flex min-h-9 flex-wrap items-center justify-between gap-x-4 gap-y-2 text-sm text-grey dark:text-gray-400"
       aria-live="polite"
     >
-      <span class="inline-flex h-9 items-center">
-        共 <span class="font-semibold text-black dark:text-silver"> {resultCount} </span> 个结果
+      <span class="inline-flex h-9 items-center gap-1.5">
+        共
+        <span class="font-semibold text-black dark:text-silver">{resultCount}</span>
+        个结果
       </span>
 
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
