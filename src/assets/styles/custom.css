@@ -57,6 +57,11 @@ html[data-theme='dark'] .github-curation select.github-sort {
   background-color: #fffaf0;
 }
 
+.page .sl-link-button.minimal {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
 html[data-theme='dark'] .primary {
   background: #0F2027;
   background: -webkit-linear-gradient(to left, #2C5364, #203A43, #0F2027);

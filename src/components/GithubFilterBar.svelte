@@ -81,7 +81,7 @@
       aria-live="polite"
     >
       <span class="inline-flex h-9 items-center">
-        共 <span class="font-semibold text-black dark:text-silver">{resultCount}</span> 个结果
+        共 <span class="font-semibold text-black dark:text-silver"> {resultCount} </span> 个结果
       </span>
 
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
