@@ -112,7 +112,7 @@
   }
 </script>
 
-<section class="flex flex-col gap-8" aria-label="开源琅嬛阁项目列表">
+<section class="github-curation flex flex-col gap-6" aria-label="开源琅嬛阁项目列表">
   <header class="mx-auto max-w-2xl text-center">
     <h2
       class="text-3xl font-semibold tracking-tight text-black dark:text-silver sm:text-4xl"
@@ -122,18 +122,18 @@
     <p class="mt-4 text-base leading-relaxed text-grey dark:text-gray-400 sm:text-lg">
       收录 AI 编程、本地模型、工作流自动化与开发者生产力方向的高质量开源项目。
     </p>
-    <dl class="mt-7 flex items-center justify-center gap-3" aria-label="项目统计">
+    <dl class="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3" aria-label="项目统计">
       <div
-        class="flex items-baseline gap-1.5 rounded-full bg-black/[0.04] px-4 py-1.5 dark:bg-white/[0.06]"
+        class="inline-flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-4 dark:bg-white/[0.06]"
       >
-        <dd class="text-base font-semibold text-black dark:text-silver">{projects.length}</dd>
-        <dt class="text-sm text-grey dark:text-gray-400">个项目</dt>
+        <dd class="text-base font-semibold leading-none text-black dark:text-silver">{projects.length}</dd>
+        <dt class="text-sm leading-none text-grey dark:text-gray-400">个项目</dt>
       </div>
       <div
-        class="flex items-baseline gap-1.5 rounded-full bg-black/[0.04] px-4 py-1.5 dark:bg-white/[0.06]"
+        class="inline-flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-4 dark:bg-white/[0.06]"
       >
-        <dd class="text-base font-semibold text-black dark:text-silver">{tags.length}</dd>
-        <dt class="text-sm text-grey dark:text-gray-400">个标签</dt>
+        <dd class="text-base font-semibold leading-none text-black dark:text-silver">{tags.length}</dd>
+        <dt class="text-sm leading-none text-grey dark:text-gray-400">个标签</dt>
       </div>
     </dl>
   </header>

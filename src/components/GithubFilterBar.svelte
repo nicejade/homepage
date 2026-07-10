@@ -16,14 +16,14 @@
   export let onClearFilters: () => void = () => {};
 
   const sortSelectClass =
-    'min-h-9 min-w-[9.5rem] cursor-pointer appearance-none rounded-xl border border-black/[0.08] bg-white py-2 pl-3 pr-9 text-sm font-medium text-black outline-none transition-[border-color,box-shadow,background-color] duration-200 focus:border-brand/60 focus:ring-4 focus:ring-brand/10 dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-silver dark:focus:bg-white/[0.06]';
+    'github-sort h-9 min-w-[9.5rem] cursor-pointer rounded-xl border border-black/[0.08] bg-white pl-3 pr-8 text-sm font-medium leading-none text-black outline-none transition-[border-color,box-shadow,background-color] duration-200 focus:border-brand/60 focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)] dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-silver dark:focus:bg-white/[0.06]';
 </script>
 
 <div
-  class="sticky top-0 z-10 -mx-4 border-b border-black/[0.06] bg-white/70 px-4 py-4 backdrop-blur-xl dark:border-white/[0.08] dark:bg-gray-950/70 sm:-mx-6 sm:px-6"
+  class="sticky top-0 z-10 -mx-4 border-b border-black/[0.06] bg-white/80 px-4 py-4 backdrop-blur-xl dark:border-white/[0.08] dark:bg-gray-950/80 sm:-mx-6 sm:px-6"
   aria-label="开源琅嬛阁筛选"
 >
-  <div class="flex flex-col gap-3.5">
+  <div class="flex flex-col gap-3">
     <label for="github-search" class="sr-only">搜索开源琅嬛阁</label>
     <div class="relative">
       <svg
@@ -52,7 +52,7 @@
     </div>
 
     <div
-      class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:px-6"
+      class="-mx-4 flex items-center gap-2 overflow-x-auto scroll-px-4 px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:flex-wrap sm:overflow-x-visible sm:px-6"
       aria-label="标签筛选"
       role="group"
     >
@@ -77,42 +77,31 @@
     </div>
 
     <div
-      class="flex flex-wrap items-center justify-between gap-3 text-sm text-grey dark:text-gray-400"
+      class="flex min-h-9 flex-wrap items-center justify-between gap-x-4 gap-y-2 text-sm text-grey dark:text-gray-400"
       aria-live="polite"
     >
-      <span>共 <span class="font-semibold text-black dark:text-silver">{resultCount}</span> 个结果</span>
+      <span class="inline-flex h-9 items-center">
+        共 <span class="font-semibold text-black dark:text-silver">{resultCount}</span> 个结果
+      </span>
 
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-        <div class="flex shrink-0 items-center gap-2">
+        <div class="inline-flex h-9 items-center gap-2">
           <label
             for="github-sort"
-            class="whitespace-nowrap text-grey dark:text-gray-400"
+            class="inline-flex h-9 items-center whitespace-nowrap text-grey dark:text-gray-400"
           >
             排序
           </label>
-          <div class="relative">
-            <select
-              id="github-sort"
-              class={sortSelectClass}
-              value={selectedSort}
-              on:change={(event) => onSortChange(event.currentTarget.value as GithubSortKey)}
-            >
-              {#each GITHUB_SORT_OPTIONS as option}
-                <option value={option.value}>{option.label}</option>
-              {/each}
-            </select>
-            <svg
-              class="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey/70 dark:text-gray-500"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-          </div>
+          <select
+            id="github-sort"
+            class={sortSelectClass}
+            value={selectedSort}
+            on:change={(event) => onSortChange(event.currentTarget.value as GithubSortKey)}
+          >
+            {#each GITHUB_SORT_OPTIONS as option}
+              <option value={option.value}>{option.label}</option>
+            {/each}
+          </select>
         </div>
 
         {#if hasFilters}

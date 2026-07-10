@@ -26,14 +26,14 @@ export const GITHUB_BUTTON_PRIMARY =
 export const GITHUB_BUTTON_SECONDARY =
   'inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-black/10 bg-white px-5 py-2.5 text-sm font-semibold text-black no-underline transition-[transform,background-color,border-color] duration-200 ease-out motion-reduce:transition-none hover:border-black/20 hover:bg-black/[0.03] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-white/15 dark:bg-transparent dark:text-silver dark:hover:border-white/25 dark:hover:bg-white/[0.04] dark:focus-visible:ring-offset-gray-950';
 
-/** Filter pill in the sticky toolbar (44px touch target per Apple HIG). */
+/** Filter pill in the sticky toolbar. */
 export function githubTagButtonClass(active: boolean): string {
   const base =
-    'shrink-0 inline-flex min-h-11 items-center rounded-full px-4 text-sm font-medium transition-[background-color,color] duration-200 ease-out motion-reduce:transition-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
+    'shrink-0 inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full border px-3.5 text-sm font-medium leading-none transition-[background-color,color,border-color] duration-200 ease-out motion-reduce:transition-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/50';
   if (active) {
-    return `${base} bg-brand text-white`;
+    return `${base} border-brand bg-brand text-white`;
   }
-  return `${base} bg-black/[0.04] text-grey hover:bg-black/[0.07] hover:text-black dark:bg-white/[0.06] dark:text-gray-300 dark:hover:bg-white/[0.1] dark:hover:text-white`;
+  return `${base} border-black/[0.06] bg-black/[0.04] text-grey hover:border-black/[0.1] hover:bg-black/[0.07] hover:text-black dark:border-white/[0.08] dark:bg-white/[0.06] dark:text-gray-300 dark:hover:border-white/[0.14] dark:hover:bg-white/[0.1] dark:hover:text-white`;
 }
 
 /** Numbered page control in list pagination. */

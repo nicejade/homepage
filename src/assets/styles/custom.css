@@ -25,11 +25,27 @@
   font-size: var(--sl-text-3xl);
 }
 
-svg {
+.sl-markdown-content svg,
+header.header svg,
+#starlight__sidebar svg,
+.social-icons svg {
   --sl-icon-size: 1.2rem !important;
   font-size: var(--sl-icon-size) !important;
   width: var(--sl-icon-size) !important;
   height: var(--sl-icon-size) !important;
+}
+
+.github-curation select.github-sort {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23565656' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+  background-position: right 0.625rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+}
+
+html[data-theme='dark'] .github-curation select.github-sort {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
 }
 
 .header {
