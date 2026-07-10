@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicDir = path.join(__dirname, '..', 'public');
+const distDir = path.join(__dirname, '..', 'dist');
 
 console.log('🔍 开始检查 SEO 配置...\n');
 
@@ -28,8 +29,15 @@ const requiredFiles = [
   { path: 'manifest.json', name: 'Web App Manifest' },
   { path: 'browserconfig.xml', name: 'Browser Config' },
   { path: '.well-known/security.txt', name: 'Security.txt' },
-  { path: 'feed.xml', name: 'RSS Feed' },
   { path: 'ads.txt', name: 'Ads.txt' }
+];
+
+// 构建产物中动态生成的文件（需先执行 pnpm build）
+const requiredDistFiles = [
+  { path: 'feed.xml', name: 'RSS Feed（动态生成）' },
+  { path: 'llms.txt', name: 'llms.txt（GEO 索引）' },
+  { path: 'llms-full.txt', name: 'llms-full.txt（GEO 全文）' },
+  { path: 'sitemap-index.xml', name: 'Sitemap 索引' }
 ];
 
 // 注意：
@@ -45,6 +53,20 @@ requiredFiles.forEach(file => {
     checks.failed.push(`❌ ${file.name} 缺失`);
   }
 });
+
+console.log('\n📦 检查构建产物（dist）...');
+if (fs.existsSync(distDir)) {
+  requiredDistFiles.forEach(file => {
+    const filePath = path.join(distDir, file.path);
+    if (fs.existsSync(filePath)) {
+      checks.passed.push(`✅ ${file.name} 存在`);
+    } else {
+      checks.failed.push(`❌ ${file.name} 缺失（请先执行 pnpm build）`);
+    }
+  });
+} else {
+  checks.warnings.push('⚠️  dist 目录不存在，跳过构建产物检查（请先执行 pnpm build）');
+}
 
 // 检查图标文件
 console.log('\n🖼️  检查图标文件...');
@@ -89,6 +111,14 @@ if (fs.existsSync(robotsPath)) {
   if (robotsContent.includes('User-agent: Baiduspider')) {
     checks.passed.push('✅ robots.txt 配置了 Baiduspider');
   }
+
+  const aiBots = ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended', 'CCBot'];
+  const missingAiBots = aiBots.filter(bot => !robotsContent.includes(`User-agent: ${bot}`));
+  if (missingAiBots.length === 0) {
+    checks.passed.push('✅ robots.txt 已放行主流 AI 爬虫（GEO）');
+  } else {
+    checks.warnings.push(`⚠️  robots.txt 缺少 AI 爬虫配置: ${missingAiBots.join(', ')}`);
+  }
 }
 
 // 检查 manifest.json
@@ -125,8 +155,8 @@ if (fs.existsSync(securityPath)) {
   }
 }
 
-// 检查 feed.xml
-const feedPath = path.join(publicDir, 'feed.xml');
+// 检查 feed.xml（构建产物）
+const feedPath = path.join(distDir, 'feed.xml');
 if (fs.existsSync(feedPath)) {
   const feedContent = fs.readFileSync(feedPath, 'utf-8');
   if (feedContent.includes('<rss')) {

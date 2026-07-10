@@ -36,8 +36,6 @@ export default defineConfig({
 	integrations: [
 		svelte(),
 		sitemap({
-			changefreq: 'weekly',
-			priority: 0.7,
 			lastmod: new Date(),
 			i18n: {
 				defaultLocale: 'zh-CN',
@@ -45,10 +43,37 @@ export default defineConfig({
 					'zh-CN': 'zh-CN',
 				},
 			},
+			serialize(item) {
+				const url = new URL(item.url);
+				const path = url.pathname;
+
+				// Deployment flattens /about/index.html to /about.html, served at /about.
+				if (path === '/about/') {
+					item.url = `${url.origin}/about`;
+				}
+
+				if (path === '/') {
+					item.changefreq = 'daily';
+					item.priority = 1.0;
+				} else if (path === '/github/') {
+					item.changefreq = 'daily';
+					item.priority = 0.9;
+				} else if (path.startsWith('/github/')) {
+					item.changefreq = 'weekly';
+					item.priority = 0.8;
+				} else {
+					item.changefreq = 'monthly';
+					item.priority = 0.5;
+				}
+				return item;
+			},
 		}),
 		starlight({
 			plugins: [starlightLinksValidator(), starlightThemeRapide()],
 			title: '逍遥自在轩',
+			// Site-wide fallback description; pages provide their own via frontmatter.
+			description:
+				'逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。涵盖 AI 工具、编程开发、文档资源、在线服务等精选推荐。',
 			social: [
 				{ icon: 'mastodon', label: 'Mastodon', href: 'https://mastodon.social/@nicejade' },
 				{ icon: 'telegram', label: 'Telegram', href: 'https://t.me/nicejade' },
@@ -121,33 +146,6 @@ export default defineConfig({
 						href: 'https://fonts.gstatic.com',
 					},
 				},
-				// 预加载关键资源
-				{
-					tag: 'link',
-					attrs: {
-						rel: 'preload',
-						href: '/logo.png',
-						as: 'image',
-						type: 'image/png',
-					},
-				},
-				{
-					tag: 'link',
-					attrs: {
-						rel: 'preload',
-						href: '/favicon.svg',
-						as: 'image',
-						type: 'image/svg+xml',
-					},
-				},
-				// Canonical URL
-				{
-					tag: 'link',
-					attrs: {
-						rel: 'canonical',
-						href: 'https://www.niceshare.site/',
-					},
-				},
 				// Humans.txt
 				{
 					tag: 'link',
@@ -194,37 +192,14 @@ export default defineConfig({
 						href: '/feed.xml',
 					},
 				},
-				// 语言标签 - 国际化支持
+				// GEO 优化：为生成式引擎提供站点级 llms.txt 索引
 				{
 					tag: 'link',
 					attrs: {
 						rel: 'alternate',
-						hreflang: 'zh-CN',
-						href: 'https://www.niceshare.site/',
-					},
-				},
-				{
-					tag: 'link',
-					attrs: {
-						rel: 'alternate',
-						hreflang: 'zh',
-						href: 'https://www.niceshare.site/',
-					},
-				},
-				{
-					tag: 'link',
-					attrs: {
-						rel: 'alternate',
-						hreflang: 'zh-Hans',
-						href: 'https://www.niceshare.site/',
-					},
-				},
-				{
-					tag: 'link',
-					attrs: {
-						rel: 'alternate',
-						hreflang: 'x-default',
-						href: 'https://www.niceshare.site/',
+						type: 'text/plain',
+						title: 'LLMs.txt',
+						href: '/llms.txt',
 					},
 				},
 				{
@@ -234,14 +209,7 @@ export default defineConfig({
 						content: 'zh-CN',
 					},
 				},
-				// 基础 SEO Meta 标签
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'description',
-						content: '逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。涵盖 AI 工具、编程开发、文档资源、在线服务等精选推荐。',
-					},
-				},
+				// 基础 SEO Meta 标签（description 由各页面 frontmatter 提供，勿在此覆盖）
 				{
 					tag: 'meta',
 					attrs: {
@@ -428,7 +396,7 @@ export default defineConfig({
 						rel: 'manifest',
 					},
 				},
-				// Twitter Card Meta 标签
+				// Twitter Card Meta 标签（title/description/url 由 Starlight 按页面生成，勿全局覆盖）
 				{
 					tag: 'meta',
 					attrs: {
@@ -453,20 +421,6 @@ export default defineConfig({
 				{
 					tag: 'meta',
 					attrs: {
-						name: 'twitter:title',
-						content: '逍遥自在轩 | 个人主页',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'twitter:description',
-						content: '逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
 						name: 'twitter:image',
 						content: 'https://www.niceshare.site/mockup.png',
 					},
@@ -478,56 +432,7 @@ export default defineConfig({
 						content: '逍遥自在轩 - 个人主页预览图',
 					},
 				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'twitter:domain',
-						content: 'www.niceshare.site',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'twitter:url',
-						content: 'https://www.niceshare.site/',
-					},
-				},
-				// Open Graph Meta 标签 (使用 property 而非 name)
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'og:type',
-						content: 'website',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'og:url',
-						content: 'https://www.niceshare.site/',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'og:site_name',
-						content: '逍遥自在轩',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'og:title',
-						content: '逍遥自在轩 | 个人主页',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'og:description',
-						content: '逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。',
-					},
-				},
+				// Open Graph 站点级兜底（og:title/og:description/og:url 由 Starlight 按页面生成）
 				{
 					tag: 'meta',
 					attrs: {
@@ -566,38 +471,8 @@ export default defineConfig({
 				{
 					tag: 'meta',
 					attrs: {
-						property: 'og:updated_time',
-						content: new Date().toISOString(),
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
 						property: 'og:see_also',
 						content: 'https://fine.niceshare.site/',
-					},
-				},
-				// LinkedIn 专用标签
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'og:video',
-						content: '',
-					},
-				},
-				// Pinterest 验证和优化
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'pinterest',
-						content: 'nopin',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'pinterest-rich-pin',
-						content: 'false',
 					},
 				},
 				// Telegram 分享优化
@@ -606,114 +481,6 @@ export default defineConfig({
 					attrs: {
 						property: 'telegram:channel',
 						content: '@nicejade',
-					},
-				},
-				// WhatsApp 分享优化
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'og:phone_number',
-						content: '',
-					},
-				},
-				// Facebook App ID（如果有）
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'fb:app_id',
-						content: 'your-facebook-app-id',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						property: 'fb:admins',
-						content: 'your-facebook-admin-id',
-					},
-				},
-				// Dublin Core Meta 标签（适用于学术和图书馆系统）
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.title',
-						content: '逍遥自在轩 | 个人主页',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.creator',
-						content: '逍遥自在轩',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.subject',
-						content: '工具导航, AI工具, 编程开发, 在线服务, 资源分享',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.description',
-						content: '逍遥自在轩，采用 Astro, Starlight, Svelte 构建的个人主页，汇集优质工具与服务',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.publisher',
-						content: '逍遥自在轩',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.date',
-						content: '2024-11-03',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.type',
-						content: 'Text',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.format',
-						content: 'text/html',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.identifier',
-						content: 'https://www.niceshare.site/',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.language',
-						content: 'zh-CN',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.coverage',
-						content: 'World',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'DC.rights',
-						content: 'Copyright 2024-present 逍遥自在轩. All rights reserved.',
 					},
 				},
 				{
@@ -757,13 +524,6 @@ export default defineConfig({
 					attrs: {
 						name: 'apple-touch-fullscreen',
 						content: 'yes',
-					},
-				},
-				{
-					tag: 'meta',
-					attrs: {
-						name: 'apple-itunes-app',
-						content: 'app-id=your-app-id, app-argument=https://www.niceshare.site/',
 					},
 				},
 				{
@@ -886,34 +646,6 @@ export default defineConfig({
 						content: 'ca-pub-8586652723015758',
 					},
 				},
-				// 结构化数据 - WebApplication/SoftwareApplication
-				{
-					tag: 'script',
-					attrs: {
-						type: 'application/ld+json',
-					},
-					content: JSON.stringify({
-						"@context": "https://schema.org",
-						"@type": "WebApplication",
-						"@id": "https://www.niceshare.site/#webapp",
-						"name": "逍遥自在轩",
-						"applicationCategory": "Utility",
-						"applicationSubCategory": "Web Tools Directory",
-						"operatingSystem": "Any",
-						"browserRequirements": "Requires JavaScript, Supports modern browsers",
-						"url": "https://www.niceshare.site/",
-						"description": "精选工具与资源导航平台",
-						"offers": {
-							"@type": "Offer",
-							"price": "0",
-							"priceCurrency": "CNY"
-						},
-						"author": {
-							"@type": "Person",
-							"name": "逍遥自在轩"
-						}
-					}),
-				},
 				// Google Analytics - 优化加载策略
 				{
           tag: 'script',
@@ -969,14 +701,6 @@ export default defineConfig({
 								"width": 512,
 								"height": 512
 							}
-						},
-						"potentialAction": {
-							"@type": "SearchAction",
-							"target": {
-								"@type": "EntryPoint",
-								"urlTemplate": "https://www.niceshare.site/?search={search_term_string}"
-							},
-							"query-input": "required name=search_term_string"
 						}
 					}),
 				},
@@ -1013,129 +737,6 @@ export default defineConfig({
 							"@type": "WebPage",
 							"@id": "https://www.niceshare.site/"
 						}
-					}),
-				},
-				// 结构化数据 - BreadcrumbList
-				{
-					tag: 'script',
-					attrs: {
-						type: 'application/ld+json',
-					},
-					content: JSON.stringify({
-						"@context": "https://schema.org",
-						"@type": "BreadcrumbList",
-						"itemListElement": [
-							{
-								"@type": "ListItem",
-								"position": 1,
-								"name": "首页",
-								"item": "https://www.niceshare.site/"
-							},
-							{
-								"@type": "ListItem",
-								"position": 2,
-								"name": "关于",
-								"item": "https://www.niceshare.site/about"
-							}
-						]
-					}),
-				},
-				// 结构化数据 - CollectionPage（导航网站）
-				{
-					tag: 'script',
-					attrs: {
-						type: 'application/ld+json',
-					},
-					content: JSON.stringify({
-						"@context": "https://schema.org",
-						"@type": "CollectionPage",
-						"@id": "https://www.niceshare.site/#collectionpage",
-						"name": "逍遥自在轩 - 精选工具与资源导航",
-						"description": "汇集优质的 AI 工具、编程开发资源、在线服务、文档构建工具等精选内容",
-						"url": "https://www.niceshare.site/",
-						"inLanguage": "zh-CN",
-						"isPartOf": {
-							"@type": "WebSite",
-							"url": "https://www.niceshare.site/"
-						},
-						"about": {
-							"@type": "Thing",
-							"name": "Web Development Tools and Resources"
-						},
-						"keywords": ["AI工具", "编程开发", "在线服务", "工具导航", "资源分享", "开发工具", "前端开发", "后端开发"]
-					}),
-				},
-				// 结构化数据 - ItemList（工具列表）
-				{
-					tag: 'script',
-					attrs: {
-						type: 'application/ld+json',
-					},
-					content: JSON.stringify({
-						"@context": "https://schema.org",
-						"@type": "ItemList",
-						"@id": "https://www.niceshare.site/#itemlist",
-						"name": "精选工具与服务列表",
-						"description": "逍遥自在轩收录的优质工具和服务",
-						"numberOfItems": 100,
-						"itemListElement": [
-							{
-								"@type": "ListItem",
-								"position": 1,
-								"name": "AI 工具",
-								"description": "人工智能相关工具和服务"
-							},
-							{
-								"@type": "ListItem",
-								"position": 2,
-								"name": "编程开发",
-								"description": "开发工具和编程资源"
-							},
-							{
-								"@type": "ListItem",
-								"position": 3,
-								"name": "在线服务",
-								"description": "实用的在线服务和工具"
-							}
-						]
-					}),
-				},
-				// 结构化数据 - FAQPage
-				{
-					tag: 'script',
-					attrs: {
-						type: 'application/ld+json',
-					},
-					content: JSON.stringify({
-						"@context": "https://schema.org",
-						"@type": "FAQPage",
-						"@id": "https://www.niceshare.site/#faq",
-						"mainEntity": [
-							{
-								"@type": "Question",
-								"name": "逍遥自在轩是什么？",
-								"acceptedAnswer": {
-									"@type": "Answer",
-									"text": "逍遥自在轩是一个个人主页和工具导航网站，采用 Astro、Starlight、Svelte、TailwindCSS 等现代技术构建，用于汇集生活和工作中频繁使用的工具、软件和服务。"
-								}
-							},
-							{
-								"@type": "Question",
-								"name": "网站包含哪些类型的资源？",
-								"acceptedAnswer": {
-									"@type": "Answer",
-									"text": "网站包含 AI 工具、编程开发资源、在线服务、文档构建工具、前端后端开发工具、云服务、搜索引擎、社交媒体等多种类型的精选资源。"
-								}
-							},
-							{
-								"@type": "Question",
-								"name": "如何使用这个网站？",
-								"acceptedAnswer": {
-									"@type": "Answer",
-									"text": "您可以通过导航菜单浏览不同分类的工具和服务，点击感兴趣的链接即可访问相应的资源。网站支持快速搜索和分类浏览。"
-								}
-							}
-						]
 					}),
 				},
 			],

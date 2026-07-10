@@ -1,26 +1,113 @@
 # robots.txt for https://www.niceshare.site/
-# 允许所有搜索引擎爬取所有内容
+# 允许所有搜索引擎与 AI 爬虫爬取全部内容
 
-# 全局规则 - 允许所有搜索引擎
+# 全局规则 - 允许所有爬虫
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /_astro/
 
-# Google Bot - 优先级最高
+# ============================
+# 传统搜索引擎
+# ============================
 User-agent: Googlebot
 Allow: /
-Disallow: /api/
 
-# Google Image Bot
 User-agent: Googlebot-Image
 Allow: /
 
-# DuckDuckGo Bot
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Sogou web spider
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
 User-agent: DuckDuckBot
 Allow: /
 
-# 禁止有害爬虫
+# ============================
+# AI / 生成式引擎爬虫（GEO）
+# ============================
+# OpenAI（ChatGPT 训练与搜索）
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic（Claude）
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google AI（Gemini / AI Overviews）
+User-agent: Google-Extended
+Allow: /
+
+# Apple（Siri / Apple Intelligence）
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta AI
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Amazon（Alexa / Rufus）
+User-agent: Amazonbot
+Allow: /
+
+# Common Crawl（多数开源模型训练语料来源）
+User-agent: CCBot
+Allow: /
+
+# 字节跳动（豆包）
+User-agent: Bytespider
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# xAI（Grok）
+User-agent: xAI-Bot
+Allow: /
+
+# ============================
+# 禁止纯商业 SEO 数据爬虫
+# ============================
 User-agent: AhrefsBot
 Disallow: /
 
@@ -33,9 +120,11 @@ Disallow: /
 User-agent: MJ12bot
 Disallow: /
 
-# Sitemap 位置
+# ============================
+# Sitemap 与 LLM 索引
+# ============================
 Sitemap: https://www.niceshare.site/sitemap-index.xml
-Sitemap: https://www.niceshare.site/sitemap-0.xml
 
-# 主机信息
-Host: https://www.niceshare.site
+# LLM 友好索引（llms.txt 规范）
+# https://www.niceshare.site/llms.txt
+# https://www.niceshare.site/llms-full.txt

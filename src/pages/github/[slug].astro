@@ -18,6 +18,50 @@ const { entry } = Astro.props;
 const project = normalizeGithubProject({ slug: entry.slug, data: entry.data });
 const { Content } = await render(entry);
 const description = entry.data.description;
+
+const SITE_URL = 'https://www.niceshare.site';
+const pageUrl = `${SITE_URL}/github/${entry.slug}/`;
+const publishedAt = entry.data.publishedAt;
+const updatedAt = entry.data.updatedAt;
+
+const articleJsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'TechArticle',
+	'@id': `${pageUrl}#article`,
+	headline: `${entry.data.title} - 开源项目介绍与上手指南`,
+	description,
+	url: pageUrl,
+	inLanguage: 'zh-CN',
+	datePublished: publishedAt,
+	dateModified: updatedAt,
+	author: { '@type': 'Person', name: '逍遥自在轩', url: `${SITE_URL}/` },
+	publisher: {
+		'@type': 'Person',
+		name: '逍遥自在轩',
+		logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+	},
+	mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+	about: {
+		'@type': 'SoftwareSourceCode',
+		name: entry.data.title,
+		description: entry.data.repoDescription ?? description,
+		codeRepository: entry.data.repo,
+		programmingLanguage: entry.data.language,
+		license: entry.data.license,
+		...(entry.data.homepage ? { url: entry.data.homepage } : {}),
+	},
+	keywords: entry.data.tags.join(','),
+});
+
+const breadcrumbJsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: '首页', item: `${SITE_URL}/` },
+		{ '@type': 'ListItem', position: 2, name: '开源琅嬛阁', item: `${SITE_URL}/github/` },
+		{ '@type': 'ListItem', position: 3, name: entry.data.title, item: pageUrl },
+	],
+});
 ---
 
 <StarlightPage
@@ -27,9 +71,20 @@ const description = entry.data.description;
 		description,
 		tableOfContents: false,
 		head: [
-			{ tag: 'link', attrs: { rel: 'canonical', href: `https://www.niceshare.site/github/${entry.slug}/` } },
+			{ tag: 'link', attrs: { rel: 'canonical', href: pageUrl } },
+			{ tag: 'meta', attrs: { property: 'og:type', content: 'article' } },
 			{ tag: 'meta', attrs: { property: 'og:title', content: `${entry.data.title} | 开源琅嬛阁` } },
 			{ tag: 'meta', attrs: { property: 'og:description', content: description } },
+			{ tag: 'meta', attrs: { property: 'article:published_time', content: `${publishedAt}T00:00:00+08:00` } },
+			{ tag: 'meta', attrs: { property: 'article:modified_time', content: `${updatedAt}T00:00:00+08:00` } },
+			{ tag: 'meta', attrs: { property: 'article:author', content: '逍遥自在轩' } },
+			{ tag: 'meta', attrs: { property: 'article:section', content: '开源项目' } },
+			...entry.data.tags.map((tag) => ({
+				tag: 'meta' as const,
+				attrs: { property: 'article:tag', content: tag },
+			})),
+			{ tag: 'script', attrs: { type: 'application/ld+json' }, content: articleJsonLd },
+			{ tag: 'script', attrs: { type: 'application/ld+json' }, content: breadcrumbJsonLd },
 		],
 	}}
 >

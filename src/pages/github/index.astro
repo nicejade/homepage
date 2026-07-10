@@ -10,19 +10,49 @@ const projects = sortGithubProjects(
 	entries.map((entry) => normalizeGithubProject({ slug: entry.slug, data: entry.data })),
 );
 
-const description = '收录 AI 编程、本地模型、工作流自动化与开发者生产力方向的高质量 GitHub 开源项目。';
+const SITE_URL = 'https://www.niceshare.site';
+const pageUrl = `${SITE_URL}/github/`;
+const description = `收录 AI 编程、本地模型、工作流自动化与开发者生产力方向的 ${projects.length} 个高质量 GitHub 开源项目，每个项目均附核心特性、替代方案对比与上手指南。`;
+
+const itemListJsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'ItemList',
+	'@id': `${pageUrl}#itemlist`,
+	name: '开源琅嬛阁 - 精选 GitHub 开源项目',
+	description,
+	numberOfItems: projects.length,
+	itemListElement: projects.map((project, index) => ({
+		'@type': 'ListItem',
+		position: index + 1,
+		name: project.title,
+		description: project.description,
+		url: `${SITE_URL}${project.href}`,
+	})),
+});
+
+const breadcrumbJsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: '首页', item: `${SITE_URL}/` },
+		{ '@type': 'ListItem', position: 2, name: '开源琅嬛阁', item: pageUrl },
+	],
+});
 ---
 
 <StarlightPage
 	hasSidebar={false}
 	frontmatter={{
-		title: '开源琅嬛阁',
+		title: '开源琅嬛阁 - 精选 GitHub 开源项目导航',
 		description,
 		tableOfContents: false,
 		head: [
-			{ tag: 'link', attrs: { rel: 'canonical', href: 'https://www.niceshare.site/github/' } },
+			{ tag: 'link', attrs: { rel: 'canonical', href: pageUrl } },
+			{ tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
 			{ tag: 'meta', attrs: { property: 'og:title', content: '开源琅嬛阁 | 逍遥自在轩' } },
 			{ tag: 'meta', attrs: { property: 'og:description', content: description } },
+			{ tag: 'script', attrs: { type: 'application/ld+json' }, content: itemListJsonLd },
+			{ tag: 'script', attrs: { type: 'application/ld+json' }, content: breadcrumbJsonLd },
 		],
 	}}
 >

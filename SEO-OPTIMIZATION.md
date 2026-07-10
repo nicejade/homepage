@@ -1,5 +1,25 @@
 # SEO 优化完整清单
 
+## 🤖 GEO（生成式引擎优化）— 2026-07-10 更新
+
+针对 ChatGPT、Claude、Perplexity、Gemini 等生成式引擎的优化：
+
+- ✅ **llms.txt**（`/llms.txt`）：站点级 LLM 索引，含站点简介、核心页面与全部开源项目条目链接（构建时由内容集合动态生成）
+- ✅ **llms-full.txt**（`/llms-full.txt`）：开源琅嬛阁全部项目介绍的完整 Markdown 文本，供 LLM 直接引用
+- ✅ **robots.txt 显式放行 AI 爬虫**：GPTBot、OAI-SearchBot、ChatGPT-User、ClaudeBot、PerplexityBot、Google-Extended、Applebot-Extended、CCBot、Bytespider 等
+- ✅ **全站 `<link rel="alternate" type="text/plain" href="/llms.txt">`** 声明
+- ✅ **RSS Feed 动态化**：`/feed.xml` 由内容集合生成，包含全部开源项目条目（此前为仅 2 条的静态文件）
+
+### 页面级元数据修正（同日）
+
+- ✅ 移除全局 head 中覆盖页面级 `description` / `canonical` / `og:title` / `og:url` / `og:description` / `twitter:title` 的标签，改由 Starlight 按页面自动生成 + 页面 frontmatter 精细控制
+- ✅ 移除占位符标签（`fb:app_id`、`apple-itunes-app`）与空标签（`og:video`、`og:phone_number`）
+- ✅ FAQPage / CollectionPage 结构化数据移至首页专属（此前全站每页注入，存在富媒体结果滥用风险）
+- ✅ `/github/` 列表页：ItemList（全量真实项目条目）+ BreadcrumbList 结构化数据
+- ✅ `/github/[slug]` 详情页：TechArticle + SoftwareSourceCode + BreadcrumbList 结构化数据，`og:type=article` 及 `article:published_time` / `article:modified_time` / `article:tag`
+- ✅ Sitemap 分级：首页 priority 1.0（daily）、/github/ 0.9（daily）、项目页 0.8（weekly）、about 0.5（monthly）；about 条目 URL 与部署路径（无尾斜杠）对齐
+- ✅ 首页 `<title>` 优化为关键词导向：「逍遥自在轩 - 精选工具与资源导航 | AI 工具、开源项目、开发者资源」
+
 ## ✅ 已完成的 SEO 优化项目
 
 本项目已经实施了全面的 SEO 优化策略，以下是详细清单：

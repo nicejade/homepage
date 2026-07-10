@@ -3,6 +3,12 @@ title: 清闲无事，坐卧随心
 description: 逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。涵盖 AI 工具、编程开发、文档资源、云服务、在线工具等精选推荐。
 template: splash
 head:
+  - tag: title
+    content: 逍遥自在轩 - 精选工具与资源导航 | AI 工具、开源项目、开发者资源
+  - tag: meta
+    attrs:
+      property: og:type
+      content: website
   - tag: meta
     attrs:
       property: og:title
@@ -19,6 +25,25 @@ head:
     attrs:
       rel: canonical
       href: https://www.niceshare.site/
+  - tag: script
+    attrs:
+      type: application/ld+json
+    content: >-
+      {"@context":"https://schema.org","@type":"CollectionPage","@id":"https://www.niceshare.site/#collectionpage","name":"逍遥自在轩
+      - 精选工具与资源导航","description":"汇集优质的 AI
+      工具、编程开发资源、在线服务、文档构建工具等精选内容","url":"https://www.niceshare.site/","inLanguage":"zh-CN","isPartOf":{"@type":"WebSite","url":"https://www.niceshare.site/"},"about":{"@type":"Thing","name":"Web
+      Development Tools and Resources"},"keywords":["AI工具","编程开发","在线服务","工具导航","资源分享","开发工具","前端开发","后端开发"],"hasPart":[{"@type":"WebPage","name":"开源琅嬛阁","url":"https://www.niceshare.site/github/","description":"收录
+      AI 编程、本地模型、工作流自动化与开发者生产力方向的高质量 GitHub 开源项目"},{"@type":"WebPage","name":"关于逍遥自在轩","url":"https://www.niceshare.site/about","description":"了解项目结构、技术栈、使用方法和部署指南"}]}
+  - tag: script
+    attrs:
+      type: application/ld+json
+    content: >-
+      {"@context":"https://schema.org","@type":"FAQPage","@id":"https://www.niceshare.site/#faq","mainEntity":[{"@type":"Question","name":"逍遥自在轩是什么？","acceptedAnswer":{"@type":"Answer","text":"逍遥自在轩是一个个人主页和工具导航网站，采用
+      Astro、Starlight、Svelte、TailwindCSS
+      等现代技术构建，用于汇集生活和工作中频繁使用的工具、软件和服务。"}},{"@type":"Question","name":"网站包含哪些类型的资源？","acceptedAnswer":{"@type":"Answer","text":"网站包含
+      AI
+      工具、编程开发资源、在线服务、文档构建工具、前端后端开发工具、云服务、搜索引擎、社交媒体等多种类型的精选资源；另设「开源琅嬛阁」栏目，收录并深度点评上百个高质量
+      GitHub 开源项目。"}},{"@type":"Question","name":"如何使用这个网站？","acceptedAnswer":{"@type":"Answer","text":"您可以通过导航菜单浏览不同分类的工具和服务，点击感兴趣的链接即可访问相应的资源。网站支持快速搜索和分类浏览。"}}]}
 hero:
   tagline: 应无所住，而生其心。  莫听穿林打叶声，何妨吟啸且徐行。竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。
   html: <img src="/hero.svg" alt="逍遥自在轩 ｜ 个人主页" />

@@ -86,8 +86,12 @@ html[data-theme='dark'] .primary {
 }
 
 /* /github/ 列表页已有自定义标题，隐藏 Starlight 重复的 PageTitle 面板 */
-main:has(.github-curation) > .content-panel:first-child {
+main:has(.github-curation) > .content-panel:has(#_top) {
 	display: none;
+}
+
+main:has(.github-curation) > .content-panel:has(.github-curation) {
+	border-top: none;
 }
 
 .sl-link-button {
