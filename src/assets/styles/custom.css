@@ -1,4 +1,5 @@
 :root {
+  text-autospace: normal;
   --sl-text-5xl: 3rem;
   --sl-text-4xl: 1.6rem;
   --sl-text-3xl: 1.4rem;
@@ -72,6 +73,11 @@ html[data-theme='dark'] .primary {
 
 .sl-markdown-content a:not(:where(.not-content *)) {
 	color: var(--sl-color-link-accent);
+}
+
+.sl-markdown-content :not(:-webkit-any(a, strong, em, del, span, input, code, br))
+	+ :not(:-webkit-any(a, strong, em, del, span, input, code, br, :where(.not-content *))) {
+	margin-top: 0 !important;
 }
 
 .sl-link-button {
