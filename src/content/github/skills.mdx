@@ -1,99 +1,112 @@
 ---
-title: Anthropic Agent Skills
-description: Anthropic 官方的 Agent Skills 参考实现，含技能规范、示例库与 Claude Code 插件安装路径。
-repo: https://github.com/anthropics/skills
-repoDescription: Public repository for Agent Skills
-avatarUrl: https://avatars.githubusercontent.com/u/76263028?v=4
+title: Skills For Real Engineers
+description: Matt Pocock 日常 Agent Skills：可组合 grill、TDD 与规格工作流，强调工程可控而非 vibe coding。
+repo: https://github.com/mattpocock/skills
+repoDescription: Skills for Real Engineers. Straight from my .claude directory.
+avatarUrl: https://avatars.githubusercontent.com/u/28293365?v=4
 tags:
   - AI 编程
   - Agent
-  - 开发工具
-language: Python
-stars: 152794
-forks: 17998
-openIssues: 968
+  - 工作流
+language: Shell
+stars: 169644
+forks: 14603
+openIssues: 162
 contributors: 1
-license: Apache-2.0
+license: MIT
 featured: false
-publishedAt: "2026-06-20"
-updatedAt: "2026-06-20"
-curationReason: 想按 agentskills.io 标准自建技能包，或在 Claude Code / API 中复用 PDF、PPT 等文档技能的开发者。
+publishedAt: "2026-07-14"
+updatedAt: "2026-07-14"
+curationReason: 嫌 GSD/BMAD 流程过重、想保留决策权，又需要 grill 对齐与红绿重构闭环的工程师。
 ---
 
 ## 项目介绍
 
-这是 Anthropic 面向 Claude 生态公开的 **Agent Skills** 仓库：每个技能是一个独立文件夹，内含 `SKILL.md` 指令、脚本与资源，供 Claude 在特定任务中按需加载。仓库同时提供 [Agent Skills 规范](https://agentskills.io)（`spec/`）、可复制的技能模板（`template/`），以及创意、开发、企业与文档处理等多类示例，是理解官方技能体系与编写自定义技能的首选参考。
+Skills For Real Engineers 是 Matt Pocock（Total TypeScript / AI Hero）从自己 `.claude` 目录整理出的一套 **面向真实工程而非 vibe coding** 的 Agent Skills。它刻意做成小、可组合、可黑客的单元：不接管整条研发流水线，而是用 `/grill-me`、`/tdd`、`/to-spec`、`/implement` 等命令补齐「对齐需求、共享领域语言、反馈回路、代码设计」四类常见 Agent 失败模式。支持 skills.sh 本地拷贝改写，也支持 Claude Code 插件订阅更新。
 
 ## 核心特性
 
-- **技能即文件夹**：`SKILL.md` 含 YAML frontmatter（`name`、`description`）与可执行指令，Claude 动态加载以完成可重复任务
-- **多场景示例库**：`skills/` 覆盖创意设计、开发测试、企业沟通，以及 docx / pdf / pptx / xlsx 文档处理能力
-- **官方规范与模板**：`spec/` 定义跨平台技能标准；`template/` 提供最小可运行起点
-- **Claude Code 插件市场**：通过 `/plugin marketplace add anthropics/skills` 安装 `document-skills` 或 `example-skills`
-- **多入口支持**：Claude.ai 付费计划、Claude API Skills 接口，以及 skills.sh 技能目录均可发现与分发
-- **生产级文档技能参考**：文档子技能为 source-available，展示复杂技能在 Claude 产品中的实际形态
+- **可组合、可改编**：技能体积小、依赖少，强调 fork 进项目后按团队习惯改写，而非锁定一整套方法论（明确对照 GSD / BMAD / Spec-Kit）
+- **Grill 对齐工作流**：`/grill-me`（通用）与 `/grill-with-docs`（附带 `CONTEXT.md` / ADR 与共享领域语言）在动手前把需求与术语对齐
+- **工程闭环技能**：`/tdd`（红绿重构）、`/diagnosing-bugs`、`/to-spec`、`/to-tickets`、`/implement`、`/code-review`、`/improve-codebase-architecture` 等覆盖规格、票务、实现与设计治理
+- **双安装哲学**：`npx skills@latest add mattpocock/skills` 把技能拷进项目可自由修改；Claude Code 插件则以只读托管包形式跟上游版本
+- **多宿主支持**：skills.sh 安装器可写入 Claude Code、Codex 及其他 Agent-Skills 标准宿主；按仓库跑一次 `/setup-matt-pocock-skills` 配置 issue tracker、triage 标签与文档落点
 
 ## 对用户价值
 
-通用大模型擅长泛化对话，却难以稳定复现「按品牌规范写文档」「按组织流程分析数据」等专有流程。Agent Skills 把领域知识、步骤与工具调用封装成可版本化、可分享的技能包，让 Claude 在触发相关任务时自动遵循同一套方法。本仓库既是官方范例集，也是自建技能与对接 API 的落地样板，降低从「写 prompt」到「交付可维护能力模块」的门槛。
+Agent 常见翻车点是：没对齐就开写、术语冗长、缺少测试反馈、代码熵加速膨胀。本仓库把经典工程原则（对齐会话、共享语言、小步反馈、深模块设计）收成可调用技能，让你在保留「流程控制权」的同时，系统性地减少沟通偏差与盲写。适合已会用 Agent，但希望输出更像资深工程师、而不是「看起来能跑」的半成品。
 
 ## 与替代方案
 
-- 相比 [Superpowers](https://github.com/obra/superpowers) 等第三方方法论技能库，本仓库代表 **Anthropic 官方标准与实现**，并与 Claude Code 插件市场、API Skills 深度集成。
-- 相比项目级 `CLAUDE.md` 或 Cursor Rules 等静态规则，Skills 支持 **按任务动态加载**、独立版本管理与跨宿主分发（见 agentskills.io）。
-- 相比 MCP 工具服务器，Skills 侧重 **指令、流程与资源编排**；复杂工具调用可与之组合，而非互相替代。
-- 文档类子技能（docx / pdf / pptx / xlsx）为 source-available，**并非全部 Apache 2.0 开源**；商用或二次分发前请逐技能核对许可。
+- 相比 [GSD](https://github.com/gsd-build/gsd) / BMAD / Spec-Kit 等「接管整条流程」方案，本仓库刻意 **不抢走控制权**：技能可组合、可局部替换，流程缺陷也更容易定位与修补。
+- 相比 [Agent Skills（Addy Osmani）](https://github.com/addyosmani/agent-skills)，Addy 更偏 Google 风格全生命周期质量门禁与斜杠命令编排；Matt 更强调 **grill 对齐、领域语言、小技能组合与可 fork 改编**。二者可并存评估。
+- 相比 [Superpowers](https://github.com/obra/superpowers) 或单文件 [Karpathy Coding Guidelines](https://github.com/multica-ai/andrej-karpathy-skills)，本仓库提供更细的 **用户触发 vs 模型触发** 技能分层与票务/规格工作流；若只需行为约束准则而不要技能包，Karpathy 条目更轻量。
 
 ## 适应人群
 
-- 使用 Claude Code、Claude.ai 或 Claude API，希望编写或安装自定义技能的开发者。
-- 需要参考生产级文档处理技能实现的产品与平台工程师。
-- 正在评估 Agent Skills 标准、打算在团队内统一技能包格式的 Tech Lead。
+- 日常用 Claude Code / Codex / Cursor，希望 Agent「先问清楚再写」并走 TDD 的个人开发者。
+- 嫌重型 AI 开发方法论锁流程，想保留本地可改技能与决策权的团队 Tech Lead。
+- 已有领域复杂项目，需要沉淀 `CONTEXT.md` / ADR 与共享术语以压 token、减废话的工程师。
 
 ## 如何使用
 
 ### 前置条件
 
-- 使用 Claude Code、Claude.ai 付费计划，或具备 Skills API 访问权限的 Claude API 账户。
-- 自建技能时熟悉 Markdown 与 YAML frontmatter；部分示例技能依赖 Python 等运行时（见各技能目录 README）。
-- 理解仓库免责声明：示例仅供演示与教育，生产环境需自行充分测试。
+- 已安装某一兼容宿主：Claude Code（推荐插件路径）、或支持 Agent Skills 标准的 Codex / 其他工具。
+- 有目标仓库的读写权限；`/setup-matt-pocock-skills` 会询问 issue tracker（GitHub / Linear / 本地文件）、triage 标签与文档保存位置。
+- 理解：完整工程闭环适合中等以上改动；一行热修不必强跑整套流程。
 
 ### 安装方式
 
-**Claude Code：注册插件市场并安装**
-
-```
-/plugin marketplace add anthropics/skills
-```
-
-浏览安装 `document-skills` 或 `example-skills`，或直接：
-
-```
-/plugin install document-skills@anthropic-agent-skills
-/plugin install example-skills@anthropic-agent-skills
-```
-
-**自建技能：从模板复制**
+**方式 A：skills.sh（可改、可 fork）**
 
 ```bash
-git clone https://github.com/anthropics/skills.git
-cp -r skills/template/template-skill my-skill-name
-# 编辑 my-skill-name/SKILL.md 中的 name、description 与正文指令
+npx skills@latest add mattpocock/skills
 ```
 
-**Claude API**：参阅 [Skills API Quickstart](https://docs.claude.com/en/api/skills-guide#creating-a-skill) 上传自定义技能或使用预置能力。
+安装时勾选需要的技能与宿主，务必包含 `/setup-matt-pocock-skills`。
+
+**方式 B：Claude Code 插件（托管更新）**
+
+在 Claude Code 内：
+
+```
+/plugin marketplace add mattpocock/skills
+/plugin install mattpocock-skills@mattpocock
+```
+
+或在 shell：
+
+```bash
+claude plugin marketplace add mattpocock/skills
+claude plugin install mattpocock-skills@mattpocock
+```
 
 ### 首次运行
 
-在 Claude Code 安装 `document-skills` 后，可尝试：「Use the PDF skill to extract the form fields from `path/to/file.pdf`」。自建技能时，将文件夹放入宿主支持的技能目录，或在对话中明确提及技能 `name` 以触发加载。
+在目标仓库中运行一次：
+
+```
+/setup-matt-pocock-skills
+```
+
+按提示选择 issue tracker、triage 标签与文档目录。之后典型路径：
+
+1. `/grill-with-docs`（或 `/grill-me`）对齐需求并沉淀术语
+2. `/to-spec` → `/to-tickets` 拆票
+3. `/implement`（内部可驱动 `/tdd` 与 `/code-review`）
+
+不确定从哪开始时，可先用 `/ask-matt` 做路由。
 
 ### 验证是否成功
 
-确认 Claude 能识别技能描述并按 `SKILL.md` 步骤执行；插件安装后应在 Claude Code 插件列表中看到 `anthropic-agent-skills`。API 集成时检查技能创建与调用接口返回无错误。
+- 技能列表中能看到 `setup-matt-pocock-skills`、`grill-me` / `grill-with-docs`、`tdd` 等。
+- 跑通一次 setup 后，后续技能能读到你配置的 tracker / 标签 / 文档路径。
+- 对新需求发起 grill：Agent 应先追问细节，而不是直接生成大段实现；有 `/tdd` 时可见先写失败测试再修复的节奏。
 
 ### 常见坑 / 注意事项
 
-- 仓库根目录无单一 SPDX 许可证；**多数示例为 Apache 2.0**，文档子技能为 source-available，不可一律视为可自由商用。
-- Claude.ai 已内置部分示例技能；本仓库主要用于学习模式、自定义扩展与 Claude Code / API 场景。
-- 技能行为以你当前 Claude 版本与宿主实现为准，与仓库演示可能存在差异；关键任务务必在自有环境回归验证。
-- 规范与生态持续演进，跨平台实现请优先对齐 [agentskills.io](https://agentskills.io) 与官方支持文档。
+- **两种安装语义不同**：skills.sh 拷贝到项目便于改编；插件为只读托管包，适合「跟着上游升级」、不适合本地大改后当长期 fork。
+- 必须先跑 `/setup-matt-pocock-skills`，否则依赖 tracker / 标签 / 文档路径的 triage、to-tickets 等技能会缺配置。
+- Codex 等宿主目前走 skills.sh；原生 Codex 插件仍在路线图中，以仓库 ADR 为准。
+- 技能依赖「人愿意被追问」：跳过 grill 直接 `/implement` 会削弱本仓库的核心价值。
