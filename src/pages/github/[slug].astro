@@ -4,6 +4,7 @@ import { getCollection, render } from 'astro:content';
 import GithubPageShell from '../../components/GithubPageShell.astro';
 import GithubSocialCard from '../../components/GithubSocialCard.svelte';
 import MarkdownContent from '../../components/MarkdownContent.astro';
+import MediumZoom from '../../components/MediumZoom.svelte';
 import { normalizeGithubProject } from '../../lib/github-curation';
 
 export async function getStaticPaths() {
@@ -95,5 +96,6 @@ const breadcrumbJsonLd = JSON.stringify({
 		<MarkdownContent>
 			<Content />
 		</MarkdownContent>
+		<MediumZoom client:visible />
 	</GithubPageShell>
 </StarlightPage>

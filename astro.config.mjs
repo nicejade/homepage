@@ -30,8 +30,7 @@ export default defineConfig({
 	},
 	// 预取配置 - 提升页面切换速度
 	prefetch: {
-		prefetchAll: true,
-		defaultStrategy: 'viewport',
+		defaultStrategy: 'hover',
 	},
 	integrations: [
 		svelte(),
@@ -86,7 +85,7 @@ export default defineConfig({
 			components: {
         // Override the default `MarkdownContent` component.
 				MarkdownContent: './src/components/MarkdownContent.astro',
-				LinkCard: './src/components/LinkCard.svelte',
+				LinkCard: './src/components/LinkCard.astro',
 				Footer: './src/components/Footer.astro',
       },
 			logo: {

@@ -1,0 +1,130 @@
+---
+interface Props {
+	title: string;
+	link: string;
+	desc: string;
+	stars?: number;
+	declining?: boolean;
+}
+
+const { title, link, desc, stars = 0, declining = false } = Astro.props;
+const href = declining ? undefined : `${link}?ref=niceshare.site`;
+const starCount = stars > 0 ? Math.min(stars, 5) : 0;
+---
+
+<div class:list={['link-card', declining && 'link-card--declining']}>
+	{
+		declining ? (
+			<span class="link-card__inner link-card__inner--disabled">
+				<h3 class="link-card__title">{title}</h3>
+				<p class="link-card__desc">{desc}</p>
+				{starCount > 0 && (
+					<div class="link-card__stars">
+						{Array.from({ length: starCount }).map(() => (
+							<svg class="link-card__star" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+								<path d="M20.924 7.625a1.52 1.52 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.52 1.52 0 0 0 .387-1.575" />
+							</svg>
+						))}
+					</div>
+				)}
+			</span>
+		) : (
+			<a href={href} target="_blank" rel="noopener" class="link-card__inner">
+				<h3 class="link-card__title">{title}</h3>
+				<p class="link-card__desc">{desc}</p>
+				{starCount > 0 && (
+					<div class="link-card__stars">
+						{Array.from({ length: starCount }).map(() => (
+							<svg class="link-card__star" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+								<path d="M20.924 7.625a1.52 1.52 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.52 1.52 0 0 0 .387-1.575" />
+							</svg>
+						))}
+					</div>
+				)}
+			</a>
+		)
+	}
+</div>
+
+<style>
+	.link-card {
+		position: relative;
+		border-radius: 0.5rem;
+		padding: 1.25rem;
+		transition: box-shadow 150ms ease-in-out;
+		box-shadow: var(--shadow-custom-white);
+	}
+
+	.link-card:hover {
+		box-shadow: var(--shadow-custom-white-xl);
+	}
+
+	html[data-theme='dark'] .link-card {
+		box-shadow: var(--shadow-custom-dark);
+	}
+
+	html[data-theme='dark'] .link-card:hover {
+		box-shadow: var(--shadow-custom-dark-xl);
+	}
+
+	.link-card--declining {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+
+	.link-card__inner {
+		display: block;
+		text-decoration: none;
+	}
+
+	.link-card__inner:not(.link-card__inner--disabled):hover {
+		cursor: pointer;
+	}
+
+	.link-card__inner--disabled {
+		pointer-events: none;
+	}
+
+	.link-card__title {
+		color: var(--color-black);
+	}
+
+	.link-card__title:hover {
+		color: var(--color-brand);
+	}
+
+	html[data-theme='dark'] .link-card__title {
+		color: var(--color-silver);
+	}
+
+	.link-card__desc {
+		margin-top: 0.5rem;
+		font-size: 1rem;
+		font-weight: 400;
+		text-decoration: none;
+		color: var(--color-grey);
+	}
+
+	html[data-theme='dark'] .link-card__desc {
+		color: rgb(156 163 175);
+	}
+
+	.link-card__stars {
+		position: absolute;
+		top: 0;
+		right: 0.5rem;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		margin-top: 0.25rem;
+	}
+
+	.link-card__star {
+		width: 1rem;
+		height: 1rem;
+		margin-top: 0;
+		color: rgb(253 224 71);
+		display: inline-block;
+	}
+</style>

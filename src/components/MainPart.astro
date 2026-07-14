@@ -1,117 +1,117 @@
 ---
 import { CardGrid } from '@astrojs/starlight/components';
-import LinkCard from './LinkCard.svelte';
+import LinkCard from './LinkCard.astro';
 import configs from '../configs';
 ---
 
 {
-  configs.map(({ title, style, list }) => (
-    <h2 class="text-xl font-bold" style="background: -webkit-linear-gradient(#212121, #2196f3);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">{title}</h2>
-    <CardGrid stagger={style === 'stagger'}>
-      {
-        // @ts-ignore
-        list.map(({ title, link, desc, stars, declining }) => (
-          <LinkCard client:only='svelte' title={title} link={link} desc={desc} stars={stars} declining={declining}  />
-        ))
-      }
-    </CardGrid>
-  ))
+	configs.map(({ title, style, list }) => (
+		<>
+			<h2
+				id={title}
+				class="text-xl font-bold"
+				style="background: -webkit-linear-gradient(#212121, #2196f3);-webkit-background-clip: text;-webkit-text-fill-color: transparent;"
+			>
+				{title}
+			</h2>
+			<CardGrid stagger={style === 'stagger'}>
+				{
+					// @ts-ignore
+					list.map(({ title, link, desc, stars, declining }) => (
+						<LinkCard title={title} link={link} desc={desc} stars={stars} declining={declining} />
+					))
+				}
+			</CardGrid>
+		</>
+	))
 }
 
-<!-- 回到顶部按钮 -->
 <button id="back-to-top" aria-label="回到顶部" title="回到顶部">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M18 15l-6-6-6 6"/>
-  </svg>
+	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		<path d="M18 15l-6-6-6 6" />
+	</svg>
 </button>
 
 <style>
-  #back-to-top {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #0ea5e9, #2196f3);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    transform: translateY(20px);
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  }
+	#back-to-top {
+		position: fixed;
+		bottom: 20px;
+		right: 20px;
+		background: linear-gradient(135deg, #0ea5e9, #2196f3);
+		color: white;
+		border: none;
+		border-radius: 50%;
+		width: 50px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 0.3s, transform 0.3s;
+		transform: translateY(20px);
+		z-index: 1000;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+	}
 
-  #back-to-top.visible {
-    opacity: 0.8;
-    transform: translateY(0);
-  }
+	#back-to-top.visible {
+		opacity: 0.8;
+		transform: translateY(0);
+	}
 
-  #back-to-top:hover {
-    opacity: 1;
-  }
+	#back-to-top:hover {
+		opacity: 1;
+	}
 
-  /* 移动端适配 */
-  @media (max-width: 768px) {
-    #back-to-top {
-      width: 40px;
-      height: 40px;
-      bottom: 15px;
-      right: 15px;
-    }
-  }
+	@media (max-width: 768px) {
+		#back-to-top {
+			width: 40px;
+			height: 40px;
+			bottom: 15px;
+			right: 15px;
+		}
+	}
 </style>
 
 <script>
-  // 为 gtag 添加类型声明
-  declare global {
-    interface Window {
-      gtag?: (...args: any[]) => void;
-    }
-  }
+	import AnchorJS from 'anchor-js';
 
-  // 当页面加载完成后执行
-  document.addEventListener('DOMContentLoaded', () => {
-    // 检查 URL 中是否存在锚点
-    const hash = decodeURIComponent(window.location.hash);
-    if (hash) {
-      // 延迟一下以确保页面内容已完全加载
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    }
-    
-    const backToTopButton = document.getElementById('back-to-top');
-    // 监听滚动事件
-    window.addEventListener('scroll', () => {
-      // 当页面滚动超过 300px 时显示按钮
-      if (window.scrollY > 300) {
-        backToTopButton.classList.add('visible');
-      } else {
-        backToTopButton.classList.remove('visible');
-      }
-    });
-    
-    // 点击按钮回到顶部
-    backToTopButton.addEventListener('click', () => {
-      // 使用可选链操作符，避免 gtag 未定义的错误
-      window.gtag?.('event', 'back_to_top_click', {
-        'event_category': 'engagement',
-        'event_label': 'back_to_top_button'
-      });
-      
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-  });
+	declare global {
+		interface Window {
+			gtag?: (...args: unknown[]) => void;
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', () => {
+		const anchors = new AnchorJS();
+		anchors.options.visible = 'always';
+		anchors.add('h2');
+
+		const hash = decodeURIComponent(window.location.hash);
+		if (hash) {
+			setTimeout(() => {
+				document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
+			}, 100);
+		}
+
+		const backToTopButton = document.getElementById('back-to-top');
+		if (!backToTopButton) return;
+
+		window.addEventListener(
+			'scroll',
+			() => {
+				backToTopButton.classList.toggle('visible', window.scrollY > 300);
+			},
+			{ passive: true },
+		);
+
+		backToTopButton.addEventListener('click', () => {
+			window.gtag?.('event', 'back_to_top_click', {
+				event_category: 'engagement',
+				event_label: 'back_to_top_button',
+			});
+
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		});
+	});
 </script>
