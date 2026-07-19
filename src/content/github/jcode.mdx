@@ -1,0 +1,119 @@
+---
+title: "jcode"
+description: "Rust 终端 Coding Agent 框架，极致轻量多会话，内置记忆、Swarm 与广泛模型接入。"
+repo: "https://github.com/1jehuang/jcode"
+homepage: "https://jcode.sh"
+repoDescription: "Coding Agent Harness"
+avatarUrl: "https://avatars.githubusercontent.com/u/94247773?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - CLI
+language: "Rust"
+stars: 8739
+forks: 1008
+openIssues: 99
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-07-19"
+updatedAt: "2026-07-19"
+curationReason: "想并行多会话/Swarm、对内存与启动延迟敏感，或要从 Claude Code/Codex 会话续跑的终端用户。"
+---
+
+## 项目介绍
+
+jcode 是用 Rust 打造的下一代终端 Coding Agent 框架（harness），定位不是「又一个聊天壳」，而是尽可能从同一模型里榨出更多可用工作：多会话并行、Agent 记忆、Swarm 协作与极致资源占用。官方强调 harness 层才是能力跃迁的关键，同时仍可当作日常通用开发工具使用，MIT 开源，官网为 [jcode.sh](https://jcode.sh)。
+
+## 核心特性
+
+- **极致性能与内存**：官方对比显示首帧约 14ms、可输入约 49ms；多会话增量内存约 ~10MB/会话，显著低于 Claude Code、OpenCode、Cursor Agent 等同类终端 Agent
+- **Agent 记忆**：对话向量化检索 + 旁路记忆 Agent 提取/校验，被动召回相关记忆，并提供主动 memory 工具与会话 RAG
+- **Swarm 多 Agent**：同一仓库可拉起多个会话，服务端协调文件冲突通知与私信/广播；Agent 也可自行 spawn 工作组并行干活
+- **广泛模型接入**：Claude / OpenAI / Gemini / Copilot / Azure / Ollama / LM Studio 等 OAuth 或配置登录，以及大量 OpenAI-compatible 配置档与自建端点
+- **可定制与可迁移**：Self-dev 模式可让 Agent 改自身源码并热重载；支持从 Claude Code、Codex、OpenCode、pi 等会话 resume；内置 Firefox 浏览器自动化与 MCP（兼容 Claude Code 配置导入）
+
+## 对用户价值
+
+当你真正需要「同时开很多会话」或「让多个 Agent 在同一仓库协作」时，多数终端 Agent 的内存与启动成本会迅速爆炸；jcode 把 harness 做成可扩展的基础设施，让多会话成为默认能力而不是负担。语义记忆减少反复喂上下文的 token 浪费，confidence stepping / auto-poke / hill-climbable goals 等机制则针对「过早收工、空转声明完成」这类常见失败模式。对已在用 Claude Code 或 Codex 的用户，还可在会话中断后用 jcode 续跑，降低迁移切换成本。
+
+## 与替代方案
+
+- 相比 **Claude Code**，jcode 开源、模型可换、多会话内存更省，并强调 Swarm/记忆等 harness 能力；Claude Code 在 Anthropic 官方产品体验与生态集成上更成熟。
+- 相比 **OpenCode**，两者都是开源终端 Agent；jcode 以 Rust 与资源效率见长，OpenCode 在多入口形态（TUI/桌面/IDE）与模型目录生态上更广。
+- 相比 **Codex CLI**，jcode 提供更重的多会话协调、记忆与 Swarm；Codex 更贴近 OpenAI 官方链路与订阅体验。
+- 若只需要 IDE 内补全或轻量结对，**Continue** / **Aider** 可能更简单；jcode 适合把终端 Agent 当作主力工作流。
+
+## 适应人群
+
+- 习惯终端 TUI、希望并行多会话或 Swarm 协作的 AI 编程用户。
+- 对启动延迟与内存占用敏感、需要在同一机器跑大量 Agent 的个人或小团队。
+- 已有 Claude Code / Codex / OpenCode 会话、想换 harness 续跑或接入本地/自建模型的迁移用户。
+
+## 如何使用
+
+### 前置条件
+
+- **Linux**（x86_64 / aarch64）、**macOS**（Apple Silicon / Intel）或 **Windows 11**（原生或 WSL2）；Termux 需先 `pkg install glibc patchelf`
+- 至少一个可用模型通路：订阅 OAuth（Claude / OpenAI / Gemini / Copilot 等）、API Key，或本地 Ollama / LM Studio / vLLM 等 OpenAI-compatible 端点
+- 现代终端模拟器；需要浏览器自动化时准备 Firefox（通过内置 Firefox Agent Bridge）
+
+### 安装方式
+
+**推荐（macOS / Linux）：**
+
+```bash
+curl -fsSL https://jcode.sh/install | bash
+```
+
+**Homebrew：**
+
+```bash
+brew tap 1jehuang/jcode
+brew install jcode
+```
+
+**Windows（PowerShell 5.1+）：**
+
+```powershell
+irm https://jcode.sh/install.ps1 | iex
+```
+
+**源码构建：**
+
+```bash
+git clone https://github.com/1jehuang/jcode.git
+cd jcode
+cargo build --release
+scripts/install_release.sh
+```
+
+### 首次运行
+
+```bash
+# 登录提供商（按需选择其一）
+jcode login --provider claude
+# 或：openai / gemini / copilot / ollama / lmstudio / openai-compatible ...
+
+# 启动交互式 TUI
+jcode
+
+# 非交互冒烟
+jcode run "say hello"
+```
+
+本地模型示例：先启动 Ollama 并拉取模型，再 `jcode login --provider ollama`，用 `jcode --provider ollama --model llama3.2 run 'hello'` 验证。无头/SSH 环境可用 `jcode login --provider <provider> --no-browser`。
+
+### 验证是否成功
+
+- `jcode` 在 PATH 中可启动，TUI 正常渲染输入
+- `jcode auth-test --all-configured` 或 `jcode run "say hello"` 能拿到模型回复
+- 可选：`jcode browser status` / `jcode browser setup` 确认浏览器工具可用；多会话可试 `jcode serve` 后再 `jcode connect`
+
+### 常见坑 / 注意事项
+
+- 官方性能数字来自特定机器与版本对照，换硬件/模型后观感会变；本地 embedding 关闭时内存会更低，但记忆能力受影响
+- Self-dev 会改 jcode 自身源码并重载二进制，建议用前沿模型，弱模型可能引入隐蔽破坏
+- MCP 目前主要支持 stdio 型服务器；HTTP/SSE 条目会被识别并跳过
+- Windows 安装、Defender / SmartScreen 与可选组件说明见仓库 `docs/WINDOWS.md`；卸载默认保留配置与会话，完整清理需 `--purge`
+- 项目迭代快（README 含大量实验性 harness 能力），升级前建议看 Releases，并在隔离目录先试用
