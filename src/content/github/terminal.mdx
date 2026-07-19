@@ -1,0 +1,112 @@
+---
+title: Windows Terminal
+description: Windows 现代命令行终端：多标签、丰富渲染与主题配置，并与系统控制台同源演进。
+repo: https://github.com/microsoft/terminal
+homepage: https://aka.ms/terminal
+repoDescription: The new Windows Terminal and the original Windows console host, all in the same place!
+avatarUrl: https://avatars.githubusercontent.com/u/6154722?v=4
+tags:
+  - CLI
+  - 开发工具
+  - 工作流
+language: C++
+stars: 104072
+forks: 9432
+openIssues: 1740
+contributors: 438
+license: MIT
+featured: false
+publishedAt: "2026-07-19"
+updatedAt: "2026-07-19"
+curationReason: Windows 开发者替换旧版控制台、统一 PowerShell/WSL/CMD 多会话工作区的官方首选。
+---
+
+## 项目介绍
+
+Windows Terminal 是微软开源的现代终端应用，面向 Windows 命令行用户提供多标签、富文本、全球化、主题与可配置体验。同一仓库还包含 Windows 控制台宿主 `conhost.exe` 以及双方共享的渲染、文本缓冲与 VT 解析组件，是 Windows 命令行基础设施的官方演进主线，而非第三方外壳包装。
+
+## 核心特性
+
+- **现代终端 UX**：标签页、分屏、丰富文本与全球化支持，面向日常命令行生产力
+- **主题与可配置**：配色、字体（含 Cascadia Code 生态）、样式与配置文件，适配不同 Shell 与工作流
+- **高性能目标**：在功能增强的同时控制内存与功耗，避免「好看但拖慢机器」
+- **与控制台同源**：共享 DirectWrite 渲染、UTF-8/UTF-16 文本缓冲、VT 解析器等核心组件；`conhost` 继续承担兼容性职责
+- **多发行通道**：Stable / Preview，以及追踪 `main` 的 Canary（App Installer 或便携 ZIP）
+
+## 对用户价值
+
+经典 Windows 控制台受兼容性约束，难以原生提供标签、完善 Unicode/Emoji 等社区长期诉求。Windows Terminal 把多会话管理、可读渲染与主题配置做成一等公民，让 PowerShell、CMD、WSL、SSH 等配置文件在同一窗口协作。对 Windows 开发者与运维来说，它通常是换机后最先装的官方终端，而不是再叠一层第三方模拟器。
+
+## 与替代方案
+
+- 相比 **旧版 `conhost` 控制台**，Terminal 提供标签、现代渲染与配置体验；`conhost` 仍负责兼容性与 Console API，二者互补而非简单替代。
+- 相比 **Warp** 等 AI 原生终端，Windows Terminal 更偏官方、轻账户依赖与系统集成；Warp 在块编辑与 Agent 工作流上更激进，但产品形态与许可策略不同。
+- 相比 **Alacritty / WezTerm / Kitty** 等跨平台 GPU 终端，Windows Terminal 深度绑定 Windows（含 Store 自动更新、系统控制台组件）；若团队要在 macOS/Linux 上统一同一套终端配置，跨平台方案更合适。
+- 若主要在 **VS Code / Cursor 内置终端** 里干活，不必强行迁移；独立 Terminal 更适合同时管理多个 Shell/WSL/远程会话的桌面工作区。
+
+## 适应人群
+
+- 每天在 Windows 上切换 PowerShell、CMD、WSL 或 SSH 的后端、全栈与 DevOps 工程师。
+- 希望用官方维护、可自动更新的现代终端替换旧控制台窗口的个人开发者。
+- 关注 Windows 命令行基础设施、ConPTY/VT 兼容或希望贡献 C++ 终端内核的贡献者。
+
+## 如何使用
+
+### 前置条件
+
+- **Windows 10 2004（build 19041）或更高版本**
+- 普通使用：无需自行编译；从 Microsoft Store / winget / GitHub Releases 安装即可
+- 从源码构建（可选）：需 Developer Mode、PowerShell 7+、Windows SDK、Visual Studio 等，见仓库 README「Developer Guidance」
+
+### 安装方式
+
+- **推荐：Microsoft Store**（自动更新）：
+
+打开 [aka.ms/terminal](https://aka.ms/terminal) 从 Microsoft Store 安装。
+
+- **winget**：
+
+```powershell
+winget install --id Microsoft.WindowsTerminal -e
+```
+
+> 安装较新稳定版时，建议 WinGet 客户端为 1.6.2631 或更高，以便正确处理依赖。
+
+- **GitHub Releases（手动）**：
+
+从 [Releases](https://github.com/microsoft/terminal/releases) 下载 `Microsoft.WindowsTerminal_<version>.msixbundle`，双击安装；或在 PowerShell 中执行：
+
+```powershell
+# PowerShell 7+ 可能需要先执行：
+# Import-Module Appx -UseWindowsPowerShell
+Add-AppxPackage Microsoft.WindowsTerminal_<versionNumber>.msixbundle
+```
+
+手动安装不会自动更新，需自行跟进新版本；旧版 Windows 10 若提示缺少框架包，可能需安装 VC++ v14 Desktop Framework Package。
+
+- **非官方包管理器（社区维护）**：
+
+```powershell
+choco install microsoft-windows-terminal
+# 或
+scoop bucket add extras
+scoop install windows-terminal
+```
+
+- **Canary（每日构建，稳定性最低）**：见 [aka.ms/terminal-canary-installer](https://aka.ms/terminal-canary-installer) 或便携 ZIP（[x64](https://aka.ms/terminal-canary-zip-x64) 等）。
+
+### 首次运行
+
+启动 Windows Terminal 后，在设置中为 PowerShell、CMD、WSL 等添加或调整配置文件，按需设置默认配置、字体与配色。文档入口：[aka.ms/terminal-docs](https://aka.ms/terminal-docs)。
+
+### 验证是否成功
+
+确认可新建标签/窗格、切换不同 Shell 配置文件，且文本、颜色与 Unicode 显示正常。若从 Store / winget 安装，应用应出现在开始菜单并可正常启动。
+
+### 常见坑 / 注意事项
+
+- **平台限定**：面向 Windows；macOS/Linux 请另选终端。
+- **手动安装无自动更新**：GitHub / 部分第三方包方式需自己跟进 Releases。
+- **Canary 不稳定**：追踪 `main`，适合尝鲜，不建议作为唯一生产终端。
+- **源码调试易踩坑**：本地构建请部署 `CascadiaPackage`；直接跑 `WindowsTerminal.exe` / 误开 `OpenConsole` 可能看起来像旧控制台。
+- **贡献前先读指南**：功能开发前请遵循仓库 [CONTRIBUTING.md](https://github.com/microsoft/terminal/blob/main/CONTRIBUTING.md)，避免重复劳动。
