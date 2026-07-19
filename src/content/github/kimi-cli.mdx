@@ -1,0 +1,112 @@
+---
+title: "Kimi CLI"
+description: "月之暗面出品的终端 AI Agent，可读写代码、执行命令，并接入 IDE 与 MCP。"
+repo: "https://github.com/MoonshotAI/kimi-cli"
+homepage: "https://moonshotai.github.io/kimi-cli/"
+repoDescription: "Kimi Code CLI is your next CLI agent."
+avatarUrl: "https://avatars.githubusercontent.com/u/129152888?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - CLI
+language: "Python"
+stars: 9767
+forks: 1181
+openIssues: 772
+contributors: 71
+license: "Apache-2.0"
+featured: false
+publishedAt: "2026-07-19"
+updatedAt: "2026-07-19"
+curationReason: "想用 Kimi 在终端做编码 Agent，或评估 ACP / Zsh / MCP 集成的开发者。"
+---
+
+## 项目介绍
+
+Kimi CLI（现称 Kimi Code CLI）是 Moonshot AI 推出的终端 AI Agent，面向软件开发与日常终端操作。它能阅读和编辑代码、执行 Shell 命令、搜索与抓取网页，并在任务执行中自主规划与调整。官方正将其演进为 [Kimi Code](https://github.com/MoonshotAI/kimi-code)；新用户可直接安装新版，配置与会话会自动迁移。
+
+## 核心特性
+
+- **Shell 命令模式**：`Ctrl-X` 切换，在 Agent 会话中直接跑命令，不必反复进出终端
+- **多入口形态**：交互式 `kimi`、本地浏览器 `kimi web`，以及 `kimi acp` 对接 ACP 兼容 IDE
+- **MCP 工具链**：`kimi mcp` 管理 HTTP / stdio / OAuth 服务，也可用 `--mcp-config-file` 临时接入
+- **编辑器集成**：官方 VS Code 扩展，以及 Zed / JetBrains 等通过 ACP 的 Agent 面板接入
+- **Zsh 插件**：配合 [zsh-kimi-cli](https://github.com/MoonshotAI/zsh-kimi-cli)，在 Shell 里一键进入 Agent 模式
+
+## 对用户价值
+
+把「读代码 → 改文件 → 跑命令 → 查资料」收进同一条终端工作流，减少在 IDE、浏览器聊天与 Shell 之间来回切换。对已使用 Kimi 生态、或希望用 ACP / MCP 把 Agent 嵌进现有编辑器的人，上手成本相对低；Apache-2.0 许可也便于在团队内评估与二次集成。
+
+## 与替代方案
+
+- 相比 **Claude Code / Codex**：Kimi CLI 深度绑定月之暗面模型与 OAuth 登录体验；后者分别偏向 Anthropic / OpenAI 生态。
+- 相比 **OpenCode / Aider**：OpenCode 更强调多模型切换与开源自由度；Aider 更轻、偏 Git diff 结对。Kimi CLI 的差异在 Shell 模式、ACP 与官方 VS Code / Zsh 配套。
+- 若你主要需要 IDE 内补全而非自主 Agent，Continue / Copilot 可能更轻量。
+- **迁移边界**：仓库正在向 Kimi Code CLI 收敛；新项目建议优先看 [kimi-code](https://github.com/MoonshotAI/kimi-code) 与最新安装脚本。
+
+## 适应人群
+
+- 习惯终端，想用自然语言驱动改代码、跑构建与探索陌生仓库的开发者。
+- 需要把 Agent 接到 VS Code、Zed、JetBrains，或扩展 MCP 工具的人。
+- 已在用 Kimi，希望把网页端能力迁到本地 CLI / IDE 工作流的团队。
+
+## 如何使用
+
+### 前置条件
+
+- 支持的操作系统：Linux / macOS / Windows。
+- Python 3.12–3.14（官方建议 3.13）；安装脚本可自动安装 `uv`。
+- 可用的 API 来源：推荐 Kimi Code OAuth，或自行配置其他平台 API Key。
+
+### 安装方式
+
+官方安装脚本（推荐）：
+
+```bash
+# Linux / macOS
+curl -LsSf https://code.kimi.com/install.sh | bash
+```
+
+```powershell
+# Windows (PowerShell)
+Invoke-RestMethod https://code.kimi.com/install.ps1 | Invoke-Expression
+```
+
+若已安装 `uv`：
+
+```bash
+uv tool install --python 3.13 kimi-cli
+```
+
+升级 / 卸载：
+
+```bash
+uv tool upgrade kimi-cli --no-cache
+uv tool uninstall kimi-cli
+```
+
+> 新用户也可直接按官方指引安装 Kimi Code；安装后会自动迁移本仓库的配置与会话。
+
+### 首次运行
+
+```bash
+cd your-project
+kimi
+```
+
+首次启动后输入 `/login`，选择平台（推荐 Kimi Code 走浏览器 OAuth）。可用自然语言下任务，例如「帮我看一下这个项目的目录结构」。无 `AGENTS.md` 时可执行 `/init` 生成项目上下文；`/help` 查看斜杠命令。
+
+### 验证是否成功
+
+```bash
+kimi --version
+```
+
+进入项目后能完成 `/login`，并对仓库提出一个小问题或小改动且得到合理响应，即说明安装与鉴权正常。
+
+### 常见坑 / 注意事项
+
+- **项目演进**：本仓库正逐步收口到 Kimi Code CLI；长期依赖请关注新仓库与文档迁移说明。
+- **macOS 首次启动慢**：可在「系统设置 → 隐私与安全性 → 开发者工具」中加入终端应用以加速后续启动。
+- **Shell 模式限制**：内置命令如 `cd` 尚不支持；复杂目录切换仍建议在普通 Shell 中完成。
+- **ACP 使用前**：需先在终端完成 `/login`，再让 IDE 以 `kimi acp` 启动 Agent 服务。
