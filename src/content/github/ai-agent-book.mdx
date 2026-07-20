@@ -1,0 +1,112 @@
+---
+title: "深入理解 AI Agent"
+description: "李博杰著开源 AI Agent 教材：全书正文/PDF 与十章配套实验代码，覆盖上下文、工具、评估与多 Agent。"
+repo: "https://github.com/bojieli/ai-agent-book"
+repoDescription: "《深入理解 AI Agent：设计原理与工程实践》（李博杰 著）开源主仓库：全书正文、编译版 PDF 与按章配套代码"
+avatarUrl: "https://avatars.githubusercontent.com/u/1421793?v=4"
+tags:
+  - Agent
+  - AI 编程
+  - 工作流
+language: "Python"
+stars: 9354
+forks: 854
+openIssues: 1
+contributors: 1
+license: "Apache-2.0"
+featured: false
+publishedAt: "2026-07-20"
+updatedAt: "2026-07-20"
+curationReason: "想系统学 Agent=LLM+上下文+工具，并按章动手跑实验的工程师与研究生。"
+---
+
+## 项目介绍
+
+**深入理解 AI Agent** 是李博杰所著同名教材的开源主仓库，围绕核心公式 **Agent = LLM + 上下文 + 工具**，提供中文正文/PDF、社区多语言译本，以及与十章一一对应的配套实验代码。内容从基础范式、上下文工程、记忆与 RAG、MCP 工具与 Coding Agent，一路延伸到评估、后训练、自我进化、多模态与多 Agent 协作，适合把理论读透后再亲手跑通。
+
+## 核心特性
+
+- **全书开源**：`book/` 提供引言至第十章 Markdown 正文与编译版中文 PDF；英文/泰米尔语/越南语译本由社区贡献，可直接阅读或自行 `build_pdf.sh` 编译
+- **核心公式贯穿**：以 Agent = 模型 + 上下文 + 工具 组织十章，强调 Harness 工程（模型之外的工程能力）才是竞争力所在
+- **按章配套代码**：目录为 `chapterN/项目名/`；多数实验可独立运行并已对接真实 LLM API，另有复现指南与设计文档两类标注清晰
+- **覆盖主流工程议题**：上下文与 KV Cache、Agent Skills、MCP、Coding Agent、评测基准、SFT/RL、Computer Use、多 Agent 编排等均有可对照实验
+- **国内友好的 API 选型**：推荐 Kimi、智谱、Siliconflow、火山引擎、OpenRouter 等，降低从零配模型的摩擦
+
+## 对用户价值
+
+散落的博客、论文与 demo 很难拼出「设计原理 + 可复现实验」的完整学习路径。本仓库把教材正文与按章代码绑在一起：你可以先读 PDF/Markdown 建立框架，再从第 1–2 章可独立运行的项目上手（如 `web-search-agent`、上下文消融），逐步进入记忆/RAG、工具与 Coding Agent；需要评测或训练时，再按附录克隆外部基准与框架。对个人是系统课程，对团队是可共享的 onboarding 与实验模板。
+
+## 与替代方案
+
+- 相比 [LangChain](https://github.com/langchain-ai/langchain) / [Dify](https://github.com/langgenius/dify) 等**框架或平台**，本仓库是**教材 + 按章实验**，目标是理解原理与亲手复现，而非开箱搭业务 Agent。
+- 相比 [Claude Code Best Practice](https://github.com/shanraisshan/claude-code-best-practice) 等**单一产品实践索引**，本书覆盖更广的 Agent 系统设计面（上下文、记忆、工具、评估、后训练、多模态、多 Agent），不以某一 CLI 为中心。
+- 相比纯论文合集或视频课，这里提供**可运行 Python 实验与消融对照**；但第 6/7/9 章部分评测与训练依赖外部仓库，体积与环境成本高于「只读 PDF」。
+- 不替代生产级 Agent 运行时或托管平台；读完应回到具体栈（自研 Harness、Claude Code、开源框架等）落地。
+
+## 适应人群
+
+- 希望系统建立 Agent 心智模型，并从简单 ReAct/搜索 Agent 循序进阶的工程师与研究生。
+- 需要上下文工程、RAG/记忆、MCP、Coding Agent 或评测选型对照实验的 AI 应用开发者。
+- 带团队做 Agent onboarding，想要一份可 fork、可改、可跑的中文教材与代码基线的 Tech Lead。
+
+## 如何使用
+
+### 前置条件
+
+- Git、Python 3，以及按各子项目 `requirements.txt` 安装依赖的能力。
+- 至少申请一个 LLM API Key（推荐 Kimi / 智谱 / Siliconflow / 火山引擎 / OpenRouter；选型参考作者文：[LLM API Setup](https://01.me/2025/07/llm-api-setup/)）。
+- 建议先通读 `book/` 对应章节，再跑该章代码；高级章可能还需 GPU 或额外克隆外部仓库。
+
+### 安装方式
+
+克隆主仓库：
+
+```bash
+git clone https://github.com/bojieli/ai-agent-book.git
+cd ai-agent-book
+```
+
+以第 1 章可独立运行的搜索 Agent 为例：
+
+```bash
+cd chapter1/web-search-agent
+pip install -r requirements.txt
+```
+
+仅阅读电子书时，直接打开 [`book/深入理解-AI-Agent-李博杰-v1.2.pdf`](https://github.com/bojieli/ai-agent-book/blob/main/book/深入理解-AI-Agent-李博杰-v1.2.pdf)；若需自行编译 PDF，安装 pandoc、xelatex、ElegantBook 后执行 `cd book && bash build_pdf.sh`。
+
+### 首次运行
+
+配置 API Key（以 Kimi / Moonshot 为例）：
+
+```bash
+export MOONSHOT_API_KEY='your-api-key-here'
+# 亦支持 KIMI_API_KEY；或写入 .env
+```
+
+无 Key 可先看离线演示轨迹：
+
+```bash
+python main.py --provider offline-demo
+```
+
+有 Key 后跑单次问答或交互模式：
+
+```bash
+python main.py "2024年诺贝尔物理学奖获得者是谁？"
+# 或：python main.py
+```
+
+### 验证是否成功
+
+- 离线模式应打印完整「想 → 做 → 看」ReAct 示例轨迹。
+- 在线模式应看到多步工具调用与最终总结；可用 `--output result.json` 落盘轨迹做核对。
+- 阅读路径：确认能打开 `book/` 下 PDF 或 `chapter1.md`～`chapter10.md`。
+
+### 常见坑 / 注意事项
+
+- 项目分三类：✅ 可独立运行、📖 复现指南（需另 clone 外部仓）、🚧 设计文档；克隆后先看各目录 README 标注，避免以为「全仓库开箱即跑」。
+- 第 6/7/9/10 章部分实验依赖评测基准、训练框架等，完整命令见仓库文末《附录 · 外部仓库获取》；请 `checkout` 到文档指定 commit 以保证复现。
+- OpenRouter 等兜底通道可能**没有**厂商专有工具（如 Kimi 内置 `$web_search`）；要真实联网搜索请用对应平台主 Key。
+- 子项目许可证可能与根目录 Apache-2.0 不同，商用前核对各目录说明。
+- 社区译本可能滞后于中文原版；以 `book/` 中文正文为准。
