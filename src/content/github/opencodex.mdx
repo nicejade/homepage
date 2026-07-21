@@ -1,0 +1,107 @@
+---
+title: opencodex
+description: 本地通用 LLM 代理，让 Codex 与 Claude Code 接入 Claude、Gemini、Ollama 等任意模型。
+repo: https://github.com/lidge-jun/opencodex
+homepage: https://lidge-jun.github.io/opencodex/
+repoDescription: Universal provider proxy for OpenAI Codex & Claude Code — use any LLM (Claude, Gemini, Grok, DeepSeek, Ollama…) with Codex CLI, App, SDK, and Claude Code
+avatarUrl: https://avatars.githubusercontent.com/u/243035832?v=4
+tags:
+  - AI 编程
+  - CLI
+  - 本地模型
+language: TypeScript
+stars: 1889
+forks: 113
+openIssues: 22
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-07-21"
+updatedAt: "2026-07-21"
+curationReason: 想在官方 Codex/Claude Code 工作流里换模型、池化 ChatGPT 账号或接本地 Ollama 的开发者。
+---
+
+## 项目介绍
+
+opencodex 是面向 OpenAI Codex 与 Claude Code 的轻量本地代理：把 Codex Responses API（以及 Claude Code 的 Anthropic Messages API）翻译成各家 LLM 协议，从而在不改工作流的前提下接入 Claude、Gemini、Grok、DeepSeek、Kimi、Qwen、Ollama 等 40+ 提供商。它支持流式、工具调用、reasoning token 与图片，并可池化多个 ChatGPT / Codex 账户做配额感知路由。项目 MIT 开源，文档提供中英韩三语。
+
+## 核心特性
+
+- **任意模型进 Codex / Claude Code**：5 种协议 adapter 覆盖 Anthropic、Gemini、Azure、OpenAI Responses 与 OpenAI 兼容 Chat Completions；`ocx claude` 可启动已接线的 Claude Code
+- **40+ 内置 Provider + 自定义端点**：仪表盘一键添加；Anthropic / xAI / Kimi 支持 OAuth，也可粘贴 API Key 或 `${ENV_VAR}` 引用
+- **ChatGPT 账户池**：新会话按 5h / 周 / 30d 配额挑健康账号，已有线程保持 affinity；429 冷却与 failover，token 失败 fail-closed
+- **模型路由与子代理委派**：`provider/model` 语法（如 `anthropic/claude-opus-4-8`、`ollama/llama3`）；最多 5 个模型进 Codex subagent 选择器
+- **Web 仪表盘与干净退出**：`localhost:10100` 看请求日志与 OAuth 状态；`ocx stop` / `ocx uninstall` 可恢复原生 Codex 配置，无残留
+
+## 对用户价值
+
+官方 Codex 与 Claude Code 体验好，但模型与账号往往绑死。opencodex 让你继续用同一套 CLI / App / SDK，却能自由换大脑：本地 Ollama 试跑、第三方 API 控成本、多 ChatGPT 账号分担配额，都不必等官方加支持。对已深度使用 Codex 工作流、又不想迁到另一套 Agent 产品的人，它是「换引擎、不换方向盘」的路径。
+
+## 与替代方案
+
+- 相比 **CC Switch**：CC Switch 侧重多 CLI 的供应商配置管理与桌面快切；opencodex 是运行时本地代理，直接把请求翻译并路由到任意模型，还能池化 Codex 登录账号。
+- 相比直接改 **Codex / Claude Code 配置或第三方中继**：opencodex 自动注入客户端、提供仪表盘与按需 shim，并保留 `ocx stop` 一键还原；中继方案通常不覆盖 Claude Code Messages API 与 Codex 账户池。
+- 相比 **OpenCode、Aider** 等独立开源 Agent：那些是另一套产品体验；若你已习惯官方 Codex / Claude Code，opencodex 更适合「保留宿主、只换模型」。
+- 若只需单一官方订阅、从不换模型，直接官方登录更轻量，无需引入本地代理。
+
+## 适应人群
+
+- 日常用 Codex CLI / App，却想试用 Claude、Gemini、DeepSeek 或本地 Ollama 的开发者。
+- 同时维护多个 ChatGPT / Codex 账号，需要配额感知路由与会话亲和的重度用户。
+- 已在用 Claude Code，希望同一守护进程里切换路由模型、又不想迁移到其他 Agent 的人。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 18+（推荐 nvm / fnm 等用户自有 Node，避免 `sudo npm install -g`）
+- 已安装 [Codex](https://github.com/openai/codex) 和/或 Claude Code；Windows / macOS / Linux 原生支持（Windows 无需 WSL）
+- 至少一个可用凭证：ChatGPT / Codex 登录、Provider API Key，或本地 Ollama 等端点
+
+### 安装方式
+
+```bash
+# 自动打包 Bun 运行时，只需 Node 18+
+npm install -g @bitkyc08/opencodex
+```
+
+若出现 `bundled Bun runtime is missing`（安装时跳过了 lifecycle / optional 依赖），允许 bun 脚本后重装：
+
+```bash
+npm install -g --allow-scripts=bun @bitkyc08/opencodex
+```
+
+完整文档：[lidge-jun.github.io/opencodex](https://lidge-jun.github.io/opencodex/)
+
+### 首次运行
+
+```bash
+ocx init          # 交互式写入配置并注入 Codex
+ocx start         # 默认监听 localhost:10100
+ocx gui           # 打开仪表盘，添加 Provider / 管理账户池
+# 可选：按需自动启动代理
+ocx codex-shim install
+```
+
+之后正常使用 Codex；指定路由模型示例：
+
+```bash
+codex -m "anthropic/claude-opus-4-8" "解释这个 stack trace"
+codex -m "ollama/llama3" "重构这个函数"
+```
+
+Claude Code：`ocx claude` 启动已接入代理的会话（需 Claude Code 2.1.129+ 以使用网关模型发现）。
+
+### 验证是否成功
+
+- `ocx status` 显示代理在运行；浏览器打开 `http://localhost:10100` 能看到仪表盘
+- 在 Codex 中执行简单任务，或用 `-m "provider/model"` 指定路由模型并得到响应
+- 仪表盘请求日志出现对应上游调用；无阻塞性鉴权 / 连接错误
+
+### 常见坑 / 注意事项
+
+- **Bun 运行时缺失**：不要用 `--ignore-scripts` / `--omit=optional`；重装时务必显式带上包名 `@bitkyc08/opencodex`
+- **sudo 全局安装**：root 前缀易导致脚本与权限问题，优先迁移到用户级 Node
+- **干净卸载**：试用结束后用 `ocx stop` 或 `ocx uninstall`，避免遗留注入配置
+- **跨 Provider 委派限制**：原生父代理 spawn 路由子代理时，任务正文可能因后端加密丢失（[#92](https://github.com/lidge-jun/opencodex/issues/92)）；可靠跨模型委派请关注文档中的 v1 表面说明
+- **密钥与账户**：OAuth token、API Key 与账户池凭证保存在本地配置中，勿提交到仓库
