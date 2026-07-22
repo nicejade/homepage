@@ -1,0 +1,116 @@
+---
+title: "Pi"
+description: "极简可扩展的终端编码 Agent harness，多模型统一接入，用扩展与包适配你的工作流。"
+repo: "https://github.com/earendil-works/pi"
+homepage: "https://pi.dev"
+repoDescription: "AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI"
+avatarUrl: "https://avatars.githubusercontent.com/u/207902832?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - CLI
+language: "TypeScript"
+stars: 74464
+forks: 9164
+openIssues: 68
+contributors: 233
+license: "MIT"
+featured: false
+publishedAt: "2026-07-21"
+updatedAt: "2026-07-21"
+curationReason: "想要可自改 harness、树状会话分支，或不想被内置 Plan/MCP/权限弹窗绑死的开发者。"
+---
+
+## 项目介绍
+
+Pi 是 earendil-works 出品的极简终端编码 Agent harness：核心保持精简，通过 TypeScript 扩展、Skills、提示词模板、主题与 Pi Packages 适配你的工作流，而不是反过来改工作流迁就工具。仓库同时提供统一多厂商 LLM API（`pi-ai`）、Agent 运行时（`pi-agent-core`）、交互式 CLI（`pi-coding-agent`）与终端 UI 库（`pi-tui`），支持交互 / Print·JSON / RPC / SDK 四种运行形态。
+
+## 核心特性
+
+- **自扩展 harness**：用扩展、Skills、提示词模板、主题定制能力；可打包为 Pi Package，经 npm 或 git 安装分享
+- **15+ 模型提供商**：Anthropic、OpenAI、Google、Bedrock、OpenRouter、Ollama、Kimi For Coding 等；会话中 `/model` 或 `Ctrl+L` 切换
+- **树状可分享会话**：会话存为树；`/tree` 回到任意节点继续，`/export` 导出 HTML，`/share` 上传 gist 分享
+- **四种运行模式**：交互式 TUI、`pi -p` Print/JSON、stdin/stdout RPC，以及可嵌入应用的 SDK（如 OpenClaw 集成）
+- **刻意不做的能力**：默认无子 Agent、Plan 模式、权限弹窗、内置 MCP / TODO / 后台 bash——需要时自己扩展或装第三方包
+
+## 对用户价值
+
+把「读改代码 + 跑命令」收进一条可定制的终端工作流，同时保留上下文工程空间：`AGENTS.md` / `SYSTEM.md`、可定制 compaction、按需加载 Skills。若你讨厌密封式 Agent 产品，希望改 harness 而不是 fork 内核，Pi 的定位更接近可组合原语。MIT 许可，也便于团队评估二次集成与供应链加固实践（如 `--ignore-scripts` 安装、shrinkwrap）。
+
+## 与替代方案
+
+- 相比 **Claude Code / Codex**：Pi 模型无关、开源可扩展；前者深度绑定各自厂商订阅与产品体验。
+- 相比 **OpenCode**：OpenCode 更强调开箱即用的多入口与 Plan/Build；Pi 更偏「最小核心 + 自己拼能力」，默认不做 Plan / 子 Agent / MCP。
+- 相比 **Aider**：Aider 更轻、偏 Git diff 结对；Pi 提供完整 TUI、树状会话与 SDK/RPC 嵌入路径。
+- **边界**：无内置权限系统，默认与启动用户同权；需要隔离请用 Docker / Gondolin / OpenShell 等容器化方案。聊天自动化另见 [pi-chat](https://github.com/earendil-works/pi-chat)。
+
+## 适应人群
+
+- 习惯终端，想用自然语言驱动改代码、跑命令，并自己扩展工具链的开发者。
+- 需要把 Agent 以 SDK / RPC 嵌入自有产品或自动化流水线的工程团队。
+- 想评估「可自改 harness」路线、对比密封式商业 Agent 的技术决策者。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 与可用终端（Windows / Termux 等见官方平台文档）。
+- 至少一个模型来源：订阅（Claude Pro/Max、ChatGPT Plus/Pro、GitHub Copilot 等）走 `/login`，或配置对应 API Key。
+- 理解安全边界：Pi 默认不限制文件系统 / 进程 / 网络权限。
+
+### 安装方式
+
+**npm（推荐加 `--ignore-scripts`）：**
+
+```bash
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+```
+
+**安装脚本（Linux / macOS）：**
+
+```bash
+curl -fsSL https://pi.dev/install.sh | sh
+```
+
+卸载（npm 安装）：
+
+```bash
+npm uninstall -g @earendil-works/pi-coding-agent
+```
+
+从源码开发本 monorepo 时，用仓库根目录的 `npm install --ignore-scripts` 与 `npm run build`（见 README Development）。
+
+### 首次运行
+
+进入项目目录启动：
+
+```bash
+cd your-project
+pi
+```
+
+用订阅登录：
+
+```text
+/login
+```
+
+或先导出 API Key 再启动，例如：
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+pi
+```
+
+默认工具为 `read` / `write` / `edit` / `bash`。可用 `/model` 选模型，用自然语言下任务；需要更多能力再装 Skills、扩展或 `pi install` 包。
+
+### 验证是否成功
+
+命令 `pi` 能进入 TUI，完成 `/login` 或 API Key 鉴权后，对当前仓库提一个小问题（如「总结目录结构」）并得到合理回复，即说明安装与模型通路正常。可用 `/session` 查看会话信息，`/hotkeys` 核对快捷键。
+
+### 常见坑 / 注意事项
+
+- **无内置权限弹窗**：Agent 可读写文件并执行 bash；敏感环境请容器化，参见官方 containerization 文档。
+- **安装务必关注供应链**：官方推荐 `npm install --ignore-scripts`；依赖生命周期脚本默认关闭。
+- **贡献流程特殊**：新贡献者的 issue / PR 默认自动关闭，维护者每日复查；贡献前先读 `CONTRIBUTING.md`。
+- **「缺功能」多半是设计**：MCP、子 Agent、Plan 等需自行扩展或安装第三方 Pi Package，而不是期待内置开关。
