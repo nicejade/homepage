@@ -1,0 +1,110 @@
+---
+title: "Marketing Skills"
+description: Corey Haines 出品的 AI 营销技能库，48 个 SKILL.md 覆盖 CRO、文案、SEO、增长与数据分析全场景。
+repo: "https://github.com/coreyhaines31/marketingskills"
+homepage: "https://marketing-skills.com"
+repoDescription: "Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, analytics, and growth engineering."
+avatarUrl: "https://avatars.githubusercontent.com/u/34802794?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: "JavaScript"
+stars: 41647
+forks: 6555
+openIssues: 81
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-07-25"
+updatedAt: "2026-07-25"
+curationReason: 让编码 Agent 承接落地页转化、冷启邮件、SEO 审计等营销任务的技术型营销人与独立创始人。
+---
+
+## 项目介绍
+
+Marketing Skills 是 Corey Haines 维护的一套 **面向 AI 代理的营销技能库**，把转化优化、文案、SEO、数据分析与增长工程等营销工作，封装成一批结构化的 `SKILL.md` 工作流。它遵循 [Agent Skills 规范](https://agentskills.io)，可在 Claude Code、OpenAI Codex、Cursor、Windsurf 等支持该规范的代理中直接使用。所有技能以 `product-marketing`（产品营销上下文）为公共地基——其它技能在动手前都会先读取它，以理解你的产品、受众与定位，再套用对应框架。
+
+## 核心特性
+
+- **48 项营销技能**：覆盖 CRO、文案、SEO、付费投放、数据度量、留存、增长工程、销售/RevOps 与策略九大类，含 `cro`、`copywriting`、`seo-audit`、`analytics`、`ab-testing`、`churn-prevention` 等
+- **技能相互引用**：以 `product-marketing` 为共享上下文，`copywriting ↔ cro ↔ ab-testing`、`revops ↔ sales-enablement ↔ cold-email` 等形成依赖网，避免各自为战
+- **自动触发 + 显式调用**：代理识别到营销任务时自动套用对应框架，也支持 `/cro`、`/emails`、`/seo-audit` 等斜杠命令直接调用
+- **多宿主安装**：官方推荐 `npx skills` 一键安装，另提供 Claude Code 插件、Git 克隆/子模块、SkillKit 多代理等六种接入方式
+- **纯 Markdown 交付**：技能即知识文件，无运行时依赖，可随项目版本化、按需裁剪与二次定制
+
+## 对用户价值
+
+通用编码 Agent 在营销任务上往往缺乏方法论：写落地页不懂转化框架、做 SEO 审计漏掉关键项、发冷启邮件套路化。Marketing Skills 把资深营销人的判断编码成可复用工作流——何时该做客户调研、落地页按什么结构改、A/B 实验怎么设计。对独立创始人，它相当于把一位懂增长的营销顾问接进终端；对技术型营销团队，它提供可版本化、跨工具复用的营销执行标准。
+
+## 与替代方案
+
+- 相比 [Agent Skills](https://github.com/addyosmani/agent-skills)、[Superpowers](https://github.com/obra/superpowers) 等 **通用软件工程技能库**，本仓库聚焦营销垂类（CRO、文案、SEO、增长），领域框架而非研发流程是其核心差异。
+- 相比 [Anthropic Agent Skills](https://github.com/anthropics/skills) 官方规范与示例，这里是 **面向单一职能（营销）的成体系技能集**，二者可组合——用官方格式分发，用本仓库补齐营销专业知识。
+- 相比通用 ChatGPT / Claude 营销提示词合集，Skills 以 `product-marketing` 共享上下文 + 技能互引组织，**按任务渐进加载**，比零散 Prompt 更结构化、可维护。
+
+## 适应人群
+
+- 使用 Claude Code、Cursor 或 Codex，希望代理承接 CRO、文案、SEO 等营销任务的技术型营销人。
+- 需要独立完成增长全链路、又缺乏专职营销团队的独立开发者与创始人。
+- 想为团队沉淀可版本化、可跨工具复用营销执行标准的增长负责人。
+
+## 如何使用
+
+### 前置条件
+
+- 一个支持 Agent Skills 规范的宿主：Claude Code、Codex、Cursor、Windsurf 等。
+- 目标项目具备读写权限；建议先准备好产品/受众/定位信息，供 `product-marketing` 技能建立上下文。
+- 已安装 Node.js，以便使用官方推荐的 `npx skills` 安装方式。
+
+### 安装方式
+
+**CLI 安装（官方推荐）**
+
+```bash
+# 安装全部技能
+npx skills add coreyhaines31/marketingskills
+
+# 仅安装指定技能
+npx skills add coreyhaines31/marketingskills --skill cro copywriting
+
+# 列出全部可用技能
+npx skills add coreyhaines31/marketingskills --list
+```
+
+在 Agent 会话内运行时，需显式指定代理，否则可能只装到通用 `.agents/skills/` 目录：
+
+```bash
+npx skills add coreyhaines31/marketingskills -a claude-code
+```
+
+**Claude Code 插件**
+
+```
+/plugin marketplace add coreyhaines31/marketingskills
+/plugin install marketing-skills
+```
+
+**克隆复制**
+
+```bash
+git clone https://github.com/coreyhaines31/marketingskills.git
+cp -r marketingskills/skills/* .agents/skills/
+```
+
+多代理批量安装可用 [SkillKit](https://github.com/rohitg00/skillkit)：`npx skillkit install coreyhaines31/marketingskills`。
+
+### 首次运行
+
+安装后新开会话，直接用自然语言描述营销任务，例如「帮我优化这个落地页的转化」或「给我的 SaaS 写首页文案」。代理应自动触发 `cro`、`copywriting` 等对应技能；也可用 `/cro`、`/seo-audit` 直接调用。
+
+### 验证是否成功
+
+发起营销请求后，确认代理引用了具体 skill 名称并按其框架分步执行（而非泛泛作答）；斜杠命令（如 `/emails`）可被识别即安装成功。
+
+### 常见坑 / 注意事项
+
+- 在代理会话内运行 CLI 时若不加 `-a claude-code`，可能只装到 Claude Code 不读取的通用目录，导致技能「装了却不生效」。
+- 从 v1.x 升级到 v2.0 有 17 个技能改名、`page-cro`+`form-cro` 合并为 `cro`；旧目录不会自动清理，需按 README 手动删除并迁移 `product-marketing` 上下文文件。
+- 技能为纯 Markdown，实际效果取决于宿主实现与模型版本，关键营销决策仍需人工复核。
+- MIT 许可，可自由用于个人与商业项目。
