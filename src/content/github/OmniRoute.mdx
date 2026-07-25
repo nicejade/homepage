@@ -1,0 +1,114 @@
+---
+title: "OmniRoute"
+description: "MIT 开源本地 AI 网关：单端点聚合 250+ 提供商与免费额度，配额感知回退，兼容主流编程 Agent。"
+repo: "https://github.com/diegosouzapw/OmniRoute"
+homepage: "https://omniroute.online"
+repoDescription: "Never stop coding. Free MIT AI gateway: one endpoint, 290+ providers (90+ free), 500+ models — Kimi, Claude, GPT, OpenAI, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 500+ contributors"
+avatarUrl: "https://avatars.githubusercontent.com/u/8016841?v=4"
+tags:
+  - AI 编程
+  - 开发工具
+  - CLI
+language: "TypeScript"
+stars: 29696
+forks: 3869
+openIssues: 292
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-07-25"
+updatedAt: "2026-07-25"
+curationReason: "想榨干免费额度、统一多模型路由，或给 Claude Code / Cursor 配本地代理时检索。"
+---
+
+## 项目介绍
+
+OmniRoute 是一款 **MIT 开源、本地优先的 AI 网关**：把 Claude Code、Codex、Cursor、Cline、Copilot、OpenCode 等工具统一指向一个 OpenAI 兼容端点（默认 `http://localhost:20128/v1`），由网关在 250+ 提供商（含 90+ 免费档）间做配额感知路由与自动回退。它强调「零起步成本」——聚合文档化的免费额度并在仪表盘展示，同时用 RTK + Caveman 压缩降低 tool-heavy 会话的 token 消耗。请求路径跑在你自己的机器上，不经过 OmniRoute 云。
+
+## 核心特性
+
+- **单端点多协议**：OpenAI ↔ Claude ↔ Gemini ↔ Responses API 互译，多数编程 Agent 只需改 Base URL
+- **配额感知自动回退**：订阅 → API → 低价 → 免费等多层策略，额度耗尽时毫秒级切换，减少中断
+- **RTK + Caveman 压缩**：对 git diff、grep、日志等工具输出做堆叠压缩，官方称可节省约 15–95% 相关 token
+- **内置 MCP / A2A**：MCP 工具集、A2A 协议与记忆、护栏等生产向能力
+- **多端运行**：npm / Docker / Electron 桌面 / Termux / PWA，密钥本地 AES-256-GCM 加密，默认定制无遥测
+
+## 对用户价值
+
+手工堆叠各家免费档要维护多套 SDK、密钥与限流，很难知道「这个月还剩多少」。OmniRoute 把分散额度收成一个本地仪表盘，并把 Claude Code、Cursor 等工具接到同一代理，避免每个 IDE 单独配一套模型账号。额度打满或限流时自动换下一家，适合长期结对编程又不想被单点配额卡死的场景。压缩链路则针对工具输出浪费 token 的痛点，让同等预算能跑更长会话。
+
+## 与替代方案
+
+- 相比 [OpenRouter](https://openrouter.ai/) 等**托管聚合 API**：OmniRoute 是**自托管本地代理**，密钥与流量留在本机；OpenRouter 免运维但走第三方云，计费与隐私模型不同。
+- 相比 [LiteLLM](https://github.com/BerriAI/litellm) 等**通用 LLM 代理库**：LiteLLM 偏服务端/SDK 集成与统一调用；OmniRoute 更面向**编程 Agent 一键接入、免费档聚合、仪表盘与压缩**，开箱体验更偏「个人/小团队网关」。
+- 相比只改某个 CLI 的 router（如 Claude Code 专用路由）：OmniRoute 目标是**一套配置服务多种工具**；若你只固定用单一 CLI，专用方案可能更轻，但跨 Cursor / Cline / Codex 时 OmniRoute 更省事。
+- 官方对比文档见仓库 [`docs/comparison/OMNIROUTE_VS_ALTERNATIVES.md`](https://github.com/diegosouzapw/OmniRoute/blob/main/docs/comparison/OMNIROUTE_VS_ALTERNATIVES.md)；提供商数量与免费额度会随社区更新，以 README 与仪表盘为准。
+
+## 适应人群
+
+- 同时使用 **Claude Code、Cursor、Cline、Codex** 等工具，想用**一个本地端点**统一模型与回退策略的开发者。
+- 希望尽量用 **免费档 / 订阅额度** 做日常编程，并需要额度可视与自动切换的个人用户。
+- 需要 **Docker / 桌面 / Termux** 自托管、关心密钥不出本机的隐私敏感用户。
+
+## 如何使用
+
+### 前置条件
+
+- **Node.js** 环境（全局 npm/pnpm 安装），或 Docker。
+- 至少准备一个提供商账号或免费档（如 README 提到的 Kiro AI、OpenCode Free 等；具体以仪表盘 Providers 列表为准）。
+- 了解 MIT 许可与各上游提供商的服务条款；免费额度统计方法见官方 [FREE_TIERS](https://github.com/diegosouzapw/OmniRoute/blob/main/docs/reference/FREE_TIERS.md)。
+
+### 安装方式
+
+全局安装（官方 Quick Start）：
+
+```bash
+npm install -g omniroute
+omniroute
+```
+
+Docker：
+
+```bash
+docker run -d --name omniroute --restart unless-stopped --stop-timeout 40 \
+  -p 20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest
+```
+
+源码开发：
+
+```bash
+cp .env.example .env && npm install
+PORT=20128 npm run dev
+```
+
+仪表盘默认 `http://localhost:20128`，API 为 `http://localhost:20128/v1`。更多路径见 [Docker Guide](https://github.com/diegosouzapw/OmniRoute/blob/main/docs/guides/DOCKER_GUIDE.md)、[Setup Guide](https://github.com/diegosouzapw/OmniRoute/blob/main/docs/guides/SETUP_GUIDE.md)。
+
+### 首次运行
+
+1. 启动后打开仪表盘 → **Providers**，连接至少一个免费或付费提供商。
+2. 在 **Endpoints** 复制本地 API Key。
+3. 将编程工具指向 OmniRoute：
+
+```txt
+Base URL: http://localhost:20128/v1
+API Key:  <Dashboard → Endpoints 中复制>
+Model:    auto
+```
+
+各 CLI 的详细配置见 [CLI Tools Guide](https://github.com/diegosouzapw/OmniRoute/blob/main/docs/reference/CLI-TOOLS.md)。
+
+### 验证是否成功
+
+```bash
+curl http://localhost:20128/v1/models -H "Authorization: Bearer YOUR_KEY"
+```
+
+应返回已连接模型列表。再在 Claude Code / Cursor 等工具发一条简单请求，确认路由与回退按预期工作。
+
+### 常见坑 / 注意事项
+
+- **提供商条款与额度**：免费档数量与「约 1.6B tokens/月」等汇总数字会变化，且依赖各家政策；以仪表盘与 [FREE_TIERS](https://github.com/diegosouzapw/OmniRoute/blob/main/docs/reference/FREE_TIERS.md) 方法论为准，勿当作 SLA。
+- **密钥安全**：API Key / OAuth 存在本地；勿把 `.env` 或数据卷提交到公开仓库。远程暴露网关前先读授权与护栏文档。
+- **安装体积**：`better-sqlite3` 等原生依赖可能触发 postinstall；CI 可用 `OMNIROUTE_SKIP_POSTINSTALL=1`（见 README）。
+- **压缩效果因场景而异**：官方节省比例主要针对 tool-heavy 会话中的合格 token，非所有请求一律打折。
+- 升级前阅读 Releases；多平台部署差异见 Termux / PWA / Electron 相关指南。
