@@ -1,0 +1,113 @@
+---
+title: "superfile"
+description: "颜值优先的现代终端文件管理器，多面板浏览、主题与插件，适合轻量日常文件操作。"
+repo: "https://github.com/yorukot/superfile"
+homepage: "https://superfile.dev"
+repoDescription: "Pretty fancy and modern terminal file manager"
+avatarUrl: "https://avatars.githubusercontent.com/u/107802416?v=4"
+tags:
+  - CLI
+  - 开发工具
+  - 工作流
+language: "Go"
+stars: 20637
+forks: 656
+openIssues: 224
+contributors: 116
+license: "MIT"
+featured: false
+publishedAt: "2026-07-27"
+updatedAt: "2026-07-27"
+curationReason: "想在终端里优雅管文件，又嫌 ranger/yazi 上手重、更看重界面观感的开发者。"
+---
+
+## 项目介绍
+
+superfile 是一款用 Go 与 [Bubble Tea](https://github.com/charmbracelet/bubbletea) 打造的现代终端文件管理器，官方定位是「Pretty fancy and modern」。它把侧栏、文件列表、进程、元数据、剪贴板与命令栏收进统一 TUI，强调观感与上手成本，适合不想离开终端、又只需完成轻量目录浏览与文件操作的日常场景。
+
+## 核心特性
+
+- **多面板布局**：侧栏、文件、进程、元数据、剪贴板与命令执行栏；可用快捷键切换焦点，支持多文件面板与预览开关
+- **日常文件操作**：浏览、搜索、排序、钉选目录、显示/隐藏点文件；文件用系统默认应用打开
+- **主题与快捷键**：可自定义主题与热键；Vim 用户可切换到 Vim 风格键位
+- **插件扩展**：元数据（需 exiftool）、MD5 校验、[zoxide](https://github.com/ajeetdsouza/zoxide) 智能跳转等
+- **跨平台安装**：macOS / Linux 一键脚本，Windows 支持 PowerShell / Winget / Scoop；启动命令为 `spf`
+
+## 对用户价值
+
+传统 GUI 文件管理器与终端工作流割裂，而许多终端文件管理器又偏「功能全家桶」、学习曲线陡。superfile 把美观、可读的 TUI 放在第一位，让复制、移动、预览、侧栏钉选等常见操作在终端内即可完成，减少在 Finder / 资源管理器与 shell 之间来回切换。若你的需求是轻量整理目录、快速定位路径，而不是复杂批处理或插件生态深挖，它往往比更重的方案更省心。
+
+## 与替代方案
+
+- 相比 [Yazi](https://github.com/sxyazi/yazi)：官方也承认 Yazi 等工具功能更全；superfile 胜在界面观感与上手简单，不适合作为「功能最强」的首选。
+- 相比 [ranger](https://github.com/ranger/ranger) / [lf](https://github.com/gokcehan/lf)：后两者更偏极简或高度可脚本化；superfile 默认提供更现代的多面板 UI 与主题体系，脚本化与成熟度可能不如老牌方案。
+- 相比 Finder、资源管理器或 [FileBrowser](https://github.com/filebrowser/filebrowser) 等 Web 方案：superfile 绑定终端与本地路径，无浏览器/多用户分享能力；适合开发者本机 CLI 工作流，不适合 Homelab 远程网盘场景。
+- **边界**：Windows 官方标注「尚未完全支持」；图标依赖 Nerd Font；自动更新检查会访问 GitHub，可在配置中关闭。
+
+## 适应人群
+
+- 日常在 macOS / Linux 终端工作，希望用美观 TUI 代替频繁切换 GUI 文件管理器的开发者。
+- 尝试过 ranger / yazi，但更看重开箱观感与较低学习成本的用户。
+- 需要主题、热键与轻量插件（如 zoxide、元数据面板）来微调终端文件工作流的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 操作系统：Linux、macOS；Windows 可用但官方标注尚未完全支持。
+- 终端建议安装并启用 [Nerd Font](https://www.nerdfonts.com/)，否则图标可能显示异常。
+- 可选：`exiftool`（元数据插件）、[zoxide](https://github.com/ajeetdsouza/zoxide)（智能跳转插件）。
+
+### 安装方式
+
+**macOS / Linux（官方一键脚本）：**
+
+```bash
+bash -c "$(curl -sLo- https://superfile.dev/install.sh)"
+```
+
+安装脚本源码见仓库 [`website/public/install.sh`](https://github.com/yorukot/superfile/blob/main/website/public/install.sh)。更多渠道见 [官方安装文档](https://superfile.dev/getting-started/installation/)。
+
+**Windows：**
+
+```powershell
+# PowerShell
+powershell -ExecutionPolicy Bypass -Command "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://superfile.dev/install.ps1'))"
+
+# 或 Winget / Scoop
+winget install --id yorukot.superfile
+scoop install superfile
+```
+
+**从源码构建（需 Go）：**
+
+```bash
+git clone https://github.com/yorukot/superfile.git --depth=1
+cd superfile
+./build.sh          # macOS/Linux；Windows 可用 go build -o bin/spf.exe
+sudo mv ./bin/spf /usr/local/bin
+```
+
+### 首次运行
+
+在终端执行：
+
+```bash
+spf
+```
+
+按 `q` 或 `esc` 退出。建议先浏览 [官方教程](https://superfile.dev/getting-started/tutorial/)：`s` / `p` / `m` 切换侧栏、进程、元数据面板，`n` / `w` 开闭文件面板，`j`/`k` 或方向键移动，`enter`/`l` 进入，`h` 返回上级。Vim 用户请按文档改为 Vim 版热键配置。
+
+### 验证是否成功
+
+- 执行 `spf` 后出现多面板 TUI，图标与文字渲染正常。
+- 能进入/退出目录、用 `/` 搜索当前目录，并按 `q` 干净退出。
+- 若启用 zoxide 插件，按 `z` 可打开跳转搜索；元数据面板在聚焦后能显示目录大小等信息。
+
+### 常见坑 / 注意事项
+
+- **图标乱码**：安装 Nerd Font 并在终端模拟器中启用该字体。
+- **渲染错乱**：将 locale 设为 UTF-8；必要时设置 `RUNEWIDTH_EASTASIAN=0`；Windows 可尝试 `chcp 65001`。更多见 [Troubleshooting](https://superfile.dev/troubleshooting/)。
+- **自动更新提示**：默认约每 24 小时检查 GitHub 新版本；可在配置中将 `auto_check_update` 设为 `false`。
+- **Windows 完整度**：部分能力仍在完善中，生产主力机建议优先 macOS/Linux。
+- 卸载：macOS/Linux 可用官方 `uninstall.sh`；Windows 对应 `uninstall.ps1`（见仓库 README）。
