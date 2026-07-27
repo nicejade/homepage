@@ -1,0 +1,118 @@
+---
+title: "herdr"
+description: "终端里的 Agent 多路复用器：真终端视图、一眼看清状态，分离后 Agent 继续跑。"
+repo: "https://github.com/ogulcancelik/herdr"
+homepage: "https://herdr.dev"
+repoDescription: "agent multiplexer that lives in your terminal."
+avatarUrl: "https://avatars.githubusercontent.com/u/7064011?v=4"
+tags:
+  - Agent
+  - AI 编程
+  - CLI
+language: "Rust"
+stars: 21278
+forks: 1432
+openIssues: 111
+contributors: 1
+license: "Apache-2.0"
+featured: false
+publishedAt: "2026-07-27"
+updatedAt: "2026-07-27"
+curationReason: "适合同时跑 Claude Code / Codex 等多 Agent，想要 tmux 式分离重连与状态侧栏的开发者。"
+---
+
+## 项目介绍
+
+herdr 是一款跑在现有终端里的 **Agent 多路复用器**（agent multiplexer）：用真实终端视图管理 Claude Code、Codex、OpenCode 等编码 Agent，侧栏一眼区分 blocked / working / done，而不是再包一层「解释过的」UI。单 **Rust** 二进制、无 Electron；支持鼠标与 tmux 式前缀键、分离后 Agent 继续跑、SSH 重连，并提供纯 Socket API 让 Agent 彼此编排。
+
+## 核心特性
+
+- **全局面板**：每个 Agent 的 blocked / working / done / idle 状态跨 workspace 可见，真终端输出而非包装视图
+- **分离与持久**：`ctrl+b q` 分离或关掉终端窗口后 Agent 仍在跑；任意终端或 SSH 再执行 `herdr` 即可重连
+- **键鼠双一流**：tmux 风格前缀键与点击、拖拽分屏、右键菜单并存，按场景选用
+- **Agent 可调用 herdr**：纯 Socket API，Agent 可开 pane、读输出、互相等待；配套 [agent skill](https://herdr.dev/docs/agent-skill/)
+- **插件与轻量运行时**：插件扩展 pane / 工作流（[marketplace](https://herdr.dev/plugins/)）；一个二进制跑在你已有的终端里
+
+## 对用户价值
+
+同时开多个编码 Agent 时，最痛的是「哪个在等人、哪个在干活、关掉窗口会不会断」。herdr 把多 Agent 收进带状态侧栏的 multiplexer：真终端、可分离重连、会话可跨重启，适合本地与远程 SSH 同一套心智。需要 Agent 自己开 pane、等彼此完成时，Socket API 把编排留在终端运行时内，而不必另搭 Electron 桌面壳。
+
+## 与替代方案
+
+- 相比 **tmux / Zellij** 等通用终端多路复用器，herdr 面向 **编码 Agent**：自动识别 Claude / Codex 等，侧栏展示 Agent 状态，并提供 Agent 可用的 Socket API。
+- 相比 [Gas Town](https://github.com/gastownhall/gastown) 等 **多 Agent 任务编排 / 合并队列** 工具，herdr 更偏 **终端会话与 pane 运行时**，不替你做 Bead 账本或 PR 合并流水线；可互补使用。
+- 相比 Electron 桌面 Agent IDE，herdr 是 **一个 Rust 二进制 + 现有终端**，更轻、更适合 SSH / 远程；代价是依赖你本机已有的 CLI Agent。
+- 若只偶尔开 1 个 Agent，通用 multiplexer 可能够用；若要「多 Agent 一眼可扫 + 分离不丢 + Agent 互调」，herdr 定位更准。
+
+## 适应人群
+
+- 日常并行跑 **Claude Code、Codex、OpenCode、pi** 等终端编码 Agent 的开发者。
+- 习惯 tmux，但希望侧栏直接看到 Agent 忙闲、并支持鼠标分屏的用户。
+- 需要 SSH / 远程重连、会话与 Agent 在分离后仍存活的进阶终端用户。
+
+## 如何使用
+
+### 前置条件
+
+- 一台可运行安装脚本的环境：**macOS / Linux**（推荐），Windows 为 beta。
+- 本机已安装至少一种终端编码 Agent（如 `claude`、`codex`、`opencode`、`pi` 等）；完整列表见 [supported agents](https://herdr.dev/docs/agents/)。
+- 任意现代终端模拟器即可；无需 Electron。
+
+### 安装方式
+
+```bash
+# 官方一键安装（推荐）
+curl -fsSL https://herdr.dev/install.sh | sh
+```
+
+其他方式：
+
+```bash
+brew install herdr
+# 或
+mise use -g herdr
+```
+
+Windows（beta）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -c "irm https://herdr.dev/install.ps1 | iex"
+```
+
+亦可从 [Releases](https://github.com/ogulcancelik/herdr/releases) 下载预编译二进制。
+
+### 首次运行
+
+在项目目录启动（会启动或附着到默认后台 session）：
+
+```bash
+herdr
+```
+
+在 pane 里启动 Agent，例如：
+
+```bash
+claude
+# 或 codex / opencode / pi 等
+```
+
+herdr 会自动识别；侧栏显示 working / blocked / done / idle。常用：`ctrl+b` 进入前缀模式，`prefix+v` 右分屏，`prefix+c` 新标签，`prefix+q` 分离。完整绑定见 [keyboard](https://herdr.dev/docs/keyboard/)，站内可按 `prefix+?`。
+
+### 验证是否成功
+
+- 运行 `herdr` 后出现 workspace / pane UI，侧栏能看到 Agent 状态变化。
+- `prefix+q` 分离后关掉终端，再执行 `herdr` 应重连到同一 session，Agent 仍在运行。
+- 在 pane 中启动支持的 Agent，确认被自动识别且状态不是长期错误的 idle。
+
+要真正结束 session 并停掉 panes：
+
+```bash
+herdr server stop
+```
+
+### 常见坑 / 注意事项
+
+- **分离 ≠ 停止**：关窗口或 `prefix+q` 后 Agent 仍在跑；要停干净用 `herdr server stop`。
+- Windows 安装路径仍为 **beta**，行为可能与 macOS / Linux 有差异。
+- 鼠标链接：macOS 上 pane 内链接常用 **Ctrl-click**；Cmd-click 依赖终端原生旁路（如关闭 `ui.mouse_capture`）。详见 [quick start](https://herdr.dev/docs/quick-start/)。
+- 配置、远程、`herdr --remote`、插件与 Socket API 以 [herdr.dev/docs](https://herdr.dev/docs/) 为准；升级前查看 Releases 是否有破坏性变更。
