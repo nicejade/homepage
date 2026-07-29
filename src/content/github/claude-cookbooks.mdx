@@ -1,0 +1,110 @@
+---
+title: Claude Cookbooks
+description: Anthropic 官方 Claude 食谱集，以 Jupyter Notebook 演示工具调用、RAG、多模态、Agent 与评测实践。
+repo: https://github.com/anthropics/claude-cookbooks
+repoDescription: A collection of notebooks/recipes showcasing some fun and effective ways of using Claude.
+avatarUrl: https://avatars.githubusercontent.com/u/76263028?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: Jupyter Notebook
+stars: 50504
+forks: 5940
+openIssues: 293
+contributors: 85
+license: MIT
+featured: false
+publishedAt: "2026-07-28"
+updatedAt: "2026-07-28"
+curationReason: 按场景抄官方可运行 notebook，上手 Claude API、Agent SDK 与 Managed Agents 的开发者入口。
+---
+
+## 项目介绍
+
+Claude Cookbooks 是 Anthropic 维护的 **Claude 官方示例食谱库**，用可复制的 Jupyter Notebook / Python 片段展示如何用 Claude API 落地真实能力：分类与摘要、RAG、工具调用、多模态、Extended Thinking、Claude Agent SDK、Managed Agents、评测与可观测性等。仓库通过 `registry.yaml` 索引约 80+ 道配方，并配套 `uv` 依赖管理与 notebook 校验流水线，适合当作「官方可运行文档」而非纯概念教程。
+
+## 核心特性
+
+- **能力配方**：分类、摘要、知识图谱、RAG 与检索增强等基础能力示例
+- **工具与 Agent**：Tool Use、Agent Patterns、威胁情报 Agent、客服 Agent 等可扩展集成
+- **Claude Agent SDK / Managed Agents**：数据分析、Slack Bot、SRE 事件响应、生产部署与 prompt 版本回滚等端到端教程
+- **多模态与进阶技巧**：Vision、图表解读、子代理组合、Prompt Caching、JSON Mode、内容审核过滤器
+- **工程化配套**：`uv` + Makefile、`.env` 密钥模板、notebook 结构/执行测试，以及 Claude Code 校验命令
+
+## 对用户价值
+
+官方 API 文档讲清「能做什么」，Cookbooks 回答「怎么把概念跑通」。你可以直接打开对应 notebook，改密钥与输入数据，把工具调用、RAG、Agent 或评测流水线接到自己的项目里，减少从零拼胶水代码的时间。对团队而言，它是统一的 onboarding 与方案评审参考：先对照官方示例对齐实现路径，再决定是否引入 LangChain 等更重的编排框架。
+
+## 与替代方案
+
+- 相比 [Anthropic 开发者文档](https://docs.claude.com)，本仓库提供 **可执行 notebook 与端到端场景**，更偏动手实践，而非 API 参考手册。
+- 相比 [LangChain](https://github.com/langchain-ai/langchain) / LlamaIndex 等 **应用编排框架**，Cookbooks 是 **官方原语层示例**；需要跨模型组件生态或复杂图编排时，再叠加框架。
+- 相比社区 Claude Code 技巧库（如 Best Practice / Skills 合集），这里聚焦 **Claude API / Agent SDK / Managed Agents**，不是 CLI 工作流或 `.claude/` 配置策展。
+- 概念较新时可先读 [Claude API Fundamentals 课程](https://github.com/anthropics/courses/tree/master/anthropic_api_fundamentals)，再进入本仓库按场景深入。
+
+## 适应人群
+
+- 已有 Anthropic API Key，想用官方可运行示例快速落地 RAG、工具调用或 Agent 的应用开发者。
+- 评估 Managed Agents / Agent SDK 能否接入现有产品流程的后端与平台工程师。
+- 需要在团队内统一「怎么用 Claude」示例与评测基线的 Tech Lead / AI 应用负责人。
+
+## 如何使用
+
+### 前置条件
+
+- Python **3.11 或 3.12**（`pyproject.toml` 要求 `>=3.11,<3.13`）。
+- 推荐安装 [uv](https://docs.astral.sh/uv/)；也可用 pip。
+- 在 [Anthropic Console](https://console.anthropic.com/settings/keys) 申请 Claude API Key。
+- 部分 third-party notebook 还需要 Pinecone、Voyage 等额外服务密钥。
+
+### 安装方式
+
+```bash
+git clone https://github.com/anthropics/claude-cookbooks.git
+cd claude-cookbooks
+
+# 推荐：用 uv 同步依赖
+uv sync --all-extras
+# 或：make install
+
+# 可选：安装 pre-commit
+uv run pre-commit install
+
+# 配置密钥
+cp .env.example .env
+# 编辑 .env，填入 ANTHROPIC_API_KEY
+```
+
+也可用 pip：`pip install -e ".[dev]"`。
+
+### 首次运行
+
+在 `registry.yaml` 中按类别挑选配方，或直接打开目录中的 notebook。例如：
+
+```bash
+uv run jupyter notebook
+# 或
+uv run jupyter lab
+```
+
+建议从较轻量示例入手（如 `tool_use/`、`capabilities/`），再进入 `managed_agents/`、`claude_agent_sdk/` 等进阶目录。测试时可将 `.env` 中的 `CLAUDE_MODEL` 设为较便宜的 Haiku 别名以控制成本。
+
+### 验证是否成功
+
+- Jupyter 能正常启动，且 notebook 内核为当前 `uv` 环境。
+- 打开任一 notebook 后，`anthropic` 客户端能读取 `ANTHROPIC_API_KEY` 并成功完成一次 API 调用。
+- 可选结构校验（无需完整跑通 API）：
+
+```bash
+make test-notebooks NOTEBOOK=tool_use/calculator_tool.ipynb
+```
+
+### 常见坑 / 注意事项
+
+- **密钥勿入库**：只用 `.env` / 环境变量；仓库明确要求不提交 `.env`。
+- **Python 版本**：暂不支持 3.13+；环境不对时 `uv sync` 会失败。
+- **README 链接可能滞后**：部分目录链接仍指向旧路径名 `anthropic-cookbook`；以当前仓库目录与 `registry.yaml` 为准。
+- **成本与模型别名**：完整执行 notebook 会消耗 API 额度；优先用文档推荐的非日期模型别名（如 `claude-haiku-4-5`），避免过时的 dated model ID。
+- **第三方依赖**：Pinecone、Voyage、MongoDB 等示例需额外账号与配置，不是开箱即跑。
+- Notebook **保留输出是刻意的**，用于展示预期结果；本地重跑前注意覆盖与费用。
