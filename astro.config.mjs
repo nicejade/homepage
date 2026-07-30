@@ -87,6 +87,8 @@ export default defineConfig({
 				MarkdownContent: './src/components/MarkdownContent.astro',
 				LinkCard: './src/components/LinkCard.astro',
 				Footer: './src/components/Footer.astro',
+				// /github/ list supplies its own H1; omit Starlight PageTitle to avoid title FOUC.
+				PageTitle: './src/components/PageTitle.astro',
       },
 			logo: {
 				src: './src/assets/images/logo.svg',

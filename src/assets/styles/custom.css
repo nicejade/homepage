@@ -85,8 +85,12 @@ html[data-theme='dark'] .primary {
 	margin-top: 0 !important;
 }
 
-/* /github/ 列表页已有自定义标题，隐藏 Starlight 重复的 PageTitle 面板 */
-main:has(.github-curation) > .content-panel:has(#_top) {
+/*
+ * /github/ 列表页已有自定义 H1（PageTitle 组件在该路由不渲染）。
+ * 仍隐藏空的 Starlight 标题面板，避免留下 padding / 顶部分割线。
+ * 不依赖 #_top：真实 #_top 已挂在列表自定义 H1 上，供「跳转到内容」使用。
+ */
+main:has(.github-curation) > .content-panel:not(:has(.github-curation)) {
 	display: none;
 }
 

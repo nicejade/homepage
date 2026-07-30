@@ -115,6 +115,7 @@
 <section class="github-curation flex flex-col gap-6" aria-label="开源琅嬛阁项目列表">
   <header class="mx-auto max-w-2xl text-center">
     <h1
+      id="_top"
       class="text-3xl font-semibold tracking-tight text-black dark:text-silver sm:text-4xl"
     >
       高质量开源项目精选

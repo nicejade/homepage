@@ -1,0 +1,14 @@
+---
+/**
+ * Starlight always renders a page H1 from frontmatter `title`.
+ * The /github/ list page supplies its own H1 in GithubProjectExplorer;
+ * omitting the duplicate here avoids a FOUC of the document title
+ * (previously hidden only via CSS after paint).
+ */
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const hidePageTitle = path === '/github';
+---
+
+{hidePageTitle ? null : <Default />}
