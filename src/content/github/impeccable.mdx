@@ -1,0 +1,120 @@
+---
+title: "Impeccable"
+description: "面向 AI 编程助手的设计语言：1 个 Skill、23 条命令、浏览器实时迭代与 60 条确定性检测规则。"
+repo: "https://github.com/pbakaus/impeccable"
+homepage: "https://impeccable.style"
+repoDescription: "The design language that makes your AI harness better at design."
+avatarUrl: "https://avatars.githubusercontent.com/u/43004?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: "JavaScript"
+stars: 52428
+forks: 3103
+openIssues: 47
+contributors: 1
+license: "Apache-2.0"
+featured: false
+publishedAt: "2026-07-29"
+updatedAt: "2026-07-29"
+curationReason: "落地页总是 Inter + 紫蓝渐变？用 /impeccable init 与 audit/polish 把产品语境和反 AI 味规则写进助手。"
+---
+
+## 项目介绍
+
+Impeccable 是一套给 AI 编程助手用的**前端设计语言与工作流**：在 Anthropic `frontend-design` 技能思路上扩展，提供统一的 `/impeccable` 命令入口、浏览器实时视觉迭代，以及无需 LLM、无需 API Key 的确定性检测器。先用 `/impeccable init` 写出 `PRODUCT.md` / `DESIGN.md`，后续 `craft`、`audit`、`polish`、`live` 等命令就能在同一套受众、品牌、色彩与反参考语境下改界面，减少「每家官网都像同一套 SaaS 模板」的问题。
+
+## 核心特性
+
+- **一次初始化**：`/impeccable init` 区分 brand（营销/落地页）与 product（应用 UI），写入受众、语气、反参考与设计系统上下文
+- **23 条共享命令**：`craft`、`shape`、`critique`、`audit`、`polish`、`bolder` / `quieter`、`animate`、`live` 等，形成可复用的设计词汇
+- **60 条确定性检测规则**：CLI 与浏览器扩展可在无 LLM 情况下扫描 AI slop（紫蓝渐变、嵌套卡片、bounce 缓动等）与通用质量问题
+- **设计 Hook**：安装后可在 Claude Code、Cursor、Codex、Copilot、Grok Build 等对 UI 文件改动自动跑检测；Cursor 可在写入前拦截
+- **多工具一键安装**：`npx impeccable install` 适配 Cursor、Claude Code、Codex、Gemini CLI、OpenCode 等主流 harness
+
+## 对用户价值
+
+模型训练语料高度同质，跳过设计引导时几乎总会出现 Inter、紫到蓝渐变、卡片套卡片、彩色底上的灰字等「一眼 AI」痕迹。Impeccable 把产品语境、反模式清单与可执行命令写进助手技能，让你在写代码前先定调、在改完后用 `audit` / `critique` / `polish` 收口；`npx impeccable detect` 还能在 CI 或本地做确定性扫描，不依赖模型发挥。
+
+## 与替代方案
+
+- 相比 [Taste Skill](https://github.com/Leonxlnx/taste-skill) 侧重多视觉人格与 GSAP 动效范式，Impeccable 更强调 **命令式设计工作流**（init → shape/craft → audit/polish）与 **无 LLM 的确定性检测器**。
+- 相比 [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) 的行业风格/配色数据库检索，本仓库更像「设计语言 + 迭代命令 + Hook」，而不是大规模设计系统生成器。
+- 相比仅安装 Anthropic [frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) 通用技能，Impeccable 补齐了项目级 `PRODUCT.md`/`DESIGN.md`、23 条命令、live 模式与 CLI detect。
+- 它**不替代** Figma / 专业设计评审；品牌强约束项目仍需人工 override 检测忽略项与设计 token。
+
+## 适应人群
+
+- 用 Cursor、Claude Code、Codex 等做落地页 / SaaS 前端，想压住「AI 味」模板感的开发者。
+- 需要团队统一设计命令与检测规则、并希望 Hook / CI 扫描兜底的小团队。
+- 正在搭建多 harness Agent 工作流、希望一套 Skill 覆盖多工具的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 环境（用于 `npx impeccable`）。
+- 已安装目标 AI 编程工具（Cursor、Claude Code、Codex、Gemini CLI 等）。
+- Cursor 使用 Skills 时，需按官方文档开启 Agent Skills（必要时切换 Nightly / 启用 Rules 中的 Skills）。
+
+### 安装方式
+
+**推荐：CLI 安装**
+
+```bash
+npx impeccable install
+```
+
+安装器会检测 `~/.claude`、`~/.codex`、`.cursor` 等目录，可交互选择 provider 与项目/全局作用域；脚本场景可用：
+
+```bash
+npx impeccable install --providers=claude,codex,cursor,grok --scope=project
+```
+
+更新已有安装：
+
+```bash
+npx impeccable update
+```
+
+**备选：Claude Code 插件市场**
+
+```bash
+/plugin marketplace add pbakaus/impeccable
+```
+
+然后在 `/plugin` 中安装 Impeccable。完整文档见 [impeccable.style](https://impeccable.style)。
+
+### 首次运行
+
+重载 harness 后，在项目中运行：
+
+```text
+/impeccable init
+```
+
+按提示选择 brand 或 product 表面，生成设计上下文。之后可按需执行，例如：
+
+```text
+/impeccable craft
+/impeccable audit landing
+/impeccable polish settings
+/impeccable live
+```
+
+常用命令可用 `/impeccable pin audit` 固定为独立快捷方式（如 `/audit`）。Codex 用户安装或更新后需打开 `/hooks` 批准项目 Hook。
+
+### 验证是否成功
+
+- 助手中可看到 `/impeccable`（或 Codex 的 `$impeccable` / `/skills`）且命令列表可用。
+- `init` 后项目出现 `PRODUCT.md`，并按选择生成或约定 `DESIGN.md`。
+- 可选验证检测器：`npx impeccable detect src/` 能输出规则命中（或干净扫描结果），无需 API Key。
+
+### 常见坑 / 注意事项
+
+- **Codex Hook 信任**：更新若改动 `.codex/hooks.json`，可能需再次在 `/hooks` 中批准。
+- **Grok**：项目 Hook 需 `/hooks-trust` 或启动时 `--trust` 后才会执行。
+- **`.impeccable/` 勿整目录提交**：截图、session、本地缓存应 gitignore；保留共享的 `config.json`、`design.json`、`critique/*.md` 等（见 README 模板）。
+- **忽略规则**：品牌字体等合法例外可用 `npx impeccable ignores` 或文件内 `impeccable-disable` 注释，避免误报。
+- 手动 `cp -r dist/...` 仅作兜底；日常以 `npx impeccable install` / `update` 为准。
