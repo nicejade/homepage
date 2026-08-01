@@ -1,0 +1,107 @@
+---
+title: "Kaneo"
+description: "开源自托管项目管理工具，对标 Linear/Jira 的极简看板，强调少而精与数据自主。"
+repo: "https://github.com/usekaneo/kaneo"
+homepage: "https://kaneo.app/"
+repoDescription: "🎯 All you need. Nothing you don't. Open source project management that works for you, not against you."
+avatarUrl: "https://avatars.githubusercontent.com/u/192649426?v=4"
+tags:
+  - 自托管
+  - 开发工具
+  - 工作流
+language: "TypeScript"
+stars: 5548
+forks: 478
+openIssues: 78
+contributors: 64
+license: "MIT"
+featured: false
+publishedAt: "2026-08-02"
+updatedAt: "2026-08-02"
+curationReason: "厌倦 Jira/Notion 臃肿通知与复杂工作流、想自建轻量 issue 看板的小团队与 indie hacker。"
+---
+
+## 项目介绍
+
+Kaneo 是一款 MIT 许可的开源项目管理工具，定位「你需要的都在，多余的都没有」。它面向受够臃肿平台的小团队与独立开发者，提供干净的看板式工作流，并支持自托管，让 issue、项目与团队数据留在自己的基础设施上。官方另有 [Cloud](https://cloud.kaneo.app) 与完整文档（[kaneo.app/docs](https://kaneo.app/docs/core)）。
+
+## 核心特性
+
+- **极简界面** — 减少多余按钮与通知噪音，把注意力留在交付本身
+- **可自托管** — Docker Compose / drim 一键部署，数据与密钥由你掌控
+- **性能优先** — TypeScript 栈（React + Hono），强调实际可用的响应速度
+- **开源许可** — MIT，便于二次开发与商业自用
+- **多部署路径** — 支持 drim、Docker Compose、Helm（Kubernetes）与本地 `pnpm` 开发
+
+## 对用户价值
+
+多数项目管理工具的问题不是功能不够，而是功能过多：复杂工作流、无休止的通知与配置，反而拖慢交付。Kaneo 把「看板 + issue」收敛成轻量自托管方案，适合不想被 Jira/Linear 的 SaaS 费用或供应商锁定绑架、又需要一个干净协作面板的团队。数据驻留在自有 PostgreSQL 上，也便于合规与备份。
+
+## 与替代方案
+
+- 相比 **[Linear](https://linear.app/)**：Linear 产品体验成熟、偏 SaaS；Kaneo 开源可自托管，更适合要数据自主或控制成本的团队。
+- 相比 **Jira**：Jira 企业流程与插件生态更全，但配置沉重；Kaneo 刻意做减法，不适合重度流程编排与复杂权限矩阵。
+- 相比 **Plane / Focalboard 等开源看板**：选型时对比 UI 完成度、issue 模型与运维成本；Kaneo 的卖点是「少而精 + MIT + 官方 Cloud 可选」。
+- **边界**：若你需要完整 OKR、工时报表、复杂审批链，应继续评估企业级套件，而非强行用 Kaneo 替代。
+
+## 适应人群
+
+- 想替换臃肿项目管理 SaaS、偏好自托管的小团队与创业公司。
+- 需要轻量 issue / Kanban、但不想维护复杂插件生态的工程负责人。
+- 希望在 Homelab 或内网快速搭一套看板，并保留 Cloud 试用出口的独立开发者。
+
+## 如何使用
+
+### 前置条件
+
+- Docker 与 Docker Compose（试用 / 生产推荐），或可运行 [drim](https://github.com/usekaneo/drim) 的环境。
+- PostgreSQL（Compose 会一并拉起）；生产建议准备域名与 HTTPS。
+- 生成会话密钥：`openssl rand -hex 32`（写入 `AUTH_SECRET`）。
+
+### 安装方式
+
+**方式一：drim 一键部署（官方推荐，含自动 HTTPS 与数据库配置）**
+
+```bash
+curl -fsSL https://assets.kaneo.app/install.sh | sh
+drim setup
+```
+
+**方式二：Docker Compose 快速试用**
+
+将官方 README 中的 `compose.yml` 保存到本地，复制 `.env.sample` 为 `.env`，取消注释 `KANEO_CLIENT_URL=http://localhost:5173`，设置 `POSTGRES_PASSWORD` 与 `AUTH_SECRET`，然后：
+
+```bash
+docker compose up -d
+```
+
+浏览器打开 `http://localhost:5173`。Compose 内 API 通过服务名 `postgres` 连库；若 API 跑在宿主机，请改用 `localhost` 或显式设置 `DATABASE_URL`。
+
+**方式三：本地开发**
+
+```bash
+git clone https://github.com/usekaneo/kaneo.git
+cd kaneo
+pnpm install
+# 按 ENVIRONMENT_SETUP.md 配置根目录 .env
+pnpm dev
+```
+
+Kubernetes 场景可使用仓库内 Helm chart（见 `charts/kaneo/`）。
+
+### 首次运行
+
+打开 Web 界面完成初始账号/工作区设置，创建第一个项目与看板列，试着新建一条 issue 并拖拽状态。可选配置 GitHub OAuth（`GITHUB_OAUTH_CLIENT_ID` / `GITHUB_OAUTH_CLIENT_SECRET`）以启用 SSO。
+
+### 验证是否成功
+
+- 页面可访问且能登录；新建 issue 可保存并在看板间移动。
+- `docker compose ps`（或 drim 状态）显示 Postgres 与 Kaneo 容器健康。
+- 重启后会话仍有效（确认 `AUTH_SECRET` 已固定写入 `.env`，而非每次随机生成）。
+
+### 常见坑 / 注意事项
+
+- **未固定 `AUTH_SECRET`**：启动时会随机生成，重启后已有会话全部失效。
+- **数据库主机名**：Compose 内用 `postgres`，宿主机直连 API 时用 `localhost` / 显式 `DATABASE_URL`，混用会导致连库失败。
+- **CORS / 环境变量**：本地开发常见跨域问题，详见仓库 [ENVIRONMENT_SETUP.md](https://github.com/usekaneo/kaneo/blob/main/ENVIRONMENT_SETUP.md)。
+- **生产加固**：务必改默认密码、启用 HTTPS，并参考 [官方文档](https://kaneo.app/docs/core) 配置环境变量；管道安装脚本请先审阅再执行。
