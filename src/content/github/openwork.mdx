@@ -1,0 +1,126 @@
+---
+title: OpenWork
+description: 开源 Claude Cowork 替代方案：跨 Agent 共享技能与 MCP 的桌面 AI 工作流应用。
+repo: https://github.com/different-ai/openwork
+homepage: https://openworklabs.com
+repoDescription: The open-source alternative to Claude Cowork (powered by opencode)
+avatarUrl: https://avatars.githubusercontent.com/u/118544361?v=4
+tags:
+  - Agent
+  - 工作流
+  - 开发工具
+language: TypeScript
+stars: 20151
+forks: 2077
+openIssues: 439
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-08-02"
+updatedAt: "2026-08-02"
+curationReason: 已在用 Cursor、Codex 或 Claude Code，想把同一套技能与连接在团队间复用。
+---
+
+## 项目介绍
+
+OpenWork 是 Different AI 推出的开源桌面应用，定位为 Claude Cowork 与 Codex 的跨平台替代方案（macOS / Windows / Linux），底层由 OpenCode 驱动。你可以把一套技能、MCP 与已连接服务，通过单一 OpenWork MCP 复用到 Codex、Claude Code、Cursor 等兼容 Agent；桌面端是可选工作区，团队侧则可用 OpenWork Den 做能力发布与访问管控。
+
+## 核心特性
+
+- **跨 Agent 复用**：添加一次 OpenWork MCP，即可在多款 Agent 中搜索并执行同一批能力（`search_capabilities` / `execute_capability`）
+- **可选桌面工作区**：需要专注界面时用桌面 App；也可只在现有 Agent 里使用，不必强制安装桌面端
+- **OpenWork Den 管控面**：统一配置推理提供商、成员与团队权限、桌面策略与可安装版本
+- **技能与插件市场**：发布 skills / plugins，按组织、团队或个人分配；可导入 Anthropic 兼容插件并暴露其远程 MCP
+- **Agent 一键安装**：把官方安装提示词贴进 Claude Code / Cursor / Codex 等，即可完成安装、建工作区并打开就绪状态
+
+## 对用户价值
+
+把「在某个 Agent 里配好的技能与连接」从单机、单工具里解放出来，变成可共享的组织能力。个人用户能一次配置、多端复用；小团队可以把 Google Workspace、Microsoft 365 等连接与内部技能统一分发，而不必在每人的 Cursor / Claude Code 里重复粘贴配置。对需要策略管控（本地模型、应用版本）的组织，Den 提供集中管理入口，降低影子 IT 式散装 Agent 配置的成本。
+
+## 与替代方案
+
+- 相比 **Claude Cowork**：OpenWork 强调开源与跨 Agent；Cowork 深度绑定 Anthropic 产品体验与账号体系。
+- 相比 **OpenCode**：OpenCode 是编码 Agent 运行时本身；OpenWork 在其之上做工作流共享、MCP 聚合与组织管控，二者互补而非简单替代。
+- 相比 **Dify / n8n**：后两者偏可视化应用或通用自动化编排；OpenWork 面向「已有 AI Agent 客户端」的能力共享与桌面协作，而不是从零搭低代码平台。
+- 若你只需单人、单工具里写代码，直接用 Claude Code / Cursor / OpenCode 可能更轻；需要跨工具与跨同事复用同一套能力时，OpenWork 更合适。
+
+## 适应人群
+
+- 同时使用多种 Agent（Cursor、Codex、Claude Code 等），厌倦在各处重复配置技能与 MCP 的个人开发者。
+- 希望把内部插件、连接与推理配额统一分发给成员的小团队管理员。
+- 在评估开源 Cowork 替代方案、关注跨平台桌面与组织策略的技术决策者。
+
+## 如何使用
+
+### 前置条件
+
+- 支持的操作系统：macOS、Windows 或 Linux。
+- 至少一个兼容 MCP 的 AI Agent（如 Codex、Claude Code、Cursor、OpenCode），或计划安装官方桌面应用。
+- 可访问 [openworklabs.com](https://openworklabs.com)；添加 MCP 后需在浏览器完成登录并选择组织。
+- 参与源码开发时：Node.js + pnpm（见仓库本地开发说明）。
+
+### 安装方式
+
+**桌面应用（推荐终端用户）：** 从 [官方下载页](https://openworklabs.com/download) 安装对应平台包。
+
+**用现有 AI Agent 安装（官方提示词）：** 将以下内容粘贴到 Claude Code、Cursor、Codex 等可执行本机命令的 Agent：
+
+```text
+Install OpenWork on my computer, set up my first workspace, and open it ready to use. Follow the steps in https://openworklabs.com/start.md?v=hero
+```
+
+**仅接入 OpenWork MCP（不强制桌面端）：**
+
+```bash
+# Codex
+codex mcp add openwork --url https://api.openworklabs.com/mcp/agent
+
+# Claude Code
+claude mcp add --transport http openwork https://api.openworklabs.com/mcp/agent
+```
+
+OpenCode 在 `opencode.json` 中配置：
+
+```json
+{
+  "mcp": {
+    "openwork": {
+      "type": "remote",
+      "enabled": true,
+      "url": "https://api.openworklabs.com/mcp/agent",
+      "oauth": {}
+    }
+  }
+}
+```
+
+任意 MCP 客户端也可直接使用远程地址：`https://api.openworklabs.com/mcp/agent`。
+
+**本地开发（贡献者）：**
+
+```bash
+pnpm dev
+# 多 worktree 并行开发时：
+pnpm dev:worktree
+```
+
+### 首次运行
+
+1. 安装桌面端或完成 Agent 侧安装提示词后，创建首个 workspace。
+2. 在 Agent 中添加 OpenWork MCP，按提示完成浏览器登录并选择组织。
+3. 用 `search_capabilities` 查看可用能力，再用 `execute_capability` 执行一项你已分配的技能或连接，确认链路通畅。
+4. 团队场景下进入 OpenWork Den，邀请成员、发布技能/插件并按组织或个人分配。
+
+### 验证是否成功
+
+- 桌面端能正常打开工作区；或 Agent 侧 MCP 列表中出现 `openwork`。
+- 登录后能列出组织分配的能力；执行一项无害的 capability 返回成功而非鉴权失败。
+- 开发模式下启动日志出现类似 `[openwork] dev profile=... cdp=http://127.0.0.1:...` 的横幅。
+
+### 常见坑 / 注意事项
+
+- **许可证分层**：仓库主体多为 MIT，但 `/ee` 目录为 Fair Source；二次分发或商用前请核对 `LICENSE` 与 `ee/LICENSE`。
+- **MCP 需登录**：添加远程 MCP 后会打开浏览器做 OAuth/组织选择，跳过登录会导致能力列表为空。
+- **开发 profile 与钥匙串**：`pnpm dev:worktree` 默认 `OPENWORK_ELECTRON_USE_MOCK_KEYCHAIN=1`，避免 macOS 钥匙串弹窗卡住 Electron；若要用系统钥匙串需显式设为 `0`。
+- **多实例锁**：第二个实例抢不到同一 profile 锁会直接退出；并行调试请用不同 `OPENWORK_DEV_PROFILE` 或 `dev:worktree`。
+- **文档入口**：[官方文档](https://openworklabs.com/docs) 与下载页更新可能快于 README，安装前建议对照官网最新步骤。
