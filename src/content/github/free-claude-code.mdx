@@ -1,0 +1,105 @@
+---
+title: "Free Claude Code"
+description: "本地代理网关：用自选免费/付费/本地模型驱动 Claude Code、Codex、Pi 及其 IDE 扩展。"
+repo: "https://github.com/Alishahryar1/free-claude-code"
+repoDescription: "Use Claude Code, Codex and Pi for free from your terminal, app, IDE, or phone like OpenClaw (voice supported)"
+avatarUrl: "https://avatars.githubusercontent.com/u/20476625?v=4"
+tags:
+  - AI 编程
+  - 开发工具
+  - Agent
+language: "Python"
+stars: 43865
+forks: 7232
+openIssues: 342
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-08-03"
+updatedAt: "2026-08-03"
+curationReason: "想绕开官方订阅、用 NIM/OpenRouter/Ollama 等跑 Claude Code；多供应商与分级路由场景。"
+---
+
+## 项目介绍
+
+Free Claude Code（FCC）是一个本地运行的供应商代理：把 Claude Code、Codex、Pi 及其 IDE 扩展接到你自己配置的云端或本地模型上。通过本机 Admin UI 选择、校验并应用供应商，用 `fcc-claude` / `fcc-codex` / `fcc-pi` 启动客户端，即可在免费档、付费 API 与 Ollama / LM Studio 等本地模型之间切换，同时尽量保留流式输出、工具调用、推理与图像输入等能力。
+
+## 核心特性
+
+- **一键启动器**：`fcc-claude`、`fcc-codex`、`fcc-pi` 按当前 Admin 配置拉起对应编码 Agent
+- **多供应商 Admin UI**：在约 31 家云端与本地供应商间切换并 Validate / Apply（NVIDIA NIM、OpenRouter、Gemini、DeepSeek、Bedrock、Ollama 等）
+- **原生模型选择器**：代理暴露网关模型目录，可在 Claude Code / Codex 自带的 `/model` 选择器中挑选
+- **分级路由**：可为 Fable / Opus / Sonnet / Haiku 分别指定模型，其余请求走默认 `MODEL` 回退
+- **桌面与扩展集成**：Windows / macOS 托盘或菜单栏后台运行；支持 VS Code、JetBrains ACP，以及可选的 Discord / Telegram（含语音转录）
+
+## 对用户价值
+
+官方 Claude Code / Codex 往往绑定特定订阅或账号体系；若你已有 NVIDIA NIM、OpenRouter 免费档、ChatGPT 订阅、本地 Ollama 等资源，却无法直接喂给这些 Agent，FCC 把「改 Base URL + 统一鉴权 + 模型目录」收成可操作的本地网关。对个人开发者，它降低多供应商试错成本；对习惯终端与 IDE 双开的用户，同一套 Admin 配置可同时服务 CLI 与扩展。可选消息与语音集成则适合希望在手机或聊天工具侧继续会话的场景。
+
+## 与替代方案
+
+- 相比直接使用 **Anthropic / OpenAI 官方登录**：FCC 侧重「自带供应商密钥或本地模型」；若你只用单一官方订阅且不换模型，官方路径更简单。
+- 相比 **[OmniRoute](https://github.com/diegosouzapw/OmniRoute)** 等通用 AI 网关：OmniRoute 更强调跨多工具的免费档聚合与配额回退；FCC 更贴 Claude Code / Codex / Pi 的启动器、原生模型选择器与分级路由。
+- 相比 **[CC Switch](https://github.com/farion1231/cc-switch)**：CC Switch 是配置与供应商切换桌面层；FCC 是常驻本地代理进程，负责协议翻译与请求转发。二者可互补：前者管配置，后者跑流量。
+- 边界：各上游免费额度、ToS 与模型对工具调用的支持差异很大；本地小模型若上下文不足，Agent 体验会明显下降。
+
+## 适应人群
+
+- 已安装 Claude Code / Codex / Pi，希望改用 NIM、OpenRouter、Gemini、本地 Ollama 等供应商的开发者。
+- 需要在多个模型间做 Opus/Sonnet/Haiku 分级路由，或在 IDE 与终端共用同一本地代理的用户。
+- 想通过 Discord / Telegram（可选语音）远程驱动 Claude Code 会话的效率型玩家。
+
+## 如何使用
+
+### 前置条件
+
+- 能运行安装脚本的环境（macOS / Linux / Windows PowerShell）；安装器会处理 Python / uv 等依赖。
+- 至少准备一种供应商密钥或本地推理服务（README 默认示例为 NVIDIA NIM），并了解各上游服务条款。
+- 建议先安装或允许安装器校验 Claude Code、Codex、Pi 中至少一种客户端。
+
+### 安装方式
+
+**macOS / Linux：**
+
+```bash
+curl -fsSL "https://raw.githubusercontent.com/Alishahryar1/free-claude-code/main/scripts/install.sh" | sh
+```
+
+**Windows PowerShell：**
+
+```powershell
+& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Alishahryar1/free-claude-code/main/scripts/install.ps1")))
+```
+
+安装过程会询问要安装或校验哪些编码 Agent；至少选一种。同一命令可重复执行以更新。安装脚本可先在仓库中审阅再运行。
+
+### 首次运行
+
+1. **启动 FCC**：Windows / macOS 打开桌面或开始菜单中的 **Free Claude Code**（托盘 / 菜单栏后台）；Linux 运行 `fcc-server`，保持终端打开。
+2. 查看启动日志中的 Admin UI 地址（默认类似 `http://127.0.0.1:8082/admin`，以实际端口为准）。
+3. 在 Admin UI 配置供应商（例如粘贴 `NVIDIA_NIM_API_KEY`，选择 `MODEL`）→ **Validate** → **Apply**。
+4. 启动客户端：
+
+```bash
+fcc-claude
+# 或
+fcc-codex
+# 或
+fcc-pi
+```
+
+可用 Agent 自带的模型选择器切换 FCC 暴露的模型；普通 CLI 参数仍可用，例如 `fcc-codex exec "hello"`。
+
+### 验证是否成功
+
+- `fcc-server --version` 能打印版本；Admin UI 可打开且 Validate 通过。
+- `fcc-claude` / `fcc-codex` / `fcc-pi` 能启动，并在模型选择器中看到 FCC 网关模型。
+- 发起一次简单对话或 `exec`，确认流式回复正常、无鉴权或端口错误。
+
+### 常见坑 / 注意事项
+
+- **端口与 Token 不一致**：IDE / Codex 配置中的 `base_url`、Bearer Token 必须与 Admin UI 一致（文档示例常为 `8082` 与 `freecc`）。
+- **Claude Code 仍要求登录**：可向 `~/.claude.json`（Windows 为 `%USERPROFILE%\.claude.json`）合并 `"hasCompletedOnboarding": true` 后重启客户端。
+- **优先选支持工具调用的模型**：编码 Agent 依赖 tools；本地模型还需足够上下文容纳系统提示与工具定义。
+- **OpenAI / ChatGPT**：走 Admin「Providers → Connected accounts」连接订阅，而非普通 API Key；连接后需重启已运行的 Agent 以刷新模型列表。
+- **安全**：可选开启本地代理 Token 鉴权；密钥保存在本机配置中，勿提交到仓库。卸载前先停掉所有 FCC 进程，再运行官方 uninstall 脚本（会删除 `~/.fcc/`，但保留 Claude Code / Codex / Pi 本体）。
