@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy, onMount, tick } from 'svelte';
   import {
     GITHUB_SORT_OPTIONS,
     type GithubSortKey,
@@ -15,8 +16,113 @@
   export let onSortChange: (sort: GithubSortKey) => void = () => {};
   export let onClearFilters: () => void = () => {};
 
-  const sortSelectClass =
-    'github-sort h-9 min-w-[9.5rem] cursor-pointer rounded-xl border border-black/[0.08] bg-white pl-3 pr-8 text-sm font-medium leading-none text-black outline-none transition-[border-color,box-shadow,background-color] duration-200 focus:border-brand/60 focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)] dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-silver dark:focus:bg-white/[0.06]';
+  let sortOpen = false;
+  let sortRoot: HTMLDivElement | null = null;
+  let sortTrigger: HTMLButtonElement | null = null;
+  let sortListbox: HTMLUListElement | null = null;
+  let activeIndex = 0;
+
+  $: selectedSortLabel =
+    GITHUB_SORT_OPTIONS.find((option) => option.value === selectedSort)?.label ??
+    GITHUB_SORT_OPTIONS[0].label;
+
+  function selectedSortIndex() {
+    const index = GITHUB_SORT_OPTIONS.findIndex((option) => option.value === selectedSort);
+    return index >= 0 ? index : 0;
+  }
+
+  function closeSortMenu(restoreFocus = false) {
+    if (!sortOpen) return;
+    sortOpen = false;
+    if (restoreFocus) {
+      sortTrigger?.focus();
+    }
+  }
+
+  function openSortMenu() {
+    activeIndex = selectedSortIndex();
+    sortOpen = true;
+    void tick().then(() => {
+      sortListbox?.focus();
+    });
+  }
+
+  function toggleSortMenu() {
+    if (sortOpen) {
+      closeSortMenu();
+    } else {
+      openSortMenu();
+    }
+  }
+
+  function chooseSort(sort: GithubSortKey) {
+    onSortChange(sort);
+    closeSortMenu(true);
+  }
+
+  function onSortTriggerKeydown(event: KeyboardEvent) {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (!sortOpen) {
+        openSortMenu();
+      }
+    } else if (event.key === 'Escape') {
+      closeSortMenu();
+    }
+  }
+
+  function onSortListboxKeydown(event: KeyboardEvent) {
+    const lastIndex = GITHUB_SORT_OPTIONS.length - 1;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        activeIndex = activeIndex >= lastIndex ? 0 : activeIndex + 1;
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        activeIndex = activeIndex <= 0 ? lastIndex : activeIndex - 1;
+        break;
+      case 'Home':
+        event.preventDefault();
+        activeIndex = 0;
+        break;
+      case 'End':
+        event.preventDefault();
+        activeIndex = lastIndex;
+        break;
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        chooseSort(GITHUB_SORT_OPTIONS[activeIndex].value);
+        break;
+      case 'Escape':
+        event.preventDefault();
+        closeSortMenu(true);
+        break;
+      case 'Tab':
+        closeSortMenu();
+        break;
+    }
+  }
+
+  function onDocumentPointerDown(event: PointerEvent) {
+    if (!sortOpen || !sortRoot) return;
+    const target = event.target as Node | null;
+    if (target && !sortRoot.contains(target)) {
+      closeSortMenu();
+    }
+  }
+
+  onMount(() => {
+    document.addEventListener('pointerdown', onDocumentPointerDown);
+  });
+
+  onDestroy(() => {
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('pointerdown', onDocumentPointerDown);
+    }
+  });
 </script>
 
 <div
@@ -88,22 +194,100 @@
 
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
         <div class="inline-flex h-9 items-center gap-2">
-          <label
-            for="github-sort"
-            class="inline-flex h-9 items-center whitespace-nowrap text-grey dark:text-gray-400"
-          >
+          <span id="github-sort-label" class="inline-flex h-9 items-center whitespace-nowrap text-grey dark:text-gray-400">
             排序
-          </label>
-          <select
-            id="github-sort"
-            class={sortSelectClass}
-            value={selectedSort}
-            on:change={(event) => onSortChange(event.currentTarget.value as GithubSortKey)}
-          >
-            {#each GITHUB_SORT_OPTIONS as option}
-              <option value={option.value}>{option.label}</option>
-            {/each}
-          </select>
+          </span>
+
+          <div class="relative" bind:this={sortRoot}>
+            <button
+              type="button"
+              id="github-sort"
+              bind:this={sortTrigger}
+              class="inline-flex h-9 min-w-[10rem] cursor-pointer items-center justify-between gap-2 rounded-full border bg-white py-0 pl-3.5 pr-2.5 text-sm font-medium leading-none outline-none transition-[border-color,box-shadow,background-color,color] duration-200 ease-out motion-reduce:transition-none focus-visible:border-brand/50 focus-visible:shadow-[0_0_0_3px_rgba(33,150,243,0.12)] dark:bg-white/[0.04] dark:focus-visible:bg-white/[0.06] {sortOpen
+                ? 'border-brand/40 text-black shadow-[0_0_0_3px_rgba(33,150,243,0.1)] dark:border-brand/35 dark:text-silver'
+                : 'border-black/[0.08] text-black hover:border-black/[0.14] hover:bg-black/[0.02] dark:border-white/[0.1] dark:text-silver dark:hover:border-white/[0.16] dark:hover:bg-white/[0.06]'}"
+              aria-haspopup="listbox"
+              aria-expanded={sortOpen}
+              aria-controls="github-sort-listbox"
+              aria-labelledby="github-sort-label github-sort"
+              on:click={toggleSortMenu}
+              on:keydown={onSortTriggerKeydown}
+            >
+              <span class="truncate">{selectedSortLabel}</span>
+              <svg
+                class="h-3.5 w-3.5 shrink-0 text-grey/55 transition-transform duration-200 ease-out motion-reduce:transition-none dark:text-gray-400 {sortOpen
+                  ? 'rotate-180 text-brand'
+                  : ''}"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2.25"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </button>
+
+            {#if sortOpen}
+              <ul
+                id="github-sort-listbox"
+                bind:this={sortListbox}
+                class="github-sort-menu absolute right-0 top-[calc(100%+0.375rem)] z-20 m-0 flex w-max min-w-full list-none flex-col gap-1.5 overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-1.5 shadow-[0_8px_30px_-6px_rgba(15,23,42,0.14),0_2px_8px_-2px_rgba(15,23,42,0.06)] dark:border-white/[0.1] dark:bg-gray-950 dark:shadow-[0_12px_36px_-8px_rgba(0,0,0,0.55)]"
+                role="listbox"
+                tabindex="-1"
+                aria-labelledby="github-sort-label"
+                aria-activedescendant="github-sort-option-{GITHUB_SORT_OPTIONS[activeIndex]?.value}"
+                on:keydown={onSortListboxKeydown}
+              >
+                {#each GITHUB_SORT_OPTIONS as option, index}
+                  {@const isSelected = selectedSort === option.value}
+                  {@const isActive = activeIndex === index}
+                  <li
+                    id="github-sort-option-{option.value}"
+                    role="option"
+                    aria-selected={isSelected}
+                    class="!ml-0 flex min-h-10 list-none cursor-pointer items-center gap-2 rounded-xl py-2 pl-2.5 pr-2 text-sm leading-none no-underline transition-[background-color,color] duration-150 ease-out motion-reduce:transition-none {isSelected
+                      ? 'bg-brand/[0.1] font-medium text-brand'
+                      : isActive
+                        ? 'bg-black/[0.05] font-medium text-black dark:bg-white/[0.08] dark:text-silver'
+                        : 'font-normal text-grey dark:text-gray-400'}"
+                    on:click={() => chooseSort(option.value)}
+                    on:mouseenter={() => {
+                      activeIndex = index;
+                    }}
+                  >
+                    <span class="whitespace-nowrap no-underline">{option.label}</span>
+                    <span
+                      class="ml-auto inline-flex h-4 w-4 shrink-0 items-center justify-center text-brand"
+                      aria-hidden="true"
+                    >
+                      {#if isSelected}
+                        <svg
+                          class="h-3.5 w-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="2.5"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m4.5 12.75 6 6 9-13.5"
+                          />
+                        </svg>
+                      {/if}
+                    </span>
+                  </li>
+                {/each}
+              </ul>
+            {/if}
+          </div>
         </div>
 
         {#if hasFilters}
@@ -130,3 +314,35 @@
     </div>
   </div>
 </div>
+
+<style>
+  .github-sort-menu {
+    animation: github-sort-in 160ms ease-out;
+    transform-origin: top right;
+    /* Override global `.main-pane li { margin-left: 2rem }` from custom.css */
+    list-style: none;
+    margin: 0;
+  }
+
+  .github-sort-menu :global(li) {
+    list-style: none;
+    margin-left: 0;
+  }
+
+  @keyframes github-sort-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .github-sort-menu {
+      animation: none;
+    }
+  }
+</style>
