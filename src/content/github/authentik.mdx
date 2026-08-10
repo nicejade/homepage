@@ -1,0 +1,118 @@
+---
+title: "authentik"
+description: "开源身份提供商（IdP），支持 OIDC/SAML/LDAP 等协议，可自托管统一 SSO 与应用接入。"
+repo: "https://github.com/goauthentik/authentik"
+homepage: "https://goauthentik.io"
+repoDescription: "The authentication glue you need."
+avatarUrl: "https://avatars.githubusercontent.com/u/82976448?v=4"
+tags:
+  - 自托管
+  - 开发工具
+  - 工作流
+language: "Python"
+stars: 24472
+forks: 1870
+openIssues: 1142
+contributors: 454
+license: "MIT"
+featured: false
+publishedAt: "2026-08-10"
+updatedAt: "2026-08-10"
+curationReason: "适合 Homelab 与中小团队评估自托管 SSO，替换 Okta/Auth0/Entra 或统一内网应用登录。"
+---
+
+## 项目介绍
+
+authentik 是面向现代 SSO 的开源身份提供商（IdP），把认证、授权与应用接入收拢到一套可自托管的控制平面。它支持 OAuth2/OIDC、SAML、LDAP、RADIUS 等主流协议，可从实验室级 Docker Compose 部署扩展到生产级 Kubernetes 集群。对企业场景，官方也提供商业版，用于替代 Okta、Auth0、Entra ID、Ping Identity 等托管 IdP。
+
+## 核心特性
+
+- **多协议 IdP**：原生支持 OAuth2/OIDC、SAML2、LDAP、RADIUS、SCIM 等，覆盖 Web、桌面与网络设备接入
+- **可编排的登录流**：通过 Stage / Flow / Policy 组合注册、MFA、条件访问与自助服务，而不必硬编码登录逻辑
+- **应用代理与 Outpost**：可为无原生 SSO 的应用提供反向代理接入，并自动部署/管理 Outpost
+- **多种部署形态**：Docker Compose（小规模/测试）、Helm/Kubernetes（生产扩缩）、AWS CloudFormation、DigitalOcean Marketplace
+- **企业能力可选**：Passkeys/WebAuthn、地理围栏与 Impossible Travel、RDP/VNC/SSH 远程访问、FIPS 等高级能力按需启用
+
+## 对用户价值
+
+自托管服务一多，就会陷入「每个应用一套账号」「改密码要改十几处」「缺少统一 MFA 与审计」的泥潭。authentik 把身份源、登录策略与应用集成放在自己可控的基础设施上：敏感认证数据不必全部交给公有云 IdP，又能用标准化协议一次性接入大量应用。对 Homelab 来说，它是内网服务的统一登录入口；对团队来说，它是评估「用开源替换商业 IdP」的务实起点。
+
+## 与替代方案
+
+- 相比 **Keycloak**：两者都是可自托管的开源 IdP；authentik 更强调可视化 Flow/Policy 与应用代理开箱即用，Keycloak 在大型企业联邦与社区生态上更深厚，运维心智也更重。
+- 相比 **Authelia / Authentik 轻量替代**：Authelia 更偏「反向代理前置的 2FA 网关」，协议面与管理面更窄；authentik 更接近完整 IdP（OIDC/SAML/LDAP 等）。
+- 相比 **Okta / Auth0 / Entra ID**：托管 IdP 省运维、集成市场成熟，但费用与数据驻留由厂商主导；authentik 换来控制权与可定制策略，代价是自行负责高可用、备份与升级。
+- 开源核心以 MIT 为主，仓库还包含网站文档许可与企业组件（EE）许可；商用与二次分发前请核对 [LICENSE](https://github.com/goauthentik/authentik/blob/main/LICENSE) 与企业授权条款。
+
+## 适应人群
+
+- 已有 NAS / Homelab / 内网服务集群，想统一 SSO、MFA 与应用入口的自托管爱好者。
+- 中小团队希望用开源方案评估或替换 Okta/Auth0/Entra，又需要 OIDC/SAML 双栈兼容的工程师。
+- 需要按流程编排登录、条件访问与自助重置，而不是只挂一层简单反向代理鉴权的平台/安全工程人员。
+
+## 如何使用
+
+### 前置条件
+
+- 主机建议至少 **2 CPU / 2 GB RAM**；已安装 Podman 或 **Docker Compose v2**（`docker compose`）。
+- 小规模/测试优先 Docker Compose；更大规模见 [Kubernetes / Helm 文档](https://docs.goauthentik.io/docs/install-config/install/kubernetes/)。
+- 准备可解析到主机的域名（生产强烈建议），并规划好对外 HTTP/HTTPS 端口映射。
+
+### 安装方式
+
+官方推荐先用 Docker Compose。在目标目录下载 compose 文件：
+
+```bash
+# Linux
+wget https://docs.goauthentik.io/compose.yml
+# 或 macOS / 通用
+curl -O https://docs.goauthentik.io/compose.yml
+```
+
+生成 PostgreSQL 密码与 authentik 密钥并写入 `.env`：
+
+```bash
+echo "PG_PASS=$(openssl rand -base64 36 | tr -d '\n')" >> .env
+echo "AUTHENTIK_SECRET_KEY=$(openssl rand -base64 60 | tr -d '\n')" >> .env
+```
+
+如需把对外端口改成 80/443，可在 `.env` 中设置：
+
+```bash
+COMPOSE_PORT_HTTP=80
+COMPOSE_PORT_HTTPS=443
+```
+
+拉取并启动：
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+完整说明见 [Docker Compose 安装文档](https://docs.goauthentik.io/docs/install-config/install/docker-compose/)。
+
+### 首次运行
+
+浏览器访问初始安装页（默认 HTTP 端口 **9000**）：
+
+```text
+http://<你的服务器 IP 或主机名>:9000
+```
+
+按提示为默认管理员用户 `akadmin` 设置密码，完成初始化。随后在控制台添加第一个 **Application + Provider**，再创建业务用户并绑定所需登录流（MFA、邀请注册等）。
+
+### 验证是否成功
+
+- `docker compose ps` 中 server / worker / PostgreSQL 等相关容器为运行状态。
+- 能用 `akadmin` 登录管理界面，并看到 Applications / Flows 等菜单。
+- 为测试应用配置 OIDC 或 SAML Provider 后，走一遍授权码/断言流程，确认回调与用户信息映射正确。
+- （可选）配置全局邮件后，触发一次验证/找回邮件，确认通知链路可用。
+
+### 常见坑 / 注意事项
+
+- **不要改容器时区挂载**：内部统一用 UTC；向容器挂载 `/etc/localtime` 或改时区可能导致 OAuth/SAML 签名校验异常。
+- **Docker socket 风险**：默认 Compose 会把 Docker socket 挂给 worker 以便自动管理 Outpost；生产可改用 Docker Socket Proxy，或去掉挂载并手动部署 Outpost。
+- **密钥与密码**：`PG_PASS`、`AUTHENTIK_SECRET_KEY` 务必随机且持久保存；Postgres 密码长度勿超过 99 字符。
+- **升级方式**：`compose.yml` 会固定下载当时的最新镜像版本；升级需按 Release Notes 重新下载 compose 并执行升级流程，勿只改本地标签碰运气。
+- **许可边界**：开源核心多为 MIT，企业功能与部分目录另有许可；对外提供商业服务前先核对 EE 条款与功能开关。
