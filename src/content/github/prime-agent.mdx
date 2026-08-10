@@ -1,0 +1,132 @@
+---
+title: prime-agent
+description: Prime Intellect 开源的自改进 RLM Agent，持久 IPython 控制面，适合编码与长时自治任务。
+repo: https://github.com/PrimeIntellect-ai/prime-agent
+homepage: https://primeintellect.ai
+repoDescription: "A self-improving RLM agent for coding workflows and long-running autonomous tasks."
+avatarUrl: https://avatars.githubusercontent.com/u/148051844?v=4
+tags:
+  - Agent
+  - AI 编程
+  - 自动化
+language: TypeScript
+stars: 12615
+forks: 1267
+openIssues: 476
+contributors: 211
+license: MIT
+featured: false
+publishedAt: "2026-08-10"
+updatedAt: "2026-08-10"
+curationReason: 需要 daemon 后台续跑、子 Agent 并行与 /refine harness 自改进的研究与长跑评测场景。
+---
+
+## 项目介绍
+
+Prime Agent 是 [Prime Intellect](https://primeintellect.ai) 开源的**编码与研究向 Agent**：以 [Recursive Language Model (RLM)](https://www.primeintellect.ai/blog/rlm) 把上下文当变量、把递归子 Agent 当可编程调用，运行在持久 IPython REPL 里；再配合 Continual Harness，把补充提示、记忆、技能描述与可复用子 Agent 规格沉淀为可 refinement 的持久状态。它面向一般编程工作流，也专门强化**长时、可断线再附着**的自治任务（评测、研究流水线等）。Agent 与 TUI 基于 [`pi`](https://github.com/earendil-works/pi) 构建。
+
+## 核心特性
+
+- **RLM 编程模型**：内置工具是持久 IPython；文件、Shell、工具、子 Agent 与上下文管理都通过代码完成；`rlm(...)` 可派生并行/后台子 Agent
+- **Continual Harness 自改进**：`/refine` 基于轨迹做小步、可回滚的 harness 状态更新（不改写不可变 base system prompt）
+- **可执行 Skills**：技能是可 import 的 Python 包；内置 skill creator 能把重复工作流沉淀为项目/个人技能
+- **Daemon 长跑与调度**：终端断开后会话可继续；支持 reattach、持久 `/goal`、heartbeat、schedule 与有界 `/autonomous` 模式
+- **Agent 间直连**：运行中的 Agent / 保留的子 Agent 可互相发现、发消息并协同，不必一切经用户中转；另提供 JSON / RPC 模式做无头自动化
+
+## 对用户价值
+
+普通结对 Agent 往往「关终端就断、跨会话难复用」。Prime Agent 把**控制面（IPython）与 harness 状态**做成可延续资产：长任务可在后台跑、用 `prime-agent attach` 再接上；`/refine` 把本次轨迹里可复用的教训写回 harness，而不是只留在聊天窗口。对研究与评测，heartbeats、schedules、autonomous 预算与 quality gates 让「跑一夜再看结果」更可控。对工程集成，`-p` 一次性提示、`--mode json` / `--mode rpc` 便于脚本与流水线接入。
+
+## 与替代方案
+
+- 相比 [Claude Code](https://github.com/anthropics/claude-code)、[OpenCode](https://github.com/sst/opencode) 等**终端结对编程 Agent**，Prime Agent 更强调 **RLM + 持久 IPython 控制面**、daemon 后台续跑与 harness `/refine`；若你主要要 IDE/仓库内快速改代码，前者更轻；若要长时自治与可编程子 Agent，Prime 更对口。
+- 相比 [Hermes Agent](https://github.com/NousResearch/hermes-agent)、[OpenClaw](https://github.com/openclaw/openclaw) 等**消息网关 / 个人助手**路线，Prime Agent 主战场是**编码与研究工作流**（目录内改文件、跑命令），并非 Telegram/Discord 收件箱；远程消息驱动不是其核心卖点。
+- 相比 [LangGraph](https://github.com/langchain-ai/langgraph) 等**编排框架**，Prime Agent 提供开箱 CLI/TUI、安装器与会话 daemon；要自研编排选框架，要尽快跑起长时 Agent 选 Prime。
+- 边界：worker/kernel **不是安全沙箱**；模型生成的 Python 与项目命令以你的用户权限执行——不信任的代码应放外部沙箱。
+
+## 适应人群
+
+- 需要 **长时自治任务**（评测、研究流水线、多小时后台会话）并能断线再附着的研究者与工程师。
+- 希望用 **可编程子 Agent（`rlm`）+ 可执行 Skills** 组织复杂编码工作流的高级用户。
+- 想把 Agent 接入脚本 / CI、使用 **JSON 或 RPC 模式** 做无头自动化的平台与工具链开发者。
+
+## 如何使用
+
+### 前置条件
+
+- **macOS 或 Linux**（官方安装脚本面向这两端；Windows / Termux 见仓库 docs 平台说明）。
+- 从源码跑需要 **Node.js 22.8.0+**。
+- 模型访问：订阅登录（Claude Pro/Max、ChatGPT Plus/Pro Codex、GitHub Copilot）或 API Key（Anthropic、OpenAI、OpenRouter、Prime Inference 等，见 [Providers](https://github.com/PrimeIntellect-ai/prime-agent/blob/main/packages/coding-agent/docs/providers.md)）。
+- 建议在**可回滚的 git worktree / 一次性 clone** 中首次试用；Agent 会在当前目录读写与执行命令。
+
+### 安装方式
+
+**稳定版（推荐）**
+
+```bash
+curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh
+```
+
+**试用 main 线 beta**
+
+```bash
+curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh -s -- beta
+```
+
+**从源码**
+
+```bash
+git clone https://github.com/PrimeIntellect-ai/prime-agent
+cd prime-agent
+npm ci
+./prime-agent.sh
+```
+
+安装器会下载带版本的产物、校验 SHA-256，并安装 `prime-agent` 命令；也可准备 Agent 使用的 IPython 运行时。
+
+### 首次运行
+
+```bash
+cd /path/to/project
+prime-agent
+```
+
+首次进入后执行 `/login` 选择订阅或 API Key 提供商；也可事先：
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+prime-agent
+```
+
+然后直接提问，例如：
+
+```text
+Summarize this repository and tell me how to run its checks.
+```
+
+需要并行子任务时可提示模型使用 `rlm`；项目级约定可写在 `AGENTS.md` / `CLAUDE.md`（全局：`~/.prime/agent/AGENTS.md`）。
+
+常用运维命令：
+
+```bash
+prime-agent agents              # 浏览 running / idle / saved 会话
+prime-agent attach <agent>      # 重新附着到后台会话
+prime-agent -c                  # 继续最近一次会话
+prime-agent doctor [--fix]      # 检查或修复后台服务
+prime-agent update [--force]    # 更新
+```
+
+### 验证是否成功
+
+- Shell 中 `prime-agent` 可启动；`/login` 或环境变量认证后能正常对话。
+- `prime-agent doctor` 无阻塞性错误；`prime-agent status` 能查看后台服务状态。
+- 一次性模式：`prime-agent -p "Summarize this codebase"` 有合理输出。
+- 可选：关闭 TUI 后用 `prime-agent agents` / `attach` 确认 daemon 会话仍在。
+
+### 常见坑 / 注意事项
+
+- **不是沙箱**：模型生成的 Python 与项目命令以当前用户权限执行；只信任可信仓库、指令、skills 与扩展。
+- 安装后若找不到命令，按安装器提示 **reload shell**；升级用 `prime-agent update`。
+- Claude 订阅经第三方 harness 使用时，可能走 [extra usage](https://claude.ai/settings/usage) 按 token 计费，而非套餐额度——以官方 Providers 说明为准。
+- 内核默认自动引导；若要用已有 Python 环境，可设 `PRIME_AGENT_KERNEL_PYTHON`（需含 `ipykernel`）。
+- 会话默认落在 `~/.prime/agent/sessions/`；密钥在 `~/.prime/agent/auth.json`（权限 `0600`）——勿提交到仓库。

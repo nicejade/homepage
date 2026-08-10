@@ -1,0 +1,120 @@
+---
+title: Mermaid
+description: 用类 Markdown 文本生成流程图、时序图等 20+ 种图表，可版本管理且 GitHub 原生渲染。
+repo: https://github.com/mermaid-js/mermaid
+homepage: https://mermaid.ai/open-source/
+repoDescription: Generation of diagrams like flowcharts or sequence diagrams from text in a similar manner as markdown
+avatarUrl: https://avatars.githubusercontent.com/u/57169982?v=4
+tags:
+  - 可视化
+  - 开发工具
+  - 知识管理
+language: TypeScript
+stars: 89664
+forks: 9165
+openIssues: 1690
+contributors: 367
+license: MIT
+featured: false
+publishedAt: "2026-08-10"
+updatedAt: "2026-08-10"
+curationReason: 文档与代码同库、Live Editor 原型，以及对比 PlantUML / Excalidraw 时的 diagrams-as-code 选型。
+---
+
+## 项目介绍
+
+Mermaid 是基于 JavaScript / TypeScript 的 diagrams-as-code 工具：用类 Markdown 的文本定义流程图、时序图、类图、状态图、ER、甘特图、思维导图等 20+ 种图表，并由渲染器输出 SVG。它的核心目标是让文档跟上开发节奏——图表以纯文本存进仓库，可 diff、可 review，也能写进自动化脚本。不熟悉语法时可先用 [Mermaid Live Editor](https://mermaid.live/)；完整文档见 [mermaid.ai/open-source](https://mermaid.ai/open-source/)。
+
+## 核心特性
+
+- **20+ 图表类型**：Flowchart、Sequence、Class、State、ER、Gantt、Pie、Git Graph、Mindmap、Timeline、Sankey、XY Chart 等，覆盖常见架构与产品说明场景
+- **类 Markdown 语法**：无需拖拽式设计工具，把图表当代码写进 README、Wiki 或文档站点
+- **版本友好**：图表即文本，Git diff / PR review 自然可用；GitHub Markdown 也支持原生渲染 Mermaid 代码块
+- **Live Editor**：在 [mermaid.live](https://mermaid.live) 即时试写与分享；可通过 CDN 或 npm 包嵌入网页
+- **可定制与安全优先**：主题、颜色、字体与布局方向可配；内置消毒与 `sandbox` 等 `securityLevel`，降低不可信输入的 XSS 风险
+
+## 对用户价值
+
+手绘或独立绘图工具产出的 PNG/SVG 很难与代码同步，「文档腐烂」几乎不可避免。Mermaid 把图表变成可提交的文本，让架构说明、接口时序、发布计划与仓库同生命周期，并在 GitHub、Notion、Obsidian、许多静态站点生成器中开箱渲染。非程序员也能用 Live Editor 产出专业图表；前端则可通过 npm/`mermaid.initialize` / `mermaid.run` 嵌入自建文档站或产品页。MIT 许可、生态集成广泛，适合作为团队 diagrams-as-code 的默认选项。
+
+## 与替代方案
+
+- 相比 [PlantUML](https://plantuml.com/)，Mermaid 语法更接近 Markdown、浏览器侧渲染与 GitHub 原生支持更顺；PlantUML 在部分 UML 深度与 Java 工具链集成上更强，常需服务端渲染。
+- 相比 [Excalidraw](https://excalidraw.com/) / draw.io，Mermaid 不适合手绘白板式自由布局，但在「与代码同库、可 diff、可自动化」上更优；需要协作白板或精细视觉设计时优先图形工具。
+- 相比 Graphviz / D2 等图语言，Mermaid 图表类型更面向文档与产品说明（时序、甘特、旅程图等），学习曲线对 Markdown 用户更低；复杂图布局算法场景可能仍偏好 Graphviz。
+- 边界说明：面向公网用户输入渲染时务必理解 `securityLevel`（默认 `strict`）；超大图或极特殊布局可能需要拆分或改用专用绘图工具。
+
+## 适应人群
+
+- 希望 README、设计文档与 PR 中用文本维护架构图、时序图的工程师与技术写作者。
+- 在文档站、知识库或博客中嵌入可版本管理图表的前端与站点维护者。
+- 评估 diagrams-as-code（对比 PlantUML、Excalidraw）并关注 MIT 与 GitHub 原生渲染的技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- 仅试用语法：现代浏览器即可打开 [mermaid.live](https://mermaid.live)。
+- 网页集成：Node.js ≥ 16（npm/Yarn/pnpm 安装时）；或直接使用 jsDelivr CDN 的 ESM 包。
+- 了解基础 HTML；在打包项目中需能解析 ES Module。
+
+### 安装方式
+
+**方式一：npm / Yarn / pnpm（推荐，打包项目）**
+
+```bash
+npm install mermaid
+# 或
+yarn add mermaid
+# 或
+pnpm add mermaid
+```
+
+**方式二：CDN ESM（无 bundler 快速嵌入）**
+
+```html
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+</script>
+```
+
+CDN 路径形如 `https://cdn.jsdelivr.net/npm/mermaid@<version>/dist/`，请按需锁定主版本（如 `@11`）。更轻量、功能裁剪的包可查阅官方 **Mermaid Tiny** 说明。
+
+### 首次运行
+
+最小 HTML 示例：页面中放置 `class="mermaid"` 的定义块，并加载上述脚本：
+
+```html
+<!doctype html>
+<html lang="zh-CN">
+  <body>
+    <pre class="mermaid">
+flowchart LR
+  A[开始] --> B{判断}
+  B -->|是| C[结果 1]
+  B -->|否| D[结果 2]
+    </pre>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+  </body>
+</html>
+```
+
+在打包项目中改为 `import mermaid from 'mermaid'`，再调用 `mermaid.initialize` / `mermaid.run`。语法与配置见 [Getting Started](https://mermaid.ai/open-source/intro/) 与 [Usage](https://mermaid.js.org/config/usage.html)。
+
+### 验证是否成功
+
+- 浏览器打开页面后，`pre.mermaid` 应被替换为 SVG 图表，控制台无模块加载或解析错误。
+- 修改流程图文本并刷新（或按文档调用 `mermaid.run`）后，图形应随之更新。
+- 在 GitHub Markdown 中使用 \`\`\`mermaid 代码块时，仓库页面应直接渲染图表（无需额外部署）。
+
+### 常见坑 / 注意事项
+
+- **安全级别**：默认 `securityLevel: 'strict'` 会编码 HTML 并禁用节点点击；仅在信任图表来源时才改为 `loose` / `antiscript`，公网用户内容优先考虑 `sandbox`。
+- **字体与越界**：动态加载的 Web 字体未就绪时，标签可能超出边界；复杂页面可在资源加载完成后再 `initialize` / `run`。
+- **包体积**：完整包含多种图表；若不需要 Mindmap、Architecture、KaTeX 等，可评估 Mermaid Tiny 以减小体积。
+- **v10+ API**：复杂集成优先使用 `mermaid.run`；设置 `mermaid.initialize({ startOnLoad: false })` 可关闭自动扫描，改为手动渲染。
+- **版本锁定**：CDN 与 npm 请固定主版本，升级前阅读 [Changelog](https://github.com/mermaid-js/mermaid/releases) 中的破坏性变更。
