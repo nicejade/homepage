@@ -1,0 +1,173 @@
+---
+title: Firecrawl
+description: 面向 Agent 的网页上下文 API：搜索、抓取、全站爬取，输出干净 Markdown 或结构化 JSON。
+repo: https://github.com/firecrawl/firecrawl
+homepage: https://firecrawl.dev
+repoDescription: The context API to search, scrape, and interact with the web at scale. 🔥
+avatarUrl: https://avatars.githubusercontent.com/u/135057108?v=4
+tags:
+  - Agent
+  - 自动化
+  - 开发工具
+language: TypeScript
+stars: 166815
+forks: 9370
+openIssues: 508
+contributors: 1
+license: AGPL-3.0
+featured: false
+publishedAt: "2026-08-13"
+updatedAt: "2026-08-13"
+curationReason: 给 RAG、Agent 或 MCP 客户端接入实时网页，又不想自建代理、无头浏览器与反爬基础设施。
+---
+
+## 项目介绍
+
+[Firecrawl](https://github.com/firecrawl/firecrawl) 是面向 AI 应用的网页上下文 API：把搜索、单页抓取、全站爬取、站点地图发现与页面交互收成一套接口，输出干净 Markdown、结构化 JSON 或截图，供 Agent 与 RAG 流水线直接消费。项目以 AGPL-3.0 开源，可自托管；日常最快路径是 [Firecrawl Cloud](https://firecrawl.dev) 托管服务。官方文档见 [docs.firecrawl.dev](https://docs.firecrawl.dev)。
+
+## 核心特性
+
+- **核心端点齐全**：`Search` 搜网并带回全文、`Scrape` 把任意 URL 转成 Markdown/HTML/JSON、`Crawl` 整站抓取、`Map` 秒级发现站点 URL、`Batch Scrape` 异步批量处理
+- **LLM 友好输出**：默认清洗导航与噪声，返回 token 更省的 Markdown；可用 schema 抽出结构化 JSON
+- **Agent / MCP 接入**：一条命令把网页能力接到 Claude Code、OpenCode 等 Agent，或通过 `firecrawl-mcp` 接入任意 MCP 客户端
+- **页面动作与媒体解析**：抓取前可点击、滚动、输入、等待；可解析网页上的 PDF、DOCX 等（完整能力以 Cloud 为准）
+- **多语言 SDK**：Python、Node.js、Go、Java、Rust、Ruby、.NET、PHP、Elixir 等 SDK 会自动轮询异步任务（如 crawl）
+
+## 对用户价值
+
+给模型喂网页时，最耗时间的往往不是写 prompt，而是代理轮换、JS 渲染、反爬、站点发现与正文清洗。Firecrawl 把这些收成一次 API 调用：你给 URL 或自然语言任务，拿回可直接进向量库或 Agent 上下文的 Markdown/JSON。托管版适合快速上线；需要源码与基础设施控制时，可用 Docker Compose 自托管开源栈。Playground 可先验证目标站点效果，再决定是否接入生产。
+
+## 与替代方案
+
+- 相比 **[Crawl4AI](https://github.com/unclecode/crawl4ai)**：Crawl4AI 是 Apache-2.0 的 Python 库，本地跑浏览器、按页不计费，适合高吞吐、数据不出域的流水线；Firecrawl 的重心是托管 API、多语言 SDK 与「描述需求即可取数」的 Agent 端点，运维更轻、按 credit 计费。
+- 相比 **[Jina Reader](https://jina.ai/reader)**：Jina 用 `r.jina.ai/` 前缀即可把单页转成 Markdown，原型最快；Firecrawl 额外提供整站 crawl、map、search、交互与 schema 抽取，更适合生产级 Agent。
+- 相比 **[Scrapy](https://github.com/scrapy/scrapy)** / Playwright 自建：自建框架可控性最强，但要自己处理渲染、代理与清洗；Firecrawl 用 API 换掉这层基础设施。需要深度定制选择器与超大规模静态站爬取时，Scrapy 仍更合适。
+- **开源 vs Cloud**：自托管默认栈覆盖 scrape / crawl / map / search；截图、页面 actions、Agent、interact 等依赖 Fire-engine 或 Cloud。核心仓库为 AGPL-3.0，各语言 SDK 多为 MIT。
+
+## 适应人群
+
+- 要把实时网页接入 RAG、知识库或 Agent 工具链，希望直接拿到干净 Markdown/JSON 的应用开发者。
+- 需要 MCP / Skill 一键给编码 Agent 联网搜索与抓取能力的 AI 工程团队。
+- 正在评估自托管网页抓取 API、对标 Crawl4AI / Jina / Apify 的基础设施负责人。
+
+## 如何使用
+
+### 前置条件
+
+- **托管版**：到 [firecrawl.dev](https://firecrawl.dev) 注册并取得 `fc-` 开头的 API Key；可用 [Playground](https://firecrawl.dev/playground) 先试目标站点。
+- **Python SDK**：Python 3.x 与 `pip`。
+- **Node SDK**：Node.js 与 npm / pnpm。
+- **自托管**：Git、Docker Engine、Docker Compose v2、本机空闲端口 `3002`。官方评估指南以发布标签 `v2.11.162` 为准，换版本前先对照该版 `docker-compose.yaml`。
+
+### 安装方式
+
+**方式一：Python SDK（托管 API）**
+
+```bash
+pip install firecrawl-py
+```
+
+**方式二：Node.js SDK**
+
+```bash
+npm install firecrawl
+```
+
+**方式三：给 Agent / MCP 接入**
+
+```bash
+npx -y firecrawl-cli@latest init --all --browser
+```
+
+MCP 客户端示例（需设置 `FIRECRAWL_API_KEY`）：
+
+```json
+{
+  "mcpServers": {
+    "firecrawl-mcp": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "fc-YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+**方式四：Docker Compose 自托管（评估用）**
+
+```bash
+git clone https://github.com/firecrawl/firecrawl.git
+cd firecrawl
+git checkout v2.11.162
+```
+
+在仓库根目录写入最小 `.env`（勿提交；将密码换成至少 32 位随机字符，并保持 `POSTGRES_DB=postgres`）：
+
+```bash
+cat > .env <<'EOF'
+USE_DB_AUTHENTICATION=false
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=replace-with-at-least-32-random-characters
+POSTGRES_DB=postgres
+EOF
+```
+
+```bash
+docker compose up --build -d
+```
+
+该基线关闭 API 鉴权，仅适合受信网络评估，不是生产架构。完整步骤见 [Self-hosting 文档](https://docs.firecrawl.dev/contributing/self-host)。
+
+### 首次运行
+
+托管版用 Python 抓取一页：
+
+```python
+from firecrawl import Firecrawl
+
+app = Firecrawl(api_key="fc-YOUR_API_KEY")
+doc = app.scrape("https://firecrawl.dev", formats=["markdown"])
+print(doc.markdown)
+```
+
+等价 cURL：
+
+```bash
+curl -X POST 'https://api.firecrawl.dev/v2/scrape' \
+  -H 'Authorization: Bearer fc-YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{"url": "https://firecrawl.dev", "formats": ["markdown"]}'
+```
+
+自然语言取数（Cloud Agent 端点，无需事先知道 URL）：
+
+```bash
+curl -X POST 'https://api.firecrawl.dev/v2/agent' \
+  -H 'Authorization: Bearer fc-YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{"prompt": "Find the pricing plans for Notion"}'
+```
+
+自托管冒烟（鉴权关闭时无需 Bearer）：
+
+```bash
+curl --fail --silent --show-error --max-time 5 \
+  http://localhost:3002/v0/health/readiness
+```
+
+### 验证是否成功
+
+- 托管 scrape：响应含 `success: true` 与非空 `markdown`（或 SDK 的 `doc.markdown`）。
+- Agent：返回结果与 `sources` 列表，而不是空对象。
+- 自托管：health 接口返回 `{"status":"ok"}`；再对 `https://example.com` 发 `POST /v2/scrape`，确认 `data.markdown` 与 `metadata.statusCode` 为 200。健康检查只证明进程存活，不能代替一次真实抓取。
+
+### 常见坑 / 注意事项
+
+- **Cloud 与开源能力不等价**：默认自托管栈不含截图、页面 actions、Agent、interact；这些依赖 Fire-engine 或走 Cloud。选型前对照 [Open Source vs Cloud](https://docs.firecrawl.dev/contributing/open-source-or-cloud)。
+- **自托管默认无鉴权**：`USE_DB_AUTHENTICATION=false` 时请求不需要 API Key，切勿把 `3002` 暴露到公网。Compose 基线也没有持久化卷、TLS 与高可用。
+- **Credit 与费用**：托管按用量计费；Agent 可用 `spark-1-mini`（默认、更便宜）或 `spark-1-pro`（复杂调研）。大批量前先在 Playground 估消耗。
+- **合规**：默认遵守 `robots.txt`；抓取目标站点须遵守其条款与隐私政策，责任在使用者。
+- **许可证**：核心为 AGPL-3.0，网络提供修改版服务需开源相应改动；SDK 多为 MIT。商业闭源自托管需自行评估许可义务。
+- **Redis 地址**：Compose 网络内应使用 `redis://redis:6379`，容器里写 `localhost` 会连到自己而不是 Redis 服务。
