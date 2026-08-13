@@ -1,0 +1,125 @@
+---
+title: anydoc
+description: Firecrawl 出品的 Rust 库：毫秒级把 Word、PPT、Excel、PDF 等办公文档转为干净 Markdown。
+repo: https://github.com/firecrawl/anydoc
+homepage: https://firecrawl.github.io/anydoc/
+repoDescription: Convert Word, PowerPoint, Excel, OpenDocument, RTF, EPUB, CSV, and PDF to clean Markdown. Built in Rust, with Node.js and Python bindings.
+avatarUrl: https://avatars.githubusercontent.com/u/135057108?v=4
+tags:
+  - 知识管理
+  - 开发工具
+  - CLI
+language: Rust
+stars: 15559
+forks: 837
+openIssues: 57
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-08-13"
+updatedAt: "2026-08-13"
+curationReason: 要把混合办公附件喂给 LLM/RAG，或让 Agent 本地读 Word/PPT，又不想上 OCR 模型与云解析服务。
+---
+
+## 项目介绍
+
+[anydoc](https://github.com/firecrawl/anydoc) 是 Firecrawl 开源的纯 Rust 文档转换库，把 Word、PowerPoint、Excel、OpenDocument、RTF、EPUB、CSV 与文本型 PDF 统一转成 GitHub Flavored Markdown。各格式先进入同一套文档模型，再走同一套 Markdown 序列化，因此表格转义、标题锚点、脚注等行为不随输入格式漂移。官方提供 Node.js、Python、WebAssembly 绑定与 CLI，并可作为 [Agent Skill](https://agentskills.io) 让编码代理直接读办公附件；它也是 [Firecrawl Parse](https://firecrawl.dev/parse) 的本地转换内核。
+
+## 核心特性
+
+- **毫秒级、无模型**：纯 Rust 实现，不调 ML、不依赖外部服务；官方基准中位转换约 4.4ms（Ryzen 9 9950X3D）
+- **一种输出覆盖十四种格式**：`.doc`/`.docx`、`.ppt`/`.pptx`、`.xls`/`.xlsx`、ODT/ODS/ODP、RTF、EPUB、CSV、PDF 等走同一套结构与 Markdown 渲染
+- **结构保留完整**：标题锚点、加粗/斜体/删除线、代码块、交叉引用、多层列表、合并单元格表格、引用、脚注/尾注、演讲者备注
+- **按内容识别格式**：从 PDF 头、RTF 开组、OLE 流名、ZIP mimetype 判断类型，扩展名标错也能转；CSV 无魔数，需扩展名或显式 `--format`
+- **多语言绑定与 Agent Skill**：`npx @firecrawl/anydoc`、`npm i @firecrawl/anydoc`、`pip install firecrawl-anydoc`、`cargo add anydoc`、浏览器 WASM；一行 `npx skills add firecrawl/anydoc` 即可接入 Claude Code / Codex / Cursor 等代理
+
+## 对用户价值
+
+知识库、RAG 与 Agent 工作流经常收到「什么格式都有」的办公附件，却很难用同一套规则抽成干净 Markdown。anydoc 把这件事收成一条本地、可嵌入的转换步骤：不占 GPU、不上传文件、延迟在个位数毫秒。浏览器 [演示页](https://firecrawl.github.io/anydoc/) 以 WASM 在本地转换，文件不出机器。扫描件与纯图片 PDF 它读不了——那是 OCR 产品的范围；文本型办公文档与数字 PDF 则是它的主场。
+
+## 与替代方案
+
+- 相比 **[Marker](https://github.com/datalab-to/marker)**、**[Docling](https://github.com/docling-project/docling)**：后两者用视觉/版面模型，扫描件、复杂 PDF 更强，但要 GPU 或数秒级推理。anydoc 无模型、更快、格式面更宽，但不做 OCR。
+- 相比 **[MarkItDown](https://github.com/microsoft/markitdown)**、**Pandoc**、**mammoth**：官方同语料评测中，anydoc 覆盖 14/14 格式且各格式得分最高；MarkItDown 覆盖约 6 种、Pandoc 约 5 种、mammoth 仅 docx。若你已深度绑定 Pandoc 滤镜生态，不必强迁。
+- 相比 **LibreOffice** 导出：LibreOffice 能开的格式多，但转换慢（官方中位约 1.1s）且 Markdown 干净度明显更差。
+- 扫描件/图片 PDF：用托管 **[Firecrawl Parse](https://firecrawl.dev/parse)**（anydoc + OCR），或本地上 Marker / 专用 OCR，而不是指望 anydoc。
+
+## 适应人群
+
+- 要把混合办公文档批量打成 Markdown，接入 RAG、笔记库或 ETL，且延迟与私有化优先的数据/AI 工程师。
+- 需要让 Claude Code、Codex、Cursor 等 Agent 读 Word/PPT/Excel 附件，不想为每个格式写一套解析器的开发者。
+- 评估文档解析方案、希望先用零依赖 CLI/SDK 处理文本型文件，再把扫描件分流给 OCR 的工程团队。
+
+## 如何使用
+
+### 前置条件
+
+- **CLI / Node**：已安装 Node.js，可用 `npx` 或 `npm`
+- **Python**：已安装 pip；包名 `firecrawl-anydoc`，导入名 `anydoc`
+- **Rust**：可用 Cargo（`cargo add anydoc`）
+- **浏览器**：现代浏览器即可跑 [WASM 演示](https://firecrawl.github.io/anydoc/)；自建需 `npm install @firecrawl/anydoc-wasm`
+- 本地转换**不需要** GPU、API Key 或联网推理；首次 `npx` 会下载对应平台的预编译二进制
+
+### 安装方式
+
+零安装试用 CLI：
+
+```bash
+npx @firecrawl/anydoc report.docx
+```
+
+全局命令、Node 库、Python、Rust、Agent Skill：
+
+```bash
+npm install -g @firecrawl/anydoc
+npm install @firecrawl/anydoc
+pip install firecrawl-anydoc
+cargo add anydoc
+npx skills add firecrawl/anydoc
+```
+
+### 首次运行
+
+CLI 输出到 stdout 或文件；CSV 无文件头魔数，从 stdin 读时必须声明格式：
+
+```bash
+npx @firecrawl/anydoc report.docx
+npx @firecrawl/anydoc slides.pptx -o slides.md
+npx @firecrawl/anydoc - --format csv < data.csv
+```
+
+Node.js：
+
+```js
+import { toMarkdown, toMarkdownBytes } from '@firecrawl/anydoc';
+
+const markdown = await toMarkdown('report.docx');
+const fromCsv = await toMarkdownBytes(bytes, 'csv');
+```
+
+Python：
+
+```python
+import anydoc
+
+markdown = anydoc.to_markdown("report.docx")
+markdown = anydoc.to_markdown_bytes(data, "csv")
+```
+
+需要内嵌图片字节时，用 `toDocument` / `anydoc.to_document`：Markdown 里图片只保留 alt 文本，原始 bytes 在文档模型的 `assets` 上。
+
+### 验证是否成功
+
+- CLI 将 Markdown 打到 stdout，错误走 stderr；`anydoc --help` 应列出选项
+- 打开输出，核对标题层级、表格、列表编号、脚注是否与原文结构一致
+- 对 CSV：未传 `--format csv` 或扩展名不是 `.csv` 时应失败或无法识别，补上格式后再转
+- 加密文档、纯图片 PDF 会失败（见下），这是预期行为而非安装损坏
+
+### 常见坑 / 注意事项
+
+- **不做 OCR**：扫描件、纯图片 PDF 会报 `unsupported`。要读这类文件，走 Firecrawl Parse 或 Marker 等带 OCR 的方案
+- **加密文档**：密码保护的文件返回 `encrypted`，不会尝试破解
+- **CSV 必须显式命名格式**：内容检测对 CSV 返回空，需扩展名或 `toMarkdownBytes(bytes, 'csv')` / `--format csv`
+- **图片不会内嵌进 Markdown**：alt 文本会出现在 `.md` 里；要拿原图请走 document model 的 `assets`
+- **转换失败才抛错**：只有无法产出有意义 Markdown 时才 `Err`/`reject`；可按 `unsupported` / `encrypted` 跳过坏文件，其余错误再中断流水线
+- **首次 npx 会拉二进制**：内网或无外网环境请改用全局安装，或把 npm/PyPI/crates 包缓存进制品库
