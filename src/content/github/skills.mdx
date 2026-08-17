@@ -1,109 +1,104 @@
 ---
-title: Google Skills
-description: Google 官方 Agent Skills 合集，覆盖 GCP、GKE、Ads 等产品，让编码代理按官方流程操作云服务。
-repo: https://github.com/google/skills
-repoDescription: Agent Skills for Google products and technologies
-avatarUrl: https://avatars.githubusercontent.com/u/1342004?v=4
+title: Skills For Real Engineers
+description: Matt Pocock 日常使用的工程向 Agent Skills：小而可组合、可本地改写，反对方法论接管全流程。
+repo: https://github.com/mattpocock/skills
+homepage: https://aihero.dev/skills
+repoDescription: Skills for Real Engineers. Straight from my .agents directory.
+avatarUrl: https://avatars.githubusercontent.com/u/28293365?v=4
 tags:
-  - Agent
   - AI 编程
+  - Agent
   - 工作流
-language: Python
-stars: 17527
-forks: 1403
-openIssues: 34
-contributors: 6
-license: Apache-2.0
+language: Shell
+stars: 219495
+forks: 18900
+openIssues: 357
+contributors: 1
+license: MIT
 featured: false
-publishedAt: "2026-08-10"
-updatedAt: "2026-08-10"
-curationReason: 用 Claude Code / Codex 做 GCP、GKE、BigQuery 或 Ads 时，按需安装官方技能与插件，减少幻觉命令。
+publishedAt: "2026-08-17"
+updatedAt: "2026-08-17"
+curationReason: 想用 /grill-me 对齐需求并沉淀 CONTEXT.md，又不想被 GSD/BMAD/Spec-Kit 接管整条流程。
 ---
 
 ## 项目介绍
 
-Google Skills 是 Google 维护的 [Agent Skills](https://agentskills.io/home) 官方合集，面向 Google 产品与技术（以 Google Cloud 为主，并延伸 Ads、Analytics 等）。技能以 Markdown 工作流编码认证、上云、架构方案与运维护栏，安装后可被 Claude Code、Codex、Cursor 等兼容宿主按需激活。仓库仍在活跃迭代，同时捆绑部分「Skills + MCP」插件。
+Skills For Real Engineers 是 Total TypeScript / AI Hero 作者 Matt Pocock 从个人 `.agents` 目录公开的一套 **面向真实工程的 Agent Skills**。它刻意做成小、可组合、易本地改写的技能单元，而不是像 GSD、BMAD、Spec-Kit 那样「拥有」整条研发流程。技能面向任意模型与主流编码代理，把几十年工程经验压缩成可重复实践，目标是正经交付应用，而不是 vibe coding。
 
 ## 核心特性
 
-- **按需安装**：`npx skills add google/skills`，交互式勾选本仓技能子集，不必一次装全
-- **GCP 入门与鉴权**：认证、Foundation Builder、上云 onboarding 等「Getting started」配方
-- **多产品方案技能**：解决方案架构、RAG、GKE Inference 迁移、无服务器 n-tier、双向流式 Agent 等端到端流程
-- **领域纵深**：Agent Platform / Gemini、GKE 基建与排障、BigQuery·AlloyDB 等数据、WAF 六支柱、Logging/Monitoring、Cloud Run / Firebase、Ads SDK 与 Analytics API
-- **宿主插件**：Claude Code、Codex、Antigravity CLI 可从本仓安装 Google 产品插件（Skills + MCP）
+- **`/grill-me` / `/grill-with-docs`**：上线前用拷问式访谈对齐意图；后者还会共建领域语言、更新 `CONTEXT.md` 与 ADR
+- **工程闭环技能**：`/tdd`（红绿重构）、`/diagnosing-bugs`（分阶段诊断）、`/to-spec` / `/to-tickets` / `/implement`、`/code-review`（Standards × Spec 双轴）
+- **架构与地图**：`/improve-codebase-architecture` 扫描「加深模块」机会并输出 HTML 报告；`/wayfinder` 把超大任务拆成可逐个决议的决策票
+- **用户调用 vs 模型调用**：编排类技能仅人工触发；纪律类技能可被代理在合适场景自动拉起
+- **双安装哲学**：Claude Code 官方 marketplace 插件（只读订阅、自动更新）或 [skills.sh](https://skills.sh/mattpocock/skills) / `npx skills`（拷贝可编辑文件，自主改写）
 
 ## 对用户价值
 
-让 Agent 写 `gcloud`、搭 GKE、配 BigQuery 或接 Ads SDK 时，最常见的问题是过时语法、臆造 flag、跳过鉴权与安全护栏。本仓库把官方流程与「先查 help / 先验证再执行」一类约束写进可安装技能：你描述目标后，助手按对应技能走认证、清单与排障步骤，而不是凭训练记忆硬猜。对云原生与广告技术团队，相当于把分散文档收敛成可复用的 Agent 工作流。
+编码代理最常见的失败不是「写得慢」，而是意图错位、术语冗长、缺少反馈回路，以及在加速编码的同时加速代码腐化。这套技能用 grilling 缩小沟通鸿沟，用共享领域语言压低 token 与噪音，用 TDD / 诊断循环给代理可观测反馈，并用架构加深与 tracer-bullet 工单把大改动切成可控切片——同时把控制权留在你手里，方便按仓库改技能本身。
 
 ## 与替代方案
 
-- 相比 [Superpowers](https://github.com/obra/superpowers) 等通用研发方法论技能库，本仓聚焦 **Google 产品操作与架构配方**，不覆盖 brainstorming / TDD 全生命周期。
-- 相比手写 Cursor Rules 或粘贴 Cloud 文档片段，这里提供可勾选、可更新的官方技能包，并与 [agentskills.io](https://agentskills.io/home) 格式对齐；Flutter / Dart / ADK 等另有独立 skills 仓（README「Additional Google skills」）。
-- 相比只装 MCP 而无流程约束的集成，本仓技能强调步骤与护栏（例如 gcloud 技能要求先 `gcloud help` 校验叶子命令）；若你只需原始 API 调用且不经过 Agent，直接读官方文档即可，不必安装。
+- 相比 [Agent Skills](https://github.com/addyosmani/agent-skills)：后者是意见鲜明的完整生命周期门禁包（规格 → 上线）；本仓库强调**小而可改、可组合**，反对方法论接管流程。
+- 相比 [Superpowers](https://github.com/obra/superpowers)：Superpowers 更突出 brainstorming、子代理编排与 git worktree 收尾；本仓库更突出 grilling、领域模型/`CONTEXT.md`、以及「订阅插件 vs 可编辑拷贝」两种安装哲学。
+- 相比 GSD / BMAD / Spec-Kit 一类「流程所有权」方案：它们帮你扛流程，但出 bug 时难拆；本仓库刻意不做总控，让你本地 hack。
+- 相比 [Karpathy Coding Guidelines](https://github.com/multica-ai/andrej-karpathy-skills) 等单文件行为准则：这里提供可触发的斜杠技能链，而不只是编码克制原则。
 
 ## 适应人群
 
-- 用 Claude Code、Codex、Cursor 等日常操作 GCP / GKE / BigQuery，希望减少错误 CLI 与漏配的云工程师。
-- 需要把「官方推荐架构与上线清单」固化进 Agent 行为的平台 / SRE / 解决方案架构师。
-- 做 Google Ads、Mobile Ads 或 Analytics API，想让助手按官方 quickstart 与诊断流程推进的应用开发者。
+- 使用 Claude Code、Codex、Cursor 等工具，希望先对齐再动手、又不愿被整套方法论锁死的工程师。
+- 需要在仓库里沉淀 `CONTEXT.md`、ADR 与可复用领域语言，降低代理废话与命名漂移的个人 / 小团队。
+- 愿意把技能当「可 fork 的实践库」本地改写，而不是只订阅黑盒流程的资深开发者。
 
 ## 如何使用
 
 ### 前置条件
 
-- 已安装 Node.js（用于 `npx skills`），或目标 Agent 宿主支持本仓插件安装方式。
-- 操作 Google Cloud 时需本机或 CI 具备有效凭据（如 `gcloud` 登录 / ADC）；Ads / Analytics 技能另需对应 API 访问权限。
-- 确认宿主兼容 [Agent Skills](https://agentskills.io/home) 或 README 列出的插件路径；仓库标注为积极开发中，技能集合会持续增减。
+- 已安装 Claude Code，或其他支持 Agent Skills 的宿主（Codex、Cursor 等；`npx skills` 路径需 Node.js）。
+- **二选一安装哲学**：插件（托管只读、随作者更新）或 skills.sh 拷贝（可编辑、自行 `npx skills update`）。**不要两种都装**，否则每个技能会出现两份。
+- 使用工程向技能前，每个仓库先跑一次 `/setup-matt-pocock-skills`。
 
 ### 安装方式
 
-**skills.sh / npx（通用）**
+**方式 A：Claude Code 插件（官方 marketplace，推荐「订阅」用法）**
 
 ```bash
-npx skills add google/skills
+claude plugins install mattpocock-skills
 ```
 
-安装过程中按提示选择需要的具体技能。
+或在会话内：
 
-**Claude Code 插件**
+```
+/plugin install mattpocock-skills
+```
+
+无需先加 marketplace，更新随作者发布自动到达。
+
+**方式 B：skills.sh / `npx skills`（可编辑拷贝，含 Codex 及其他宿主）**
 
 ```bash
-claude plugin marketplace add google/skills
-claude plugin install <plugin>@google-plugins
+npx skills@latest add mattpocock/skills
 ```
 
-**Codex**
+安装器会让你选择技能与目标宿主。**务必把 `setup-matt-pocock-skills` 选上。** 想自己改技能时也用同一命令；需要同步上游时：
 
 ```bash
-codex plugin marketplace add google/skills
-# 再在 /plugins 浏览器中安装所需插件
+npx skills update
 ```
-
-**Antigravity CLI**
-
-```bash
-agy plugin install https://github.com/google/skills/<plugin-path>
-```
-
-将 `<plugin-path>` 替换为仓库内实际插件路径（见 README Plugins 表）。
 
 ### 首次运行
 
-1. 仅勾选当前任务相关技能（例如鉴权 + gcloud，或某一 GKE / BigQuery 技能），避免上下文过载。
-2. 在 Agent 会话中描述具体目标（如「创建带私有网络的 Cloud Run 服务」或「排查 GKE JobSet 中断」），确认对应技能被激活。
-3. 涉及云变更时先在非生产项目演练；按技能要求完成鉴权与语法校验后再执行写操作。
+在目标仓库的 Agent 会话中执行一次 `/setup-matt-pocock-skills`：选择 issue tracker（GitHub / Linear / 本地文件）、triage 标签、以及文档落盘位置。之后日常改动建议先 `/grill-me` 或 `/grill-with-docs` 对齐，再视情况 `/to-spec` → `/to-tickets` → `/implement`（或直接 `/tdd`）。不确定用哪条技能时，可先 `/ask-matt`。
 
 ### 验证是否成功
 
-- `npx` 安装完成后，宿主的 skills / plugins 列表中能看到所选 Google 技能。
-- 发起与技能匹配的请求后，助手应引用技能步骤（例如先跑 `gcloud help …`、给出清单式计划），而非直接输出未校验的长命令。
-- 只读探测（如 `gcloud config get-value project`、列出集群）可成功；再逐步验证写操作。
+- 斜杠菜单或技能列表中能看到本包命令（至少 `/setup-matt-pocock-skills`、`/grill-me`）。
+- setup 完成后，后续 triage / 文档类技能应按你配置的 tracker 与目录工作。
+- 发起一次中等复杂度改动：代理应先拷问澄清，而不是直接大段写代码；启用 `/grill-with-docs` 时仓库中应出现或更新 `CONTEXT.md` / ADR。
 
 ### 常见坑 / 注意事项
 
-- **仓库仍在活跃开发**：技能路径与覆盖范围可能变化，升级后核对所选技能是否仍存在。
-- **按需安装**：全量装入易挤占上下文；优先最小子集。
-- **凭据与权限**：技能不会替你绕过 IAM；缺权限时先修角色，不要反复重试破坏性命令。
-- **gcloud 幻觉**：相关技能明确要求先查叶子级 `gcloud help`，不要跳过校验直接执行。
-- **姊妹仓库**：Flutter、Dart、Firestore、ADK、进阶 GCS 等技能在其他官方仓，本仓 README「Additional Google skills」有链接。
+- **插件与 skills.sh 不要双装**：README 明确警告会得到两套重复技能。
+- **漏装 `setup-matt-pocock-skills`**：工程技能依赖仓库级配置（tracker、标签、文档路径）；`npx skills` 安装时请主动勾选。
+- **`/improve-codebase-architecture` 是勘察不是拯救**：老仓库能找出加深候选，但不会替你拆泥球。
+- 原生 Codex 插件仍在路线图上；当前 Codex 等宿主以 `npx skills@latest add mattpocock/skills` 为准。
