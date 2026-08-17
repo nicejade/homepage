@@ -1,0 +1,111 @@
+---
+title: Buzz
+description: 自托管协作工作区：人与 AI Agent 共用频道，消息/Git/工作流统一进可审计事件日志。
+repo: https://github.com/block/buzz
+repoDescription: A hive mind communication platform
+avatarUrl: https://avatars.githubusercontent.com/u/185116535?v=4
+tags:
+  - Agent
+  - 工作流
+  - 开发工具
+language: Rust
+stars: 27777
+forks: 3460
+openIssues: 2750
+contributors: 1
+license: Apache-2.0
+featured: false
+publishedAt: "2026-08-17"
+updatedAt: "2026-08-17"
+curationReason: 适合想自建团队房间、让 Agent 以独立身份参与评审与发布的工程师。
+---
+
+## 项目介绍
+
+Buzz 是 Block 开源的**自托管团队工作区**：人类与 AI Agent 在同一批频道里协作，底层是你自己掌控的 Nostr relay。每条消息、反应、工作流步骤、评审通过与 Git 事件都是签名事件，落在同一条可检索、可审计的日志里——无论作者是人还是进程。桌面端用 Tauri + React，Agent 侧提供 `buzz-cli`（JSON 进 / JSON 出）与 ACP 对接 Goose、Codex、Claude Code；默认单 relay 对应一个 community，URL 即工作区边界。
+
+## 核心特性
+
+- **人与 Agent 同房**：Agent 以独立密钥与频道成员身份加入，而非挂在频道里的无身份机器人
+- **统一事件底盘**：频道、线程、DM、画布、媒体、搜索与审计日志基于同一套 Nostr 事件模型
+- **Git 与工作流入房**：NIP-34 补丁/仓库公告、YAML 工作流（消息 / 反应 / 定时 / webhook 触发）与合并决策可同屏发生
+- **Agent 一等表面**：`buzz-cli` + ACP harness，Agent 可开频道、发补丁、跑工作流、进 huddle（部分能力仍在接线中）
+- **可自托管可试用**：本地 Docker 开发栈、Railway 一键 relay，以及 macOS / Linux / Windows 打包桌面端
+
+## 对用户价值
+
+团队往往用聊天、Forge、机器人、CI 面板与胶水脚本拼出「协作感」，却缺少统一身份与完整审计链。Buzz 把这些收进**一个 community + 一条事件日志**：凌晨排查故障时，Agent 可带着历史线程与根因回帖；功能分支可变成房间，补丁、CI、评审与合并决策同处一室；发版工作流可读合并记录、起草说明并等人点赞再发布。对希望**数据与中继自有、Agent 行为可追责**的工程团队，这比「七个标签页假装互相认识」更接近单一事实来源。
+
+## 与替代方案
+
+- 相比 Slack / Discord + Bot：Buzz 把 Agent 当作**同权成员**（独立密钥与审计），并把 Git / 工作流事件写进同一日志，而不是外挂 webhook 拼凑上下文。
+- 相比 Mattermost / 自建聊天：Buzz 更偏向**开发协作与 Agent 编排**（补丁、工作流、ACP），不是通用企业 IM。
+- 相比 [OpenClaw](https://github.com/openclaw/openclaw) / [ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw) 等**个人助手运行时**：Buzz 是**多人 community 工作区 + relay**，主战场是频道与项目房间，而非个人多 IM 收件箱。
+- 相比纯 GitHub / GitLab 协作：Buzz 强调频道即决策记录，Forge 能力与聊天共享底盘；Git 托管与部分审批门仍在演进，勿按成熟合规平台预期。
+- 路线图中的跨 relay 声誉、推送等仍属愿景；选型前对照 README 的「Works today / Being wired up」表。
+
+## 适应人群
+
+- 想**自托管**团队协作面、让 Agent 以独立身份进频道做事的工程团队。
+- 关注 **Nostr 事件模型、可审计 Agent 行为** 的基础设施与安全向开发者。
+- 愿意用 Docker / Hermit 从源码跑 relay，或先用打包桌面端试水的早期采用者。
+
+## 如何使用
+
+### 前置条件
+
+- **仅试用桌面端**：从 [Releases](https://github.com/block/buzz/releases/latest) 下载对应平台安装包即可；默认连 `ws://localhost:3000`，需先有可用 relay 或改 `BUZZ_RELAY_URL`。
+- **从源码开发 / 自建**：需要 [Docker](https://docs.docker.com/get-docker/) 与 [Hermit](https://cashapp.github.io/hermit/)（或 Rust 1.88+、Node 24+、pnpm 10+、`just`）。
+- **Windows**：Agent shell 依赖 bash；安装 [Git for Windows](https://git-scm.com/download/win)（Git Bash），或用 `BUZZ_SHELL` 指向兼容 shell。
+- Block 内部员工应使用内部构建（`squareup/buzz-releases`），勿混用 OSS 发行版。
+
+### 安装方式
+
+试用打包客户端（按芯片选包）：
+
+| 平台 | 文件 |
+|---|---|
+| macOS Apple Silicon | `Buzz_<version>_aarch64.dmg` |
+| macOS Intel | `Buzz_<version>_x64.dmg` |
+| Linux x86_64 | `Buzz_<version>_amd64.AppImage` 或 `.deb` |
+| Windows x64 | `Buzz_<version>_x64-setup_alpha-unsigned.exe` |
+
+托管 relay（少运维）：可用 [Railway 一键部署](https://railway.com/deploy/buzz-relay-block)，说明见 [Block Engineering 博文](https://engineering.block.xyz/blog/run-your-own-buzz-relay)。
+
+从源码本地开发：
+
+```bash
+git clone https://github.com/block/buzz.git && cd buzz
+. ./bin/activate-hermit   # 固定工具链，首次自动下载
+just setup && just build
+```
+
+生产向单节点 / VPS 可看 [`deploy/compose/`](https://github.com/block/buzz/tree/main/deploy/compose)；根目录 `docker-compose.yml` 仅适合日常开发。
+
+### 首次运行
+
+本地开发日常命令：
+
+```bash
+. ./bin/activate-hermit
+just dev   # 同时启动 relay + 桌面端
+```
+
+Relay 默认 `ws://localhost:3000`，桌面端应弹出。若要分终端：一窗 `just relay`，另一窗 `just desktop-dev`。
+
+给 Agent 用：设置 `BUZZ_PRIVATE_KEY`，使用 [`buzz-cli`](https://github.com/block/buzz/tree/main/crates/buzz-cli)（JSON 进 / JSON 出）。打包客户端可用环境变量或应用内切换指向你的 relay。
+
+### 验证是否成功
+
+- `just dev` 后桌面端能打开，并连上本地 `ws://localhost:3000`。
+- 能创建或加入频道、发消息/线程；日志无持续连接失败。
+- Agent 路径：配置私钥后，`buzz-cli` 能完成一次可读的 JSON 往返（具体子命令以仓库 README / crate 文档为准）。
+- 若用 Railway / Compose 部署：客户端 `BUZZ_RELAY_URL` 指向该实例后可登录并看到 community。
+
+### 常见坑 / 注意事项
+
+- Windows 未签名安装包可能触发 SmartScreen，需「更多信息 → 仍要运行」；Agent 缺 Git Bash 时 shell 工具会失败。
+- 无 relay 时桌面端默认连本机 3000 会失败——先起本地栈，或改指向已部署的 relay。
+- 部分能力（移动端、工作流审批胶水、huddle 生命周期等）仍在接线；跨 relay 声誉等愿景勿当作已交付合规能力。
+- 密钥与 `.env` 勿提交仓库；升级前阅读 [Releases](https://github.com/block/buzz/releases) 与 `RELEASING.md`。
+- 安全问题按仓库 [SECURITY.md](https://github.com/block/buzz/blob/main/SECURITY.md) 披露，勿直接公开细节。
