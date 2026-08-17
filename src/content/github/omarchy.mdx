@@ -1,0 +1,95 @@
+---
+title: Omarchy
+description: DHH 打造的 Arch + Hyprland 意见型 Linux 发行版，开箱即用的键盘驱动开发桌面。
+repo: https://github.com/basecamp/omarchy
+homepage: https://omarchy.org
+repoDescription: Beautiful, Modern & Opinionated Linux
+avatarUrl: https://avatars.githubusercontent.com/u/13131?v=4
+tags:
+  - 开发工具
+  - 系统工具
+  - 工作流
+language: Shell
+stars: 25545
+forks: 2603
+openIssues: 756
+contributors: 452
+license: MIT
+featured: false
+publishedAt: "2026-08-17"
+updatedAt: "2026-08-17"
+curationReason: 想从 macOS/Windows 迁到 Linux，又不想从零拼装 Arch 与 Hyprland 的全栈开发者。
+---
+
+## 项目介绍
+
+Omarchy 是 [DHH](https://world.hey.com/dhh) / Basecamp 开源的 **意见型（omakase）Linux 发行版**：基于 Arch Linux 与 Wayland 平铺窗口管理器 [Hyprland](https://hypr.land/)，把终端、编辑器、主题、热键与常用开发/办公软件预配置成一套可立即开工的桌面。它刻意不做「尽量像 macOS/Windows」，而是提供一套完整、美观、键盘优先的开发机体验；权威手册在仓库 `manual/`，并镜像于 [learn.omacom.io](https://learn.omacom.io/2/the-omarchy-manual)。
+
+## 核心特性
+
+- **开箱即用的开发桌面**：预装并串好 Neovim、终端（如 Alacritty/foot）、Chromium、LibreOffice、以及 Spotify / Zoom 等日常工具，强调「装完就能干活」而非裸 Arch
+- **Hyprland 全套默认配置**：锁屏、空闲、顶栏、启动器、通知与主题联动，避免从零拼装平铺 WM 的常见坑
+- **统一主题系统**：十余套主题可一键切换，同步桌面、终端、Neovim、btop、通知、顶栏与锁屏样式
+- **键盘驱动工作流**：`Super + Space` 启动器、`Super + Alt + Space` Omarchy 菜单，以及终端/浏览器等常用热键；平铺、分组、scratchpad 开箱可用
+- **默认全盘加密安装**：ISO 安装默认 LUKS；支持整盘接管或空闲分区双系统，并提供无人值守安装路径
+
+## 对用户价值
+
+裸装 Arch + Hyprland 往往要花数天配置锁屏、蓝牙、显示器、主题一致性与开发工具链。Omarchy 把 DHH 日常使用的那套约定打包成可复制的发行版：你拿到的是「已打磨的开发机」，而不是「还要自己接水管的 WM」。对从 macOS/Windows 迁入 Linux 的工程师，手册里有专门的迁移导航；对希望团队机器体验一致的人，ISO + 无人值守安装可当作镜像基线。它不解决「最稳妥的新手桌面」问题——那更适合 Ubuntu 系——而是解决「想要漂亮、高效、强意见的 Arch 开发环境，但不想从零组装」。
+
+## 与替代方案
+
+- 相比 **[Omakub](https://github.com/basecamp/omakub)**（DHH 的 Ubuntu 意见型配置）：Omarchy 面向 Arch + Hyprland，更激进、更「Linux-native」；Ubuntu 新手或追求更稳妥落地路径时，Omakub / 常规 Ubuntu 桌面通常更合适。
+- 相比 **自装 Arch + Hyprland / 各类 rice 仓库**：Omarchy 提供完整发行版、ISO、更新与菜单化装包流程；DIY 自由度更高，但锁屏、空闲、主题一致性与硬件适配成本也更高。
+- 相比 **Fedora / Pop!_OS / 其他开箱桌面**：通用发行版更友好、社区更大、对 Secure Boot 等生态更顺；Omarchy 的差异在于强意见的平铺键盘工作流与开发者审美，而不是「最省心的日常家用桌面」。
+- **边界**：默认安装会加密并可能擦除所选磁盘；双系统需按手册处理空闲分区 / BitLocker；目标是专用开发机，不是通用企业桌面或「完全鼠标可用」的传统桌面隐喻。
+
+## 适应人群
+
+- 熟悉或愿意学习平铺窗口与终端工作流，想要「装完即用」的 Arch 开发机的全栈 / 后端工程师。
+- 从 macOS 或 Windows 迁到 Linux，希望有完整手册与热键体系，而不是从零拼 Hyprland 的迁移者。
+- 需要可复制桌面基线（ISO / 无人值守）给个人多机或小团队开发机的运维向开发者。
+
+## 如何使用
+
+### 前置条件
+
+- **x86_64** 机器，建议为 Omarchy **准备整块磁盘**，或按手册在磁盘上预留未分配空间做双系统。
+- BIOS / UEFI 中 **关闭 Secure Boot 与 TPM**（官方说明：否则无法安装）。
+- 准备可启动 U 盘；全盘加密开机解锁需要 **有线或 2.4GHz 接收器键盘**（蓝牙键盘通常无法在加密解锁阶段输入）。
+- 若与 Windows 双系统：先按手册关闭 BitLocker，并阅读 [dual-boot install](https://learn.omacom.io/2/the-omarchy-manual) 相关章节。
+- 安装前备份目标盘数据；默认全盘安装会擦除所选驱动器。
+
+### 安装方式
+
+1. 从官网 [omarchy.org](https://omarchy.org/) 下载 Omarchy ISO。
+2. 写入 U 盘：macOS/Windows 可用 [balenaEtcher](https://etcher.balena.io/)，Linux 可用 [caligula](https://github.com/ifd3f/caligula)。
+3. 从 U 盘启动，按安装向导填写键盘、用户等配置，选择目标磁盘（整盘或空闲空间），等待安装完成（官方称多数机器约 1–5 分钟）。
+4. 特殊场景：
+   - 磁盘格式确认时可 `Ctrl + C` 切换为**无加密**安装（仅适合受控/抛掷环境）。
+   - 给他人装机：在首屏键盘选择处 `Ctrl + C`，可延迟个人化配置到首次开机。
+   - 无人值守 / 机群镜像：见手册 *Unattended installs*。
+   - M 系列 Mac（Asahi）等特殊硬件：走手册中的手动安装路径，而非默认 ISO 流程。
+
+### 首次运行
+
+- 开机用有线/2.4GHz 键盘输入磁盘加密口令，登录进入 Hyprland。
+- 按 `Super + Space` 打开应用启动器；按 `Super + Alt + Space` 打开 Omarchy 菜单。
+- 试用核心热键：`Super + Return` 终端、`Super + Shift + Return` 浏览器，并用 `Super + 方向键` 在平铺窗口间切换焦点。
+- 通过菜单 `Style > Theme`（或相关主题快捷键）切换主题，确认终端 / 顶栏 / 锁屏样式联动。
+
+### 验证是否成功
+
+- 能完成加密解锁并进入桌面，启动器与 Omarchy 菜单可用。
+- 终端、浏览器、文件管理等预装应用可启动；平铺与工作区切换正常。
+- 主题切换后多组件样式一致；网络与音视频等基础外设可用。
+- 需要装包时，可在菜单使用 Install > Package / AUR，或在终端使用官方提供的 `omarchy` 相关装包命令（以当前手册为准）。
+
+### 常见坑 / 注意事项
+
+- **Secure Boot / TPM 未关**：安装失败或无法启动；装前务必在 BIOS 关闭。
+- **蓝牙键盘无法解锁磁盘**：加密口令阶段需要有线或 2.4GHz 键盘。
+- **误选磁盘导致数据丢失**：默认全盘安装会擦除目标盘，务必备份并二次确认。
+- **不要直接改系统包内配置**：用户定制应写在 `~/.config`（如 Hyprland / Omarchy shell 覆盖文件）；改 `/usr/share/omarchy` 或包管理目录下的文件会在更新时被覆盖。
+- **AUR 包需自行审慎**：菜单可装 AUR，但与 npm/gems 类似，上传者不受 Arch 官方审查。
+- 卡住时可到官网 Discord 的 `#omarchy-help` 求助；细节以 [The Omarchy Manual](https://learn.omacom.io/2/the-omarchy-manual) 与仓库 `manual/` 为准。
