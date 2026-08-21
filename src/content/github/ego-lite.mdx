@@ -1,0 +1,132 @@
+---
+title: ego lite
+description: 为人与 AI Agent 并行设计的 Chromium 浏览器，Agent 在独立 Space 里复用登录态，互不抢标签。
+repo: https://github.com/citrolabs/ego-lite
+homepage: https://lite.ego.app
+repoDescription: "The fastest browser for AI agents to run browser automation, built for sharing your logged-in browser state with your AI agents, like Codex or Claude Code, without disturbing you. Zero cost, zero config."
+avatarUrl: https://avatars.githubusercontent.com/u/234319236?v=4
+tags:
+  - Agent
+  - 自动化
+  - 开发工具
+language: JavaScript
+stars: 12434
+forks: 652
+openIssues: 123
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-08-21"
+updatedAt: "2026-08-21"
+curationReason: 适合已在用 Claude Code、Codex 或 Cursor、想让 Agent 操作真实登录站点且不打扰自己浏览的开发者。
+---
+
+## 项目介绍
+
+ego lite 是一款从底层为「人 + AI Agent」并行工作设计的 Chromium 浏览器：你继续用自己的标签页，Agent 在独立的 Space 里跑任务，默认继承当前登录态、Cookie 与扩展，而不会抢走鼠标或覆盖你正在看的页面。它通过 `ego-browser` 技能接入 Claude Code、Codex、Cursor 等任意 Agent CLI——Agent 写一段调用 snapshot / click / fill 的 JavaScript，浏览器在页面上一次执行完，而不是来回打 CLI。定位是**零配置、本地数据、可当日常浏览器用的 Agent 工作台**，不是再套一层需要另起浏览器的自动化框架。
+
+## 核心特性
+
+- **以代码而非 CLI 驱动复杂任务**：能力以 JavaScript 函数暴露给 Agent，多步流程可合成一次输出；官方对照传统 CLI 循环，复杂任务最高约 2.5× 更快、token 更少
+- **每个 Agent 一个隔离 Space**：前台浏览、后台自动化互不抢标签；可随时查看哪个 Space 在跑、接管或停下
+- **同一浏览器内并行多任务**：多个 Space 可同时跑不同 Agent 或不同任务（例如一批线索enrich、另一批竞品抓取）
+- **内核级页面 Snapshot**：针对模型「看见并操作网页」做语义快照，官方强调深层嵌套 iframe 等传统方案易失败的场景
+- **任意 Agent 经 `ego-browser` 接入**：Claude Code、Codex、Cursor 或自建 CLI 均可驱动；首次安装可选迁移 Chrome 数据，登录态无需再配一遍
+
+## 对用户价值
+
+常见痛点是：让 Agent 操作网页时，要么另开一套没登录的浏览器，要么和人抢同一批标签。ego lite 把「真实登录态」和「隔离工作区」放进同一款日常浏览器：填表、点按钮、截图、抓取、登录后站点上的 QA，都可以在不打断你浏览的前提下完成。数据默认留在本机；仓库技能免费，浏览器应用也是免费下载。对已经把编码交给 Claude Code / Codex 的人，它补上的是「Agent 能开真实网页」这一环，而不是再换一套内置聊天框的 AI 浏览器。
+
+## 与替代方案
+
+- 相比 [Browser-Use](https://github.com/browser-use/browser-use)、[Vercel agent-browser](https://github.com/vercel-labs/agent-browser) 等**自动化框架**：它们不自带浏览器，需要另起实例，登录态很难干净带过去；ego lite 是浏览器本身，人与 Agent 共用、工作区隔离。
+- 相比 [ChatGPT Atlas](https://openai.com/index/chatgpt-atlas/)、Perplexity Comet 等**内置 Agent 的 AI 浏览器**：那些产品通常只能由自家助手驱动；ego lite 可被你已在用的外部 Agent CLI 控制，且官方对比表强调本地存储与免费。
+- 相比 [Puppeteer](https://github.com/puppeteer/puppeteer) / Playwright：后者是脚本库与测试/爬虫底座，不解决「和人共用已登录日常浏览器」；ego lite 面向 Agent 结对上网，不是 E2E 测试框架。
+- 边界：当前官方支持 **macOS**；Windows / Linux 在 [路线图](https://lite.ego.app/roadmap) 上为 Planned。本仓库 MIT 发布的是技能与文档，浏览器应用是单独的免费下载。
+
+## 适应人群
+
+- 已在用 **Claude Code、Codex、Cursor**，需要 Agent 打开真实已登录网站、填表或验收前端的开发者。
+- 希望 **自己继续浏览、Agent 在后台并行**，而不是把标签页交给自动化脚本的人。
+- 评估「Agent 浏览器」选型、对照 Browser-Use / agent-browser / Atlas 类产品差异的技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- **macOS**（官方当前仅支持；Windows / Linux 见路线图）。
+- 一台已安装的 Agent CLI：Claude Code、Codex、Cursor 或兼容 skills 的同类工具。
+- 可选：本机已有 Chrome 配置文件，以便首次启动时迁移登录态、Cookie、扩展与书签。
+- 首次安装后 `ego-browser` 通常注册到 `~/.local/bin`，需保证该目录在 PATH 中。
+
+### 安装方式
+
+任选其一。安装后，ego lite 会把 `ego-browser` 技能写入本机各 Agent 的 skills 目录。
+
+**方式一：下载 macOS 应用**
+
+从 [lite.ego.app](https://lite.ego.app) 下载安装包并打开。首次启动会询问是否迁移 Chrome 数据。
+
+**方式二：只加技能，再由 Agent 引导装应用**
+
+```bash
+npx skills add citrolabs/ego-lite
+```
+
+Agent 第一次执行浏览器任务时，会按技能内 `references/install.md` 引导安装应用。
+
+**方式三：让 Agent 直接安装**
+
+把下面这段发给 Agent：
+
+```
+Set up ego lite for me: https://github.com/citrolabs/ego-lite
+
+Read `skills/ego-browser/references/install.md` and follow the steps to install ego lite.
+```
+
+技能内安装脚本会按 CPU 架构下载 DMG、装到 `/Applications`（必要时回退 `~/Applications`），并去掉隔离属性以减少 Gatekeeper 拦截。
+
+### 首次运行
+
+完成应用内引导（是否导入 Chrome 数据）后，在 Agent CLI 里用自然语言发起任务，例如：
+
+```
+ego-browser follow @ego_agent on x.com for me
+```
+
+或由 Agent 按技能约定执行 `ego-browser nodejs` heredoc：先 `useOrCreateTaskSpace`，再 `openOrReuseTab`，用 `snapshotText` / `click` 等助手操作页面。任务跑在 Agent 自己的 Space 里，你的标签页保持不动。
+
+教程与工具参考见 [lite.ego.app/document](https://lite.ego.app/document/)。
+
+### 验证是否成功
+
+```bash
+command -v ego-browser
+```
+
+若找不到命令，先把 `~/.local/bin` 加入 PATH 再试：
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+command -v ego-browser
+```
+
+然后跑一条最小脚本：
+
+```bash
+ego-browser nodejs <<'EOF'
+cliLog('ego-browser ready')
+EOF
+```
+
+打印 `ego-browser ready` 即表示运行时可用。再让 Agent 打开一个公开页面并回报 Snapshot，确认 Space 与你的标签页相互独立。
+
+### 常见坑 / 注意事项
+
+- **仅 macOS**：安装脚本检查 `uname -s` 为 Darwin；其他系统请等官方 Windows / Linux，或先看 [lite.ego.app](https://lite.ego.app)。
+- **Gatekeeper**：脚本会尝试去掉隔离属性；若仍被拦，到「系统设置 → 隐私与安全性」手动允许。
+- **PATH**：引导完成后命令仍找不到，多半是 `~/.local/bin` 未进当前 shell；重新打开 ego lite 完成引导后再试。
+- **登录态**：首次是否迁移 Chrome 由你选择；浏览数据留在本机，官方称仅记录是否选择了迁移。
+- **许可证**：仓库内容为 MIT；浏览器应用是单独免费下载，不要把「整个产品都是这个 GitHub 仓库」当成分发方式。
+- 「使用越久 Agent 越快」的经验沉淀技能，官方标注为 *coming soon*，当前不要按已交付能力来规划。
