@@ -1,0 +1,111 @@
+---
+title: "ccusage"
+description: 本地读取多款 AI 编程 CLI 用量与成本，输出日/周/月/会话报告的命令行工具。
+repo: "https://github.com/ccusage/ccusage"
+homepage: "https://ccusage.com/"
+repoDescription: "npx ccusage"
+avatarUrl: "https://avatars.githubusercontent.com/u/291949270?v=4"
+tags:
+  - AI 编程
+  - CLI
+  - 开发工具
+language: "Rust"
+stars: 18099
+forks: 806
+openIssues: 28
+contributors: 77
+license: "MIT"
+featured: false
+publishedAt: "2026-08-22"
+updatedAt: "2026-08-22"
+curationReason: 同时用 Claude Code、Codex、OpenCode 等 Agent CLI，想汇总 Token 花费与账单窗口的开发者。
+---
+
+## 项目介绍
+
+[ccusage](https://ccusage.com/) 是一款从本地数据读取 **AI 编程 / Agent CLI** Token 用量与费用的命令行工具。它覆盖 Claude Code、Codex、OpenCode、Amp、Copilot CLI、Gemini CLI 等十余种来源，可按日、周、月、会话输出彩色表格或 JSON，也支持 Claude Code 的 5 小时计费窗口（blocks）与 statusline 钩子集成。无需把用量数据上传到第三方；定价可离线缓存，也可在配置里按模型覆盖。
+
+## 核心特性
+
+- **多源统一报表**：一条 CLI 汇总 Claude Code、Codex、OpenCode、Hermes、OpenClaw、Kimi、Qwen、Copilot、Gemini、Grok 等本地用量；`daily` / `weekly` / `monthly` / `session` 可按源或 `--all` 合并
+- **Claude 专属视图**：`blocks` 跟踪 5 小时计费窗口与活跃 block；`statusline`（Beta）可接入 Claude Code 状态栏钩子
+- **成本与模型拆解**：USD 成本列、缓存读写 Token、`--breakdown` 按模型拆分；可用 `--no-cost` 隐藏费用字段
+- **筛选与导出**：`--since` / `--until`、`--last 1`、`--timezone`、`--json`、`--compact`；Claude 还可按项目 `--instances` / `--project` 分组
+- **离线与可配置**：`--offline` 使用预缓存定价；`ccusage.json` 可覆盖模型单价，并支持自定义本地数据路径
+
+## 对用户价值
+
+多款 Agent CLI 的用量分散在各自本地目录里，官方网页控制台往往只覆盖单一订阅，且难以把 Codex、OpenCode、第三方 CLI 放进同一张表。ccusage 把「今天花了多少、哪次会话最贵、Claude 当前 5 小时窗口还剩多少」变成可重复执行的本地命令，适合个人控本、截图分享与脚本化导出（JSON），减少翻控制台或手写解析 JSONL 的成本。
+
+## 与替代方案
+
+- 相比 **Anthropic / OpenAI 控制台用量页**：ccusage 读本地 transcript / 用量文件，可跨多 CLI 合并，并支持离线与自定义单价；控制台更适合账号级账单核对，二者互补。
+- 相比 **Claude Code 内置 `/cost` 或会话内提示**：本工具面向历史区间与多会话汇总，并扩展到非 Claude 来源；会话内命令更适合当下这一轮的即时反馈。
+- 相比 **[claude-hud](https://github.com/jarrodwatts/claude-hud)** 等状态栏插件：hud 侧重当前会话可观测性；ccusage 侧重成本与周期报表（也提供 statusline Beta，但定位仍是用量分析）。
+- 局限：依赖各 CLI 已在本机留下可解析的用量数据；未安装或未产生本地日志的来源不会出现在报告中。许可证以仓库 `apps/ccusage/LICENSE`（MIT）为准。
+
+## 适应人群
+
+- 同时使用 Claude Code、Codex、OpenCode 等多款 Agent CLI，需要一张表看清总花费的开发者。
+- 关心 Claude 订阅 5 小时窗口与项目级用量分布，希望用 CLI 做日常复盘的重度用户。
+- 要把用量导出为 JSON、接入脚本或团队内部看板的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 **Node.js**（推荐用 `npx` / `bunx` / `pnpm dlx` 直接跑）或 **Nix**（`nix run`）
+- 本机至少用过一种受支持 CLI，并已生成本地用量数据（如 Claude Code、Codex 等）
+- 首次拉取定价可能需要网络；完全离线时可加 `--offline`
+
+### 安装方式
+
+无需全局安装，直接运行：
+
+```bash
+# npm
+npx ccusage@latest
+
+# 其他包管理器
+bunx ccusage
+pnpm dlx ccusage
+
+# Nix
+nix run github:ccusage/ccusage -- daily
+```
+
+完整文档见 [ccusage.com](https://ccusage.com/)。
+
+### 首次运行
+
+```bash
+# 默认：按日汇总所有已检测到的来源
+npx ccusage@latest
+
+# 或按维度查看
+npx ccusage@latest daily
+npx ccusage@latest weekly
+npx ccusage@latest monthly
+npx ccusage@latest session
+
+# 单源示例
+npx ccusage@latest claude daily
+npx ccusage@latest codex daily
+
+# Claude 5 小时计费窗口
+npx ccusage@latest blocks
+```
+
+### 验证是否成功
+
+- 终端打印彩色表格，出现日期/会话行与 Token、费用列（或你用了 `--no-cost`）
+- `npx ccusage@latest daily --json` 能输出可解析的 JSON
+- 若本机只有 Claude 数据，`claude daily` 有行而其他源为空或未出现，属正常
+
+### 常见坑 / 注意事项
+
+- **报告为空**：确认对应 CLI 已产生本地用量文件；自定义目录需按文档配置路径（如 pi 的 `--pi-path`）。
+- **费用不准**：默认走 LiteLLM 等定价快照；可用 `--offline` 固定缓存价，或在 `ccusage.json` 按模型名覆盖单价。
+- **时区错位**：日期分组默认跟本机时区，跨日对账可加 `--timezone UTC`。
+- **窄终端**：宽度 &lt; 100 会自动紧凑列；截图分享可强制 `--compact`。
+- GitHub 仓库 `description` 字段仅为 `npx ccusage`（营销短标签）；功能说明以 README / [文档站](https://ccusage.com/) 为准。
