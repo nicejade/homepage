@@ -1,0 +1,121 @@
+---
+title: "Beszel"
+description: 轻量级服务器监控平台：历史指标、Docker/Podman 容器统计与可配置告警，Hub + Agent 开箱即用。
+repo: "https://github.com/henrygd/beszel"
+homepage: "https://beszel.dev"
+repoDescription: "Lightweight server monitoring with historical data, docker stats, and alerts."
+avatarUrl: "https://avatars.githubusercontent.com/u/8519632?v=4"
+tags:
+  - 自托管
+  - 开发工具
+  - 自动化
+language: "Go"
+stars: 24590
+forks: 967
+openIssues: 322
+contributors: 138
+license: "MIT"
+featured: false
+publishedAt: "2026-08-24"
+updatedAt: "2026-08-24"
+curationReason: 适合 Homelab 与多 VPS，想用比 Prometheus+Grafana 更轻的方案统一看主机与容器健康。
+---
+
+## 项目介绍
+
+Beszel 是面向自托管与 Homelab 场景的轻量级服务器监控平台，采用 **Hub + Agent** 架构：Hub（基于 PocketBase）提供 Web 仪表盘与多系统管理，Agent 部署在每台被监控主机上上报指标。它开箱可用，覆盖主机与 Docker/Podman 容器的历史数据、告警、多用户与 OAuth/OIDC，资源占用明显低于完整可观测性栈。
+
+## 核心特性
+
+- **轻量易部署**：镜像与资源占用小于主流监控方案，配置量少，几分钟可上线
+- **Docker / Podman 统计**：按容器追踪 CPU、内存与网络历史用量
+- **可配置告警**：支持 CPU、内存、磁盘、带宽、温度、风扇、负载与在线状态等阈值
+- **多用户与 OAuth/OIDC**：用户管理自有系统，管理员可共享；支持多种 OAuth2，可关闭密码登录
+- **自动备份**：支持落盘或 S3 兼容存储的备份与恢复；另含 GPU、S.M.A.R.T. 等扩展指标
+
+## 对用户价值
+
+跑几台 VPS、NAS 或家庭实验室时，往往既不想维护 Prometheus + Grafana + Alertmanager 全家桶，又不甘心只有「进程还活着」级别的 uptime 探测。Beszel 把「主机健康 + 容器用量 + 历史曲线 + 阈值告警」收敛到一套 Hub/Agent：在面板里添加系统、按对话框提示启动 Agent，即可集中查看多机状态，并在磁盘将满、容器异常或温度过高时收到通知，显著降低自托管运维的认知与维护成本。
+
+## 与替代方案
+
+- 相比 **Prometheus + Grafana**，Beszel 上手快、运维面小，适合个人与小团队；复杂自定义指标、PromQL 查询与大规模联邦仍应选 Prometheus 生态。
+- 相比 **Netdata / Glances**，Beszel 更强调多机 Hub 汇总、历史数据与告警工作流；单机实时细粒度剖析可优先 Netdata。
+- 相比 **Uptime Kuma**，Beszel 关注资源与容器指标，而非 HTTP/TCP 存活探测；两者常互补（可用性 + 容量）。
+- 相比 **Zabbix / Checkmk** 等企业监控，Beszel 功能面更窄、部署更简单，不适合需要完整 CMDB、复杂告警编排与大规模 Agent 策略的场景。
+
+## 适应人群
+
+- 在 Homelab、家庭 NAS 或少量 VPS 上自托管服务，需要轻量多机监控面板的个人用户。
+- 想快速看 Docker/Podman 容器资源趋势与磁盘/温度告警，又不想搭完整可观测性栈的开发者与运维。
+- 小团队需要多用户、OAuth 与共享系统视图，统一查看多台服务器健康状态的效率型用户。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装 [Docker](https://docs.docker.com/install/) 与 Docker Compose（也可用 Podman）；或按文档使用官方二进制。
+- 规划 Hub 访问地址（本机可用 `http://localhost:8090`；公网需域名/反代并设置 `APP_URL`）。
+- 每台被监控主机需能运行 Agent，并与 Hub 网络互通（同机可用 Unix socket）。
+
+### 安装方式
+
+推荐按[官方快速开始](https://beszel.dev/guide/getting-started)用 Compose 启动 Hub（可与本机 Agent 同文件）：
+
+```yaml
+services:
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    environment:
+      APP_URL: http://localhost:8090
+    ports:
+      - 8090:8090
+    volumes:
+      - ./beszel_data:/beszel_data
+      - ./beszel_socket:/beszel_socket
+
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./beszel_agent_data:/var/lib/beszel-agent
+      - ./beszel_socket:/beszel_socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: /beszel_socket/beszel.sock
+      HUB_URL: http://localhost:8090
+      TOKEN: <token>
+      KEY: "<key>"
+```
+
+```bash
+mkdir beszel && cd beszel
+# 将上述内容写入 docker-compose.yml，并按实际访问地址修改 APP_URL
+docker compose up -d
+```
+
+远程主机可在 Web UI「添加系统」对话框中复制 Agent 的 Compose 或 Linux 安装脚本；也可用 `/settings/tokens` 的通用 Token（0.12.0+）免预配置对接。
+
+### 首次运行
+
+1. 浏览器打开 Hub（默认 `http://localhost:8090`），按提示创建管理员账号。
+2. 点击 **Add System**，按对话框获取 `TOKEN` / `KEY`（或通用 Token），写入 Agent 环境变量后重启 Agent。
+3. 同机 Docker 示例可将 Host/IP 设为 Unix socket：`/beszel_socket/beszel.sock`。
+4. 在对话框中完成添加；系统状态变绿即表示 Agent 已连通。
+
+### 验证是否成功
+
+- Hub 仪表盘出现已添加系统，状态为绿色。
+- 系统详情页能看到 CPU、内存、磁盘、网络等历史曲线；若挂载了 Docker socket，应能列出容器统计。
+- 在通知设置中配置一条测试告警（如磁盘阈值），确认能收到通知渠道推送。
+
+### 常见坑 / 注意事项
+
+- **同机 Agent 必须更新 KEY/TOKEN 并重启**：Compose 里的占位符替换后需 `docker compose up -d`，否则系统会一直红。
+- **`APP_URL` 与反代不一致**会导致 OAuth、链接与 Agent 回调异常；公网部署请写成最终对外 URL。
+- **Docker 统计依赖只读挂载** `/var/run/docker.sock`；未挂载则只有主机指标。
+- 变红或连不上时先查[官方 Common Issues](https://beszel.dev/guide/common-issues)；升级前阅读 Releases，关注 Agent/Hub 版本需匹配。
