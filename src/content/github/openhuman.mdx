@@ -1,0 +1,99 @@
+---
+title: "OpenHuman"
+description: 本地优先的个人 AI 超智能：持久记忆、Agent 编排与深度研究，桌面端几分钟开箱可用。
+repo: "https://github.com/tinyhumansai/openhuman"
+homepage: "https://tinyhumans.ai/openhuman"
+repoDescription: "Your Personal AI super intelligence. A brain that builds a local-first memory of your life, a fantastic orchestrator of agent fleets and workflows, and a deep researcher."
+avatarUrl: "https://avatars.githubusercontent.com/u/246003628?v=4"
+tags:
+  - Agent
+  - 本地模型
+  - 自动化
+language: "Rust"
+stars: 36856
+forks: 3674
+openIssues: 270
+contributors: 148
+license: "GPL-3.0"
+featured: false
+publishedAt: "2026-08-24"
+updatedAt: "2026-08-24"
+curationReason: 适合想几分钟灌入邮箱/日历/仓库上下文，并用可视化画布审批 Agent 工作流的个人用户。
+---
+
+## 项目介绍
+
+OpenHuman 是 Tiny Humans AI 开源的**本地优先个人 AI 超智能**桌面应用（Early Beta）：把持久记忆（Memory Tree + Obsidian Wiki）、多 Agent 图编排（tinyagents）与深度研究工具链收进一套 UI。连接 Gmail、Notion、GitHub 等账号后，可按约 20 分钟自动拉取并压缩进本机 SQLite/Markdown 记忆；支持 Privacy Mode（推理不出本机）、BYOK/Ollama 与可选订阅模型路由。官方定位是「有记忆的编排器」，而非又一个冷启动聊天框。
+
+## 核心特性
+
+- **Memory Tree + Obsidian Wiki**：本机 SQLite 中的可评分 Markdown 记忆树，可镜像为可编辑 Obsidian 库；支持 OAuth/MCP/Skills 接入与 auto-fetch
+- **图编排与工作流**：checkpointed Agent 图可暂停/恢复；Agent 可提议 tinyflows 工作流，你在画布上审批后触发（定时/Webhook/频道事件）
+- **深度研究与原生工具**：托管网页搜索、浏览器、爬虫、编码工具集、语音（Whisper）、图视频生成；17 个消息频道含原生邮件
+- **隐私与本地优先**：设备端加密、审批门、系统钥匙串密钥、可选沙箱；一键 Privacy Mode 强制推理留在本机
+- **TokenJuice**：工具输出压缩后再进模型，降低大记忆场景成本
+
+## 对用户价值
+
+多数助手从零开始：要么等插件慢慢喂上下文，要么只记住当前对话。OpenHuman 把「接账号 → 周期性同步 → 压缩成可审计记忆 → 在熟悉频道里行动」压成几分钟路径，让 Agent 很快知道你的邮箱、日历、仓库与文档，而不是再花几周「学习期」。需要自动化时，工作流由 Agent 起草、你在画布上审，副作用走审批门；想完全离线推理可开 Privacy Mode，或把部分负载指到自有 API Key / Ollama。
+
+## 与替代方案
+
+- 相比 **OpenClaw**：OpenClaw 更偏自托管 Gateway + 多 IM 频道常驻助手；OpenHuman 更强调本机记忆图、可视化工作流与桌面 UI 开箱体验。
+- 相比 **Hermes Agent**：Hermes 偏终端/自进化技能；OpenHuman 以 UI-first、Memory Tree/Obsidian 与 Agent 图编排见长，二者可互补评估。
+- 相比 **Claude Cowork 等专有桌面 Agent**：OpenHuman 开源（GPL-3.0），记忆与工作流知识可留在本机；但 Early Beta，稳定度与生态成熟度需对照商业产品。
+- 相比 **n8n / Zapier**：后两者是通用自动化平台；OpenHuman 的工作流由对话式 Agent 提议并绑定个人记忆与频道，不适合替代企业级集成中台。
+
+## 适应人群
+
+- 想把个人邮箱、日历、文档快速变成 Agent 长期记忆，而不愿长时间冷启动的个人用户。
+- 需要多 Agent 编排、可视化审批自动化，并希望数据尽量本地的效率型知识工作者。
+- 关注 Privacy Mode / BYOK / Ollama，愿意在 Early Beta 阶段尝鲜开源个人 AI 桌面端的开发者与自托管爱好者。
+
+## 如何使用
+
+### 前置条件
+
+- 桌面系统：macOS（Homebrew）、Windows（`.msi`）或 Linux（Debian/Ubuntu `.deb` 优先；Arch 可用 AUR `openhuman-bin`）。
+- 了解项目处于 **Early Beta**，功能与稳定性仍在快速迭代。
+- 许可证为 **GPL-3.0**；若使用托管模型/搜索等订阅能力，按官网账号与计费说明配置；也可 BYOK 或本地 Ollama。
+
+### 安装方式
+
+推荐从 [tinyhumans.ai/openhuman](https://tinyhumans.ai/openhuman) 或 [GitHub Releases](https://github.com/tinyhumansai/openhuman/releases/latest) 下载安装包；终端路径见官方 [INSTALL.md](https://github.com/tinyhumansai/openhuman/INSTALL.md)：
+
+```bash
+# macOS
+brew install --cask openhuman
+```
+
+```bash
+# Debian/Ubuntu：先从 Releases 下载对应 .deb，再安装（arm64 主机把 amd64 换成 arm64）
+sudo apt-get install -y --no-install-recommends ./OpenHuman_*_amd64.deb
+```
+
+Windows：运行最新 Release 中的签名 `.msi`。
+
+脚本安装（`curl | bash` / `irm | iex`）**无独立签名校验**，官方建议优先用原生包；详见 INSTALL.md 警告。
+
+### 首次运行
+
+1. 启动 OpenHuman，按引导完成基础设置（模型路由：订阅 / BYOK / 本地）。
+2. 在集成页连接需要的 OAuth 账号（如 Gmail、Notion、GitHub），并确认 auto-fetch 是否开启。
+3. 等待首轮同步与 Memory Tree 压缩；可在 Obsidian Wiki 镜像中抽查 Markdown 记忆是否合理。
+4. 按需接入消息频道或让 Agent 提议一条简单工作流，在画布上审阅后保存。
+
+### 验证是否成功
+
+- 应用可正常启动，对话能调用至少一个已配置模型。
+- 已连接集成后，记忆/Wiki 中出现压缩后的个人上下文条目。
+- 触发一条低风险工作流或频道消息，能看到可回放的运行记录与费用/步骤信息（若启用）。
+- 打开 Privacy Mode 后，确认推理流量按文档约束留在本机。
+
+### 常见坑 / 注意事项
+
+- **Early Beta**：升级前阅读 Releases；功能表与对比矩阵会随版本变化，以当前文档为准。
+- **Linux AppImage**：在 Wayland、缺库或部分 Arch 环境可能启动失败；Debian/Ubuntu 优先用 `.deb`（见官方 issue 说明）。
+- **勿用未校验脚本当生产默认路径**：优先 Homebrew / `.deb` / `.msi`。
+- **隐私与审批**：连接邮箱等敏感源前先理解数据落盘与审批门；生产敏感操作务必开审批并限制工具权限。
+- 从源码贡献需 Node 24+、pnpm、Rust 等较重桌面构建依赖，日常使用请走发行安装包。
