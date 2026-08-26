@@ -1,0 +1,126 @@
+---
+title: "AI Engineering from Scratch"
+description: "从线性代数到手写 Agent 的开源 AI 工程课：20 阶段约 511 课，先自建算法再对照生产库。"
+repo: "https://github.com/rohitg00/ai-engineering-from-scratch"
+homepage: "https://aiengineeringfromscratch.com"
+repoDescription: "Learn it. Build it. Ship it for others."
+avatarUrl: "https://avatars.githubusercontent.com/u/48523873?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: "Python"
+stars: 49417
+forks: 8613
+openIssues: 97
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-08-26"
+updatedAt: "2026-08-26"
+curationReason: "会写代码但不想只会调 API：用 Claude Code / Cursor 当家教，可跳阶段或只走 MCP / Skills 快路径。"
+---
+
+## 项目介绍
+
+**AI Engineering from Scratch** 是 Rohit Ghumare 维护的免费 MIT 开源课程，用同一条脊柱把「会调 API」和「懂它在干什么」接起来：20 个阶段、约 511 课、约 329 小时，从线性代数与工具链一路到 LLM、MCP、Agent 与生产化。每课固定走 **Build It / Use It / Ship It**：先用裸数学手写算法，再用 PyTorch / sklearn 等生产库跑同一件事，最后留下可安装的 prompt、Skill、Agent 或 MCP server。
+
+## 核心特性
+
+- **自底向上的 20 阶段脊柱**：Phase 0 环境 → 数学 / 经典 ML / 深度学习 → 视觉、NLP、语音、Transformer、生成式与强化学习 → 手写 LLM → LLM 工程、多模态、工具协议、Agent、自治系统、多智能体、生产与对齐，最后是可交付 capstone
+- **统一课时结构**：每课目录都是 `code/` + `docs/en.md` + `outputs/`；命令默认从仓库根目录运行，支持 Python，部分课另有 TypeScript / Rust / Julia 实现
+- **每课产出可复用工件**：课程结束时留下 prompt、Skill、Agent、MCP 等工具，而不是「学完就放下」的作业；可用 `scripts/install_skills.py` 装进 Claude Code / Cursor / Codex 等宿主
+- **Agent 当家教**：`npx skills add rohitg00/ai-engineering-from-scratch` 装入 `start-learning`、`learn`、`course-guide` 等技能；十分钟定位测验写入 `LEARNING.md`，也可只走 MCP 或 Agent Skills 快路径
+- **三种入口可并行**：终端家教（推荐）、官网 [aiengineeringfromscratch.com](https://aiengineeringfromscratch.com) 纯阅读，或 clone 后直接跑课时代码；核心课还可编译成六卷 EPUB / PDF
+
+## 对用户价值
+
+散落的论文、微调帖和 Agent demo 很难对上：你能上线聊天机器人，却解释不清 loss；能给 Agent 挂工具，却说不清 attention。这门课把算法、框架和可安装工件绑在同一课里——先写出慢而短的手写版，再 diff 生产库，最后把 Skill / MCP 留在自己的工具链里。已有 ML 背景可从 Phase 10 或 14 切入；只要 MCP 或 Agent Skills，可走约 23 小时 / 9.5 小时的专项路径，不必硬啃完整 ~300 小时。
+
+## 与替代方案
+
+- 相比 [Fast.ai](https://github.com/fastai/fastai) 等**自上而下、先用框架**的课，这里强制先手写再对照生产库；上手更慢，但对「框架在藏什么」更硬。
+- 相比 Karpathy 的 *Zero to Hero* / nanoGPT，覆盖面更广（数学 → 多智能体 → 生产与对齐），并配套 Agent 家教与可安装 Skill；Karpathy 系列更短、更聚焦神经网络与 LLM。
+- 相比 [深入理解 AI Agent](https://github.com/bojieli/ai-agent-book) 等 **Agent 教材**，本仓库是全栈 AI 工程课，Agent 只是后半段；若目标只是 Agent 原理 + 中文实验，前者更省。
+- 相比 [Claude Cookbooks](https://github.com/anthropics/claude-cookbooks) 或厂商课程，这里不绑定单一 API；仓库里的 Claude 认证路径是基于公开大纲的自学材料，**不隶属 Anthropic，也不保证通过**。
+- 这不是 LangChain / Dify 一类业务框架或低代码平台；学完应回到你真正要交付的栈。
+
+## 适应人群
+
+- 会写代码（Python 更佳），不想停留在「会调模型 API」，希望亲手实现反向传播、分词器、attention 与 Agent loop 的工程师。
+- 已有 ML / 深度学习基础，想补 LLM 工程、MCP、Agent Skills 或多智能体，并需要可跳阶段路径的开发者。
+- 用 Claude Code、Cursor、Codex 等编码代理学习，希望课程自己出测验、进度文件与可安装 Skill 的个人或教学团队。
+
+## 如何使用
+
+### 前置条件
+
+- 能写代码；Python 更有帮助。仓库脚本侧常见要求为 **Python 3.10+**。
+- 终端家教路径需要 Node.js、`npx`，以及 Claude Code / Codex / Cursor 等能读 `SKILL.md` 的宿主。
+- 跑课时代码需要 clone；只装学习技能或在官网阅读则不必。
+- 完整路径很长（新手约 300 小时）；可按背景从 Phase 1 / 3 / 10 / 14 开始，或只走 MCP / Agent Skills 专项。
+
+### 安装方式
+
+**方式 A：把家教装进编码代理（推荐，可不 clone）**
+
+```bash
+node --version
+npx --version
+python3 --version
+
+npx skills add rohitg00/ai-engineering-from-scratch
+```
+
+安装时选择宿主与写入范围（如 `.claude/skills/`、`.cursor/skills/`、`.codex/skills/`）。
+
+**方式 B：克隆后直接跑课**
+
+```bash
+git clone https://github.com/rohitg00/ai-engineering-from-scratch.git
+cd ai-engineering-from-scratch
+```
+
+克隆后，Claude Code 也会自动加载学习技能；本地代码可供 `learn` 真正执行，而不只是跟读。
+
+**方式 C：只阅读**
+
+打开 [aiengineeringfromscratch.com](https://aiengineeringfromscratch.com)，或从 GitHub Release 下载六卷 EPUB / PDF。英文为权威版本；落地页有多语言，课时正文的翻译在 `translations` 分支且多为机翻。
+
+### 首次运行
+
+在 Claude Code 执行 `/start-learning`；在 Codex 用 `start-learning`（或从 `/skills` 选）；其他宿主直接说「用 start-learning 开始这门课」。十题定位测验会映射到起始阶段，并把计划写入 `LEARNING.md`。
+
+只学 MCP / Agent Skills 时，分别用 `/learn-mcp`、`/learn-agent-skills`（Codex 去掉斜杠），进度写入 `MCP-LEARNING.md` 或 `AGENT-SKILLS-LEARNING.md`。
+
+clone 后的第一条证据（仓库根目录）：
+
+```bash
+python3 phases/00-setup-and-tooling/01-dev-environment/code/verify.py --route beginner
+python3 phases/01-math-foundations/01-linear-algebra-intuition/code/vectors.py
+```
+
+预检会区分「现在就要」和「以后才要」的工具；第二条课无第三方依赖，结尾会演示矩阵乘向量就是一层神经网络。
+
+把课时产出装进自己的代理（需已 clone）：
+
+```bash
+python3 scripts/install_skills.py ~/.claude/skills --dry-run
+python3 scripts/install_skills.py ~/.claude/skills --phase 14
+```
+
+### 验证是否成功
+
+- 家教路径：宿主能发现 `start-learning` / `learn`；跑完定位后项目里出现 `LEARNING.md`。
+- clone 路径：`verify.py` 给出原因与修复命令；`vectors.py` 正常打印，并留下命令、工作目录、退出码与输出作为证据。
+- 可选语法巡检（不执行、不需 API Key）：`python3 scripts/lesson_run.py --phase 1`
+
+### 常见坑 / 注意事项
+
+- **命令默认从仓库根目录执行**，除非该课明确要求 `cd`。
+- `npx skills add` **不需要 clone** 就能读课；要跑仓库里的代码实验、MCP / Agent Skills 实验，仍然要本地 clone。
+- `install_skills.py` 默认拒绝覆盖已有目标并退出码 1；先 `--dry-run`，确认后再 `--force`。
+- 不要跳过底层又对上层「为什么坏了」感到意外：可以按背景跳阶段，但上层依赖下层直觉。
+- README 中的课次、小时数以磁盘上的 `catalog.json` 为准；贡献课时后需重跑 `python3 scripts/build_catalog.py`。
+- Claude 认证学院是基于公开大纲的独立自学材料，不是 Anthropic 官方课，也不能保证通过考试。
+- 密钥与生产数据不要写入仓库；部分进阶课才会碰到外部 API 或较重依赖。
