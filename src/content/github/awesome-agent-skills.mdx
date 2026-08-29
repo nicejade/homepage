@@ -1,0 +1,105 @@
+---
+title: Awesome Agent Skills
+description: VoltAgent 维护的 Agent Skills 精选清单：收录官方团队与社区实战技能，兼容 Claude Code / Cursor 等。
+repo: https://github.com/VoltAgent/awesome-agent-skills
+homepage: https://officialskills.sh/
+repoDescription: A curated collection of 1000+ agent skills from official dev teams and the community, compatible with Claude Code, Codex, Gemini CLI, Cursor, and more.
+avatarUrl: https://avatars.githubusercontent.com/u/201282378?v=4
+tags:
+  - Agent
+  - AI 编程
+  - 开发工具
+language: Markdown
+stars: 33194
+forks: 3506
+openIssues: 20
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-08-29"
+updatedAt: "2026-08-29"
+curationReason: 想给 Claude Code / Cursor 装 Stripe、Vercel、Anthropic 等厂商官方技能，并避开 AI 批量生成的 skill 仓库。
+---
+
+## 项目介绍
+
+Awesome Agent Skills 是 VoltAgent 维护的一份 **Agent Skills 精选目录**，把各厂商官方技能与社区实战技能做成可浏览的 Awesome 清单，并配有独立站点 [officialskills.sh](https://officialskills.sh/)。它强调「人工挑选、拒绝 AI slop」：收录的是工程团队真实在用的技能（Anthropic、Google、Vercel、Stripe、Cloudflare、Figma、Sentry 等），而不是批量生成的提示词合集。清单本身只做链接策展，每项技能仍托管在各自仓库；兼容 Claude Code、Cursor、Codex、Gemini CLI、GitHub Copilot、OpenCode、Windsurf、Antigravity 等宿主。
+
+## 核心特性
+
+- **官方厂商专区**：按团队分栏，覆盖 Claude、Vercel、Stripe、Cloudflare、Netlify、Expo、Hugging Face、Trail of Bits、Sentry、Figma、Microsoft、OpenAI 等 50+ 开发团队
+- **社区分类补齐**：营销、生产力、测试、安全、数据、设计、工作流等场景另有 Community Skills，badge 显示 1497+ 项
+- **跨宿主路径表**：README 给出各编码助手的项目级 / 全局技能目录（如 Cursor 用 `.cursor/skills/`，Claude Code 用 `.claude/skills/`）
+- **质量门槛**：贡献须有真实社区使用；明确拒绝「三小时前刚写完」的新技能；并给出 Description、渐进披露、禁止绝对路径、按需声明工具等质量标准
+- **浏览站点**：[officialskills.sh](https://officialskills.sh/) 按发布者与类别筛选官方技能，比纯 Markdown 清单更适合检索
+
+## 对用户价值
+
+Agent Skills 生态增长很快，但大量仓库是批量生成、缺少真实使用痕迹的「技能垃圾场」。这份清单把「去哪找 Stripe 官方最佳实践、Vercel 工程技能、Anthropic 文档/前端技能」收成一张地图：先按厂商或场景定位来源仓库，再按宿主路径安装，避免在 GitHub 搜索里撞上未经筛选的合集。对多工具用户，同一套路径表还能减少「技能装了但宿主读不到」的试错。
+
+## 与替代方案
+
+- 相比 [anthropics/skills](https://github.com/anthropics/skills) 或 [agentskills.io](https://agentskills.io)：那些是 **规范与官方示例**；本仓库是跨厂商的 **发现目录**，不定义技能格式本身。
+- 相比 [Agent Skills](https://github.com/addyosmani/agent-skills)、[Superpowers](https://github.com/obra/superpowers)、[Matt Pocock skills](https://github.com/mattpocock/skills)：那些是可整包安装的 **方法论 / 技能包**；本仓库不提供「一键装完全部」——你按条目分别安装，控制权在自己手里。
+- 相比 [claude-plugins-official](https://github.com/anthropics/claude-plugins-official)：官方插件市场面向 **Claude Code 插件**（命令、Agent、MCP、LSP）；本清单面向跨宿主的 `SKILL.md` 技能，覆盖面更广，但不走 `/plugin` 市场机制。
+- 边界：这是链接策展，不是安全审计。README 写明技能「curated, not audited」，安装前仍须自行审阅源码与权限。
+
+## 适应人群
+
+- 使用 Claude Code、Cursor、Codex 等工具，想按厂商安装官方技能、而不是自己拼提示词的工程师。
+- 需要一张跨宿主技能地图（路径、来源仓库、质量标准）的平台或工具链同学。
+- 准备向社区提交技能、想先对照收录门槛与条目格式的作者。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装至少一个支持 Agent Skills 的宿主（Claude Code、Cursor、Codex、Gemini CLI、Copilot、OpenCode、Windsurf、Antigravity 等）。
+- 理解 **本仓库只策展链接**：克隆本仓不会得到可运行的技能包；具体安装以各技能仓库的 README / `SKILL.md` 为准。
+- 安装第三方技能前，准备花几分钟审阅脚本、工具声明与数据访问范围。
+
+### 安装方式
+
+**1. 浏览与定位**
+
+- 清单：[README](https://github.com/VoltAgent/awesome-agent-skills) 按「Official Skills by …」与 Community 分类
+- 站点：[officialskills.sh](https://officialskills.sh/) 按发布者、类别筛选
+
+**2. 按宿主放入技能目录**
+
+从目标技能仓库拷贝 `SKILL.md` 所在目录到对应路径（项目级优先，避免污染全局）：
+
+| 宿主 | 项目路径 | 全局路径 |
+|------|----------|----------|
+| Cursor | `.cursor/skills/` | `~/.cursor/skills/` |
+| Claude Code | `.claude/skills/` | `~/.claude/skills/` |
+| Codex | `.agents/skills/` | `~/.agents/skills/` |
+| Gemini CLI | `.gemini/skills/` | `~/.gemini/skills/` |
+| GitHub Copilot | `.github/skills/` | `~/.copilot/skills/` |
+| OpenCode | `.opencode/skills/` | `~/.config/opencode/skills/` |
+| Windsurf | `.windsurf/skills/` | `~/.codeium/windsurf/skills/` |
+| Antigravity | `.agents/skills/` | `~/.gemini/config/skills/` |
+
+若技能仓库支持 [skills.sh](https://skills.sh) / `npx skills`，按其文档安装（示例形态：`npx skills add <owner>/<repo>`），不要把本 Awesome 仓库名当成可安装包。
+
+**3. 向清单投稿（可选）**
+
+按 [CONTRIBUTING.md](https://github.com/VoltAgent/awesome-agent-skills/blob/main/CONTRIBUTING.md) 在对应分类追加一行链接，PR 标题格式为 `Add skill: author/skill-name`。
+
+### 首次运行
+
+选定与当前栈相关的一项官方技能（例如 Stripe 集成、Vercel 工程实践、Anthropic 文档处理），按上表装入项目目录后 **新开** Agent 会话，用该技能会匹配的自然语言任务试一次，或按该技能文档中的斜杠命令 / 技能名显式调用。
+
+### 验证是否成功
+
+- 宿主的技能列表或斜杠菜单中出现刚安装的技能名。
+- 发起相关任务时，代理应引用该 `SKILL.md` 的步骤，而不是泛泛作答。
+- 若「装了没反应」：核对是否放到了当前宿主读取的目录，以及是否需要重启会话。
+
+### 常见坑 / 注意事项
+
+- **策展不等于审计**：技能可能被原作者随时改写；可能含提示注入、工具投毒或不安全数据处理。安装前用 [Snyk Agent Scan](https://github.com/snyk/agent-scan) 等工具自查，并阅读源码。
+- **不要整表安装**：一千多项技能同时进上下文会噪声爆炸；按当前任务只装 1–3 项。
+- **本仓不可 `npx skills add VoltAgent/awesome-agent-skills`**：它没有可分发的技能包结构，装的是链接列表。
+- **链接会过时**：技能在各自仓库演进；以源仓库 README 为准，发现失效可开 [issue](https://github.com/VoltAgent/awesome-agent-skills/issues)。
+- **投稿门槛**：没有真实使用痕迹的新技能通常不会被收；描述须短（约 10 词以内），且带 `author/skill-name` 前缀。
