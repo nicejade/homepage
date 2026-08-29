@@ -317,11 +317,22 @@
 
 <style>
   .github-sort-menu {
-    animation: github-sort-in 160ms ease-out;
     transform-origin: top right;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition:
+      opacity 160ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),
+      transform 160ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));
     /* Override global `.main-pane li { margin-left: 2rem }` from custom.css */
     list-style: none;
     margin: 0;
+  }
+
+  @starting-style {
+    .github-sort-menu {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
   }
 
   .github-sort-menu :global(li) {
@@ -329,20 +340,17 @@
     margin-left: 0;
   }
 
-  @keyframes github-sort-in {
-    from {
-      opacity: 0;
-      transform: translateY(-4px) scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .github-sort-menu {
-      animation: none;
+      transform: none;
+      transition: opacity 160ms ease;
+    }
+
+    @starting-style {
+      .github-sort-menu {
+        transform: none;
+        opacity: 0;
+      }
     }
   }
 </style>

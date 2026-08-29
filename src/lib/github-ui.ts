@@ -16,7 +16,7 @@ export const GITHUB_CARD_SHADOW =
 
 /** Interactive elevation for cards: gentle lift and a deeper shadow on hover. */
 export const GITHUB_CARD_INTERACTIVE =
-  'transition-[transform,box-shadow,border-color] duration-300 ease-out motion-reduce:transition-none hover:-translate-y-1 hover:border-black/[0.1] hover:shadow-[0_4px_10px_rgba(15,23,42,0.06),0_30px_60px_-28px_rgba(15,23,42,0.28)] dark:hover:border-white/[0.16]';
+  'transition-[transform,box-shadow,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none active:scale-[0.99] hover:border-black/[0.1] hover:shadow-[0_4px_10px_rgba(15,23,42,0.06),0_30px_60px_-28px_rgba(15,23,42,0.28)] dark:hover:border-white/[0.16] [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5';
 
 /** Primary call-to-action: solid brand fill with a quiet press response. */
 export const GITHUB_BUTTON_PRIMARY =
@@ -29,7 +29,7 @@ export const GITHUB_BUTTON_SECONDARY =
 /** Filter pill in the sticky toolbar. */
 export function githubTagButtonClass(active: boolean): string {
   const base =
-    'shrink-0 inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full border px-3.5 text-sm font-medium leading-none transition-[background-color,color,border-color] duration-200 ease-out motion-reduce:transition-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/50';
+    'shrink-0 inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full border px-3.5 text-sm font-medium leading-none transition-[transform,background-color,color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none cursor-pointer active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/50';
   if (active) {
     return `${base} border-brand bg-brand text-white`;
   }
@@ -39,7 +39,7 @@ export function githubTagButtonClass(active: boolean): string {
 /** Numbered page control in list pagination. */
 export function githubPaginationPageClass(active: boolean): string {
   const base =
-    'inline-flex min-h-9 min-w-9 items-center justify-center rounded-xl px-2.5 text-sm font-medium tabular-nums transition-[background-color,color] duration-200 ease-out motion-reduce:transition-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
+    'inline-flex min-h-9 min-w-9 items-center justify-center rounded-xl px-2.5 text-sm font-medium tabular-nums transition-[transform,background-color,color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none cursor-pointer active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
   if (active) {
     return `${base} bg-brand text-white`;
   }
@@ -49,17 +49,17 @@ export function githubPaginationPageClass(active: boolean): string {
 /** Prev/next control in list pagination. */
 export function githubPaginationNavClass(disabled: boolean): string {
   const base =
-    'inline-flex h-9 w-9 items-center justify-center rounded-xl border text-sm transition-[background-color,color,border-color] duration-200 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
+    'inline-flex h-9 w-9 items-center justify-center rounded-xl border text-sm transition-[transform,background-color,color,border-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
   if (disabled) {
     return `${base} cursor-not-allowed border-black/[0.06] text-grey/40 dark:border-white/[0.06] dark:text-gray-600`;
   }
-  return `${base} cursor-pointer border-black/10 text-grey hover:border-black/20 hover:bg-black/[0.03] hover:text-black dark:border-white/15 dark:text-gray-300 dark:hover:border-white/25 dark:hover:bg-white/[0.04] dark:hover:text-white`;
+  return `${base} cursor-pointer border-black/10 text-grey hover:border-black/20 hover:bg-black/[0.03] hover:text-black active:scale-[0.97] dark:border-white/15 dark:text-gray-300 dark:hover:border-white/25 dark:hover:bg-white/[0.04] dark:hover:text-white`;
 }
 
 /** Inline metadata tag rendered inside cards and the detail preview. */
 export function githubMetaTagClass(active = false): string {
   const base =
-    'inline-flex min-h-8 items-center rounded-full px-3 py-1 text-xs font-medium no-underline transition-[background-color,color] duration-200 ease-out motion-reduce:transition-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
+    'inline-flex min-h-8 items-center rounded-full px-3 py-1 text-xs font-medium no-underline transition-[transform,background-color,color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none cursor-pointer active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-950';
   if (active) {
     return `${base} bg-brand/10 text-brand`;
   }

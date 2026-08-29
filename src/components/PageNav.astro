@@ -2,13 +2,13 @@
 import configs from '../configs';
 ---
 
-<section id="page-nav">
+<section id="page-nav" class="not-content" aria-label="分类导航">
 	{
 		configs.map(({ title }) => (
 			<a
 				title={title}
 				href={`#${title}`}
-				class="nav-link py-2 px-5 me-3 mb-3 font-medium focus:outline-none rounded-full border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-0 md:px-4 md:py-1.5 md:me-2"
+				class="nav-link"
 				data-nav-title={title}
 				data-nav-path={`#${title}`}
 			>
@@ -24,33 +24,65 @@ import configs from '../configs';
 		flex-direction: row;
 		justify-content: center;
 		flex-wrap: wrap;
-		margin: 2rem 0;
+		gap: 0.5rem;
+		margin: 1.75rem 0 0.75rem;
 	}
 
 	.nav-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 2.5rem;
+		padding: 0.4rem 1rem;
+		border-radius: 999px;
+		border: 1px solid rgba(15, 23, 42, 0.08);
+		background: rgba(15, 23, 42, 0.03);
 		color: var(--sl-color-text-accent);
-		margin: 0.5rem;
-	}
-
-	.nav-link:hover {
+		font-weight: 500;
+		text-decoration: none;
 		cursor: pointer;
-		animation: jelly 0.5s;
-		color: #ff6f61;
+		transition:
+			transform var(--duration-press) var(--ease-out),
+			background-color var(--duration-ui) ease,
+			border-color var(--duration-ui) ease,
+			color var(--duration-ui) ease;
 	}
 
-	@keyframes jelly {
-		0%,
-		100% {
-			transform: scale(1, 1);
+	html[data-theme='dark'] .nav-link {
+		border-color: rgba(255, 255, 255, 0.1);
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	.nav-link:active {
+		transform: scale(0.97);
+	}
+
+	.nav-link:focus-visible {
+		outline: 2px solid color-mix(in srgb, var(--color-brand) 45%, transparent);
+		outline-offset: 2px;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.nav-link:hover {
+			border-color: color-mix(in srgb, var(--color-brand) 35%, transparent);
+			background: color-mix(in srgb, var(--color-brand) 10%, transparent);
 		}
-		25% {
-			transform: scale(0.9, 1.1);
+	}
+
+	.nav-link.is-active {
+		background: var(--color-brand);
+		border-color: var(--color-brand);
+		color: #fff;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.nav-link {
+			transition: background-color var(--duration-ui) ease, border-color var(--duration-ui) ease,
+				color var(--duration-ui) ease;
 		}
-		50% {
-			transform: scale(1.1, 0.9);
-		}
-		75% {
-			transform: scale(0.95, 1.05);
+
+		.nav-link:active {
+			transform: none;
 		}
 	}
 </style>
@@ -62,13 +94,67 @@ import configs from '../configs';
 		}
 	}
 
-	document.getElementById('page-nav')?.addEventListener('click', (event) => {
-		const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[data-nav-path]');
-		if (!link) return;
+	const nav = document.getElementById('page-nav');
+	if (nav) {
+		const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[data-nav-title]')];
 
-		window.gtag?.('event', 'navigation_click', {
-			navigation_path: link.dataset.navPath,
-			navigation_title: link.dataset.navTitle,
+		nav.addEventListener('click', (event) => {
+			const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[data-nav-path]');
+			if (!link) return;
+
+			window.gtag?.('event', 'navigation_click', {
+				navigation_path: link.dataset.navPath,
+				navigation_title: link.dataset.navTitle,
+			});
+
+			const heading = document.getElementById(link.dataset.navTitle ?? '');
+			if (!heading) return;
+
+			event.preventDefault();
+			heading.scrollIntoView({ behavior: 'auto', block: 'start' });
+			history.pushState(null, '', link.dataset.navPath);
 		});
-	});
+
+		const visible = new Map<string, number>();
+
+		const setActive = (title: string | null) => {
+			for (const link of links) {
+				const isActive = link.dataset.navTitle === title;
+				link.classList.toggle('is-active', isActive);
+				if (isActive) {
+					link.setAttribute('aria-current', 'location');
+				} else {
+					link.removeAttribute('aria-current');
+				}
+			}
+		};
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						visible.set(entry.target.id, entry.intersectionRatio);
+					} else {
+						visible.delete(entry.target.id);
+					}
+				}
+
+				let best: string | null = null;
+				let bestRatio = 0;
+				for (const [id, ratio] of visible) {
+					if (ratio >= bestRatio) {
+						best = id;
+						bestRatio = ratio;
+					}
+				}
+				setActive(best);
+			},
+			{ rootMargin: '-18% 0px -68% 0px', threshold: [0, 0.15, 0.35, 0.6, 1] },
+		);
+
+		for (const link of links) {
+			const heading = document.getElementById(link.dataset.navTitle ?? '');
+			if (heading) observer.observe(heading);
+		}
+	}
 </script>
