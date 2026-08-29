@@ -1,0 +1,116 @@
+---
+title: awesome-gpt-image-2
+description: GPT-Image2 工业级提示词引擎：500+ 逆向案例、20+ 模板与 Agent Skill，把散文提示词变成可复用协议。
+repo: https://github.com/freestylefly/awesome-gpt-image-2
+homepage: https://gpt-image2.canghe.ai
+repoDescription: "Prompt as Code | GPT-Image2 Industrial Prompt Engine & Template Library, 500+ Reverse-Engineered Cases, 20+ Industrial Templates"
+avatarUrl: https://avatars.githubusercontent.com/u/43960064?v=4
+tags:
+  - Agent
+  - 工作流
+  - AI 编程
+language: JavaScript
+stars: 24893
+forks: 2445
+openIssues: 17
+contributors: 4
+license: MIT
+featured: false
+publishedAt: "2026-08-29"
+updatedAt: "2026-08-29"
+curationReason: 做海报、信息图、电商主图或 UI 示意时，不想每次从零写提示词、又要把出图接到 Cursor / Claude Code 的人。
+---
+
+## 项目介绍
+
+[awesome-gpt-image-2](https://github.com/freestylefly/awesome-gpt-image-2) 是苍何（freestylefly）维护的 **GPT-Image2 Prompt-as-Code 资产库**：把社区里好看但难复用的出图案例逆向成结构化协议，而不是再堆一堆散文式提示词。仓库覆盖 UI、信息图、海报、电商、品牌、摄影、插画、角色、古风长卷等十余类场景，配套 [可视化画廊](https://gpt-image2.canghe.ai) 与 `gpt-image-2-style-library` Agent Skill，方便人肉抄结构，也方便 Claude Code、Codex、Cursor 按同一份风格库选模板、场景标签并写出可复制 Prompt。
+
+## 核心特性
+
+- **500+ 逆向案例画廊**：按 UI、信息图、海报、电商、品牌、建筑、摄影、插画、角色、叙事、古风、出版物等分类浏览；站点可看大图、复制完整 Prompt，并跳回 GitHub 源案例
+- **20+ 工业级模板**：每类提供填空式常规模板与面向 Agent 的 JSON 模板，附带模块数量、文字可读性、比例等约束
+- **原子化 Schema**：把主体、光影、材质、排版、文案层级拆成可组合组件，目标是稳定、可控、可批量，而不是玄学抽卡
+- **Agent Skill 同源数据**：`gpt-image-2-style-library` 从 `data/style-library.json` 生成，与网站共用风格库；可按任务匹配模板分类 → 风格标签 → 场景标签 → 近邻案例
+- **多宿主安装**：`npx skills add`、Claude Code 插件市场，或 `npx gpt-image-2-style-library install all` 写入 `~/.codex/skills`、`~/.claude/skills`、`~/.agents/skills`
+
+## 对用户价值
+
+GPT-Image2 已经能出图，真正耗时间的是「同样一张信息图，下次怎样还出得像」。这个库把「抄风格词」改成「先锁结构再填业务变量」：先在画廊选定输出类型，再把比例、模块数、必现文案写进模板，批量出图和系列化设计才站得住。装上 Skill 后，编码助手可以直接产出带约束的中文 Prompt（例如信息图、产品海报），减少在对话里反复改提示词。对设计师和独立开发者，它是可检索的出图协议；对要接自动化流水线的人，JSON 模板比散文更好喂给脚本。
+
+## 与替代方案
+
+- 相比 [YouMind](https://youmind.com/)、[OpenNana](https://opennana.com/) 等社区提示词源（本仓库声明从中学习与归纳），这里强调 **结构化协议 + 分类模板 + Agent 可调用 JSON**，而不是只收藏原帖。
+- 相比 Midjourney / Flux 提示词合集或 PromptBase 类市场，本仓 **针对 GPT-Image2**（版式、中文标签、UI 截图质感），不能当通用模型万能库。
+- 相比 [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)、[Taste Skill](https://github.com/Leonxlnx/taste-skill) 等前端设计 Skill，本仓产出的是 **生图 Prompt**，不负责写 React/CSS；做真实产品界面应另走设计系统或代码技能。
+- 仓库附带的可视化网站可登录后试生成，但那是站点能力，**不是**你必须自建的 API；商业使用第三方案例前需自行取得原权利方授权。
+
+## 适应人群
+
+- 用 GPT-Image2 做产品示意、信息图、海报或电商主图，需要可复用结构而不是每次重写提示词的设计师与增长。
+- 想在 Claude Code、Codex、Cursor 里让 Agent 按模板选风格、输出可复制 Prompt 的开发者。
+- 要把出图接进批量脚本或工作流，需要 JSON 约束（比例、模块数、必现文字）的自动化用户。
+
+## 如何使用
+
+### 前置条件
+
+- 浏览案例与复制 Prompt：浏览器即可，打开 [gpt-image2.canghe.ai](https://gpt-image2.canghe.ai) 或仓库 `docs/gallery.md`。
+- 实际出图：需要 GPT-Image2 访问能力（ChatGPT 或兼容图像 API）；站点「登录后试生成」另需 Google 登录，与本地 Skill 无关。
+- 使用 Agent Skill：已安装 Claude Code、Codex 或 Cursor，并具备 Node.js（用于 `npx`）。
+
+### 安装方式
+
+只查案例、不装技能时，无需安装。要用 Agent 选模板，任选其一。
+
+**Agent Skills CLI（推荐）**
+
+```bash
+npx skills add freestylefly/awesome-gpt-image-2 --skill gpt-image-2-style-library --agent claude-code codex --global --yes --copy
+```
+
+安装到本机所有受支持的 Agent：
+
+```bash
+npx skills add freestylefly/awesome-gpt-image-2 --global --all --copy
+```
+
+**Claude Code 插件市场**（在 Claude Code 内执行）
+
+```text
+/plugin marketplace add freestylefly/awesome-gpt-image-2
+/plugin install gpt-image-2-style-library@awesome-gpt-image-2
+```
+
+**npm CLI**
+
+```bash
+npx gpt-image-2-style-library install all
+```
+
+`install all` 会写入 `~/.codex/skills`、`~/.claude/skills`、`~/.agents/skills`。安装后重启 Agent 会话。
+
+### 首次运行
+
+人工路径：在精选案例里确定输出类型（信息图、海报、UI 截图等）→ 到完整画廊找结构相近的案例，**先抄结构再改风格词** → 打开 [`docs/templates.md`](https://github.com/freestylefly/awesome-gpt-image-2/blob/main/docs/templates.md)，把业务变量填进常规模板或 JSON 模板。
+
+Agent 路径：重启会话后直接说，例如：
+
+```text
+使用 gpt-image-2-style-library 技能，帮我生成介绍 Codex 的信息图
+```
+
+Skill 会按「模板分类 → 风格标签 → 场景标签 → 近邻案例」匹配，并给出可复制 Prompt（含比例、必现文字与负面约束）。
+
+### 验证是否成功
+
+- 网站：能打开画廊、复制某条完整 Prompt，粘贴到 GPT-Image2 后版式与信息层级接近参考图（文字应可读，而非乱码按钮）。
+- Skill：助手识别 `gpt-image-2-style-library`，回复里出现模板名或案例 ID，且 Prompt 含构图、材质、文案与比例等分块，而不是一句空泛的「画一张图」。
+
+### 常见坑 / 注意事项
+
+- **抄结构，不要只抄风格词**：官方用法就是先锁比例、布局、模块数量和必现中文，再补光影与材质；模糊指令容易乱排版。
+- **强制文字可读**：界面与信息图务必写明「指定中文必须显示、文字绝对可读」，并控制模块数量，避免画面信息溢出。
+- **版权边界**：案例灵感来自公开社区（含 YouMind、OpenNana 等）。MIT 覆盖仓库整理方式，**不保证**第三方提示词与生成图可商用；商用前请取得原权利方授权。
+- **数量口径会变**：GitHub 简介写 530+，README 英文标题写 500+，画廊已收到 544 条；以画廊与 `docs/` 为准。
+- **网站自托管不是普通用法**：README 后半段的 Supabase / Stripe / 环境变量是站点运营配置；日常用库只需画廊 + 模板，或只装 Skill。
+- 赞助商提供的图像 API 与本仓库许可相互独立，选用前自行评估计费与数据去向。
