@@ -3,16 +3,22 @@ export default {
   style: 'stagger',
   list: [
     {
-      title: '智能体漫游',
-      stars: 5,
-      link: 'https://agent.jeffjade.com/',
-      desc: '“智能体漫游”专注于快速掌握主流 AI Agent，如 Claude Code、Hermes Agent、OpenClaw 等。通过实用教程、案例演示和最新资讯，让开发者和 AI 爱好者轻松上手，探索智能体应用潜力，提升学习效率与实践能力。',
-    },
-    {
       title: '生财有迹（Wealth Tracker）',
       stars: 5,
       link: 'https://github.com/nicejade/wealth-tracker/',
       desc: '💰生财有迹（Wealth Tracker）是一款专注于个人资产分析的应用程序。其核心功能是：全面记录并展示用户的资产状况，帮助用户轻松了解财务现状；运用 AI 能力，结合每种资产的特性和当前环境，提供适宜的财务建议。',
+    },
+    {
+      title: '逸趣游乐坊',
+      stars: 5,
+      link: 'https://play.niceshare.site/',
+      desc: '逸趣游乐坊，收录 46 款免费经典益智小游戏：棋类对战、逻辑推理、数字计算与记忆训练。一个人静心解压，陪孩子动手动脑，和另一半轮流比成绩，也能重温童年经典。无需注册下载，随时打开，想玩就玩。',
+    },
+    {
+      title: '智能体漫游',
+      stars: 5,
+      link: 'https://agent.jeffjade.com/',
+      desc: '“智能体漫游”专注于快速掌握主流 AI Agent，如 Claude Code、Hermes Agent、OpenClaw 等。通过实用教程、案例演示和最新资讯，让开发者和 AI 爱好者轻松上手，探索智能体应用潜力，提升学习效率与实践能力。',
     },
     {
       title: '清风明月轩',
