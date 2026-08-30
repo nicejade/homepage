@@ -41,13 +41,13 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="custom-footer w-full flex flex-col justify-center items-center mt-16! not-prose not-content" aria-label="网站页脚">
-	<div class="rounded-[2rem] w-full mx-auto border border-white/[0.08] bg-white/[0.02] backdrop-blur-md [:root[data-theme='light']_&]:bg-black/[0.01] [:root[data-theme='light']_&]:border-black/[0.04]">
+	<div class="w-full mx-auto rounded-xl border border-black/[0.06] bg-surface dark:border-white/[0.08] dark:bg-surface-dark">
 		<div class="px-6 sm:px-10! py-8">
 			<div class="grid grid-cols-1 lg:grid-cols-2! gap-12 lg:gap-16!">
 				<div class="flex flex-col items-start space-y-8 w-full">
 					<div class="flex items-center gap-4 select-none">
 						<img class="w-9 h-9 opacity-90" src="/favicon.svg" alt="Logo" width="36" height="36" loading="lazy" decoding="async" />
-						<span class="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-[var(--sl-color-text-accent)] to-[#d1d5db] [:root[data-theme='light']_&]:to-[#6b7280]">
+						<span class="text-2xl font-bold tracking-tight text-black dark:text-silver">
 							逍遥自在轩
 						</span>
 					</div>
@@ -64,7 +64,7 @@ const currentYear = new Date().getFullYear();
 										href={href}
 										target="_blank"
 										rel="noopener noreferrer"
-										class="p-2 rounded-xl text-[var(--sl-color-gray-3)] bg-white/[0.08] transition-[transform,background-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none hover:bg-white/[0.1] [:root[data-theme='light']_&]:hover:bg-black/[0.06] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 no-underline border-none"
+										class="p-2 rounded-xl text-[var(--sl-color-gray-3)] bg-black/[0.04] transition-[transform,background-color] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none hover:bg-black/[0.07] dark:bg-white/[0.06] dark:hover:bg-white/[0.1] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 no-underline border-none"
 										title={alt}
 									>
 										<img class="w-5 h-5 opacity-60 transition-opacity hover:opacity-100" src={`/svgs/${img}.svg`} alt={alt} width="20" height="20" loading="lazy" decoding="async" />
@@ -79,7 +79,7 @@ const currentYear = new Date().getFullYear();
 					{
 						footerInfoArr.map((item, index) => (
 							<div class:list={['flex flex-col space-y-4 mt-0!', index === 1 && 'items-end text-right']}>
-								<h3 class="text-sm mt-0! font-bold tracking-[0.1em] text-[var(--sl-color-gray-2)] uppercase opacity-80">
+								<h3 class="text-sm mt-0! font-semibold tracking-[0.08em] text-[var(--sl-color-gray-2)]">
 									{item.title}
 								</h3>
 								<ul class="space-y-1.5 mt-2!">
@@ -90,7 +90,7 @@ const currentYear = new Date().getFullYear();
 													href={citem.url}
 													target="_blank"
 													rel="noopener noreferrer"
-													class="text-[var(--sl-color-gray-3)] text-[14px] inline-block px-3 py-1.5 -mx-3 rounded-lg transition-[background-color,color] duration-200 ease-out motion-reduce:transition-none hover:bg-white/[0.1] [:root[data-theme='light']_&]:hover:bg-black/[0.06] hover:text-[var(--sl-color-text-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 no-underline border-none"
+													class="text-[var(--sl-color-gray-3)] text-[14px] inline-block px-3 py-1.5 -mx-3 rounded-lg transition-[background-color,color] duration-200 ease-out motion-reduce:transition-none hover:bg-black/[0.05] dark:hover:bg-white/[0.08] hover:text-[var(--sl-color-text-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 no-underline border-none"
 												>
 													{citem.title}
 												</a>
@@ -104,10 +104,10 @@ const currentYear = new Date().getFullYear();
 				</div>
 			</div>
 
-			<div class="w-full pt-4 !mt-4 md:!mt-8 border-t border-white/[0.08] flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left [:root[data-theme='light']_&]:border-black/[0.05]">
+			<div class="w-full pt-4 !mt-4 md:!mt-8 border-t border-black/[0.06] flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left dark:border-white/[0.08]">
 				<p class="text-[var(--sl-color-gray-4)] text-[13px] font-medium tracking-wide">
 					© {currentYear}{' '}
-					<a href="https://www.niceshare.site/" class="text-[var(--sl-color-gray-3)] px-2 py-1 rounded-md transition-[background-color,color] duration-200 ease-out motion-reduce:transition-none hover:bg-white/[0.1] bg-white/[0.1] [:root[data-theme='light']_&]:hover:bg-black/[0.06] hover:text-[var(--sl-color-text-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 decoration-none no-underline border-none">
+					<a href="https://www.niceshare.site/" class="text-[var(--sl-color-gray-3)] px-2 py-1 rounded-md transition-[background-color,color] duration-200 ease-out motion-reduce:transition-none hover:bg-black/[0.05] dark:hover:bg-white/[0.08] hover:text-[var(--sl-color-text-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 decoration-none no-underline border-none">
 						niceshare.site
 					</a>{' '}
 					· 保留所有权利

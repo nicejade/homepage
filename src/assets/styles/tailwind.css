@@ -18,10 +18,16 @@
   --color-black: #212121;
   --color-grey: #565656;
   --color-silver: #ececec;
+  --color-surface: #fffcf8;
+  --color-surface-dark: #121920;
   --color-warn: #ff9800;
   --color-error: #f44336;
   --color-success: #4caf50;
   --color-info: #2196f3;
+
+  --radius-surface: 0.75rem;
+  --radius-control: 0.75rem;
+  --radius-pill: 999px;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);

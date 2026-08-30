@@ -113,28 +113,30 @@
 </script>
 
 <section class="github-curation flex flex-col gap-6" aria-label="开源琅嬛阁项目列表">
-  <header class="mx-auto max-w-2xl text-center">
-    <h1
-      id="_top"
-      class="text-3xl font-semibold tracking-tight text-black dark:text-silver sm:text-4xl"
-    >
-      高质量开源项目精选
-    </h1>
-    <p class="mt-4 text-base leading-relaxed text-grey dark:text-gray-400 sm:text-lg">
-      收录 AI Agent、工作流自动化与开发者生产力等高质量开源项目。
-    </p>
-    <dl class="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3" aria-label="项目统计">
-      <div
-        class="inline-flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-4 dark:bg-white/[0.06]"
+  <header class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+    <div class="max-w-xl">
+      <h1
+        id="_top"
+        class="text-3xl font-semibold tracking-tight text-black dark:text-silver sm:text-4xl"
       >
-        <dd class="text-base font-semibold leading-none text-black dark:text-silver">{projects.length}</dd>
-        <dt class="text-sm leading-none text-grey dark:text-gray-400">个项目</dt>
+        高质量开源项目精选
+      </h1>
+      <p class="mt-3 text-base leading-relaxed text-grey dark:text-gray-400">
+        收录 AI Agent、工作流自动化与开发者生产力等高质量开源项目。
+      </p>
+    </div>
+    <dl class="flex shrink-0 items-baseline gap-8" aria-label="项目统计">
+      <div>
+        <dd class="text-2xl font-semibold tabular-nums leading-none tracking-tight text-black dark:text-silver">
+          {projects.length}
+        </dd>
+        <dt class="mt-1.5 text-sm text-grey dark:text-gray-400">个项目</dt>
       </div>
-      <div
-        class="inline-flex h-9 items-center gap-1.5 rounded-full bg-black/[0.04] px-4 dark:bg-white/[0.06]"
-      >
-        <dd class="text-base font-semibold leading-none text-black dark:text-silver">{tags.length}</dd>
-        <dt class="text-sm leading-none text-grey dark:text-gray-400">个标签</dt>
+      <div>
+        <dd class="text-2xl font-semibold tabular-nums leading-none tracking-tight text-black dark:text-silver">
+          {tags.length}
+        </dd>
+        <dt class="mt-1.5 text-sm text-grey dark:text-gray-400">个标签</dt>
       </div>
     </dl>
   </header>
@@ -179,6 +181,7 @@
     width: 100%;
     grid-template-columns: minmax(0, 1fr);
     gap: 1.25rem;
+    scroll-margin-top: calc(var(--sl-nav-height, 4rem) + 9rem);
   }
 
   /* 平板 / MacBook：2 列 */

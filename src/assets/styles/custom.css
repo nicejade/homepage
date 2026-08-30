@@ -4,6 +4,9 @@
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --duration-press: 160ms;
   --duration-ui: 200ms;
+  --radius-surface: 0.75rem;
+  --radius-control: 0.75rem;
+  --radius-pill: 999px;
   --sl-text-5xl: 3rem;
   --sl-text-4xl: 1.6rem;
   --sl-text-3xl: 1.4rem;
@@ -11,6 +14,8 @@
   --sl-text-xl: 1.125rem;
   --sl-text-lg: 1rem;
   --sl-color-bg: #f7f5f1;
+  --color-surface: #fffcf8;
+  --color-surface-dark: #121920;
   --sl-color-accent: #2c3e50 !important;
   --sl-color-text-accent: #2196f3 !important;
   --sl-color-link-accent: #2edfa3;
@@ -34,13 +39,23 @@ html[data-theme='dark'] {
   text-wrap: balance;
 }
 
+@media (min-width: 50rem) {
+  .hero {
+    padding-block: clamp(1.25rem, 3.5vw, 3.25rem);
+    grid-template-columns: 3fr 2fr;
+    gap: 2rem 4%;
+  }
+}
+
 .sl-markdown-content h2,
 .category-title {
   font-size: var(--sl-text-4xl);
   font-weight: 650;
   letter-spacing: -0.02em;
   color: var(--color-black);
-  scroll-margin-top: 5.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  scroll-margin-top: calc(var(--sl-nav-height, 4rem) + 3.75rem);
 }
 
 html[data-theme='dark'] .sl-markdown-content h2,
@@ -73,15 +88,28 @@ header.header {
 }
 
 .page .sl-link-button.minimal {
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
+  padding-left: 0.85rem !important;
+  padding-right: 0.85rem !important;
+  border-color: transparent;
+  color: var(--color-grey);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .page .sl-link-button.minimal:hover {
+    color: var(--color-brand);
+    background: color-mix(in srgb, var(--color-brand) 8%, transparent);
+  }
+}
+
+html[data-theme='dark'] .page .sl-link-button.minimal {
+  color: rgb(156 163 175);
 }
 
 .tagline {
   font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.7;
-  max-width: 38em;
+  max-width: 28em;
   text-wrap: pretty;
   color: var(--sl-color-gray-2);
   background: none;
@@ -90,14 +118,15 @@ header.header {
 
 .section-kicker {
   width: 100%;
-  text-align: center;
+  text-align: start;
+  margin-top: 0.5rem;
 }
 
 .section-kicker strong {
-  display: inline-block;
-  max-width: 22em;
-  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-  line-height: 1.35;
+  display: block;
+  max-width: 28em;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  line-height: 1.4;
   font-weight: 650;
   letter-spacing: -0.02em;
   color: var(--color-black);
@@ -130,14 +159,33 @@ main:has(.github-curation) > .content-panel:has(.github-curation) {
 	padding-top: var(--sl-nav-height, 4rem);
 }
 
+html:not([data-has-hero]) .main-pane .content-panel:first-of-type {
+  padding-top: calc(var(--sl-nav-height, 4rem) + 0.75rem);
+}
+
 .sl-link-button {
-  padding: 0.85rem 1.15rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: var(--radius-control);
   border: 1px solid var(--sl-color-brand);
   transition:
     transform var(--duration-press) var(--ease-out),
     background-color var(--duration-ui) ease,
     border-color var(--duration-ui) ease,
     color var(--duration-ui) ease;
+}
+
+.sl-link-button.secondary {
+  background: transparent;
+  color: var(--color-brand);
+  border-color: color-mix(in srgb, var(--color-brand) 45%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sl-link-button.secondary:hover {
+    background: color-mix(in srgb, var(--color-brand) 8%, transparent);
+    border-color: var(--color-brand);
+    color: var(--color-brand);
+  }
 }
 
 .sl-link-button:active {
@@ -173,9 +221,48 @@ header.header a.site-title img {
 }
 
 .card-grid .link-card h3.link-card__title {
-  font-size: 1.25rem !important;
+  font-size: 1.125rem !important;
   font-weight: 600 !important;
-  line-height: 1.5;
+  line-height: 1.4;
+}
+
+.sl-markdown-content .category-block {
+  margin-block: 0;
+  margin-top: 4rem;
+}
+
+.sl-markdown-content .category-block--featured {
+  margin-top: 1.75rem;
+}
+
+.sl-markdown-content .category-head {
+  margin-top: 0;
+}
+
+.category-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.sl-markdown-content .category-meta {
+  flex: none;
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-grey);
+}
+
+html[data-theme='dark'] .category-meta {
+  color: rgb(156 163 175);
+}
+
+.category-block--featured .link-card {
+  padding: 1.35rem 1.35rem 1.4rem;
 }
 
 .site-title {

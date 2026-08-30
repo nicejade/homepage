@@ -5,11 +5,11 @@
 </script>
 
 <div
-  class="flex flex-col items-center rounded-2xl border border-dashed border-black/[0.1] px-6 py-16 text-center dark:border-white/[0.12]"
+  class="flex flex-col items-center rounded-xl border border-dashed border-black/[0.1] px-6 py-16 text-center dark:border-white/[0.12]"
   role="status"
 >
   <div
-    class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-black/[0.04] dark:bg-white/[0.06]"
+    class="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-black/[0.04] dark:bg-white/[0.06]"
   >
     <svg
       class="h-7 w-7 text-grey/70 dark:text-gray-500"

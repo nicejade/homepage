@@ -8,7 +8,7 @@
 
 /** Rounded, hairline-bordered surface used by every card-like container. */
 export const GITHUB_SURFACE =
-  'rounded-2xl border border-black/[0.06] bg-white dark:border-white/[0.08] dark:bg-white/[0.02]';
+  'rounded-xl border border-black/[0.06] bg-surface dark:border-white/[0.08] dark:bg-surface-dark';
 
 /** Soft, layered elevation. Light mode carries the depth; dark mode stays quiet. */
 export const GITHUB_CARD_SHADOW =

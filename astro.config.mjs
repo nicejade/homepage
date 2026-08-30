@@ -488,7 +488,7 @@ export default defineConfig({
 					tag: 'meta',
 					attrs: {
 						name: 'theme-color',
-						content: '#f59e0b',
+						content: '#f7f5f1',
 					},
 				},
 				{
@@ -496,7 +496,7 @@ export default defineConfig({
 					attrs: {
 						name: 'theme-color',
 						media: '(prefers-color-scheme: dark)',
-						content: '#1e293b',
+						content: '#0b1218',
 					},
 				},
 				{
@@ -539,7 +539,7 @@ export default defineConfig({
 					attrs: {
 						rel: 'mask-icon',
 						href: '/safari-pinned-tab.svg',
-						color: '#f59e0b',
+						color: '#2196f3',
 					},
 				},
 				{
@@ -623,7 +623,7 @@ export default defineConfig({
 					tag: 'meta',
 					attrs: {
 						name: 'msapplication-TileColor',
-						content: '#f59e0b',
+						content: '#f7f5f1',
 					},
 				},
 				{

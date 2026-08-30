@@ -4,12 +4,20 @@ import LinkCard from './LinkCard.astro';
 import configs from '../configs';
 ---
 
+<div id="back-to-top-sentinel" aria-hidden="true"></div>
+
 {
-	configs.map(({ title, style, list }) => (
-		<>
-			<h2 id={title} class="category-title">
-				{title}
-			</h2>
+	configs.map(({ title, style, list }, index) => (
+		<section
+			class:list={['category-block', index === 0 && 'category-block--featured']}
+			aria-labelledby={title}
+		>
+			<div class="category-head">
+				<h2 id={title} class="category-title">
+					{title}
+				</h2>
+				<p class="category-meta">{list.length} 项</p>
+			</div>
 			<CardGrid stagger={style === 'stagger'}>
 				{
 					// @ts-ignore
@@ -18,7 +26,7 @@ import configs from '../configs';
 					))
 				}
 			</CardGrid>
-		</>
+		</section>
 	))
 }
 
@@ -29,6 +37,13 @@ import configs from '../configs';
 </button>
 
 <style>
+	#back-to-top-sentinel {
+		position: relative;
+		height: 1px;
+		margin: 0;
+		pointer-events: none;
+	}
+
 	#back-to-top {
 		position: fixed;
 		bottom: max(1.25rem, env(safe-area-inset-bottom, 0px) + 0.75rem);
@@ -119,13 +134,16 @@ import configs from '../configs';
 		const backToTopButton = document.getElementById('back-to-top');
 		if (!backToTopButton) return;
 
-		window.addEventListener(
-			'scroll',
-			() => {
-				backToTopButton.classList.toggle('visible', window.scrollY > 300);
-			},
-			{ passive: true },
-		);
+		const sentinel = document.getElementById('back-to-top-sentinel');
+		if (sentinel) {
+			const observer = new IntersectionObserver(
+				([entry]) => {
+					backToTopButton.classList.toggle('visible', Boolean(entry) && !entry.isIntersecting);
+				},
+				{ threshold: 0 },
+			);
+			observer.observe(sentinel);
+		}
 
 		backToTopButton.addEventListener('click', () => {
 			window.gtag?.('event', 'back_to_top_click', {

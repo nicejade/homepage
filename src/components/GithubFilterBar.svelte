@@ -126,7 +126,7 @@
 </script>
 
 <div
-  class="sticky top-0 z-10 -mx-4 border-b border-black/[0.06] bg-white/80 px-4 py-4 backdrop-blur-xl dark:border-white/[0.08] dark:bg-gray-950/80 sm:-mx-6 sm:px-6"
+  class="github-filter-bar sticky top-[var(--sl-nav-height,4rem)] z-10 -mx-4 border-b border-black/[0.06] bg-[color-mix(in_srgb,var(--sl-color-bg)_86%,transparent)] px-4 py-4 backdrop-blur-xl dark:border-white/[0.08] sm:-mx-6 sm:px-6"
   aria-label="开源琅嬛阁筛选"
 >
   <div class="flex flex-col gap-3">
@@ -153,7 +153,7 @@
         bind:value={query}
         placeholder="搜索标题、描述、标签、语言或 owner/repo"
         autocomplete="off"
-        class="min-h-11 w-full rounded-xl border border-black/[0.08] bg-black/[0.03] py-2.5 pl-11 pr-4 text-base text-black outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-grey/60 focus:border-brand/60 focus:bg-white focus:ring-4 focus:ring-brand/10 dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-silver dark:placeholder:text-gray-500 dark:focus:bg-white/[0.06]"
+        class="min-h-11 w-full rounded-xl border border-black/[0.08] bg-black/[0.03] py-2.5 pl-11 pr-4 text-base text-black outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-grey/60 focus:border-brand/60 focus:bg-surface focus:ring-4 focus:ring-brand/10 dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-silver dark:placeholder:text-gray-500 dark:focus:bg-surface-dark"
       />
     </div>
 
@@ -237,7 +237,7 @@
               <ul
                 id="github-sort-listbox"
                 bind:this={sortListbox}
-                class="github-sort-menu absolute right-0 top-[calc(100%+0.375rem)] z-20 m-0 flex w-max min-w-full list-none flex-col gap-1.5 overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-1.5 shadow-[0_8px_30px_-6px_rgba(15,23,42,0.14),0_2px_8px_-2px_rgba(15,23,42,0.06)] dark:border-white/[0.1] dark:bg-gray-950 dark:shadow-[0_12px_36px_-8px_rgba(0,0,0,0.55)]"
+                class="github-sort-menu absolute right-0 top-[calc(100%+0.375rem)] z-20 m-0 flex w-max min-w-full list-none flex-col gap-1.5 overflow-hidden rounded-xl border border-black/[0.06] bg-surface p-1.5 shadow-[0_8px_30px_-6px_rgba(15,23,42,0.14),0_2px_8px_-2px_rgba(15,23,42,0.06)] dark:border-white/[0.1] dark:bg-surface-dark dark:shadow-[0_12px_36px_-8px_rgba(0,0,0,0.55)]"
                 role="listbox"
                 tabindex="-1"
                 aria-labelledby="github-sort-label"
@@ -316,6 +316,14 @@
 </div>
 
 <style>
+  @media (prefers-reduced-transparency: reduce) {
+    .github-filter-bar {
+      background: var(--sl-color-bg);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
   .github-sort-menu {
     transform-origin: top right;
     opacity: 1;

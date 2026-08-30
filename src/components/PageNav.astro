@@ -3,41 +3,62 @@ import configs from '../configs';
 ---
 
 <section id="page-nav" class="not-content" aria-label="分类导航">
-	{
-		configs.map(({ title }) => (
-			<a
-				title={title}
-				href={`#${title}`}
-				class="nav-link"
-				data-nav-title={title}
-				data-nav-path={`#${title}`}
-			>
-				{title}
-			</a>
-		))
-	}
+	<div class="page-nav-track">
+		{
+			configs.map(({ title }) => (
+				<a
+					title={title}
+					href={`#${title}`}
+					class="nav-link"
+					data-nav-title={title}
+					data-nav-path={`#${title}`}
+				>
+					{title}
+				</a>
+			))
+		}
+	</div>
 </section>
 
 <style>
 	#page-nav {
+		position: sticky;
+		top: var(--sl-nav-height, 4rem);
+		z-index: 8;
+		margin: 1rem -0.25rem 0.25rem;
+		padding: 0.65rem 0.25rem;
+		background: color-mix(in srgb, var(--sl-color-bg) 88%, transparent);
+		backdrop-filter: blur(16px) saturate(160%);
+		-webkit-backdrop-filter: blur(16px) saturate(160%);
+	}
+
+	.page-nav-track {
 		display: flex;
 		flex-direction: row;
-		justify-content: center;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		gap: 0.5rem;
-		margin: 1.75rem 0 0.75rem;
+		overflow-x: auto;
+		overflow-y: hidden;
+		overscroll-behavior-x: contain;
+		scrollbar-width: none;
+	}
+
+	.page-nav-track::-webkit-scrollbar {
+		display: none;
 	}
 
 	.nav-link {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 2.5rem;
-		padding: 0.4rem 1rem;
-		border-radius: 999px;
+		flex: none;
+		min-height: 2.25rem;
+		padding: 0.3rem 0.9rem;
+		border-radius: var(--radius-pill);
 		border: 1px solid rgba(15, 23, 42, 0.08);
-		background: rgba(15, 23, 42, 0.03);
-		color: var(--sl-color-text-accent);
+		background: var(--color-surface, #fffcf8);
+		color: var(--color-black);
+		font-size: 0.9375rem;
 		font-weight: 500;
 		text-decoration: none;
 		cursor: pointer;
@@ -50,7 +71,8 @@ import configs from '../configs';
 
 	html[data-theme='dark'] .nav-link {
 		border-color: rgba(255, 255, 255, 0.1);
-		background: rgba(255, 255, 255, 0.05);
+		background: var(--color-surface-dark, #121920);
+		color: var(--color-silver);
 	}
 
 	.nav-link:active {
@@ -85,6 +107,14 @@ import configs from '../configs';
 			transform: none;
 		}
 	}
+
+	@media (prefers-reduced-transparency: reduce) {
+		#page-nav {
+			background: var(--sl-color-bg);
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
+		}
+	}
 </style>
 
 <script>
@@ -96,6 +126,7 @@ import configs from '../configs';
 
 	const nav = document.getElementById('page-nav');
 	if (nav) {
+		const track = nav.querySelector<HTMLElement>('.page-nav-track') ?? nav;
 		const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[data-nav-title]')];
 
 		nav.addEventListener('click', (event) => {
@@ -111,23 +142,50 @@ import configs from '../configs';
 			if (!heading) return;
 
 			event.preventDefault();
+			setActive(link.dataset.navTitle ?? null);
 			heading.scrollIntoView({ behavior: 'auto', block: 'start' });
 			history.pushState(null, '', link.dataset.navPath);
 		});
 
 		const visible = new Map<string, number>();
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-		const setActive = (title: string | null) => {
+		let currentTitle: string | null = null;
+		setActive(links[0]?.dataset.navTitle ?? null);
+
+		function scrollLinkHorizontally(link: HTMLAnchorElement) {
+			const navRect = track.getBoundingClientRect();
+			const linkRect = link.getBoundingClientRect();
+			const maxScroll = track.scrollWidth - track.clientWidth;
+			if (maxScroll <= 0) return;
+
+			const inset = 12;
+			const fullyVisible =
+				linkRect.left >= navRect.left + inset && linkRect.right <= navRect.right - inset;
+			if (fullyVisible) return;
+
+			const delta = linkRect.left - navRect.left - (track.clientWidth - linkRect.width) / 2;
+			track.scrollTo({
+				left: Math.max(0, Math.min(maxScroll, track.scrollLeft + delta)),
+				behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
+			});
+		}
+
+		function setActive(title: string | null) {
+			if (!title) return;
+			const changed = title !== currentTitle;
+			currentTitle = title;
 			for (const link of links) {
 				const isActive = link.dataset.navTitle === title;
 				link.classList.toggle('is-active', isActive);
 				if (isActive) {
 					link.setAttribute('aria-current', 'location');
+					if (changed) scrollLinkHorizontally(link);
 				} else {
 					link.removeAttribute('aria-current');
 				}
 			}
-		};
+		}
 
 		const observer = new IntersectionObserver(
 			(entries) => {
