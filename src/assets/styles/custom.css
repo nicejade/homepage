@@ -26,10 +26,15 @@ html[data-theme='dark'] {
   --sl-color-bg: #0b1218;
 }
 
+h1,
+h2 {
+  font-family: cursive;
+}
+
 .sl-markdown-content h1,
 .hero h1 {
   font-weight: 650;
-  font-family: inherit;
+  font-family: cursive;
   letter-spacing: -0.03em;
   line-height: 1.12;
 }
@@ -51,6 +56,7 @@ html[data-theme='dark'] {
 .category-title {
   font-size: var(--sl-text-4xl);
   font-weight: 650;
+  font-family: cursive;
   letter-spacing: -0.02em;
   color: var(--color-black);
   margin-top: 0;
