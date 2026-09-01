@@ -1,4 +1,5 @@
-:root {
+/* html:root beats Starlight/Rapide :root tokens, which load later and win after @layer flatten. */
+html:root {
   text-autospace: normal;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -13,6 +14,9 @@
   --sl-text-2xl: 1.2rem;
   --sl-text-xl: 1.125rem;
   --sl-text-lg: 1rem;
+  --sl-text-h1: 2.125rem;
+  --sl-text-h2: 1.8rem;
+  --sl-text-h3: 1.125rem;
   --sl-color-bg: #f7f5f1;
   --color-surface: #fffcf8;
   --color-surface-dark: #121920;
@@ -29,6 +33,16 @@ html[data-theme='dark'] {
 h1,
 h2 {
   font-family: cursive;
+}
+
+h1#_top,
+.content-panel .sl-container > h1 {
+  font-size: var(--sl-text-h1);
+  margin-top: var(--sl-text-h1);
+  font-weight: 650;
+  font-family: cursive;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
 }
 
 .sl-markdown-content h1,
@@ -54,12 +68,12 @@ h2 {
 
 .sl-markdown-content h2,
 .category-title {
-  font-size: var(--sl-text-4xl);
+  font-size: var(--sl-text-h2);
   font-weight: 650;
   font-family: cursive;
   letter-spacing: -0.02em;
   color: var(--color-black);
-  margin-top: 0;
+  margin-top: var(--sl-text-h2);
   margin-bottom: 0;
   scroll-margin-top: calc(var(--sl-nav-height, 4rem) + 3.75rem);
 }
@@ -70,8 +84,10 @@ html[data-theme='dark'] .category-title {
 }
 
 .sl-markdown-content h3 {
-  font-size: var(--sl-text-3xl);
-  letter-spacing: -0.015em;
+  font-size: var(--sl-text-h3) !important;
+  margin-top: var(--sl-text-h3) !important;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .sl-markdown-content svg:not(.link-card__star),
@@ -146,9 +162,16 @@ html[data-theme='dark'] .section-kicker strong {
 	color: var(--sl-color-link-accent);
 }
 
-.sl-markdown-content :not(:-webkit-any(a, strong, em, del, span, input, code, br))
-	+ :not(:-webkit-any(a, strong, em, del, span, input, code, br, :where(.not-content *))) {
-	margin-top: 0 !important;
+.sl-markdown-content :not(:-webkit-any(a,div,svg,strong,em,del,span,input,code,br)) + :not(:-webkit-any(a,strong,em,del,span,input,code,br,:where(.not-content *))) {
+  margin-top: 1rem !important;
+}
+
+.sl-markdown-content article + article {
+  margin-top: 0 !important;
+}
+
+svg + svg {
+  margin-top: 0rem !important;
 }
 
 /*
@@ -216,6 +239,7 @@ header.header a.site-title,
 header.header a.site-title span {
   font-size: 1.25rem !important;
   font-weight: 600 !important;
+  font-family: cursive;
   letter-spacing: -0.02em;
   line-height: 1.25;
 }

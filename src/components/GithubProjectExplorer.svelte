@@ -141,38 +141,42 @@
     </dl>
   </header>
 
-  <GithubFilterBar
-    bind:query
-    {selectedTag}
-    {selectedSort}
-    {tags}
-    resultCount={filteredProjects.length}
-    {hasFilters}
-    onTagSelect={setTag}
-    onSortChange={setSort}
-    onClearFilters={clearFilters}
-  />
+  <div class="flex flex-col">
+    <GithubFilterBar
+      bind:query
+      {selectedTag}
+      {selectedSort}
+      {tags}
+      resultCount={filteredProjects.length}
+      {hasFilters}
+      onTagSelect={setTag}
+      onSortChange={setSort}
+      onClearFilters={clearFilters}
+    />
 
-  {#if filteredProjects.length > 0}
-    <div id="github-project-grid" class="flex flex-col gap-6">
-      <div class="project-grid" bind:this={gridElement}>
-        {#each visibleProjects as project (project.slug)}
-          <GithubProjectCard {project} {selectedTag} onTagClick={setTag} />
-        {/each}
+    {#if filteredProjects.length > 0}
+      <div id="github-project-grid" class="mt-6 flex flex-col gap-6">
+        <div class="project-grid" bind:this={gridElement}>
+          {#each visibleProjects as project (project.slug)}
+            <GithubProjectCard {project} {selectedTag} onTagClick={setTag} />
+          {/each}
+        </div>
+
+        <GithubPagination
+          page={pagination.page}
+          totalPages={pagination.totalPages}
+          totalItems={pagination.totalItems}
+          startIndex={pagination.startIndex}
+          endIndex={pagination.endIndex}
+          onPageChange={goToPage}
+        />
       </div>
-
-      <GithubPagination
-        page={pagination.page}
-        totalPages={pagination.totalPages}
-        totalItems={pagination.totalItems}
-        startIndex={pagination.startIndex}
-        endIndex={pagination.endIndex}
-        onPageChange={goToPage}
-      />
-    </div>
-  {:else}
-    <GithubEmptyState onClearFilters={clearFilters} />
-  {/if}
+    {:else}
+      <div class="mt-6">
+        <GithubEmptyState onClearFilters={clearFilters} />
+      </div>
+    {/if}
+  </div>
 </section>
 
 <style>
@@ -181,7 +185,7 @@
     width: 100%;
     grid-template-columns: minmax(0, 1fr);
     gap: 1.25rem;
-    scroll-margin-top: calc(var(--sl-nav-height, 4rem) + 9rem);
+    scroll-margin-top: calc(var(--sl-nav-height, 4rem) + 5rem);
   }
 
   /* 平板 / MacBook：2 列 */

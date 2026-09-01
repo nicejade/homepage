@@ -126,37 +126,38 @@
 </script>
 
 <div
-  class="github-filter-bar sticky top-[var(--sl-nav-height,4rem)] z-10 -mx-4 border-b border-black/[0.06] bg-[color-mix(in_srgb,var(--sl-color-bg)_86%,transparent)] px-4 py-4 backdrop-blur-xl dark:border-white/[0.08] sm:-mx-6 sm:px-6"
-  aria-label="开源琅嬛阁筛选"
+  class="github-filter-search sticky top-[var(--sl-nav-height,4rem)] z-10 -mx-4 border-b border-black/[0.06] bg-[color-mix(in_srgb,var(--sl-color-bg)_86%,transparent)] px-4 pb-3 pt-4 backdrop-blur-xl dark:border-white/[0.08] sm:-mx-6 sm:px-6"
+  role="search"
 >
-  <div class="flex flex-col gap-3">
-    <label for="github-search" class="sr-only">搜索开源琅嬛阁</label>
-    <div class="relative">
-      <svg
-        class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey/70 dark:text-gray-500"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="2"
-        stroke="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-        />
-      </svg>
-      <input
-        id="github-search"
-        type="search"
-        bind:value={query}
-        placeholder="搜索标题、描述、标签、语言或 owner/repo"
-        autocomplete="off"
-        class="min-h-11 w-full rounded-xl border border-black/[0.08] bg-black/[0.03] py-2.5 pl-11 pr-4 text-base text-black outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-grey/60 focus:border-brand/60 focus:bg-surface focus:ring-4 focus:ring-brand/10 dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-silver dark:placeholder:text-gray-500 dark:focus:bg-surface-dark"
+  <label for="github-search" class="sr-only">搜索开源琅嬛阁</label>
+  <div class="relative">
+    <svg
+      class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-grey/70 dark:text-gray-500"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
       />
-    </div>
+    </svg>
+    <input
+      id="github-search"
+      type="search"
+      bind:value={query}
+      placeholder="搜索标题、描述、标签、语言或 owner/repo"
+      autocomplete="off"
+      class="min-h-11 w-full rounded-xl border border-black/[0.08] bg-black/[0.03] py-2.5 pl-11 pr-4 text-base text-black outline-none transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-grey/60 focus:border-brand/60 focus:bg-surface focus:ring-4 focus:ring-brand/10 dark:border-white/[0.1] dark:bg-white/[0.04] dark:text-silver dark:placeholder:text-gray-500 dark:focus:bg-surface-dark"
+    />
+  </div>
+</div>
 
+<div class="github-filter-bar flex flex-col gap-3" aria-label="开源琅嬛阁筛选">
     <div
       class="-mx-4 flex flex-nowrap items-center gap-2 overflow-x-auto scroll-px-4 px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:scroll-px-6 sm:px-6"
       aria-label="标签筛选"
@@ -312,12 +313,11 @@
         {/if}
       </div>
     </div>
-  </div>
 </div>
 
 <style>
   @media (prefers-reduced-transparency: reduce) {
-    .github-filter-bar {
+    .github-filter-search {
       background: var(--sl-color-bg);
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
