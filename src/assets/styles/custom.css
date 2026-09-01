@@ -162,12 +162,8 @@ html[data-theme='dark'] .section-kicker strong {
 	color: var(--sl-color-link-accent);
 }
 
-.sl-markdown-content :not(:-webkit-any(a,div,svg,strong,em,del,span,input,code,br)) + :not(:-webkit-any(a,strong,em,del,span,input,code,br,:where(.not-content *))) {
+.sl-markdown-content :not(:-webkit-any(a,div,svg,strong,em,del,span,input,code,br,article,button)) + :not(:-webkit-any(a,strong,em,del,span,input,code,br,:where(.not-content *))) {
   margin-top: 1rem !important;
-}
-
-.sl-markdown-content article + article {
-  margin-top: 0 !important;
 }
 
 svg + svg {
