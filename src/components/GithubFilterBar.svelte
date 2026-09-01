@@ -126,7 +126,7 @@
 </script>
 
 <div
-  class="github-filter-search sticky top-[var(--sl-nav-height,4rem)] z-10 -mx-4 border-b border-black/[0.06] bg-[color-mix(in_srgb,var(--sl-color-bg)_86%,transparent)] px-4 pb-3 pt-4 backdrop-blur-xl dark:border-white/[0.08] sm:-mx-6 sm:px-6"
+  class="github-filter-search sticky top-[var(--sl-nav-height,4rem)] z-10 -mx-4 border-b border-black/[0.06] bg-[color-mix(in_srgb,var(--sl-color-bg)_86%,transparent)] px-4 pb-3 pt-0 backdrop-blur-xl dark:border-white/[0.08] sm:-mx-6 sm:px-6"
   role="search"
 >
   <label for="github-search" class="sr-only">搜索开源琅嬛阁</label>

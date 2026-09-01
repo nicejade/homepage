@@ -112,7 +112,7 @@
   }
 </script>
 
-<section class="github-curation flex flex-col gap-6" aria-label="开源琅嬛阁项目列表">
+<section id="github" class="github-curation flex flex-col gap-6" aria-label="开源琅嬛阁项目列表">
   <header class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
     <div class="max-w-xl">
       <h1

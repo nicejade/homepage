@@ -158,18 +158,6 @@ html[data-theme='dark'] .section-kicker strong {
   color: var(--color-silver);
 }
 
-.sl-markdown-content a:not(:where(.not-content, .not-content *)) {
-	color: var(--sl-color-link-accent);
-}
-
-.sl-markdown-content :not(:-webkit-any(a,div,svg,strong,em,del,span,input,code,br,article,button)) + :not(:-webkit-any(a,strong,em,del,span,input,code,br,:where(.not-content *))) {
-  margin-top: 1rem !important;
-}
-
-svg + svg {
-  margin-top: 0rem !important;
-}
-
 /*
  * /github/ 列表页已有自定义 H1（PageTitle 组件在该路由不渲染）。
  * 仍隐藏空的 Starlight 标题面板，避免留下 padding / 顶部分割线。
@@ -372,4 +360,25 @@ select {
   .github-curation article:hover {
     transform: none;
   }
+}
+
+.sl-markdown-content a:not(:where(.not-content, .not-content *)) {
+	color: var(--sl-color-link-accent);
+}
+
+/*
+ * Production CSS flattens @layer and downlevels :not(a, b, c) for Safari 13.
+ * Starlight’s sibling spacing then hits gallery cards/tags; zero them explicitly.
+ */
+.sl-markdown-content :not(:-webkit-any(a,div,svg,strong,em,del,span,input,code,br,article,button)) + :not(:-webkit-any(a,strong,em,del,span,input,code,br,:where(.not-content *))) {
+  margin-top: 1rem !important;
+}
+
+.github-curation article,
+.github-curation button {
+  margin-top: 0 !important;
+}
+
+svg + svg {
+  margin-top: 0rem !important;
 }
