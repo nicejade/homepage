@@ -15,6 +15,7 @@ import backEnd from "./back-end"
 import webDevTools from "./webDevTools"
 import services from "./services"
 import cloudservices from "./cloudservices"
+import payment from "./payment"
 import entertain from "./entertain"
 
 export default [
@@ -36,4 +37,5 @@ export default [
   social,
   entertain,
   cloudservices,
+  payment,
 ]
