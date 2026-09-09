@@ -1,0 +1,155 @@
+---
+title: Diagram Design
+description: 给 Claude Code、Codex、Pi 用的编辑级图表技能：39 种版式，自包含 HTML+SVG，可按站点套品牌。
+repo: https://github.com/cathrynlavery/diagram-design
+homepage: https://cathrynlavery.github.io/diagram-design/
+repoDescription: 38 editorial diagram types for Claude Code, Codex, and Pi. Self-contained HTML + SVG. No shadows. No Mermaid slop.
+avatarUrl: https://avatars.githubusercontent.com/u/50469282?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 可视化
+language: HTML
+stars: 36110
+forks: 2272
+openIssues: 37
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-09-09"
+updatedAt: "2026-09-09"
+curationReason: 架构图总被画成圆角盒子？给 Cursor / Claude Code 把 draw.io、Mermaid 重绘成可双击打开的 HTML。
+---
+
+## 项目介绍
+
+[Diagram Design](https://github.com/cathrynlavery/diagram-design) 是 [Cathryn Lavery](https://littlemight.com) 做的一套 **Agent Skill**：让 Claude Code、Codex、Factory Droid、Pi 以及兼容 Agent Skills 的宿主画出「设计师不会嫌弃」的编辑级图表。输出是一份自包含 HTML + SVG，双击就能打开，默认没有阴影、没有构建步骤、也没有 Mermaid 那种圆角盒子。仓库 README 现计 **39 种**版式（架构、时序、象限、飞轮、Sankey、Wardley、UML、库表等），每种都有极简浅色 / 极简深色 / 完整编辑三种静态变体；在线画廊见 [cathrynlavery.github.io/diagram-design](https://cathrynlavery.github.io/diagram-design/)。
+
+## 核心特性
+
+- **按需加载**：日常请求只读 `SKILL.md` 加一份类型参考；语义模式、动效契约、导入规格都是用到才加载，不把 39 种类型一次性塞进上下文
+- **品牌 onboarding**：对站点说一句 `onboard diagram-design to https://yoursite.com`，技能会抽纸色、墨色、accent 与字体栈写入 `style-guide.md`，并做 WCAG AA 对比检查；多客户可用 `~/.diagram-design/profiles/` 与项目标记切换
+- **语义先于版式**：队列瓶颈、策略对照、信任边界等行为用 8 种 semantic pattern 描述，再落到最近的视觉类型，不必为每种行为新开一种图
+- **重绘而非转换**：把 `.drawio` / Mermaid 按 format × size × detail × audience 四个旋钮重画进本设计系统，并给出保真台账（合并、折叠、丢弃了什么）
+- **默认真静态**：普通输出无脚本、可离线（除 Google Fonts）；可选 `reveal` / `step` / `loop` 动效走钉死的 `template-motion.html` 控制器，`prefers-reduced-motion` 显示完整静帧
+
+## 对用户价值
+
+向编码代理要一张架构图，常见结果是圆角框、阴影、随意配色，既对不上站点视觉，也难直接贴进博客或幻灯片。Diagram Design 把「一个 accent、4/10 密度、坐标必须整除 4、最高删除」写进技能，让助手先报类型 / 模式 / 尺寸 / 计划删减，再交出一份可双击打开的 HTML。已有 draw.io 或 README 里的 Mermaid 块时，不必手工重绘：指定受众与详略，就能得到适合文档栏宽、16:9 幻灯或社交卡片的交付物，再导出 SVG（进 Figma）或 PNG（进 PPT）。
+
+## 与替代方案
+
+- 相比 [Mermaid](https://github.com/mermaid-js/mermaid)：Mermaid 是 diagrams-as-code，文本可 diff、GitHub 原生渲染；本仓库明确反对「Mermaid slop」，走的是编辑级 HTML/SVG，并把 Mermaid / draw.io **当输入重绘**，而不是再发明一套图语言。需要跟代码同库、可 review 的源文本时仍选 Mermaid。
+- 相比 Figma / [Excalidraw](https://excalidraw.com/) / draw.io：那些适合人手精修或白板协作；这里的目标是 60 秒套上品牌、让 Agent 直接出图，避免「打开 Figma 调 30 分钟颜色」。精细插画、自由手绘仍应回图形工具。
+- 相比 [Taste Skill](https://github.com/Leonxlnx/taste-skill) / [Emil Kowalski skills](https://github.com/emilkowalski/skills)：那两套管的是界面品味与动效决策，不管架构图版式。本仓库只解决「这张图该长什么样」。
+- 边界（官方 README）：推文/终端用的 unicode 示意图、清单、前后对比、单个方框加标签——这些不该画图。先问一句：读者是否比读一段好散文学到更多？否则不要画。
+
+## 适应人群
+
+- 用 Cursor、Claude Code、Codex 或 Pi 写技术博文、架构说明或幻灯片，厌倦圆角阴影流程图的人。
+- 手里已有 `.drawio` 或 Mermaid，需要按受众（工程师 / 混合 / 高管）和媒介（文档 / 幻灯 / OG 图）重绘的文档或咨询团队。
+- 给多个客户出图、希望品牌 token 进 profile、项目目录用 `.diagram-design` 标记切换皮肤的人。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装支持 Agent Skills / 插件市场的宿主（Claude Code、Codex、Factory Droid、Pi、Cursor、Kiro、OpenCode 等）。
+- 可双击打开 HTML 的现代浏览器；导出 PNG 需要一次性安装 Playwright + Chromium。
+- 品牌 onboarding 需要能访问目标站点首页（技能会抓纸色、字体与 CTA）。
+
+### 安装方式
+
+**Claude Code（插件市场，推荐）：**
+
+```text
+/plugin marketplace add cathrynlavery/diagram-design
+/plugin install diagram-design@diagram-design
+```
+
+随后在 `/plugin` → **Marketplaces** → **diagram-design** 打开 **Enable auto-update**（第三方市场默认关闭）。提示时执行 `/reload-plugins`。
+
+**Codex：**
+
+```bash
+codex plugin marketplace add cathrynlavery/diagram-design
+codex plugin add diagram-design@diagram-design
+```
+
+立即拉更新：`codex plugin marketplace upgrade diagram-design`，再开新会话。
+
+**Pi：**
+
+```bash
+pi install https://github.com/cathrynlavery/diagram-design
+```
+
+打开的会话里执行 `/reload`。之后可用 `/skill:diagram-design`，以及 `/export-diagram`、`/import-mermaid`、`/profile`、`/doctor`。Pi 没有自动刷新，更新用 `pi update --extensions`。
+
+**Cursor / 其他 Agent Skills 宿主（可编辑安装）：** 托管安装会覆盖对 `references/style-guide.md` 的本地改动。若要长期改样式，先 clone 再软链内部技能目录：
+
+```bash
+git clone git@github.com:cathrynlavery/diagram-design.git ~/code/diagram-design
+ln -s ~/code/diagram-design/skills/diagram-design ~/.cursor/skills/diagram-design
+```
+
+OpenCode、Cline、Kiro 等同理，把同一目录链到各自的 skills 根。Factory Droid 走 `droid plugin marketplace add` / `droid plugin install diagram-design@diagram-design --scope user`。
+
+> 曾经用 `npx skills add` 装过独立副本的：它**不会**自动跟上 Codex 市场。先删掉那份副本，再按上面的市场命令重装。
+
+### 首次运行
+
+先看画廊（无需 Agent）：
+
+```bash
+open skills/diagram-design/assets/index.html        # macOS
+xdg-open skills/diagram-design/assets/index.html   # Linux
+```
+
+在宿主里直接说需求，例如：「给我画一张应用架构图：前端、后端、数据库、Redis。」或「把这个 `.drawio` 重绘成 16:9 幻灯、细节简化、给高管看。」
+
+新项目第一次出图时，若 `style-guide.md` 仍是默认皮肤，技能会停下询问：跑 onboarding、手工贴 token，还是继续用默认（jet-black + atomic-tangerine）。建议先：
+
+```text
+onboard diagram-design to https://yoursite.com
+```
+
+确认 diff 后再让它写入 token。多客户场景用 `/diagram-design:profile`（Claude Code）或 `/profile`（Droid / Pi）保存 profile，并在项目根放含 `profile: <slug>` 的 `.diagram-design` 标记。
+
+从模板手改也可以：
+
+```bash
+cp skills/diagram-design/assets/template.html my-diagram.html
+```
+
+### 验证是否成功
+
+- 一次「做张流程图」的请求，宿主应只加载 `SKILL.md` 加 `type-flowchart.md`，而不是整包类型文档。
+- 出图前助手应先陈述所选类型、pattern、尺寸和计划删减，再渲染。
+- 得到一份 `.html`：双击离线可开（除 Google Fonts 外无其它网络请求）。
+- 读屏应读出标题与描述；系统开了减少动效时，动效图应显示完整静帧。
+- 对生成文件跑：
+
+```bash
+python3 skills/diagram-design/scripts/self_check.py <file>
+```
+
+应打印 `OK`。品牌 onboarding 之后，新图应使用站点的 paper / ink / accent / 字体，并附带 fidelity receipt。
+
+导出 PNG 前一次性：
+
+```bash
+pip install playwright && playwright install chromium
+```
+
+再在 Claude Code 用 `/diagram-design:export-diagram path/to/diagram.html`，或在 Pi 用 `/export-diagram`。
+
+### 常见坑 / 注意事项
+
+- **GitHub 简介仍写 38 种、README 写 39 种**：以仓库 README / 画廊为准；社交卡片上的英文 `repoDescription` 来自 GitHub 简介，可能暂时落后。
+- **托管安装会覆盖 `style-guide.md`**：改默认皮肤请用 clone + symlink，或把品牌放进 `~/.diagram-design/profiles/`，不要改已安装包里的文件。
+- **PNG 不含完整编辑页眉**：导出只切 `<svg>` 本身；要带 summary cards 的 `-full` 版面，用浏览器打印 PDF 或整页截图。
+- **动效导出**：先打开 `?motion=static`，等 `document.fonts.ready`，确认根节点 `data-frame="static"` 再截；任意改控制器、引入远程脚本或 `onclick` 会被皮肤检查拒绝。
+- **Windows 软链**：cookbook 里有 junction 写法；直接 `ln -s` 在部分 Windows 环境会失败。
+- **不该用的时候**：列表、前后对比、单框标签、终端 unicode 图——官方建议改用表格或段落，不要为了「有图」而画。
+- 贡献者路径的 `lint-render.py` / `lint-skin.py` 是仓库 CI 门禁，不是终端用户出图所必需。
