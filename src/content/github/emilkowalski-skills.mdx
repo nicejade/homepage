@@ -1,0 +1,97 @@
+---
+title: Skills For Designers and Engineers
+description: Emil Kowalski 出品的设计工程 Agent Skills：把动画曲线、时长与界面细节写成可执行规则，减少 AI slop。
+repo: https://github.com/emilkowalski/skills
+homepage: https://emilkowal.ski/skill
+repoDescription: Skills for Designers and Engineers.
+avatarUrl: https://avatars.githubusercontent.com/u/36730035?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: Markdown
+stars: 34622
+forks: 1932
+openIssues: 0
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-09-02"
+updatedAt: "2026-09-02"
+curationReason: 落地页动效总选错 ease-in、下拉菜单从中心弹出？给 Cursor / Claude Code 装 animate 与 review-animations。
+---
+
+## 项目介绍
+
+Skills For Designers and Engineers 是 [Emil Kowalski](https://emilkowal.ski)（animations.dev、Sonner、Vercel / Linear 背景）公开的一套 **面向设计师与工程师的 Agent Skills**。它不负责整条研发流程，而是把「这个交互该不该动、用什么曲线和时长、从哪冒出来」写成可执行规则，让 Claude Code、Cursor、Codex 等宿主更快做出正确的界面决策。作者的定位很明确：AI 不能替代领域专长，但能放大专长；这些技能是多年设计工程经验的副作用，而不是又一套 vibe coding 模板。
+
+## 核心特性
+
+- **`emil-design-eng` 主技能**：动画决策框架 + 设计品味（入口用 `ease-out`、禁止 `scale(0)`、popover 从触发点缩放、按钮 `:active` 反馈等），审查时强制 Before / After 表
+- **从零构建动效**：`animate` 按「该不该动 → 目的 → 工具 → 属性 → 曲线/时长 → 打断与退出」写实现；`animate-expo` 把同一标准落到 React Native / Expo（手势、sheet、haptics、避开 JS 线程）
+- **审查与全仓审计**：`review-animations` 按同一套硬规则批改现有动效；`improve-animations` 输出可交给任意代理执行的优先级计划；`find-animation-opportunities` 同时标出不该动的地方
+- **`prototype` 多版本对比**：显式调用后在隔离页面做出 3–5 个真正分叉的方案，用可视化切换器现场挑选，选定后再写入生产代码
+- **专项技能**：`apple-design`（WWDC 原则转 Web）、`animation-vocabulary`（用准术语描述动效）、`pick-ui-library`（避免手搓 toast/下拉）、`ask-sonner`（作者 toast 库）、`write-swift`（现代 Swift）
+
+## 对用户价值
+
+编码代理没有稳定的界面品味：进场动画用 `ease-in`、实线边框代替半透明阴影、下拉菜单从几何中心弹出、键盘呼出的命令面板还套开合动画。这些细节叠加后，界面要么出色，要么只是「能用」。这套技能把常见失误与修法写进技能文件（见作者文章 [Agents with Taste](https://emilkowal.ski/ui/agents-with-taste)），让助手先过频率门槛（每天上百次的操作不要动画），再用对的属性与曲线实现——适合想在 slop 海里把产品界面做出辨识度的人，而不是再装一个通用风格库。
+
+## 与替代方案
+
+- 相比 [Taste Skill](https://github.com/Leonxlnx/taste-skill) 的多视觉人格、排版拨盘与 GSAP 范式，本仓库更偏 **动画决策顺序与 Emil 个人标准**（曲线表、时长表、Never Ship 清单），不是风格生成器。
+- 相比 [Impeccable](https://github.com/pbakaus/impeccable) 的 `init` → `audit` / `polish` 命令流与无 LLM 检测器，这里几乎不产出 `DESIGN.md`，而是在写动效的当下把关。
+- 相比 [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) 的行业风格 / 配色数据库检索，本仓库是作者经验浓缩的技能集，覆盖面窄、意见更硬。
+- 相比 [Matt Pocock skills](https://github.com/mattpocock/skills) / [Superpowers](https://github.com/obra/superpowers) 等工程方法论包：那些管规格、TDD 与流程；本仓库只管界面与动效。GitHub 仓库名同为 `skills`，安装时务必写 `emilkowalski/skills`。
+
+## 适应人群
+
+- 用 Cursor、Claude Code、Codex 做落地页或产品 UI，希望 Agent 按 animations.dev 那套标准写动效、而不是再发明一套 `cubic-bezier` 的前端 / 设计工程师。
+- 存量界面已经「能动」，但观感廉价，需要 `review-animations` / `improve-animations` 做一次有优先级的动效审计的人。
+- 在 Web 与 Expo 之间切换、或正在接入 [Sonner](https://sonner.emilkowal.ski) / 选型 UI 库，不想让 Agent 手搓 toast、drawer 的开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装支持 Agent Skills 的宿主（Cursor、Claude Code、Codex 等）；`npx skills` 路径需要 Node.js。
+- 有可改的前端项目（Web 用 `animate`；React Native / Expo 用 `animate-expo`）。
+- 接受意见鲜明的品味标准：高频操作可以「完全不要动画」，这会被技能视为成功而不是偷懒。
+
+### 安装方式
+
+官方 README 推荐 skills CLI：
+
+```bash
+npx skills@latest add emilkowalski/skills
+```
+
+安装器会让你选择技能与目标宿主。个人站点 [emilkowal.ski/skill](https://emilkowal.ski/skill) 上曾出现 `emilkowalski/skill`（单数）写法，**以仓库 README 的 `emilkowalski/skills` 为准**。
+
+想跟作者技能更新，可订阅 [animations.dev/skills](https://animations.dev/skills)；课程与长文是加码，不是运行技能的前置。
+
+### 首次运行
+
+重载宿主后，按任务选用技能，而不是一次全开所有方法论：
+
+- 新写一个交互动效：调用 `animate`（或直接说「给这个下拉菜单加动画」）
+- 批改现有动效：`review-animations`
+- 全仓找该动 / 不该动的点：`find-animation-opportunities`，再让 `improve-animations` 出可执行计划
+- 同一块 UI 想看几个方向：显式调用 `prototype`（它不会自行触发）
+- 需要总览品味与审查表：`emil-design-eng`
+
+### 验证是否成功
+
+- 技能列表或斜杠菜单中能看到本包技能（至少 `animate`、`emil-design-eng`）。
+- 请助手给一个下拉菜单做进场动画：应使用 `ease-out`（或文档中的强 ease-out 曲线）、`transform` / `opacity`、从触发点 `transform-origin`，而不是 `ease-in` 或 `scale(0)`。
+- 请助手给命令面板 / 快捷键开关加开合动画：应按频率规则拒绝，并给出瞬时状态切换。
+- 调用 `prototype` 时，应出现隔离的切换页，而不是直接改生产路由。
+
+### 常见坑 / 注意事项
+
+- **仓库名撞车**：`mattpocock/skills` 已在本站「开源琅嬛阁」中；安装与搜索请带上 owner `emilkowalski`。
+- **Web 与原生不要混用**：`animate` 面向 Web（CSS / WAAPI / Motion）；移动端手势与线程约束走 `animate-expo`。
+- **`prototype` 默认不碰生产**：探索阶段在 `/prototypes/...` 或独立 HTML 里完成；选定后再 `keep`。切换器本身按高频操作处理，**变体切换不应再套动画**。
+- **与 Taste Skill / Impeccable 叠装可能打架**：一套要多风格实验，一套要 Emil 的硬规则；同时启用时请指定主技能，避免曲线与时长各说各话。
+- 需要 toast / drawer / 命令菜单时，技能会倾向 `pick-ui-library` 而不是手搓；Sonner 专项问题走 `ask-sonner`。
+- 作者强调技能是专长的放大器：它不会替你学会设计；复杂品牌系统仍需人工 override。

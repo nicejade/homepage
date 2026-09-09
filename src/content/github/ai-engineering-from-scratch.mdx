@@ -1,6 +1,6 @@
 ---
 title: "AI Engineering from Scratch"
-description: "从线性代数到手写 Agent 的开源 AI 工程课：20 阶段约 511 课，先自建算法再对照生产库。"
+description: "从线性代数到手写 Agent 的开源 AI 工程课：20 阶段约 523 课，先自建算法再对照生产库。"
 repo: "https://github.com/rohitg00/ai-engineering-from-scratch"
 homepage: "https://aiengineeringfromscratch.com"
 repoDescription: "Learn it. Build it. Ship it for others."
@@ -10,28 +10,28 @@ tags:
   - Agent
   - 工作流
 language: "Python"
-stars: 49417
-forks: 8613
-openIssues: 97
+stars: 53442
+forks: 9353
+openIssues: 105
 contributors: 1
 license: "MIT"
 featured: false
 publishedAt: "2026-08-26"
-updatedAt: "2026-08-26"
+updatedAt: "2026-09-09"
 curationReason: "会写代码但不想只会调 API：用 Claude Code / Cursor 当家教，可跳阶段或只走 MCP / Skills 快路径。"
 ---
 
 ## 项目介绍
 
-**AI Engineering from Scratch** 是 Rohit Ghumare 维护的免费 MIT 开源课程，用同一条脊柱把「会调 API」和「懂它在干什么」接起来：20 个阶段、约 511 课、约 329 小时，从线性代数与工具链一路到 LLM、MCP、Agent 与生产化。每课固定走 **Build It / Use It / Ship It**：先用裸数学手写算法，再用 PyTorch / sklearn 等生产库跑同一件事，最后留下可安装的 prompt、Skill、Agent 或 MCP server。
+**AI Engineering from Scratch** 是 Rohit Ghumare 维护的免费 MIT 开源课程，用同一条脊柱把「会调 API」和「懂它在干什么」接起来：20 个阶段、约 523 课、约 342 小时，从线性代数与工具链一路到 LLM、MCP、Agent 与生产化。每课固定走 **Build It / Use It / Ship It**：先用裸数学手写算法，再用 PyTorch / sklearn 等生产库跑同一件事，最后留下可安装的 prompt、Skill、Agent 或 MCP server。
 
 ## 核心特性
 
 - **自底向上的 20 阶段脊柱**：Phase 0 环境 → 数学 / 经典 ML / 深度学习 → 视觉、NLP、语音、Transformer、生成式与强化学习 → 手写 LLM → LLM 工程、多模态、工具协议、Agent、自治系统、多智能体、生产与对齐，最后是可交付 capstone
 - **统一课时结构**：每课目录都是 `code/` + `docs/en.md` + `outputs/`；命令默认从仓库根目录运行，支持 Python，部分课另有 TypeScript / Rust / Julia 实现
 - **每课产出可复用工件**：课程结束时留下 prompt、Skill、Agent、MCP 等工具，而不是「学完就放下」的作业；可用 `scripts/install_skills.py` 装进 Claude Code / Cursor / Codex 等宿主
-- **Agent 当家教**：`npx skills add rohitg00/ai-engineering-from-scratch` 装入 `start-learning`、`learn`、`course-guide` 等技能；十分钟定位测验写入 `LEARNING.md`，也可只走 MCP 或 Agent Skills 快路径
-- **三种入口可并行**：终端家教（推荐）、官网 [aiengineeringfromscratch.com](https://aiengineeringfromscratch.com) 纯阅读，或 clone 后直接跑课时代码；核心课还可编译成六卷 EPUB / PDF
+- **Agent 当家教**：`npx skills add rohitg00/ai-engineering-from-scratch` 装入 `start-learning`、`learn`、`course-guide`，以及 MCP / Agent Skills / 认证专项技能；十分钟定位测验写入 `LEARNING.md`
+- **多种入口可并行**：终端家教（推荐）、官网 [aiengineeringfromscratch.com](https://aiengineeringfromscratch.com) 纯阅读，或 clone 后直接跑课时代码；核心课还可编译成六卷 EPUB / PDF
 
 ## 对用户价值
 
@@ -58,7 +58,7 @@ curationReason: "会写代码但不想只会调 API：用 Claude Code / Cursor �
 - 能写代码；Python 更有帮助。仓库脚本侧常见要求为 **Python 3.10+**。
 - 终端家教路径需要 Node.js、`npx`，以及 Claude Code / Codex / Cursor 等能读 `SKILL.md` 的宿主。
 - 跑课时代码需要 clone；只装学习技能或在官网阅读则不必。
-- 完整路径很长（新手约 300 小时）；可按背景从 Phase 1 / 3 / 10 / 14 开始，或只走 MCP / Agent Skills 专项。
+- 完整路径很长（新手约 306 小时）；可按背景从 Phase 1 / 3 / 10 / 14 开始，或只走 MCP / Agent Skills 专项。
 
 ### 安装方式
 
@@ -91,7 +91,7 @@ cd ai-engineering-from-scratch
 
 在 Claude Code 执行 `/start-learning`；在 Codex 用 `start-learning`（或从 `/skills` 选）；其他宿主直接说「用 start-learning 开始这门课」。十题定位测验会映射到起始阶段，并把计划写入 `LEARNING.md`。
 
-只学 MCP / Agent Skills 时，分别用 `/learn-mcp`、`/learn-agent-skills`（Codex 去掉斜杠），进度写入 `MCP-LEARNING.md` 或 `AGENT-SKILLS-LEARNING.md`。
+只学 MCP / Agent Skills 时，分别用 `/learn-mcp`、`/learn-agent-skills`（Codex 去掉斜杠）：MCP 走 17 课清单并写入 `MCP-LEARNING.md`；Agent Skills 走 5 课路径并写入 `AGENT-SKILLS-LEARNING.md`。阶段测验用 `/check-understanding 13`（Codex 为 `check-understanding 13`）。
 
 clone 后的第一条证据（仓库根目录）：
 
