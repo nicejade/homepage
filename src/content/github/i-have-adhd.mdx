@@ -1,0 +1,99 @@
+---
+title: i-have-adhd
+description: 编码 Agent 的 ADHD 友好输出 Skill：先给动作、编号步骤、不寒暄，扫一眼就能动手。
+repo: https://github.com/ayghri/i-have-adhd
+repoDescription: A skill to stop your coding agent from burying the answer. ADHD-friendly output.
+avatarUrl: https://avatars.githubusercontent.com/u/32200675?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: Python
+stars: 33224
+forks: 1966
+openIssues: 34
+contributors: 34
+license: MIT
+featured: false
+publishedAt: "2026-09-09"
+updatedAt: "2026-09-09"
+curationReason: Claude Code / Cursor 总先寒暄再埋答案？装上后从命令和路径起笔，说 stop adhd mode 可关。
+---
+
+## 项目介绍
+
+i-have-adhd 是一套面向编码助手的 **Agent Skill / 插件**：拦住「Great question! Let me think…」这类铺垫，把 **下一步动作** 放到第一行，多步任务编号，结尾只留一件两分钟内能做的事。口号是 ADHD-friendly outputs，**不需要 ADHD 诊断**——任何被寒暄、跑题和「Hope this helps!」拖慢的人都适用。规则全文在 [`skills/i-have-adhd/SKILL.md`](https://github.com/ayghri/i-have-adhd/blob/main/skills/i-have-adhd/SKILL.md)，灵感大体取材自 *The Adult ADHD Tool Kit*，改的是 **LLM 怎么回话**，不是人类怎么排日程。
+
+## 核心特性
+
+- **十条输出规则**：动作优先、多步编号、每轮重申进度、压掉跑题、用分钟估时、把完成项写清楚、错误直说位置与修法、列表上限 5 条、禁止开场白 / 复盘 / 客套收尾
+- **默认按需启用**：Claude Code、Qwen Code、Codex 等尊重 `disable-model-invocation`，装上不等于改口吻；输入 `/i-have-adhd`（Codex 为 `$i-have-adhd`）后对本会话生效，说 `stop adhd mode` 或 `normal mode` 关闭
+- **可选全程开启**：Claude Code 可 `touch ~/.claude/.i-have-adhd-always`，由 `SessionStart` hook 在每轮会话开头注入；其他宿主可把规则块写进 User Rules / `AGENTS.md`
+- **多宿主安装**：Claude Code、Cursor、Codex、Copilot、Gemini CLI、OpenCode、Pi、Hermes、Zed、Kimi Code 等，完整矩阵见 [INSTALL.md](https://github.com/ayghri/i-have-adhd/blob/main/INSTALL.md)
+- **可 Fork 微调**：改 `SKILL.md` 后换上自己的 marketplace 副本；上游与 Fork 插件名相同，必须先卸再装
+
+## 对用户价值
+
+编码 Agent 常把真正要跑的命令埋在三段背景里，工作记忆一断，人就停在「看懂了但没动手」。这套技能把回复塑成 **可执行形状**：第一行是命令、路径或片段，步骤可勾选，每轮标明「第 3/5 步已完成」，估时用「约 15 分钟」而不是「一会儿」。它 **不是把话压短**（那是 [Caveman](https://github.com/JuliusBrussee/caveman) 的方向），而是让扫第一行和最后一行就知道刚才发生了什么、下一步做什么。破坏性操作仍会先确认；用户明确要求 explain 时可以写长，只是仍然没有开场白和客套结尾。
+
+## 与替代方案
+
+- 相比 [Caveman](https://github.com/JuliusBrussee/caveman) 的穴居人短句与 token 压缩，本仓库改的是 **回复结构与注意力负荷**，代码块并不刻意压字数；两者都动输出风格，叠装时容易互相覆盖，建议只开一个主规则。
+- 相比会话里随口说「请简短」，它提供可安装、可开关、可 Fork 的十条硬规则，并覆盖 Claude Code hook、Cursor skills、Codex plugin 等多条接入路径。
+- 相比 [Superpowers](https://github.com/obra/superpowers) 等 **流程与 TDD 技能包**，本仓库不管 brainstorm / plan，只约束 **怎么把结论交到你眼前**；可以互补，不要指望它替代规格驱动开发。
+- 相比各宿主自带的 concise / 简短模式：那些多半只砍长度；这里还要求编号、重申状态、可见进度和「列表不超过 5」。
+
+## 适应人群
+
+- 日常用 Claude Code、Cursor、Codex 写代码，厌倦先读三段铺垫才能找到命令的人。
+- 工作记忆容易断、希望 Agent 每轮都写出「现在第几步、下一步两分钟内能做什么」的开发者（有无 ADHD 诊断均可）。
+- 想给团队统一一种「可执行回复」规范，或 Fork `SKILL.md` 微调规则后再分发的人。
+
+## 如何使用
+
+### 前置条件
+
+- 已安装支持 Agent Skills / 插件的宿主（Claude Code、Cursor、Codex 等）。**使用技能本身不需要 Python**；仓库里的 Python 主要用于测试与评估脚本。
+- Cursor / Copilot 的 `npx skills` 路径需要 Node.js。
+- 接受「默认不自动改口吻」：多数宿主必须显式调用后才会生效。
+
+### 安装方式
+
+README 推荐把下面这段直接贴进 CLI 里，让当前 Agent 按 [AGENTS.md](https://github.com/ayghri/i-have-adhd/blob/main/AGENTS.md) 自行安装：
+
+```text
+Install the i-have-adhd skill/plugin from https://github.com/ayghri/i-have-adhd, refer to the repo's AGENTS.md for instructions.
+```
+
+按宿主手动安装（更多见 [INSTALL.md](https://github.com/ayghri/i-have-adhd/blob/main/INSTALL.md)）：
+
+```bash
+# Claude Code
+claude plugin marketplace add ayghri/i-have-adhd
+claude plugin install i-have-adhd@i-have-adhd
+
+# Cursor / 其他 Agent Skills 宿主
+npx skills add ayghri/i-have-adhd -a cursor -y
+```
+
+### 首次运行
+
+1. **重启宿主**（插件索引在启动时读取）。
+2. 新开一轮对话，输入 **`/i-have-adhd`**（Codex 用 **`$i-have-adhd`**）。
+3. 需要默认每轮都开：Claude Code 执行 `touch ~/.claude/.i-have-adhd-always`（自定义配置目录则写到 `$CLAUDE_CONFIG_DIR`）；Cursor 可把 INSTALL.md 里的 Output style 块贴进 User Rules。
+4. 关闭：说 **`stop adhd mode`** 或 **`normal mode`**。
+
+### 验证是否成功
+
+- `claude plugin list` / `npx skills list` 能看到 `i-have-adhd`；斜杠菜单出现该命令。
+- 问一个会引出多步修改的问题（例如升级某依赖并改调用处）。合格回复应：**第一行就是命令或路径**、步骤带编号、结尾只有一件下一步，且没有 “Great question” / “Hope this helps”。
+- 始终开启时，新会话第一轮就应已经是该口吻，无需再敲 `/i-have-adhd`。
+
+### 常见坑 / 注意事项
+
+- **装上不等于启用。** Claude Code / Qwen Code / Codex 在未调用前不会改输出；看不到命令就先重启。
+- **始终开启 flag 无效**：先 `claude plugin marketplace update i-have-adhd` 再重启；hook 与 `hooks/hooks.json` 只在启动时读取。
+- **`npx skills add` 后技能列表是空的**：必须新开 Agent 对话；确认文件夹落在宿主扫描路径（Cursor 为 `~/.cursor/skills/`）。
+- **Fork 自定义规则**：先 `claude plugin uninstall i-have-adhd` 并 `marketplace remove`，再添加自己的 `owner/i-have-adhd`——上下游插件名相同，不卸会装错副本。
+- 用户要求 **explain** 时技能会写长；需要完整长列表时请明确说，否则会把超过 5 项的清单拆成「现在做 / 以后做」。
+- 名称是修辞不是医学工具；许可证 MIT。
