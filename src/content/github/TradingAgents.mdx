@@ -1,0 +1,124 @@
+---
+title: TradingAgents
+description: 多 Agent LLM 金融交易框架：分析师、研究员、交易员与风控协作，模拟券商投研与下单决策。
+repo: https://github.com/TauricResearch/TradingAgents
+homepage: https://arxiv.org/pdf/2412.20138
+repoDescription: "TradingAgents: Multi-Agents LLM Financial Trading Framework"
+avatarUrl: https://avatars.githubusercontent.com/u/192884433?v=4
+tags:
+  - Agent
+  - CLI
+  - 本地模型
+language: Python
+stars: 103656
+forks: 19941
+openIssues: 364
+contributors: 21
+license: Apache-2.0
+featured: false
+publishedAt: "2026-09-09"
+updatedAt: "2026-09-09"
+curationReason: 适合用 CLI 跑模拟投研、研究多智能体金融决策，或接 Ollama / 国产模型做实验。
+---
+
+## 项目介绍
+
+TradingAgents 是一套用 LLM 多智能体模拟真实交易公司的开源研究框架。它把投研拆成基本面、情绪、新闻、技术分析等专业角色，再由多空研究员辩论、交易员下判断、风控与组合经理审批，最终在模拟交易所执行。项目基于 LangGraph，提供交互式 CLI 与 Python API，面向研究而非实盘建议。
+
+## 核心特性
+
+- **券商式角色分工**：分析师团队（基本面 / 情绪 / 新闻 / 技术）→ 多空研究员辩论 → 交易员 → 风控与组合经理审批
+- **多市场标的**：Yahoo Finance 覆盖的市场均可分析，如 `AAPL`、`0700.HK`、`600519.SS`、`BTC-USD`
+- **多模型后端**：OpenAI、Gemini、Claude、Grok、DeepSeek、Qwen、GLM、MiniMax、OpenRouter、Azure、Bedrock，以及 Ollama / vLLM / LM Studio 等 OpenAI 兼容端点
+- **决策记忆与断点续跑**：决策写入 `~/.tradingagents/memory/`；`--checkpoint` 可从上次成功节点恢复
+- **CLI 与库双入口**：`tradingagents` 交互分析，或 `TradingAgentsGraph().propagate(ticker, date)` 嵌入代码
+
+## 对用户价值
+
+单次问 LLM「该不该买」通常缺角色张力、数据锚点和可追溯过程。TradingAgents 把这条链路做成可观察的多智能体流水线：分析师产出结构化观点，研究员强制多空对质，交易员综合下单意图，风控再把关。对研究者，它是论文 [arXiv:2412.20138](https://arxiv.org/abs/2412.20138) 的可运行实现；对开发者，CLI 与 `propagate()` 便于换模型、调辩论轮次、接本地推理。v0.4.0 还修了 FRED 宏观、社交情绪与记忆日志的前视偏差，并支持 CLI checkpoint 续跑。
+
+## 与替代方案
+
+- 相比 [LangChain](https://github.com/langchain-ai/langchain) / CrewAI 等**通用 Agent 编排**，这里内置金融角色、行情与情绪数据源，以及模拟下单闭环，不必从零设计投研图。
+- 相比 [AI Berkshire](https://github.com/xbtlin/ai-berkshire) 等**价值投资 Skill 工作流**，TradingAgents 输出的是模拟交易决策与风控审批，而非长篇基本面研报。
+- 相比 [OpenBB](https://github.com/OpenBB-finance/OpenBB) 或 backtrader 等**数据终端 / 传统回测器**，它是 LLM 驱动的研究脚手架：两次同标的、同日期运行可以不同，官方明确回测收益不可复现为固定策略。
+- 框架声明仅供研究，[不构成投资建议](https://tauric.ai/disclaimer/)。
+
+## 适应人群
+
+- 想观察「多 Agent 如何协作做交易决策」的 AI / 量化研究者。
+- 需要交互式 CLI 或 Python API，快速换模型、辩论深度与分析日期的开发者。
+- 希望用 Ollama、vLLM 或国产模型（Qwen / GLM / DeepSeek / MiniMax）在本地跑投研实验的用户。
+
+## 如何使用
+
+### 前置条件
+
+- **Python 3.10+**（README 示例使用 conda + Python 3.12）。
+- 至少一个 LLM 提供商密钥，或已运行的 Ollama / OpenAI 兼容本地服务。
+- 可选：`ALPHA_VANTAGE_API_KEY` 等行情/宏观数据密钥；复制 `.env.example` 为 `.env` 填写。
+- AWS Bedrock 需 `pip install ".[bedrock]"` 并配置 AWS 凭证与区域。
+
+### 安装方式
+
+```bash
+git clone https://github.com/TauricResearch/TradingAgents.git
+cd TradingAgents
+conda create -n tradingagents python=3.12
+conda activate tradingagents
+pip install .
+cp .env.example .env   # 填入所选提供商的 API Key
+```
+
+Docker：
+
+```bash
+cp .env.example .env
+docker compose run --rm tradingagents
+# 本地 Ollama：
+docker compose --profile ollama run --rm tradingagents-ollama
+```
+
+### 首次运行
+
+交互式 CLI（安装后的入口命令，或从源码运行）：
+
+```bash
+tradingagents
+# 或：python -m cli.main
+```
+
+按提示选择标的、分析日期、LLM 提供商与研究深度。Ollama 将 `llm_provider` 设为 `ollama`（默认 `http://localhost:11434/v1`，远程用 `OLLAMA_BASE_URL`）；CLI 里选 Custom model ID 可指定未列出的模型。
+
+Python 最小示例：
+
+```python
+from tradingagents.graph.trading_graph import TradingAgentsGraph
+from tradingagents.default_config import DEFAULT_CONFIG
+
+ta = TradingAgentsGraph(debug=True, config=DEFAULT_CONFIG.copy())
+_, decision = ta.propagate("NVDA", "2026-01-15")
+print(decision)
+```
+
+断点续跑（可选）：
+
+```bash
+tradingagents analyze --checkpoint
+```
+
+### 验证是否成功
+
+- `tradingagents` 能打开交互界面，可选标的与模型。
+- 跑完一次分析后终端展示新闻/交易等进度面板，并打印决策；`~/.tradingagents/memory/trading_memory.md` 出现新记录。
+- Python 路径下 `propagate("AAPL", "<日期>")` 返回决策且无阻塞异常。
+- 开启 checkpoint 后续跑应看到 `Resuming from step N` 而非每次 `Starting fresh`。
+
+### 常见坑 / 注意事项
+
+- **不是实盘系统**：官方强调研究用途，表现受模型、温度、区间与数据质量影响，结果不可当作可复现策略。
+- 推理模型（默认 GPT-5.x 等）通常忽略 `temperature`；若要更可重复，需改用非推理模型并显式设 Custom model ID。
+- 新闻、StockTwits、Reddit 是「当前时点」数据：分析日期钉住价格窗口，社交与新闻仍随现在变化。
+- A 股等非美市场必须带交易所后缀（如 `600519.SS`、`0700.HK`），否则公司身份与基准可能对不上。
+- 密钥不要提交进仓库；Qwen / GLM / MiniMax 分国际与国内 endpoint，用错区域会认证失败。
+- checkpoint 默认关闭；中断后续跑需 `--checkpoint`。成功完成后 checkpoint 会自动清理，可用 `--clear-checkpoints` 重置。
