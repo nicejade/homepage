@@ -1,0 +1,131 @@
+---
+title: HyperFrames
+description: HeyGen 开源的 HTML 视频框架：用 HTML/CSS 与可寻址动画写片，本地 CLI 或 Agent Skills 渲成确定性 MP4。
+repo: https://github.com/heygen-com/hyperframes
+homepage: https://hyperframes.heygen.com
+repoDescription: Write HTML. Render video. Built for agents.
+avatarUrl: https://avatars.githubusercontent.com/u/65394575?v=4
+tags:
+  - Agent
+  - CLI
+  - 工作流
+language: TypeScript
+stars: 47440
+forks: 4377
+openIssues: 183
+contributors: 58
+license: Apache-2.0
+featured: false
+publishedAt: "2026-09-08"
+updatedAt: "2026-09-08"
+curationReason: 产品上线片、PR 讲解、无脸解说：给 Cursor / Claude Code 装技能就能出片，不想先搭 Remotion 工程。
+---
+
+## 项目介绍
+
+[HyperFrames](https://github.com/heygen-com/hyperframes) 是 HeyGen 开源的 HTML 原生视频框架：把 HTML、CSS、媒体与可寻址（seekable）动画渲成确定性 MP4。可以在本地用 CLI 写片，也可以给 Cursor、Claude Code、Codex、Gemini CLI 等编码代理装 Skills，或作为托管创作工作流的渲染内核。本地渲染不消耗 HeyGen credits；许可证为 Apache 2.0，没有按次渲染费或商业席位门槛。文档见 [hyperframes.heygen.com](https://hyperframes.heygen.com)。
+
+## 核心特性
+
+- **HTML 即成片**：composition 是带 `data-*` 时间轴属性的 HTML，不要求 React、也不强制打包；`index.html` 可在浏览器直接预览
+- **为编码代理设计**：自带约 20 个按需加载的 Skills；`/hyperframes` 是路由器，把「做一支片」分到产品发布、PR 讲解、无脸解说、动能字幕等工作流
+- **确定性渲染**：无头 Chrome 逐帧 seek，再交给 FFmpeg 编码；本地快速迭代，Docker / CI 可走同一套输入同一套帧
+- **动画适配器**：GSAP、CSS、Lottie、Three.js、Anime.js、WAAPI，或自定义 frame adapter；时间轴必须可寻址，不能只靠墙钟动画
+- **Catalog、Studio 与分布式渲染**：`hyperframes add` 安装转场 / 字幕 / 图表积木；浏览器 Studio 可预览编辑；AWS Lambda 路径可把长片拆开渲
+
+## 对用户价值
+
+编码代理已经会写 HTML，却很难一次交出可维护的 React / Remotion 工程。HyperFrames 把时间写进 `data-start` / `data-duration`，CLI 默认非交互，正好接上「规划 → 写 HTML → lint → preview → render」这条代理闭环。产品上线片、PR 讲解、站点导览、动能字幕社媒片可以从同一份 HTML 出发；同一输入同一帧，也方便把宣传视频当代码做 CI 回归。HeyGen 自己在生产环境使用，社区 adopter 包括 tldraw、TanStack 等。
+
+## 与替代方案
+
+- **[Remotion](https://github.com/remotion-dev/remotion)**：官方对标对象。底层同样是无头 Chrome + FFmpeg。Remotion 赌 React 组件与更成熟的云渲染（Remotion Lambda）；HyperFrames 赌纯 HTML、无构建步骤、Apache 2.0。仓库提供 `/remotion-to-hyperframes` 单向迁移技能，不是双向兼容层。
+- **[Motion Canvas](https://github.com/motion-canvas/motion-canvas)**：命令式 TypeScript 时间轴，适合人手精修讲解片；多条并行动画对 Agent 更难维护。HyperFrames 的声明式 HTML + GSAP 时间轴更接近 LLM 的布局方式。
+- **After Effects / Premiere**：成片品质上限高，但工程不进 git、不便 CI，编码代理也写不了时间轴。适合终审调色，不适合「每次 PR 自动出片」。
+- **托管 AI 视频（含 HeyGen 产品本身）**：出片快，但结果难当代码审、难做确定性回归。HyperFrames 本地渲不扣 HeyGen credits；TTS、数字人、生成素材等托管能力若接入，则按对应服务计费。
+
+## 适应人群
+
+- 用 Cursor、Claude Code、Codex 做产品片、PR 讲解或无脸解说，不想先搭一套 Remotion / React 工程的人。
+- 需要在 CI 里可重复出片、把宣传视频当代码管理的增长、开发者关系或文档团队。
+- 已有 GSAP / Three.js / Lottie 网页动效，希望同一套 HTML 直接导出 MP4 的前端。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 22+。
+- 系统已安装 FFmpeg（`npx hyperframes doctor` 期望看到 7.x 量级）。
+- 可选：Docker（生产 / CI 需要跨机器帧一致时）。
+- Agent 路径：已安装支持 Agent Skills 的宿主（Cursor、Claude Code、Codex、Gemini CLI 等）。
+
+### 安装方式
+
+给编码代理装 **Core Skills**（交互式选择器，不要预勾全套）：
+
+```bash
+npx skills add heygen-com/hyperframes
+```
+
+Agent 或非交互环境请改用当前 `main` 上的核心集，避免一次装进全部 20 个技能：
+
+```bash
+npx hyperframes skills update
+```
+
+只用 CLI、不经过 Agent：
+
+```bash
+npx hyperframes init my-video
+cd my-video
+```
+
+按需从 Catalog 装积木：
+
+```bash
+npx hyperframes add flash-through-white   # shader 转场
+npx hyperframes add instagram-follow      # 社交叠加
+npx hyperframes add data-chart            # 动态图表
+```
+
+完整技能目录与工作流对照见 [Install and update agent skills](https://hyperframes.heygen.com/guides/skills)。
+
+### 首次运行
+
+先做环境自检：
+
+```bash
+npx hyperframes doctor
+```
+
+Agent 路径：重载宿主后调用 `/hyperframes`，例如「用 `/hyperframes` 给 https://example.com 做一支 10 秒产品片」。路由器会确认意图，再按需拉取对应创作技能。
+
+CLI 路径：
+
+```bash
+npx hyperframes preview      # 浏览器实时预览
+npx hyperframes render       # 本地渲成 MP4
+```
+
+CI / 需要跨平台帧一致时：
+
+```bash
+npx hyperframes render --docker --output output.mp4
+```
+
+### 验证是否成功
+
+- `doctor` 中 Node.js、FFmpeg、FFprobe、Chrome（捆绑）为通过状态。
+- `preview` 能打开本地预览并随 HTML 热更新。
+- `render` 在项目目录产出可播放的 MP4，时长、分辨率与 composition 的 `data-width` / `data-height` / 时长属性一致。
+- Agent 路径：斜杠菜单里能看到 `/hyperframes`；一次「做 10 秒片」请求会落到可编辑的项目文件夹，而不是只吐一段文案。
+
+### 常见坑 / 注意事项
+
+- **`skills add` 在非交互下很猛**：不带 `--skill` 会装全部 20 个技能。日常用 `npx hyperframes skills update` 只刷新核心集；要全套请显式 `--all`。
+- **registry 可能落后 `main`**：`skills add` 走 skills.sh 镜像，可能晚数小时。要最新技能用 `npx hyperframes skills update`。
+- **本地渲 ≠ 可复现渲**：本机 Chrome / 字体会导致跨系统帧差。要 CI 或发布成片，用 `--docker`。
+- **完整 clone 很重**：仓库用 Git LFS 存 golden MP4（约 240 MB）。只要源码：`GIT_LFS_SKIP_SMUDGE=1 git clone …`。
+- **slideshow 技能输出的是可导航 deck**，不是 MP4；不要用它当「渲视频」的验证。
+- TTS、配乐生成、数字人、云渲染等可选服务可能单独计费；本地 `render` 本身不消耗 HeyGen credits。
+- 动画必须可寻址：墙钟式 `setTimeout` / 不可 seek 的库会在渲染时错帧。优先 GSAP timeline 或官方 adapter。
