@@ -1,0 +1,70 @@
+{
+	"name": "逍遥自在轩 - 工具导航与资源分享",
+	"short_name": "逍遥自在轩",
+	"description": "逍遥自在轩，采用 Astro, Starlight, Svelte, Markdown, MDX，TailwindCSS 所构建的个人主页，它快速、易用、易于访问、高度可定制；用于汇集生活和工作中频繁使用的工具、软件和服务。",
+	"id": "/?source=pwa",
+	"start_url": "/?source=pwa",
+	"display": "standalone",
+	"orientation": "any",
+	"scope": "/",
+	"display_override": ["window-controls-overlay", "standalone"],
+	"categories": ["productivity", "utilities", "lifestyle"],
+	"lang": "zh-CN",
+	"dir": "ltr",
+	"screenshots": [
+		{
+			"src": "/mockup.png",
+			"sizes": "1200x676",
+			"type": "image/png",
+			"form_factor": "wide",
+			"label": "桌面端主页面"
+		}
+	],
+	"background_color": "#ffffff",
+	"theme_color": "#f59e0b",
+	"icons": [
+		{
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/apple-touch-icon.png",
+			"sizes": "180x180",
+			"type": "image/png"
+		},
+		{
+			"src": "/favicon-32x32.png",
+			"sizes": "32x32",
+			"type": "image/png"
+		},
+		{
+			"src": "/favicon-16x16.png",
+			"sizes": "16x16",
+			"type": "image/png"
+		}
+	],
+	"shortcuts": [
+		{
+			"name": "关于页面",
+			"short_name": "关于",
+			"description": "了解更多关于逍遥自在轩",
+			"url": "/about",
+			"icons": [{ "src": "/favicon-96x96.png", "sizes": "96x96" }]
+		}
+	],
+	"prefer_related_applications": false
+}
