@@ -1,0 +1,131 @@
+---
+title: Agent-Reach
+description: 给 AI Agent 装上读网能力：替你选型、安装并体检各平台接入，网页、B站、GitHub、RSS 开箱即用。
+repo: https://github.com/Panniantong/Agent-Reach
+repoDescription: "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees."
+avatarUrl: https://avatars.githubusercontent.com/u/73925474?v=4
+tags:
+  - Agent
+  - CLI
+  - 自动化
+language: Python
+stars: 80252
+forks: 6972
+openIssues: 133
+contributors: 1
+license: MIT
+featured: false
+publishedAt: "2026-09-13"
+updatedAt: "2026-09-13"
+curationReason: 已在用 Claude Code、OpenClaw 或 Cursor，想让 Agent 搜推特、刷小红书、读 YouTube，又不想自己配各家 API。
+---
+
+## 项目介绍
+
+Agent Reach 是一层面向 AI Agent 的**互联网能力层**：不包一层自己的读取 API，而是替你**选型、安装、体检、路由**当下最稳的上游工具，让 Claude Code、OpenClaw、Cursor、Windsurf 等能跑命令行的 Agent 去读网页、搜全网、看 YouTube / B站、刷小红书和推特。定位是「接入方式会换代，你不用自己盯」——某个 CLI 被风控或停更，项目换后端，用户无感。主流路径不是自己抄命令，而是把安装文档地址丢给 Agent，让它按 SKILL 完成装机。
+
+## 核心特性
+
+- **能力层而非包装层**：`agent-reach` 负责探测可用后端并给出修复处方；真正读帖、抽字幕、搜仓库由 Agent 直接调用 `yt-dlp`、`gh`、`bili`、`opencli` 等上游命令
+- **零配置渠道开箱**：网页（Jina Reader）、YouTube 字幕与搜索、RSS、公开 GitHub、V2EX、B站搜索/详情无需登录即可用；全网语义搜索经 MCP 接入 Exa（免 Key）
+- **登录态渠道按需解锁**：Twitter/X、Reddit、Facebook、Instagram、小红书、LinkedIn、雪球、小宇宙播客等，告诉 Agent「帮我配 XXX」再装；桌面侧优先复用 Chrome 会话（OpenCLI）
+- **首选 + 备选多后端**：每个平台按序真机探测，坏掉的给出处方。例如 B站已从被风控的 yt-dlp 切到 bili-cli；Reddit 匿名接口已封，只剩登录态路线
+- **自带体检与默认安全**：`agent-reach doctor` 报告各渠道状态与当前后端；`install` 默认只检查环境，显式 `--system` 才装依赖、写配置
+
+## 对用户价值
+
+让 Agent「上网找点东西」通常卡在付费 API、403、必须登录、字幕拿不到、HTML 噪声这一串坑。Agent Reach 把这些收敛成一次装机：本地电脑多数渠道免费；Cookie / Token 只落在 `~/.agent-reach/`（权限 600），不上传。对日常调研、竞品口碑、技术视频总结，Agent 读完 SKILL.md 后自己知道调哪条命令，不必每次重新选型。平台改反爬时，维护者换路由，你继续对 Agent 说话即可。
+
+## 与替代方案
+
+- 相比 [Firecrawl](https://github.com/firecrawl/firecrawl) 等**网页上下文 API**：Firecrawl 输出干净 Markdown / 结构化 JSON，强在通用站点抓取与 RAG；Agent Reach 强在**社交与视频平台的 CLI 选型与登录态路由**（推特、Reddit、B站、小红书），不是托管爬虫服务。
+- 相比 [ego lite](https://github.com/citrolabs/ego-lite) 等**真实浏览器工作台**：ego 让 Agent 在独立 Space 里点页面、复用你的浏览会话；Agent Reach 不驱动鼠标，只把读网收成可调用的上游 CLI / MCP。要深度交互页面用浏览器；要「搜一下 / 读这条 / 抽字幕」用 Reach。
+- 相比自己拼 [yt-dlp](https://github.com/yt-dlp/yt-dlp)、[gh CLI](https://cli.github.com)、twitter-cli、各家 MCP：功能重叠，但你要自己踩停更与风控。Reach 的价值是**持续维护的路由表 + doctor**，不是再造一个读取引擎。
+- 边界：它不是爬虫框架，也不保证绕过平台 ToS；Cookie 登录存在封号风险，官方明确要求用**专用小号**。不要从 PyPI 安装同名包，那不是本项目。
+
+## 适应人群
+
+- 已在用 **Claude Code、OpenClaw、Cursor** 等能执行 shell 的 Agent，希望一句话装上网读技能的人。
+- 需要让 Agent **总结 YouTube / B站、搜 GitHub、读 RSS / 网页**，且不想给每个平台申请付费 API 的调研与内容工作者。
+- 桌面环境能登录 Chrome，想解锁 **小红书、Reddit、Facebook / Instagram** 等必须登录态渠道的进阶用户。
+
+## 如何使用
+
+### 前置条件
+
+- **Python 3**（推荐 [pipx](https://pipx.pypa.io/)；Homebrew / PEP 668 环境不要对系统 Python 直接 `pip install`）。
+- **能执行 shell 的 Agent**：Claude Code、Cursor、Windsurf 等一般可直接装。**OpenClaw** 须先打开 exec：`openclaw config set tools.profile "coding"`，或在 `~/.openclaw/openclaw.json` 设 `"tools": { "profile": "coding" }`，然后 `openclaw gateway restart` 并开新对话。
+- 可选基建：Node.js、[GitHub CLI](https://cli.github.com)、[mcporter](https://github.com/nicobailon/mcporter)；安装器会检查并提示缺失项。
+- Windows 若 `python3` 弹出 Microsoft Store，改用 `py -3` 或真实 `python.exe`，不要用 Store alias。
+
+### 安装方式
+
+**推荐：把下面这句话发给你的 Agent**
+
+```text
+帮我安装 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md
+```
+
+只检查、不改系统时可以说「帮我安全检查并安装」。已装过要更新：
+
+```text
+帮我更新 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/update.md
+```
+
+**人类手动安装（pipx）**
+
+```bash
+pipx install https://github.com/Panniantong/agent-reach/archive/main.zip
+agent-reach install --env=auto                 # 默认：只读检查
+agent-reach install --env=auto --dry-run       # 预览 --system 会做什么
+# 你明确允许改本机后再执行：
+agent-reach install --env=auto --system
+```
+
+不要 `pip install agent-reach` 装 PyPI 同名包。遇到 `externally-managed-environment` 时用 pipx，或：
+
+```bash
+python3 -m venv ~/.agent-reach-venv
+source ~/.agent-reach-venv/bin/activate
+pip install https://github.com/Panniantong/agent-reach/archive/main.zip
+```
+
+国内克隆可用 [AtomGit 镜像](https://atomgit.com/qq_51337814/Agent-Reach)。
+
+### 首次运行
+
+默认只激活网页、YouTube、GitHub、RSS、Exa、V2EX、B站基础渠道。需要登录态时让 Agent 按菜单装，例如：
+
+```bash
+agent-reach install --env=auto --system --channels=opencli,xiaohongshu
+agent-reach install --env=auto --system --channels=twitter,reddit
+# 渠道名：opencli, twitter, xiaoyuzhou, xueqiu, xiaohongshu,
+# reddit, facebook, instagram, bilibili, linkedin, all
+```
+
+装好后对 Agent 直接说人话即可，例如「帮我看看这个链接」「B站搜一下 AI 教程」「这个 YouTube 视频讲了什么」。需要配 Twitter / 小红书时说「帮我配 XXX」，按提示用 [Cookie-Editor](https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm) 导出 Header String，或在 Chrome 里先登录再走 OpenCLI。
+
+卸载：
+
+```bash
+agent-reach uninstall              # 清 ~/.agent-reach/、skill 与 MCP 配置
+agent-reach uninstall --dry-run
+agent-reach uninstall --keep-config
+pip uninstall agent-reach          # 仅卸 Python 包
+```
+
+### 验证是否成功
+
+- `agent-reach doctor` 里核心渠道为 ✅，并显示各平台 **当前后端**（`agent-reach doctor --json` 的 `active_backend`）。
+- 零配置冒烟：让 Agent 读一个公开网页、`gh repo view` 一个公开仓库、对 YouTube 抽字幕或 `bili search` 一次。
+- 登录态渠道：Twitter 需在**当前进程**导出 `TWITTER_AUTH_TOKEN` 与 `TWITTER_CT0` 后再跑 `twitter` 命令；`configure twitter-cookies` 只给 doctor 做齐全性检查。
+- OpenClaw 可再设每日 `agent-reach watch`（有问题才通知）。
+
+### 常见坑 / 注意事项
+
+- **默认不改系统**：忘记加 `--system` 时只是检查清单，渠道不会真正装上。
+- **Cookie / 封号**：Twitter、小红书、Reddit、Facebook、Instagram 等务必用**专用小号**；Cookie 等于完整登录权。Agent Reach **不替你登录小红书，也不去读浏览器 Cookie**；OpenCLI 只用你已有且明确控制的 Chrome 会话。
+- **Twitter 环境变量**：配置写入后，直接调用上游 `twitter` 仍需在该 shell 里 `export TWITTER_AUTH_TOKEN` / `TWITTER_CT0`。
+- **服务器 vs 本地**：本地电脑一般不需要代理；部署在机房 IP 上读 Reddit / Twitter 可能要住宅代理（文档量级约 $1/月），用 `agent-reach configure proxy`。中国大陆访问 X / Reddit 需自备代理。
+- **OpenClaw messaging 配置**下 Agent 跑不了 `pip` / `twitter` 等命令，必须先切 `coding` profile。
+- 完整命令表与渠道处方见仓库 [docs/install.md](https://github.com/Panniantong/Agent-Reach/blob/main/docs/install.md)；问题用 [GitHub Issues](https://github.com/Panniantong/Agent-Reach/issues) 跟踪。
