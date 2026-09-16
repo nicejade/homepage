@@ -1,0 +1,138 @@
+---
+title: Mem0
+description: 给 AI Agent 加长期记忆层：跨会话记住用户偏好与事实，可 SDK 嵌入、自托管或用托管平台。
+repo: https://github.com/mem0ai/mem0
+homepage: https://mem0.ai
+repoDescription: The Memory Layer for AI Agents - Drop-in memory infrastructure for AI agents and apps. Context that persists. Built for production.
+avatarUrl: https://avatars.githubusercontent.com/u/137054526?v=4
+tags:
+  - Agent
+  - 知识管理
+  - 开发工具
+language: Python
+stars: 65403
+forks: 7666
+openIssues: 752
+contributors: 398
+license: Apache-2.0
+featured: false
+publishedAt: "2026-09-16"
+updatedAt: "2026-09-16"
+curationReason: 给客服机器人、编程助手或 LangChain / CrewAI Agent 补跨会话记忆，而不想把整段聊天历史塞进上下文。
+---
+
+## 项目介绍
+
+Mem0（读作 mem-zero）是面向 AI Agent 与助手的**长期记忆层**：从对话里抽出用户偏好、事实与确认过的动作，按用户 / 会话 / Agent 分层存储，下次检索相关片段再注入上下文。它不是完整 Agent 框架，而是可插入现有应用的记忆基础设施；同一套心智模型覆盖 Python/JS SDK、自托管 Docker 栈，以及托管平台。
+
+## 核心特性
+
+- **多层记忆**：按 `user_id` / 会话 / Agent 作用域保留状态，支持个性化而不是把整段历史塞进 prompt
+- **三种部署**：`pip install mem0ai` 当库用、`docker compose` 自托管带 Dashboard、或 [Mem0 Platform](https://app.mem0.ai) 零运维托管
+- **多信号检索**：语义向量、BM25 关键词与实体链接并行打分后融合；新算法还加入时间感知检索
+- **开发者入口齐全**：Python / Node SDK、CLI（`mem0 add` / `search`），以及 Claude Code、Cursor、OpenCode 等 Agent Skills
+- **框架集成**：文档覆盖 LangChain、CrewAI、LangGraph、Vercel AI SDK 等常见 Agent 栈
+
+## 对用户价值
+
+每次开新会话都要用户重申饮食禁忌、编码偏好或工单历史，既浪费 token，也让助手显得「失忆」。Mem0 把对话压成可检索的事实条目，查询时只取回相关几条，而不是整段 transcript。库模式适合原型；团队要数据不出域可自托管；不想养向量库与 LLM 抽取流水线时用托管平台。官方 2026 年 4 月基准（LoCoMo 92.5、LongMemEval 94.4）来自托管栈的专有优化，开源 SDK 方向接近，但分数不应直接对标。
+
+## 与替代方案
+
+- 相比 [Letta](https://github.com/letta-ai/letta)（原 MemGPT），Mem0 只提供记忆层，不自带完整 Agent 运行时；已有编排框架时接入更轻，但不会替你管工具循环与人格状态。
+- 相比 [supermemory](https://github.com/supermemoryai/supermemory)，两者都是可插入的 Memory API；supermemory 更强调可完全本地 / Ollama 离线，Mem0 则托管平台与框架集成更全，默认走云端抽取。
+- 相比本站已收录的 [claude-mem](https://github.com/thedotmack/claude-mem)，后者深度绑编码助手钩子、本地 SQLite；Mem0 提供跨语言 SDK 与多租户记忆池，更适合产品级助手，而不是只给某个 IDE 插件用。
+- 相比把聊天记录做朴素 RAG 或直接塞进上下文，Mem0 先做事实抽取再检索，token 更省；代价是依赖 LLM 抽取质量，且默认走 OpenAI。
+
+## 适应人群
+
+- 在做客服、伴侣型聊天或自主 Agent，需要跨会话记住用户偏好与历史工单的产品团队。
+- 已有 LangChain / CrewAI / 自研编排，只缺一层可检索记忆、不想换整套 Agent 框架的开发者。
+- 要在自建基础设施上跑记忆服务（数据不出域），或先用托管平台验证再迁 OSS 的工程团队。
+
+## 如何使用
+
+### 前置条件
+
+- **开源库**：Python 3.10+（或 Node.js 18+），并设置 `OPENAI_API_KEY`（默认 LLM 为 `gpt-5-mini`，嵌入为 `text-embedding-3-small`）
+- **托管平台**：在 [app.mem0.ai](https://app.mem0.ai) 拿 API Key；Agent 也可用 CLI 无邮箱注册：`mem0 init --agent --agent-caller <name>`
+- 想换 Ollama、Anthropic 或其他向量库时，见 [组件配置](https://docs.mem0.ai/open-source/overview)
+
+### 安装方式
+
+**开源 Python 库（仓库主路径）**
+
+```bash
+pip install mem0ai
+```
+
+增强混合检索（BM25 + 实体抽取）可装 NLP 额外依赖：
+
+```bash
+pip install mem0ai[nlp]
+python -m spacy download en_core_web_sm
+```
+
+**Node SDK**
+
+```bash
+npm install mem0ai
+```
+
+**CLI**
+
+```bash
+npm install -g @mem0/cli
+# 或：pip install mem0-cli
+```
+
+**自托管服务**
+
+```bash
+cd server && make bootstrap
+# 或：cd server && docker compose up -d   # Dashboard: http://localhost:3000
+```
+
+自托管默认开启鉴权；从旧版升级需设置 `ADMIN_API_KEY`、走向导，或仅本地开发设 `AUTH_DISABLED=true`。
+
+### 首次运行
+
+开源库默认把向量存在 `/tmp/qdrant`、历史在 `~/.mem0/history.db`。最小验证：
+
+```python
+from mem0 import Memory
+
+m = Memory()  # 需要 OPENAI_API_KEY
+m.add("I love hiking on weekends", user_id="alice")
+print(m.search("What does Alice like to do?", filters={"user_id": "alice"}))
+```
+
+托管平台请改用 `MemoryClient`（不要和开源的 `Memory` 混用）：
+
+```python
+from mem0 import MemoryClient
+
+client = MemoryClient(api_key="your-api-key")
+client.add(
+    [{"role": "user", "content": "I'm a vegetarian and allergic to nuts."}],
+    user_id="user123",
+)
+print(client.search("What are my dietary restrictions?", filters={"user_id": "user123"}))
+```
+
+CLI 等价操作：`mem0 add "..." --user-id alice`，再 `mem0 search "..." --user-id alice`。
+
+### 验证是否成功
+
+- `search` 返回 `results`，其中含抽出的事实（例如「喜欢周末徒步」或「对坚果过敏」）与分数
+- 换一句同义问法仍能检索到同一条记忆，说明抽取与检索链路都通了
+- 自托管时打开 `http://localhost:3000`，确认 Dashboard 能登录并发出 API Key
+
+### 常见坑 / 注意事项
+
+- **`Memory` ≠ `MemoryClient`**：前者是 OSS 本地/自托管引擎，后者走托管 API；导错类会在缺 Key 或缺本地 Qdrant 时报错。
+- 默认依赖 OpenAI。没用云端 Key、也没改 LLM/Embedder 配置时，`Memory()` 无法工作；本地模型需按文档换成 Ollama 等。
+- 库模式向量默认写 `/tmp/qdrant`，进程或机器重启后可能丢失；生产应换成持久化 Qdrant / pgvector 等。
+- 2026 年 4 月算法有 [OSS v2 → v3 迁移指南](https://docs.mem0.ai/migration/oss-v2-to-v3)；README 里的高分来自托管平台，开源侧不要按同一数字做 SLA。
+- 自托管鉴权默认开启，升级后若未设管理员 Key，Dashboard 会无法访问。
+- API Key 与用户记忆属于生产数据，不要写入仓库或日志。

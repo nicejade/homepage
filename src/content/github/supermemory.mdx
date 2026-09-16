@@ -1,0 +1,158 @@
+---
+title: "supermemory"
+description: "可本地运行的 AI 记忆引擎：从对话抽取事实、维护用户画像，并把 RAG 与个性化上下文一次检索出来。"
+repo: "https://github.com/supermemoryai/supermemory"
+homepage: "https://supermemory.ai/docs"
+repoDescription: "Memory and context engine + app that is extremely fast, scalable, and can be run fully locally. The Memory API for the AI era."
+avatarUrl: "https://avatars.githubusercontent.com/u/171979587?v=4"
+tags:
+  - Agent
+  - 知识管理
+  - 本地模型
+language: "TypeScript"
+stars: 29686
+forks: 2600
+openIssues: 100
+contributors: 108
+license: "MIT"
+featured: false
+publishedAt: "2026-09-16"
+updatedAt: "2026-09-16"
+curationReason: "给 Claude Code / Cursor 装跨会话记忆，或给自建 Agent 接 Memory API；可对照 Mem0，支持 Ollama 离线。"
+---
+
+## 项目介绍
+
+Supermemory 是面向 AI 产品的记忆与上下文引擎（Memory API）：从对话中抽取事实，处理知识更新与矛盾，自动遗忘过期信息，并维护约 50ms 可取的用户画像。它把 Memory 与 RAG 放进同一次检索，还覆盖连接器与多模态文件处理，避免自建向量库、分块与嵌入流水线。官方宣称在 LongMemEval、LoCoMo、ConvoMem 三项主流记忆基准上均为第一；可走托管 API，也可用一条命令在本机跑完全相同的接口（可接 Ollama 离线）。
+
+## 核心特性
+
+- **记忆引擎** — 从对话抽取事实；处理时间变化、矛盾，并自动遗忘过期信息
+- **用户画像** — 稳定事实 + 近期动态，一次调用约 50ms，适合注入 system prompt
+- **混合检索** — 默认 RAG + Memory 同查：知识库文档与个性化上下文一起返回
+- **连接器与多模态** — Google Drive / Gmail / Notion / OneDrive / GitHub 实时同步；PDF、图片 OCR、视频转写、代码 AST 分块
+- **插件与本机部署** — Claude Code、Cursor、Codex、OpenCode、OpenClaw、Hermes；一条二进制本地跑完整 Memory API
+
+## 对用户价值
+
+编程助手和 Agent 每次开新会话都会「失忆」，重复对齐偏好、项目背景和做过的决策。Supermemory 在后台抽取并维护这些事实，下次对话按需召回，而不是把整段历史塞进上下文——官方在 LongMemEval 上给出 95% Recall@15、约 99.4% 的上下文压缩。产品侧不必再拼向量数据库、嵌入流水线和分块策略；一条 API 同时拿到记忆、画像与文档检索。数据敏感时，本机二进制默认用本地嵌入，LLM 可指向 Ollama，数据落在 `./.supermemory`。
+
+## 与替代方案
+
+- 相比 **[Mem0](https://github.com/mem0ai/mem0)**：Mem0 是通用 Agent 记忆层（Python SDK、多后端、偏记忆 CRUD）；Supermemory 把 Memory、RAG、用户画像、连接器和文件处理做成同一套 API，并强调本机一二进制与编码插件。两者可用官方 [MemoryBench](https://supermemory.ai/docs/memorybench/overview) 对照。
+- 相比 **[claude-mem](https://github.com/thedotmack/claude-mem)**：claude-mem 深度绑定 Claude Code 钩子，记忆落在本地 SQLite，开箱即用；Supermemory 是独立 Memory API（托管或本机），多宿主插件共用同一后端，适合要跨工具、跨应用复用记忆的场景。
+- 相比自建 RAG（向量库 + 嵌入 + 分块）：RAG 检索的是无状态文档块，人人结果相同；Memory 跟踪的是「关于用户的事实」，例如「刚搬到旧金山」会覆盖「住在纽约」。Supermemory 默认两者一起跑。
+- 边界：连接器与托管 MCP 属于云端产品，自托管不含这两项；本机抽取质量取决于你接入的模型，官方称托管用的是自研长程模型。基准数字来自项目研究页，评估时建议自行复现。
+
+## 适应人群
+
+- 使用 Claude Code、Cursor、Codex 或 OpenCode，希望跨会话记住偏好与项目上下文的开发者。
+- 给 Agent / 应用加记忆与 RAG，不想自建向量库和嵌入流水线的产品工程团队。
+- 数据不出机、倾向用 Ollama / LM Studio 在本机跑记忆引擎的隐私敏感用户。
+
+## 如何使用
+
+项目有三条入口：给现有 AI 工具装插件/MCP、用 SDK 接入自己的应用、或在本机跑与云端同 API 的二进制。下面以本机部署和 SDK 为主；插件路径见各宿主仓库。
+
+### 前置条件
+
+- **本机二进制**：macOS（Apple Silicon / Intel）或 Linux（x64 / arm64）；准备一个 LLM（OpenAI / Anthropic / Gemini / Groq，或 Ollama 等 OpenAI 兼容端点）。嵌入默认本地 `Xenova/bge-base-en-v1.5`，无需密钥。
+- **托管 API / 插件**：到 [console.supermemory.ai](https://console.supermemory.ai) 创建 `sm_...` 密钥。Claude Code 插件需要 **Node.js ≥ 18**。
+- 许可证为 MIT；密钥不要写入仓库。
+
+### 安装方式
+
+**本机（官方推荐）**
+
+```bash
+curl -fsSL https://supermemory.ai/install | bash
+# 或
+npx supermemory local
+```
+
+**SDK（接入自己的应用）**
+
+```bash
+npm install supermemory    # 或: pip install supermemory
+export SUPERMEMORY_API_KEY="sm_..."
+```
+
+**Claude Code 插件**
+
+```text
+/plugin marketplace add supermemoryai/claude-supermemory
+/plugin install supermemory
+```
+
+```bash
+export SUPERMEMORY_CC_API_KEY="sm_..."
+```
+
+**MCP（托管）**
+
+```json
+{
+  "mcpServers": {
+    "supermemory": {
+      "url": "https://mcp.supermemory.ai/mcp"
+    }
+  }
+}
+```
+
+其他宿主插件：[Cursor](https://github.com/supermemoryai/cursor-supermemory)、[Codex](https://github.com/supermemoryai/codex-supermemory)、[OpenCode](https://github.com/supermemoryai/opencode-supermemory)、[OpenClaw](https://github.com/supermemoryai/openclaw-supermemory)。
+
+### 首次运行
+
+本机启动：
+
+```bash
+supermemory-server
+```
+
+首次启动会初始化嵌入式图引擎、本地嵌入，并打印 API Key；服务默认监听 `http://localhost:6767`，数据目录为 `./.supermemory`。把 SDK 指向本机即可（其余 API 与云端相同）：
+
+```typescript
+import Supermemory from "supermemory";
+
+const client = new Supermemory({
+  apiKey: "sm_...", // 首次启动打印的密钥
+  baseURL: "http://localhost:6767",
+});
+
+await client.add({
+  content: "User loves TypeScript and prefers functional patterns",
+  containerTag: "user_123",
+});
+
+const { profile } = await client.profile({
+  containerTag: "user_123",
+  q: "What programming style does the user prefer?",
+});
+```
+
+完全离线可接 Ollama（需先拉好模型）：
+
+```bash
+OPENAI_BASE_URL=http://localhost:11434/v1 \
+OPENAI_API_KEY=ollama \
+OPENAI_MODEL=gpt-oss:20b \
+supermemory-server
+```
+
+编码插件指向本机时设置 `SUPERMEMORY_API_URL=http://localhost:6767`。
+
+### 验证是否成功
+
+- `supermemory-server` 启动后终端出现 `url http://localhost:6767` 与 `api key sm_...`。
+- 用同一 `containerTag` 执行 `add` 后调用 `profile`，`profile.static` 应出现刚写入的长期事实（`add` 默认异步，需等到文档 `status === "done"`；演示可设 `dreaming: "instant"`）。
+- 插件路径：完成一次含偏好/项目信息的对话，新开会话后模型应能召回；Claude Code 可用 `/supermemory:status` 查看鉴权。
+
+### 常见坑 / 注意事项
+
+- **`add` 是异步的**：返回 `queued` 不等于记忆已可搜；立刻查 profile 可能为空。Quickstart 需要马上检索时用 `dreaming: "instant"`（会多计一次操作）；默认 `"dynamic"` 会批量处理，更省但更慢。
+- **自托管不等于完整云端产品**：Google Drive / Notion 等连接器与托管 MCP 仅平台提供；本机抽取质量取决于你接入的模型。
+- **嵌入模型换了要重建**：改 `SUPERMEMORY_EMBEDDING_*` 后需新数据目录或全量重新入库，否则维度对不上。
+- **安装脚本只覆盖 macOS / Linux**；无 TTY（Docker / CI）不会弹出向导，必须用环境变量提供 LLM 密钥。
+- 旧 Claude Code 插件名是 `claude-supermemory`，已更名为 `supermemory`，不会原地升级，需按插件 README 迁移。
+- 管道安装脚本（`curl | bash`）请先阅读脚本内容；生产环境建议固定版本并备份 `./.supermemory`。

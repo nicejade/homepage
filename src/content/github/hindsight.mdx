@@ -1,0 +1,145 @@
+---
+title: "hindsight"
+description: "面向 Agent 的长期记忆系统：不只回忆对话，还能学习事实、经验并形成心智模型。"
+repo: "https://github.com/vectorize-io/hindsight"
+homepage: "https://hindsight.vectorize.io/"
+repoDescription: "Hindsight: Agent Memory That Learns"
+avatarUrl: "https://avatars.githubusercontent.com/u/81837244?v=4"
+tags:
+  - Agent
+  - 知识管理
+  - AI 编程
+language: "Python"
+stars: 23786
+forks: 1764
+openIssues: 70
+contributors: 1
+license: "MIT"
+featured: false
+publishedAt: "2026-09-16"
+updatedAt: "2026-09-16"
+curationReason: "给对话机器人、编码 Agent 或企业 AI 员工加跨会话长期记忆；对比 Mem0、Letta、纯 RAG 时检索。"
+---
+
+## 项目介绍
+
+Hindsight 是 Vectorize 推出的 **Agent 记忆系统**：多数记忆方案只负责「把对话历史找回来」，它则强调让智能体**随时间学习**——把事实、自身经验巩固成观察，再形成可读写的心智模型。记忆按 bank 隔离，提供 retain / recall / reflect 三操作，并可用 Docker、pip、Helm 自托管，或直接走 [Hindsight Cloud](https://ui.hindsight.vectorize.io/signup)。
+
+## 核心特性
+
+- **四种记忆形态**：世界事实、自身经验、带证据的观察（observations），以及可当作「常驻答案」读取的心智模型 / 知识页
+- **三操作 API**：`retain` 写入并抽取实体与时间；`recall` 并行走语义、BM25、图谱与时间四路检索再融合重排；`reflect` 做更深的联结与 Disposition 感知回答
+- **编码 Agent 一键接入**：`npx @vectorize-io/hindsight-coding-agents install` 可为 Claude Code、Codex、Cursor CLI 等建立基于 git 与会话的项目级记忆
+- **LLM Wrapper**：`wrap_openai()` / `wrap_anthropic()` 两行代码自动在每次调用前后 recall + retain，底层走 LiteLLM，覆盖 100+ 模型
+- **生产向能力**：PostgreSQL + pgvector（或 Oracle AI Database）、内置 MCP、多语言原样保留、可选 Memory Defense（密钥 / PII 扫描）
+
+## 对用户价值
+
+对话 Agent 与编码助手最常见的失败不是「不会搜」，而是**不会形成稳定信念**：同一用户偏好被覆盖、项目约定每次重讲、跨天任务无法延续。Hindsight 把写入、检索、反思拆开，后台把相关事实巩固成带引用的观察，并把「这个用户的偏好是什么」写成可直接读取的知识页，避免每轮都做一次昂贵检索。对产品团队，bank 隔离与 Disposition 让不同用户 / 角色不会串记忆；对编码场景，项目 bank 可从 git 历史自动灌入，减少反复对齐架构与进行中工作的成本。
+
+## 与替代方案
+
+- 相比直接把对话塞进 **RAG 或知识图谱**，Hindsight 官方定位是补其短板：事实会随证据强化 / 削弱 / 扩展，而不是被新切片静默覆盖；适合需要长期学习的 Agent，而不是一次性文档问答。
+- 相比 [Mem0](https://github.com/mem0ai/mem0) 这类可嵌入的通用记忆层，Hindsight 更强调 **reflect + 心智模型 / 知识页**，以及 Docker / Helm / Cloud 的服务化部署；Mem0 往往更轻、更偏 SDK 即插即用。
+- 相比 [Letta](https://github.com/letta-ai/letta)（原 MemGPT）这类**带记忆的 Agent 运行时**，Hindsight 是记忆后端：你仍用现有 Agent 框架或编码助手，通过 SDK、MCP 或 Wrapper 接入。
+- 相比 [claude-mem](https://github.com/thedotmack/claude-mem) 等宿主插件，Hindsight 覆盖对话产品、n8n / Dify 工作流与多编码 Agent；若只想给单一 IDE 加本地会话摘要，专用插件更轻，但跨产品复用记忆更弱。
+- 官方称在 LongMemEval 上达到 SOTA，并由 Virginia Tech、华盛顿邮报协作复现；具体分数以 [benchmarks.hindsight.vectorize.io](https://benchmarks.hindsight.vectorize.io/) 为准。简单工作流（例如小规模 n8n 流水线）可能过重。
+
+## 适应人群
+
+- 要给聊天机器人、客服或销售 Agent 做**按用户隔离的长期记忆**，而不只是滚动窗口的产品工程师。
+- 使用 Claude Code / Codex / Cursor 等编码 Agent，希望项目约定与 git 历史自动进入上下文的开发者。
+- 评估自托管记忆服务（Postgres / K8s）或托管 Cloud，并需要 MCP、PII 防护与多模型网关的平台团队。
+
+## 如何使用
+
+### 前置条件
+
+- Docker（推荐）或 Python 环境；生产可用外部 PostgreSQL，或走托管 Cloud 免部署。
+- 至少一个 LLM 提供商密钥。Hindsight 支持 25+ 提供商：`openai`、`anthropic`、`gemini`、本地 `ollama` / `lmstudio`，以及 `openai-codex`、`claude-code`、`github-copilot` 等已有订阅（后三者可不单独配 API Key）。详见 [supported models](https://hindsight.vectorize.io/developer/models)。
+- 了解 MIT 许可证；密钥不要写入仓库。
+
+### 安装方式
+
+**Docker（官方推荐）**
+
+```bash
+export OPENAI_API_KEY=sk-xxx
+
+docker run -it --pull always --name hindsight --restart unless-stopped -p 8888:8888 -p 9999:9999 \
+  -e HINDSIGHT_API_LLM_API_KEY=$OPENAI_API_KEY \
+  -v hindsight-data:/home/hindsight/.pg0 \
+  ghcr.io/vectorize-io/hindsight:latest
+```
+
+API：`http://localhost:8888`　UI：`http://localhost:9999`
+
+换提供商时设置 `HINDSIGHT_API_LLM_PROVIDER`（默认 OpenAI）。
+
+**pip 裸机**
+
+```bash
+pip install hindsight-api
+export HINDSIGHT_API_LLM_API_KEY=sk-xxx
+hindsight-api
+```
+
+**客户端**
+
+```bash
+pip install hindsight-client -U
+npm install @vectorize-io/hindsight-client
+# 或：curl -fsSL https://hindsight.vectorize.io/get-cli | bash
+```
+
+**编码 Agent（可选）**
+
+```bash
+npx @vectorize-io/hindsight-coding-agents install all
+# 或只装一个：npx @vectorize-io/hindsight-coding-agents install claude-code
+```
+
+无自建服务时可注册 [Hindsight Cloud](https://ui.hindsight.vectorize.io/signup)，把客户端指向 `https://api.hindsight.vectorize.io`。Intel Mac 裸机请改用 `hindsight-all-slim`，见 [安装指南](https://hindsight.vectorize.io/developer/installation#supported-platforms)。
+
+### 首次运行
+
+服务起来后，用 Python 客户端写入并检索一条记忆：
+
+```python
+from hindsight_client import Hindsight
+
+client = Hindsight(base_url="http://localhost:8888")
+client.retain(bank_id="my-bank", content="Alice works at Google as a software engineer")
+client.recall(bank_id="my-bank", query="What does Alice do?")
+client.reflect(bank_id="my-bank", query="Tell me about Alice")
+```
+
+已有 OpenAI SDK 时，可用 Wrapper 自动记：
+
+```bash
+pip install hindsight-litellm
+```
+
+```python
+from openai import OpenAI
+from hindsight_litellm import wrap_openai
+
+client = wrap_openai(OpenAI(), bank_id="user-123", hindsight_api_url="http://localhost:8888")
+```
+
+每个 bank 默认暴露 MCP：`http://localhost:8888/mcp/{bank_id}/`。
+
+### 验证是否成功
+
+- 浏览器打开 `http://localhost:9999`，确认 UI 可访问。
+- `recall` 能返回刚 `retain` 的内容；`reflect` 能给出基于记忆的综合回答。
+- 编码 Agent 安装后，新开会话应能注入项目 bank 中的约定与近期工作（无需再跑单独 ingest 命令）。
+- 需要文档内嵌到编码助手时：`npx skills add https://github.com/vectorize-io/hindsight --skill hindsight-docs`
+
+### 常见坑 / 注意事项
+
+- **bank 严格隔离**，跨用户 / 跨项目必须分 bank，否则检索空间会对不齐。
+- Intel Mac 不要直接 `pip install hindsight-all`，应使用 `hindsight-all-slim`。
+- 简单 n8n 类工作流可能过重；官方也说明 Hindsight 更适合需要持续学习、根据反馈改行为的 Agent。
+- 生产密钥、PII 建议打开 [Memory Defense](https://hindsight.vectorize.io/developer/memory-defense)，并分层配置（全局环境变量 → 租户 → bank）。
+- 存储可选内嵌 pg0、外部 Postgres 或 Oracle；K8s 用官方 Helm chart。升级前查看 Releases。

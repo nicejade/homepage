@@ -1,0 +1,106 @@
+---
+title: Letta
+description: Letta（前身 MemGPT）是带长期记忆、可自我改进的有状态 Agent 平台，提供 CLI、桌面端与 SDK。
+repo: https://github.com/letta-ai/letta
+homepage: https://docs.letta.com/
+repoDescription: "Platform for stateful agents: AI with advanced memory that can learn and self-improve over time."
+avatarUrl: https://avatars.githubusercontent.com/u/177780362?v=4
+tags:
+  - Agent
+  - CLI
+  - 知识管理
+language: TypeScript
+stars: 24764
+forks: 2619
+openIssues: 0
+license: Apache-2.0
+featured: false
+publishedAt: "2026-09-16"
+updatedAt: "2026-09-16"
+curationReason: 从 MemGPT 论文落地生产：要自编辑记忆与身份的编码助手、Slack 常驻同事，而非给现有框架插记忆层。
+---
+
+## 项目介绍
+
+Letta（曾用名 MemGPT）是面向「有状态 Agent」的开源平台：Agent 拥有可自我改写的记忆、身份与跨时间经验，而不只是单次对话里的工具调用。当前活跃实现在 [`letta-ai/letta-code`](https://github.com/letta-ai/letta-code)（TypeScript），本仓库作为项目入口与星标主页；旧版 Python V1 API 服务已归档到 [`archive`](https://github.com/letta-ai/letta/tree/archive) 分支，官方明确不建议用于生产。你可以通过 CLI、桌面端、[chat.letta.com](https://chat.letta.com)、Slack / Telegram / Discord，或 TypeScript SDK / App Server，把同一套 Agent 接到日常工作或自己的应用里。
+
+## 核心特性
+
+- **分层记忆与持续学习**：Agent 通过 memory blocks 改写自身上下文，支持 skill learning、`/sleeptime`（dreaming）与 `/remember` 把纠错变成长期记忆。
+- **多入口同一身份**：CLI、桌面应用、浏览器（含移动端）、Slack / Telegram / Discord 以及自定义频道共用同一 Agent。
+- **MemFS**：记忆块与上下文用 git 追踪，可同步到自定义 GitHub 仓库。
+- **Skills、Mods 与子代理**：兼容 Agent Skills 标准，可用 Mods 改运行时，并后台调用通用 / 回忆 / 历史分析等子代理。
+- **本地或云端运行**：本地磁盘即可保存 Agent；`/login` 后由 Letta Cloud 托管状态，`letta server` 把任意机器变成可调度的远程计算机。
+
+## 对用户价值
+
+普通 LLM 对话和多数编码 Agent 会在会话结束或换设备后「失忆」。Letta 把记忆当成运行时的一等公民：Agent 自己编辑核心记忆、检索历史对话，并在 Slack、终端和桌面之间保持同一身份。对个人，它更接近「会成长的同事」而不是一次性聊天窗口；对产品团队，可以用 Agent SDK 或自托管 App Server 把有状态 Agent 嵌进 TypeScript 应用，而不必先拼一套记忆中间件。
+
+## 与替代方案
+
+- 相比 [Mem0](https://github.com/mem0ai/mem0) / [Supermemory](https://github.com/supermemoryai/supermemory) 这类**可插拔记忆层**，Letta 是完整 Agent 运行时：记忆、循环、工具、权限与频道都在同一套 harness 里。已有 LangChain / CrewAI 编排、只想加一层记忆时，Mem0 更轻；要从零做长期存活的 Agent，Letta 更对口。
+- 相比 LangChain / LangGraph，Letta 不走「组件拼装 RAG/Agent 图」路线，而是提供带记忆块的有状态运行时与交互界面；需要复杂图编排、评测平台（LangSmith）时仍以 LangChain 生态更成熟。
+- 相比 Claude Code、OpenClaw 等编码 / 个人助手，Letta 同样能当编码 Agent，但定位是「像人一样有记忆与身份」的通用有状态 Agent，并原生覆盖消息频道与跨机器调度。本仓库的 V1 Python 服务已退役，不要把它当成当前产品源码。
+
+## 适应人群
+
+- 读过 MemGPT、想把「虚拟内存式上下文」做成可运行 Agent，而不是停留在论文复现的研究者与工程师。
+- 需要编码助手、个人助理或 Slack/Telegram 常驻同事，并希望它跨会话记住偏好与项目经验的个人用户。
+- 要把有状态 Agent 嵌进 TypeScript 应用，或用 App Server / Letta Cloud 做自托管与跨设备同步的产品团队。
+
+## 如何使用
+
+### 前置条件
+
+- **Node.js 22.19+**（官方 CLI 要求）
+- 至少一个 LLM 提供商：OpenAI、Anthropic、Z.ai 等 API Key，或本地推理服务
+- 可选：Letta 账号（用于 Cloud 备份、跨设备与远程计算机）
+
+### 安装方式
+
+**CLI（推荐）**
+
+```bash
+npm install -g @letta-ai/letta-code
+```
+
+进入项目目录后启动交互界面：
+
+```bash
+letta
+```
+
+本地或自托管 App Server：
+
+```bash
+letta server
+letta server --computer-name "work-laptop"
+```
+
+也可安装[桌面应用](https://docs.letta.com/letta-code/desktop-app)（macOS / Windows / Linux），或直接使用 [chat.letta.com](https://chat.letta.com)。Arch 可用 AUR 包 `letta-code`，Nix 可用 `nix run github:letta-ai/letta-code`。
+
+### 首次运行
+
+首次交互会自动创建 Tutor 引导 Agent。用 `/connect` 配置模型密钥或本地推理，`/model` 切换模型。进入项目后可执行 `/init` 引导 Agent 建立记忆；需要把纠错固化时用 `/remember`。可选执行 `/login`，把 Agent 状态备份到 Letta Cloud，以便在桌面端与 chat.letta.com 继续同一段关系。
+
+快速试用教程人格：
+
+```bash
+letta --new-agent --personality tutorial
+```
+
+### 验证是否成功
+
+- `letta` 能打开 TUI，Tutor 可正常回复
+- `/connect` 后发一条消息不再报缺少模型
+- `/init` 之后用 `/memory` 或 `/palace` 能看到记忆块
+- 若已 `/login`，在 [chat.letta.com](https://chat.letta.com) 或桌面端应看到同一 Agent
+
+### 常见坑 / 注意事项
+
+- **不要 clone 本仓库当源码**：活跃开发在 [`letta-ai/letta-code`](https://github.com/letta-ai/letta-code)。`archive` 分支上的 V1 API 无安全更新，官方禁止用于生产。
+- CLI 需要 Node.js **22.19+**，旧版 Node 会直接装不上或运行失败。
+- 不登录时 Agent 只存在本地磁盘，换机器会丢状态；需要跨设备请 `/login` 或自行备份。
+- AgentFile（`.af`）导入导出已从 Letta Code 移除，`/export`、`--import`、`--from-af` 不再可用。
+- 远程计算机、Secrets 等能力需要登录 Letta；频道常驻 Agent 需要一台保持在线的机器。
+- 完整命令与部署见 [Letta 文档](https://docs.letta.com)。

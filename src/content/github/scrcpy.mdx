@@ -1,0 +1,130 @@
+---
+title: "scrcpy"
+description: 把 Android 设备画面与音频投到电脑并用键鼠控制；USB 或 Wi-Fi 可用，无需 root。
+repo: "https://github.com/Genymobile/scrcpy"
+repoDescription: "Display and control your Android device"
+avatarUrl: "https://avatars.githubusercontent.com/u/3427627?v=4"
+tags:
+  - CLI
+  - 开发工具
+  - 跨平台
+language: "C"
+stars: 149754
+forks: 13753
+openIssues: 2899
+contributors: 177
+license: "Apache-2.0"
+featured: false
+publishedAt: "2026-09-16"
+updatedAt: "2026-09-16"
+curationReason: 真机调试、演示录屏、关屏投屏或无线 adb 控机时，不想装厂商套件、也不想 root。
+---
+
+## 项目介绍
+
+[scrcpy](https://github.com/Genymobile/scrcpy)（读作 *screen copy*）是 Genymobile 开源的 Android 投屏与控制工具，通过 USB 或 [TCP/IP](https://github.com/Genymobile/scrcpy/blob/master/doc/connection.md) 把设备画面（及 Android 11+ 音频）镜像到电脑，并用键盘鼠标操作。它不要求 root，也不在手机上留下常驻 App：会话开始时通过 adb 推送临时 server，结束后即清理。原生客户端覆盖 Linux、Windows 与 macOS，定位是轻量、低延迟、无账号无广告。
+
+## 核心特性
+
+- **轻量低延迟**：只显示设备画面，约 1 秒出首帧，延迟约 35–70ms，帧率随设备可达 30–120fps，分辨率可到 1080p 以上
+- **键鼠与外设控制**：电脑键盘/鼠标操作手机；可模拟物理 HID 键盘鼠标、手柄；OTG 模式甚至无需 USB 调试即可控机
+- **音频、录屏与摄像头**：Android 11+ 转发音频；可直接录制；Android 12+ 可镜像摄像头，Linux 还可作为 V4L2 摄像头源
+- **虚拟显示与关屏镜像**：可开独立虚拟屏跑指定 App，也可在设备熄屏时继续投屏（演示、省电）
+- **无线与双向剪贴板**：同一网络下 `scrcpy --tcpip` 无线连接；剪贴板可双向同步；质量、码率、编码器均可配置
+
+## 对用户价值
+
+Android 开发、演示和修机经常需要「电脑上看手机、用键鼠点」。厂商投屏套件往往绑定账号、装 App、功能割裂；Android Studio 内置镜像绑在 IDE 里，选项少、启动重。scrcpy 一条命令即可出画面，延迟低到能当日常操作界面：真机调试不必盯着小屏，演示可关屏投到大显示器，录屏、开虚拟显示跑 App、把摄像头当电脑 webcam，都不必再装一套商业远控。无线 adb 连上后数据线也可以收起来。
+
+## 与替代方案
+
+- 相比 **Android Studio Device Mirroring**：Studio 适合已经开着 IDE 的调试；scrcpy 独立运行、参数更全（OTG、虚拟显示、摄像头、V4L2、关屏），延迟与资源占用通常更低。
+- 相比 **Vysor、AirDroid、TeamViewer 等商业远控**：后者有 GUI 与账号体系，但常收费或带广告；scrcpy 无账号、无广告、Apache-2.0，不在设备上留下常驻应用。
+- 相比 **厂商无线投屏 / Samsung DeX / 小米投屏**：厂商方案对特定机型体验更好，但跨品牌不一致、控制能力弱；scrcpy 走 adb，只要开了 USB 调试即可跨机型使用。
+- **QtScrcpy** 等是 scrcpy 的图形前端，适合不习惯命令行的用户；核心投屏能力仍来自 scrcpy。不要从名称带 scrcpy 的随机网站下载安装包，只认 [官方仓库](https://github.com/Genymobile/scrcpy)。
+
+## 适应人群
+
+- 需要真机调试、看 Log、点界面，却不想一直盯着手机屏幕的 Android 开发者。
+- 做演示、录教程或直播，要把手机画面投到电脑并顺手录屏的内容创作者。
+- 修机、客服或测试人员：用电脑键鼠操作设备，或 OTG 模式在未开 USB 调试时应急控机。
+
+## 如何使用
+
+### 前置条件
+
+- **Android 5.0+**（API 21）；音频转发需 **Android 11+**；摄像头镜像需 **Android 12+**
+- 开启 **USB 调试**（开发者选项）。部分机型（尤其小米）键鼠无法注入时，还需开启另一项 **USB 调试（安全设置）**，并重启设备
+- 电脑能跑 `adb`，且设备出现在 `adb devices` 中（Windows 可能要装厂商 USB 驱动）
+- OTG 模式不要求 USB 调试，但需要支持 AOA 的 USB 连接
+
+### 安装方式
+
+只从 [GitHub Releases](https://github.com/Genymobile/scrcpy/releases/latest) 或下方包管理器安装。Debian/Ubuntu 的 `apt install scrcpy` 与 Snap 包官方标明为过时版本，不要用。
+
+**macOS（Homebrew）**
+
+```bash
+brew install scrcpy
+brew install --cask android-platform-tools   # 若 PATH 中还没有 adb
+```
+
+也可用 MacPorts：`sudo port install scrcpy`（会一并配置 adb）。或从 Releases 下载 `scrcpy-macos-aarch64` / `x86_64` 静态包解压。
+
+**Windows**
+
+```bash
+winget install --exact Genymobile.scrcpy
+```
+
+也可用 `choco install scrcpy` / `scoop install scrcpy`（若无 adb 再装 `adb`），或解压官方 `scrcpy-win64` zip。zip 包可双击目录里的 `open_a_terminal_here.bat` 再运行命令。
+
+**Linux**
+
+Arch：`pacman -S scrcpy`。Fedora：`dnf copr enable zeno/scrcpy && dnf install scrcpy`。或下载官方 `scrcpy-linux-x86_64` 静态包。要从源码装当前发行版：
+
+```bash
+git clone https://github.com/Genymobile/scrcpy
+cd scrcpy
+./install_release.sh
+```
+
+### 首次运行
+
+1. USB 连接手机，解锁并允许「这台电脑的 USB 调试」。
+2. 确认设备在线：
+
+```bash
+adb devices
+```
+
+列表应为 `device` 而不是 `unauthorized` 或空。
+
+3. 启动投屏：
+
+```bash
+scrcpy
+```
+
+无线（先 USB 插一次，让它自动开 TCP/IP）：
+
+```bash
+scrcpy --tcpip
+```
+
+多设备时用 `scrcpy -s <serial>`、`scrcpy -d`（仅 USB）或 `scrcpy -e`（仅 TCP/IP）。卡顿可先降分辨率：`scrcpy -m1024`。右键是返回，中键是 Home，`Alt+F` 全屏。
+
+### 验证是否成功
+
+- 电脑弹出窗口，画面与手机同步，延迟肉眼可接受
+- 鼠标点击、键盘输入能作用到设备（默认 ASCII；中文等建议 `--keyboard=uhid` 或 `-K`）
+- `scrcpy --help` 有输出；录屏可试 `scrcpy --no-audio --record=file.mkv`，结束后得到文件
+
+### 常见坑 / 注意事项
+
+- **只认官方源**：名称带 scrcpy 的第三方站点常见恶意安装包。
+- **adb 检测失败**：先看 `adb devices`。未授权要点手机弹窗；Windows 常缺 USB 驱动；多版本 adb 冲突可设 `ADB=/path/to/adb`。
+- **能看不能控**：小米等机型需开启「USB 调试（安全设置）」并重启；默认注入不支持多数非 ASCII 字符，改用 HID 键盘。
+- **发行版包装过时**：Ubuntu apt / Snap 不是最新 4.x，请用官方包、Copr、Arch 或 `install_release.sh`。
+- **性能**：高分辨率无线投屏易卡，优先 `-m1024`、限制 `--max-fps`，或换 `--video-codec=h265`；MediaCodec 崩溃可换编码器（见 [video.md](https://github.com/Genymobile/scrcpy/blob/master/doc/video.md)）。
+- **数据线与端口**：提示 Device disconnected 时换线或换 USB 口；无线需电脑与手机同一网络。
