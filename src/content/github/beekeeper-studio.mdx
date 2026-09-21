@@ -1,0 +1,129 @@
+---
+title: Beekeeper Studio
+description: 开源跨平台 SQL 客户端，用表格界面查改 Postgres、MySQL、SQLite 等，社区版免注册可用。
+repo: https://github.com/beekeeper-studio/beekeeper-studio
+homepage: https://www.beekeeperstudio.io
+repoDescription: Modern and easy to use SQL client for MySQL, Postgres, SQLite, SQL Server, and more. Linux, MacOS, and Windows.
+avatarUrl: https://avatars.githubusercontent.com/u/53234021?v=4
+tags:
+  - 开发工具
+  - 桌面应用
+  - 跨平台
+language: TypeScript
+stars: 23634
+forks: 1629
+openIssues: 1160
+contributors: 223
+license: GPL-3.0
+featured: false
+publishedAt: "2026-09-21"
+updatedAt: "2026-09-21"
+curationReason: 在 Linux 上找 TablePlus 替代、或要用 SSH 隧道与电子表格改表却不想买 DataGrip 的后端与全栈。
+---
+
+## 项目介绍
+
+Beekeeper Studio 是一款面向 macOS、Windows 与 Linux 的 SQL 编辑器与数据库管理器，定位是 `psql` / `mysql` 等命令行客户端的可视化替代，而不是功能堆满的「厨房水槽」。社区版免费下载、无需注册或绑卡；多数代码以 GPLv3 开源，付费能力同仓但走商业许可。官方强调三端功能对等，没有把某个操作系统当成二等公民。
+
+## 核心特性
+
+- **跨平台对等体验**：Windows、macOS、Linux 同一套界面与能力；Electron 桌面应用，查询与连接支持标签页、文件夹与快捷键
+- **SQL 编辑器**：语法高亮、自动补全、查询保存与运行历史，方便找回几天前刚调通的那条 SQL
+- **表格级数据操作**：电子表格式浏览、排序、筛选与编辑表数据；可创建/修改表结构、索引、关系与触发器
+- **远程连接能力**：SSH 隧道（含跳板机、`~/.ssh/config` 别名与 SSH agent）、SSL；SQLite 可直接双击 `.db` 打开
+- **开源核心 + 可选付费**：社区版覆盖 Postgres、MySQL、MariaDB、SQLite、SQL Server、Redis、BigQuery 等常见引擎；Oracle、MongoDB、ClickHouse、DuckDB 等在付费版
+
+## 对用户价值
+
+日常查库往往卡在「命令行复制粘贴结果」和「Java 巨无霸 GUI 难以下手」两端。Beekeeper 把连接、写 SQL、改表数据收进一套现代标签页界面，连接与查询默认留在本机（付费云工作区需主动开启）。社区版对个人与小团队已经能完成连库、跑查询、改 schema；Linux 用户尤其受益——TablePlus 在 Linux 上长期缺席，DBeaver 又偏重。数据默认不出本机，更新检查与许可证校验是少数联网行为。
+
+## 与替代方案
+
+- 相比 **DBeaver**：DBeaver 插件与 JDBC 覆盖更广、免费社区版能力更「全」；Beekeeper 界面更轻、上手更快，但社区版引擎与导入导出、JSON 侧栏等能力有分层。
+- 相比 **TablePlus**：TablePlus 原生感强、macOS/Windows 体验精致，但闭源且 Linux 支持弱；Beekeeper 三端对等、社区版 GPLv3，更适合混用 Linux 的团队。
+- 相比 **DataGrip**：DataGrip 与 JetBrains IDE 深度集成、重构与智能提示更强，但订阅贵、偏「重 IDE」；Beekeeper 是独立 SQL 工作台，适合只想连库查改、不想再开一套 IDE。
+- 相比 **pgAdmin / MySQL Workbench**：厂商工具绑定单一引擎；Beekeeper 一个客户端覆盖多种数据库，换引擎不必换 GUI。
+
+## 适应人群
+
+- 每天连 Postgres、MySQL 或 SQLite，想用标签页写 SQL、用表格改数据的后端与全栈工程师。
+- 主力系统是 Linux，需要接近 TablePlus 体验、并常用 SSH 隧道连云上数据库的开发者。
+- 评估开源 SQL GUI、关心社区版边界与商业许可的小团队技术负责人。
+
+## 如何使用
+
+### 前置条件
+
+- 桌面系统：macOS 12+、Windows x86_64，或 Linux x86_64 / ARM64。Windows ARM64 官方尚未支持。
+- 日常使用请下载[官方安装包](https://www.beekeeperstudio.io/get)，不必从源码编译。
+- 远程数据库需网络可达；走 SSH 隧道时，远端 `sshd` 需允许 `AllowTcpForwarding yes`。
+
+### 安装方式
+
+优先从 [beekeeperstudio.io/get](https://www.beekeeperstudio.io/get) 下载对应平台包。一份安装包同时包含社区版与付费能力，许可证在应用内启用。
+
+**macOS（Homebrew）**
+
+```bash
+brew install --cask beekeeper-studio
+```
+
+**Windows**
+
+从官网下载 Installer（需管理员权限、支持自动更新）或 Portable（锁屏机、U 盘场景）。当前仅 x86_64。
+
+**Linux（官方推荐 AppImage）**
+
+从官网下载 AppImage，赋予执行权限后直接运行。Ubuntu 需先安装 FUSE：
+
+```bash
+# Ubuntu 22.04+
+sudo apt install libfuse2
+```
+
+Debian / Ubuntu 也可用官方 APT 源：
+
+```bash
+curl -fsSL https://deb.beekeeperstudio.io/beekeeper.key | sudo gpg --dearmor --output /usr/share/keyrings/beekeeper.gpg \
+  && sudo chmod go+r /usr/share/keyrings/beekeeper.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/beekeeper.gpg] https://deb.beekeeperstudio.io stable main" \
+  | sudo tee /etc/apt/sources.list.d/beekeeper-studio-app.list > /dev/null
+
+sudo apt update && sudo apt install beekeeper-studio -y
+```
+
+Fedora / RHEL：
+
+```bash
+sudo curl -o /etc/yum.repos.d/beekeeper-studio.repo https://rpm.beekeeperstudio.io/beekeeper-studio.repo
+sudo rpm --import https://rpm.beekeeperstudio.io/beekeeper.key
+sudo dnf install beekeeper-studio
+```
+
+Snap 可用 `sudo snap install beekeeper-studio`，但沙箱会限制 SSH 密钥与 SSH agent，官方更推荐 AppImage 或 DEB。
+
+### 首次运行
+
+打开应用后，右侧预置 **Demo Database**（随附的小型 SQLite），无需真实数据库即可熟悉界面。连接真实库时：
+
+1. 在连接屏选择引擎（PostgreSQL、MySQL、SQLite 等）。
+2. 填写 host/port，或粘贴数据库 URL（Heroku Postgres、Azure SQL 等常用）。
+3. 需要走跳板机时打开 SSH Tunnel；可填 `~/.ssh/config` 里的 Host 别名。
+4. SQLite 也可在文件管理器中双击 `.db` 文件，由系统关联直接打开。
+
+社区版功能可一直免费使用；付费特性在应用内点「start free trial」开始 14 天试用，下载时不开始计时。
+
+### 验证是否成功
+
+- 能打开 Demo Database，浏览表并用电子表格视图筛选一行数据。
+- 对真实库执行一条只读查询（例如 `SELECT 1` 或 `SELECT version()`），结果出现在结果网格中。
+- 需要远程访问时，启用 SSH 隧道后仍能列出 schema / 表。
+
+### 常见坑 / 注意事项
+
+- **社区版引擎边界**：Oracle、Cassandra、MongoDB、ClickHouse、DuckDB、Snowflake 等明确在付费档；CockroachDB / ScyllaDB 在 README 与定价表之间不完全一致，选型前以[定价页对照表](https://beekeeperstudio.io/pricing)为准。导入导出、JSON 侧栏、直接编辑查询结果也是付费能力。
+- **Linux Snap 限制**：需 `sudo snap connect beekeeper-studio:ssh-keys :ssh-keys` 才能读 `~/.ssh`；无法使用 SSH agent。GNOME 上 Snap 存在字体渲染问题，官方建议改用 AppImage。
+- **Wayland 模糊或偏色**：默认可在 Wayland 下运行；模糊时可在 `~/.config/bks-flags.conf` 写入 `--ozone-platform-hint=auto` 等标志。颜色异常可加 `--disable-features=WaylandWpColorManagerV1`（Chromium/Electron 问题）。
+- **许可分层**：社区代码 GPLv3；付费功能同仓但受[商业 EULA](https://beekeeperstudio.io/legal/commercial-eula/) 约束。官方希望超过 10 人或年收入超 100 万美元的组织购买付费许可。
+- **从源码跑开发版**：README 要求 Node 22、Yarn Classic，`yarn run electron:serve`。`error:03000086:digital envelope routines` 才需要升级 OpenSSL，与安装正式版无关。
+- **数据位置**：连接、查询与设置默认在本机；试用结束不会删除它们，只是收回付费功能。云工作区需要有效付费订阅。
