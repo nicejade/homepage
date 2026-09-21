@@ -78,7 +78,7 @@ export default defineConfig({
 				{ icon: 'telegram', label: 'Telegram', href: 'https://t.me/nicejade' },
 				{ icon: 'external', label: '逍遥自在轩', href: 'https://fine.niceshare.site/' },
 				{ icon: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@MarshalXuan' },
-				{ icon: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/nice.jade.yang' },
+				{ icon: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/MarshalXuan' },
 				{ icon: 'x.com', label: 'X', href: 'https://x.com/MarshalXuan' },
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/nicejade/homepage' },
 			],
@@ -730,7 +730,7 @@ export default defineConfig({
 							"https://mastodon.social/@nicejade",
 							"https://t.me/nicejade",
 							"https://www.youtube.com/@MarshalXuan",
-							"https://www.facebook.com/nice.jade.yang",
+							"https://www.facebook.com/MarshalXuan",
 							"https://x.com/MarshalXuan",
 							"https://github.com/nicejade"
 						],
