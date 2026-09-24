@@ -1,0 +1,123 @@
+---
+title: Claude for Financial Services
+description: Anthropic 官方金融工作流参考库：投行、研究、PE、财富与基金运营的 Agent、Skills 与数据连接器。
+repo: https://github.com/anthropics/financial-services
+repoDescription: Reference agents, skills, and data connectors for financial-services workflows — investment banking, equity research, private equity, and wealth management.
+avatarUrl: https://avatars.githubusercontent.com/u/76263028?v=4
+tags:
+  - Agent
+  - 工作流
+  - AI 编程
+language: Python
+stars: 37224
+forks: 5408
+openIssues: 222
+contributors: 12
+license: Apache-2.0
+featured: false
+publishedAt: "2026-09-24"
+updatedAt: "2026-09-24"
+curationReason: 做 Pitch / 研报 / GL 对账或 KYC，想在 Cowork、Claude Code 或 Managed Agents 装同一套 FSI 模板。
+---
+
+## 项目介绍
+
+Claude for Financial Services 是 Anthropic 发布的 **金融服务参考工作流库**：把投资银行、股票研究、私募股权、财富管理与基金运营里最常见的分析与运营流程，收成可安装的 Agents、Skills、斜杠命令与 MCP 数据连接器。同一套系统提示与技能可走两条路径——装成 [Claude Cowork](https://claude.com/product/cowork) / Claude Code 插件，或通过 [Claude Managed Agents API](https://docs.claude.com/en/api/managed-agents) 部署到自有编排层。内容以 Markdown / YAML / JSON 为主，无构建步骤，定位是「可改写的参考模板」，不是开箱即用的投顾产品。
+
+## 核心特性
+
+- **双通道同源**：Cowork / Claude Code 插件与 Managed Agent cookbook 共用同一套 prompt 与 skills；按场景选交互式安装或 `/v1/agents` 无头部署
+- **命名端到端 Agent**：Pitch、Meeting Prep、Market Researcher、Earnings Reviewer、Model Builder、Valuation Reviewer、GL Reconciler、Month-End Closer、Statement Auditor、KYC Screener 等，插件自带所需 skills
+- **垂直技能包**：`financial-analysis` 为核心（comps / DCF / LBO / 三表、Excel 审计、全部 MCP）；另有投行、股研、PE、基金行政、运营及顾问向插件
+- **数据连接器集中管理**：Daloopa、Morningstar、S&P Global、FactSet、Moody's、LSEG、PitchBook 等 MCP 挂在 core 插件，垂直线共享
+- **可企业化改造**：改 `.mcp.json`、补 firm 术语与流程、用 `/ppt-template` 接入品牌 PPT，另有 Microsoft 365 插件管理工具链
+
+## 对用户价值
+
+金融团队的常见痛点不是「会不会用 Claude」，而是缺少贴合 cover / research / fund ops 的可复用方法与数据接线。本仓库把 comps、pitch deck、earnings note、IC memo、GL 对账、KYC 筛查等流程收成可安装单元，并预接主流研究与文档 MCP，缩短从提示词实验到可审阅工作底稿的路径。输出一律面向专业人士复核：不代替投资建议、不下单、不登账、不完成正式 onboarding 批准。
+
+## 与替代方案
+
+- 相比 [claude-plugins-official](https://github.com/anthropics/claude-plugins-official)：官方总市场覆盖通用开发扩展；本仓库是 **FSI 垂直参考实现**，含领域 Agent、金融建模技能与行业 MCP。
+- 相比 [claude-cookbooks](https://github.com/anthropics/claude-cookbooks)：食谱偏 API / Agent SDK 可运行 notebook；这里是可直接装进 Cowork / Claude Code 的工作流插件与 Managed Agent 模板。
+- 相比自建 MCP + 零散 prompt：本库已按垂直拆分并提供 `check.py` / `sync-agent-skills.py` 做清单与技能同步校验，但仍需按公司流程与数据权限二次定制。
+- 相比 Bloomberg / FactSet 等终端内置助手：厂商方案绑定其数据与合规边界；本仓库可换连接器、换托管环境，但合规与许可需自行落地。
+
+## 适应人群
+
+- 投行、股研、PE / 基金运营团队，希望用 Claude 加速 pitch、研报、估值模型或对账底稿，并保留人工签核的从业者。
+- 平台 / 量化工程团队，要在 Managed Agents 或自有编排层部署叶子 worker 与 handoff 的开发者。
+- 企业 IT / 平台负责人，评估把 Claude 接到 Microsoft 365 或内部 LLM 网关，并统一 FSI 技能与 MCP 来源的人。
+
+## 如何使用
+
+### 前置条件
+
+- 已开通 Claude Cowork，和 / 或已安装 [Claude Code](https://github.com/anthropics/claude-code)；走 Managed Agents 路径还需有效的 `ANTHROPIC_API_KEY`。
+- 接受仓库免责声明：内容不构成投资、法律、税务或会计建议；所有产出需合格专业人士复核。
+- 使用外部 MCP 前准备对应订阅 / API Key，并确认数据出境与合规策略允许。
+
+### 安装方式
+
+**Claude Cowork**
+
+在 Cowork 打开 **Settings → Plugins → Add plugin**，任选其一：
+
+- 粘贴仓库 URL：`https://github.com/anthropics/financial-services`，再从市场列表勾选需要的 Agent / 垂直包
+- 或将 `plugins/` 下某一目录打成 zip 后上传（例如 `plugins/agent-plugins/pitch-agent/`）
+
+**Claude Code**
+
+```bash
+claude plugin marketplace add anthropics/financial-services
+
+# 建议先装核心技能与连接器
+claude plugin install financial-analysis@claude-for-financial-services
+
+# 再按需安装命名 Agent
+claude plugin install pitch-agent@claude-for-financial-services
+claude plugin install gl-reconciler@claude-for-financial-services
+claude plugin install market-researcher@claude-for-financial-services
+
+# 或安装垂直技能包
+claude plugin install investment-banking@claude-for-financial-services
+claude plugin install equity-research@claude-for-financial-services
+```
+
+**Claude Managed Agents**
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+scripts/deploy-managed-agent.sh gl-reconciler
+```
+
+模板在 `managed-agent-cookbooks/`；部署脚本会解析引用、上传 skills、创建叶子 subagent，并向 `/v1/agents` 提交编排器。事件循环参考 `scripts/orchestrate.py`。
+
+**Microsoft 365 管理侧（可选）**
+
+```bash
+claude plugin install claude-for-msft-365-install@claude-for-financial-services
+/claude-for-msft-365-install:setup
+```
+
+用于把 Claude Microsoft 365 插件接到自有云（Vertex / Bedrock / 内部网关），与上方业务 Agent 插件相互独立。
+
+### 首次运行
+
+1. 先只装 `financial-analysis`，确认 `/comps`、`/dcf` 等命令可用，并按需配置 MCP。
+2. 再装一个贴近日常的 Agent（如 `pitch-agent` 或 `earnings-reviewer`），用非生产样本跑通一轮。
+3. 需要无头部署时，在隔离环境执行 `scripts/deploy-managed-agent.sh <slug>`，并阅读对应 cookbook 的安全与 handoff 说明（`callable_agents` 仍为 Research Preview）。
+
+### 验证是否成功
+
+- Cowork / Claude Code：插件列表可见已装项；会话内可触发对应 slash（如 `/comps`、`/earnings`、`/ic-memo`），Agent 可出现在 Cowork dispatch。
+- Managed Agents：脚本成功创建 agent；能按 cookbook 示例收到 / 转发 steering 与 handoff 事件。
+- 本地改内容后可运行 `python3 scripts/check.py`，确认 manifest 与跨文件引用一致、bundled skill 未与垂直源漂移。
+
+### 常见坑 / 注意事项
+
+- **不是投顾产品**：不生成投资建议、不执行交易、不绑定风险、不登总账、不批准正式 onboarding；输出仅为待人工签核的工作底稿。
+- **MCP 需单独开通**：连接器 URL 在 README 列出，访问通常依赖供应商订阅；密钥勿写入仓库。
+- **改技能要同步**：在 `plugins/vertical-plugins/<vertical>/skills/` 新增或修改后，运行 `python3 scripts/sync-agent-skills.py`，再 `check.py`。
+- **许可证**：仓库 Apache-2.0；合作方插件（LSEG、S&P Global 等）与外部 MCP 可能另有条款，生产使用前逐项核对。
+- **Managed Agent 子代理委派**仍是预览能力，生产编排前务必阅读各 agent README 的安全指引。

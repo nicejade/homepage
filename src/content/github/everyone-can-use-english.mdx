@@ -1,0 +1,109 @@
+---
+title: 人人都能用英语
+description: 开源英语自学套件：Enjoy AI 助教（网页/插件）配合「一千小时」方法论与经典教材。
+repo: https://github.com/ZuodaoTech/everyone-can-use-english
+homepage: https://1000h.org
+repoDescription: 人人都能用英语
+avatarUrl: https://avatars.githubusercontent.com/u/87694204?v=4
+tags:
+  - 知识管理
+  - 工作流
+  - Agent
+language: TypeScript
+stars: 38262
+forks: 5239
+openIssues: 126
+contributors: 73
+license: GPL-3.0
+featured: false
+publishedAt: "2026-09-24"
+updatedAt: "2026-09-24"
+curationReason: 想用 AI 跟读评估练口语、在 YouTube/Netflix 沉浸输入，或按「一千小时」自学英语。
+---
+
+## 项目介绍
+
+**人人都能用英语** 是李笑来一系英语自学材料与工具的开源主仓库：既有 2010 年同名经典教材，也有 2024 年「一千小时」训练说明，以及配套的 **Enjoy** AI 助教产品。官方定位是——AI 是最好的外语老师，Enjoy 做 AI 最好的助教。当前主入口是网页版 [enjoy.bot](https://enjoy.bot)，另有支持 YouTube / Netflix 的浏览器插件；桌面版仍可从发行渠道下载，新版桌面端（网页套壳增强）按 README 标注为即将发布。
+
+## 核心特性
+
+- **网页版 Enjoy**：视频跟读、电子书、闪卡、课程等学习场景已上线，打开 [enjoy.bot](https://enjoy.bot) 即可用
+- **浏览器插件**：Chrome 扩展 [Enjoy Echo](https://chromewebstore.google.com/detail/enjoy-echo/hiijpdndbjfnffibdhajdanjekbnalob) 可在 YouTube、Netflix 上练习
+- **AI 助教能力**：智能助手、翻译与句子分析等；可选用 Enjoy AI，也可自备 OpenAI 等密钥（发音评估为 Enjoy 侧收费能力）
+- **本地优先数据**：学习资源与录音等多落在本机 `EnjoyLibrary`；可选集成 whisper.cpp 做本地语音转文本
+- **方法论与教材齐全**：`1000-hours` / [1000h.org](https://1000h.org) 的训练任务与语音塑造，以及仓库 `book/` 下的《人人都能用英语》全书章节
+
+## 对用户价值
+
+成年人学英语常卡在「缺反馈、缺材料闭环、难坚持」。本仓库把**可执行的训练法**（一千小时：注意力密度、跟读与语音塑造）和 **AI 助教工具**绑在一起：用真实影音输入（含 YouTube / Netflix），用跟读与发音评估拿到即时反馈，用闪卡与电子书巩固，用本地库沉淀自己的语料与录音。不必先拼一堆互不相关的 App；想深挖原理时，还可直接读开源教材与站点文档。
+
+## 与替代方案
+
+- 相比 Duolingo、多邻国式轻量 App：本项目更强调**真实语料跟读 + 高密度自学**，并开源教材与方法论；产品侧 Enjoy 仍在快速迭代，文档可能落后于软件（官方自述）。
+- 相比 Anki / 纯闪卡方案：闪卡只是 Enjoy 能力之一，主轴是影音跟读、课程与 AI 助教，而不是间隔重复系统本身。
+- 相比 ChatGPT 网页聊天练口语：Enjoy 把学习材料、录音、评估与影音场景收进同一产品；部分能力（如发音评估）依赖 Enjoy 账户余额，自备密钥也不能完全绕过。
+- 边界需注意：新版桌面端「即将发布」；多设备无官方云同步，需自备网盘同步 `EnjoyLibrary`；国内访问 YouTube / 部分 API 可能需要代理——以上以 [FAQ](https://1000h.org/enjoy-app/faq.html) 为准，细节可能随版本变化。
+
+## 适应人群
+
+- 希望按「一千小时」做高密度英语自学，需要跟读、发音反馈与真实影音输入的成人学习者。
+- 已在用 YouTube / Netflix 做沉浸输入，想把浏览器里的内容直接变成练习材料的用户。
+- 关注开源英语教材与训练法，或想二次开发 / 自建 Enjoy（Electron）的开发者与教育产品研究者。
+
+## 如何使用
+
+### 前置条件
+
+- 现代浏览器即可试用网页版；插件需 Chrome（或兼容 Chromium 的扩展商店）。
+- 桌面版：Windows 10+、macOS（推荐 12+；Silicon / Intel 分包装）、或 Linux（deb / zip）；详见 [下载安装](https://1000h.org/enjoy-app/install.html)。
+- 了解许可为 **GPL-3.0**；部分云端 AI / 发音评估可能产生费用或需自备 API Key。
+- 国内网络下，访问 YouTube、部分 API 或资源服务器时可能需要代理（见 FAQ）。
+
+### 安装方式
+
+**网页版（推荐先试）**
+
+直接打开 [https://enjoy.bot](https://enjoy.bot) 注册/登录使用。
+
+**浏览器插件**
+
+在 [Chrome Web Store · Enjoy Echo](https://chromewebstore.google.com/detail/enjoy-echo/hiijpdndbjfnffibdhajdanjekbnalob) 安装，用于 YouTube / Netflix。
+
+**桌面版安装包**
+
+按系统从 [1000h.org 下载页](https://1000h.org/enjoy-app/install.html) 或 [GitHub Releases](https://github.com/ZuodaoTech/everyone-can-use-english/releases) 获取对应安装包（当前文档示例版本为 v0.7.9 一带），安装后启动即可。
+
+**从源码跑 Enjoy（开发）**
+
+```bash
+git clone https://github.com/ZuodaoTech/everyone-can-use-english.git
+cd everyone-can-use-english/enjoy
+yarn install
+yarn start
+```
+
+仅阅读教材时，打开仓库 `book/` 各章 Markdown，或浏览 [1000h.org](https://1000h.org) 的训练说明。
+
+### 首次运行
+
+1. 优先用网页版走通：登录 → 打开一段视频或课程 → 尝试跟读 / 闪卡，确认音频与麦克风权限正常。
+2. 需要影音沉浸时，安装浏览器插件，在 YouTube 或 Netflix 页面确认扩展可用。
+3. 使用桌面版时：登录后按需在 **软件设置** 中选择默认 AI 引擎（Enjoy AI 或自备密钥）；发音评估需保证 Enjoy 账户有余额。
+4. 若登录或 API 报网络错误，按 FAQ 在高级设置中改 API 地址（例如文档提到的 `https://api.getenjoyapp.com`）或配置代理后再试。
+
+### 验证是否成功
+
+- 网页版能打开学习界面，并能完成至少一次跟读、闪卡或课程交互。
+- 插件在 YouTube / Netflix 页面出现可用入口，且能对当前内容发起练习（视版本 UI 而定）。
+- 桌面版能登录；在设置里可看到 AI 引擎与（如启用）本地/云端 STT 选项；录音会写入本机资源库路径。
+- 从源码启动时，Electron 窗口能起来且无立即崩溃（依赖与 Node/Yarn 环境需自备）。
+
+### 常见坑 / 注意事项
+
+- **文档可能落后于软件**：官方标明 Enjoy 仍处早期快速迭代，功能以最新发布版本为准。
+- **网络与代理**：`Network Error` / `ETIMEDOUT`、下不了 YouTube、分享录音失败，多与网络或资源服务器连通有关；可升级客户端、改 API、或在高级设置里配代理。
+- **发音评估始终走 Enjoy 计费**，与是否自备 OpenAI 密钥无关；余额不足会出现 `403 Insufficient balance`。
+- **智能助手对话创建后不能改 AI 引擎**，切换引擎需新建对话。
+- **多设备无官方云同步**：数据在 `EnjoyLibrary`；用网盘同步时勿多端同时写同一账号，以免冲突。
+- **本地 whisper.cpp STT** 在低配或旧系统上可能不可用，可改用云端 STT（文档推荐优先 Azure AI）。
+- **新版桌面端** README 写明「即将发布」，当前下载页上的安装包与网页版能力可能不完全一致，以实际版本说明为准。
