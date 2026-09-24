@@ -1,0 +1,123 @@
+---
+title: "Docling"
+description: 开源文档解析库，把 PDF、Office、扫描件与音视频转成 Markdown 和 JSON，供生成式 AI 使用。
+repo: "https://github.com/docling-project/docling"
+homepage: "https://docling-project.github.io/docling"
+repoDescription: "Get your documents ready for gen AI"
+avatarUrl: "https://avatars.githubusercontent.com/u/188446108?v=4"
+tags:
+  - 知识管理
+  - 开发工具
+  - 自动化
+language: "Python"
+stars: 67823
+forks: 4914
+openIssues: 929
+contributors: 321
+license: "MIT"
+featured: false
+publishedAt: "2026-09-24"
+updatedAt: "2026-09-24"
+curationReason: 适合把论文、合同或财报接进 LangChain、LlamaIndex 知识库，且原文不能离开内网的工程团队。
+---
+
+## 项目介绍
+
+[Docling](https://github.com/docling-project/docling) 是 IBM Research Zurich 发起、现由 LF AI & Data 基金会托管的文档解析库。它把 PDF、Office、网页、邮件、图片以及音视频收成统一的 DoclingDocument，再导出 Markdown、HTML、DocTags 或无损 JSON。版面、表格和 OCR 默认在本地推理，也可换成 GraniteDocling 等视觉语言模型，并直接接到 LangChain、LlamaIndex、Haystack 与 CrewAI。
+
+## 核心特性
+
+- **多格式输入**：PDF、DOCX、PPTX、XLSX、HTML、EPUB、LaTeX、Apple Pages、邮件（EML、MSG）、常见图片，以及 WAV、MP3 和 MP4 等音视频；另支持 USPTO、JATS、XBRL 等专用 XML
+- **PDF 版面理解**：阅读顺序、表格结构、代码、公式、图片分类，以及把柱状图、饼图、折线图转成表格或文字描述
+- **统一文档模型**：中间表示是 DoclingDocument，可导出 Markdown、HTML、WebVTT、DocTags 和无损 JSON
+- **本地优先**：模型可预下载后离线运行，适合敏感数据和隔离环境；把文档发给远程服务必须显式打开开关
+- **生成式 AI 接口**：官方集成 LangChain、LlamaIndex、Haystack、CrewAI，并提供 CLI、MCP server 和 docling-serve API
+
+## 对用户价值
+
+论文、合同、财报和扫描件很难直接进检索或 Agent。Docling 把「版面理解 → 统一文档 → Markdown/JSON」收成一条可复现的本地流水线，比纯文本抽取更能保住表格和阅读顺序。需要数据不出内网的团队可以预下载模型后离线跑；要接 RAG 的团队不用自己写解析器，就能把结果交给 LangChain 或 LlamaIndex。代码本身是 MIT，模型权重的许可则以各原包为准。
+
+## 与替代方案
+
+- 相比 [Marker](https://github.com/datalab-to/marker)：两者都用本地模型处理复杂 PDF。Marker 更集中在高精度 Markdown/JSON，代码为 GPL-3.0，模型权重另有商业限制。Docling 代码为 MIT，格式面更宽（邮件、音视频、XBRL 等），并自带主流 Agent 框架集成。
+- 相比 [Unstructured](https://github.com/Unstructured-IO/unstructured)：Unstructured 更像通用文档 ETL 和连接器框架。Docling 把重心放在 DoclingDocument 和生成式 AI 导出。
+- 相比 [LlamaParse](https://www.llamaindex.ai/llamaparse) 等云解析：云方案不用自己管模型，但文档会离开本机。Docling 默认可完全本地运行；要用远程视觉模型，必须自己打开 `enable_remote_services`。
+- 相比 [anydoc](https://github.com/firecrawl/anydoc)：anydoc 不做 OCR 和版面模型，数字办公文档更快。扫描件、复杂版式和公式仍更适合 Docling。
+
+## 适应人群
+
+- 要把论文、手册、合同批量转成 Markdown/JSON，再送进 RAG 或知识库的数据与应用工程师。
+- 希望在内网处理财报、邮件和扫描件，且不想把原文交给云解析服务的工程团队。
+- 正在 LangChain、LlamaIndex 或 Haystack 里接文档解析，想用一个本地库覆盖多种格式的开发者。
+
+## 如何使用
+
+### 前置条件
+
+- Python 3.10 及以上。docling 2.70.0 起已移除 Python 3.9
+- macOS、Linux 或 Windows，x86_64 与 arm64 均可
+- 首次转换需要联网下载模型；隔离环境可事先执行 `docling-tools models download`
+- 扫描件若改用 EasyOCR、Tesseract 等引擎，需另装对应 extra 或系统依赖
+
+### 安装方式
+
+```shell
+pip install docling
+```
+
+使用 uv 时：
+
+```shell
+uv add docling
+```
+
+仅 CPU 的 Linux 环境，官方建议改用 PyTorch 的 CPU 轮子：
+
+```shell
+pip install docling --extra-index-url https://download.pytorch.org/whl/cpu
+```
+
+Intel Mac 上较新的 PyTorch 已不提供 x86_64 轮子，可安装兼容 extra（PyTorch 2.2.2 要求 Python 3.12 或更低）：
+
+```shell
+pip install "docling[mac_intel]"
+```
+
+### 首次运行
+
+命令行转换一份在线 PDF，会在当前目录写出 Markdown：
+
+```shell
+docling https://arxiv.org/pdf/2206.01062
+```
+
+Python（官方推荐）：
+
+```python
+from docling.document_converter import DocumentConverter
+
+source = "https://arxiv.org/pdf/2408.09869"  # 本地路径或 URL
+converter = DocumentConverter()
+result = converter.convert(source)
+print(result.document.export_to_markdown())
+```
+
+可选：用 GraniteDocling 视觉语言模型管道：
+
+```shell
+docling --pipeline vlm --vlm-model granite_docling https://arxiv.org/pdf/2206.01062
+```
+
+### 验证是否成功
+
+- CLI 结束后，当前目录应出现一份 `.md`，内容是结构化正文
+- 上面的 Python 示例会打印以 `## Docling Technical Report` 开头的 Markdown
+- 运行 `docling --help` 可看到管道、OCR 与输出格式选项
+
+### 常见坑 / 注意事项
+
+- **首次会下模型**：默认下载到 `$HOME/.cache/docling/models`。离线使用先跑 `docling-tools models download`，再用 `docling --artifacts-path` 或环境变量 `DOCLING_ARTIFACTS_PATH`
+- **远程服务默认关闭**：未设置 `enable_remote_services=True` 时，把文档发给外部视觉模型会抛出 `OperationNotAllowed`
+- **OCR 不是装完即用全家桶**：EasyOCR、RapidOCR、Tesseract 等要额外安装。Tesseract 还需系统包，以及以 `/` 结尾的 `TESSDATA_PREFIX`
+- **PDF 标题层级**：版面模型默认把标题都标成一级。需要层级时，再打开官方文档中的 heading hierarchy
+- **许可分开看**：仓库代码是 MIT；各个模型权重遵循其原始许可
