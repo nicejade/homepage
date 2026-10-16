@@ -1,0 +1,134 @@
+---
+title: CLI-Anything
+description: 为任意软件生成编程 Agent 可调用的 CLI，并通过 CLI-Hub 安装社区现成工具。
+repo: https://github.com/HKUDS/CLI-Anything
+homepage: https://clianything.cc/
+repoDescription: "\"CLI-Anything: Making ALL Software Agent-Native\" -- CLI-Hub: https://clianything.cc/"
+avatarUrl: https://avatars.githubusercontent.com/u/118165258?v=4
+tags:
+  - Agent
+  - CLI
+  - AI 编程
+language: Python
+stars: 53134
+forks: 4815
+openIssues: 170
+contributors: 145
+license: Apache-2.0
+featured: false
+publishedAt: "2026-10-16"
+updatedAt: "2026-10-16"
+curationReason: 适合让 Claude Code、Cursor 等编程 Agent 操作 Blender、GIMP、LibreOffice 的场景。
+---
+
+## 项目介绍
+
+CLI-Anything 是 [HKUDS](https://github.com/HKUDS) 开源的软件接入层：它不重写 Blender、GIMP 或 LibreOffice，而是为这些软件生成可组合的命令行，让编程 Agent 调用真实后端完成渲染、导出和编辑。每条命令同时提供人类可读输出和 `--json`，不带子命令时进入带状态的 REPL。已经做好的工具放在 [CLI-Hub](https://clianything.cc/) 里直接安装；注册表里没有的，可以用七阶段流水线从源码生成。
+
+## 核心特性
+
+- **CLI-Hub 安装器**：`pip install cli-anything-hub` 之后，用 `cli-hub` 浏览、搜索、安装、更新和启动社区 harness，也收录一部分公开第三方 CLI。
+- **七阶段生成**：`/cli-anything` 依次做源码分析、命令设计、Click 实现（REPL、JSON、撤销）、测试计划、测试编写、文档和安装到 PATH。
+- **真实软件后端**：先写出合法工程文件，再交给软件自己渲染。LibreOffice 出 PDF，Blender 出图，不用 Pillow 之类的替代实现顶替。
+- **技能文档一并生成**：每个 CLI 带 `SKILL.md`，可用 `npx skills add HKUDS/CLI-Anything --skill cli-hub-meta-skill -g -y` 让兼容 Agent 自己从 Hub 挑工具。
+- **增量补齐**：`/cli-anything:refine` 对照软件能力做缺口分析并补命令，可以多次运行，不会推倒已有 harness。
+
+## 对用户价值
+
+截图点击的 GUI Agent 会跟着界面改版失效。CLI-Anything 把「操作专业软件」收成可组合的文本命令：Agent 用 `--json` 读状态，用真实后端写出文件，失败可以复现。注册表里已有目标软件时，一条 `cli-hub install` 就能开始用；没有时，把本地路径或仓库地址交给 `/cli-anything`，不必手写命令分组、测试和技能文档。需要做评测时，任务和检查也可以在终端里合成，而不必维护一套像素自动化。
+
+## 与替代方案
+
+- 相比 Computer Use、浏览器 GUI Agent 这类截图点击方案，CLI-Anything 走结构化命令和软件自身后端，不依赖窗口布局。代价是目标最好有源码或现成 harness；只有编译后的二进制时，官方写明覆盖率会明显下降。
+- 相比为每个软件手写 MCP 或官方 API 封装，七阶段流水线一次产出 CLI、测试和 `SKILL.md`。若软件已经有稳定的官方 CLI（例如 git、ffmpeg），应直接用官方命令，不必再生成一层。
+- 相比只深耕单一应用的专用插件，CLI-Hub 把多款软件收成同一套 `cli-anything-*` 命名和 REPL 习惯。单一插件在那款软件内部可能更完整；CLI-Anything 的优势是跨软件的统一接口，以及没有 harness 时可以自己生成。
+
+## 适应人群
+
+- 用 Claude Code、Cursor、Codex、OpenClaw 等编程 Agent，希望它们操作 Blender、GIMP、LibreOffice、Shotcut 等桌面软件的人。
+- 要给内部仓库或开源项目补一层 Agent CLI，又不想从零设计命令、测试和技能文档的开发者。
+- 想先在 CLI-Hub 里找现成工具，或给 Agent 装上 meta-skill、让它自己挑选 CLI 的用户。
+
+## 如何使用
+
+### 前置条件
+
+- Python 3.10+。使用现成 CLI 时，还要装上它包装的上游软件（GIMP、Blender、LibreOffice 等）；CLI 只负责调用真实后端。
+- 从源码生成新 CLI 时，需要目标软件的源码或仓库，以及较强的编程 Agent。官方写明流水线依赖前沿模型，较弱模型容易生成不完整命令，需要人工改正。
+- 在 Cursor 里生成 harness 时，按下面的插件安装脚本操作。Windows 上使用 Claude Code 时需要 Git Bash 或 WSL，否则可能报 `cygpath: command not found`。
+
+### 安装方式
+
+**使用已有工具（CLI-Hub）：**
+
+```bash
+pip install cli-anything-hub
+```
+
+**让兼容 Agent 自己从 Hub 选工具：**
+
+```bash
+npx skills add HKUDS/CLI-Anything --skill cli-hub-meta-skill -g -y
+```
+
+**在 Cursor 里安装生成器插件：**
+
+```bash
+git clone https://github.com/HKUDS/CLI-Anything.git
+bash CLI-Anything/cursor-plugin/scripts/install.sh
+```
+
+Windows PowerShell 使用 `.\CLI-Anything\cursor-plugin\scripts\install.ps1`。装完后重载 Cursor 窗口。
+
+**在 Claude Code 里安装生成器：**
+
+```text
+/plugin marketplace add HKUDS/CLI-Anything
+/plugin install cli-anything
+```
+
+Pi、OpenCode、OpenClaw、Codex 等平台的路径见仓库 Quick Start。
+
+### 首次运行
+
+先从 Hub 装一个现成 CLI：
+
+```bash
+cli-hub list
+cli-hub search image
+cli-hub install gimp
+cli-hub info gimp
+cli-hub launch gimp
+```
+
+为本地源码生成新 harness（插件安装并重载之后）：
+
+```text
+/cli-anything ./gimp
+```
+
+也可以传入 GitHub 仓库地址。生成物默认落在目标项目的 `agent-harness`：
+
+```bash
+cd <software>/agent-harness
+pip install -e .
+cli-anything-<software> --help
+```
+
+覆盖不够时再跑一轮缺口补齐，例如 `/cli-anything:refine ./gimp`，或在 Cursor 里使用 `/cli-anything-refine`。
+
+### 验证是否成功
+
+- `cli-hub list` 能列出注册表，`cli-hub info <name>` 能看到该 CLI 的说明。
+- `which cli-anything-<software>` 能找到命令，`--help` 列出子命令；不带子命令时进入 REPL。
+- 加上 `--json` 时返回结构化 JSON，而不是只有表格文本。
+- 导出类命令应产生真实文件（例如 LibreOffice harness 导出 PDF）。官方强调不要只看退出码为 0。
+- 生成器侧可用 `/cli-anything:test` 与 `/cli-anything:validate`（Cursor 为 `/cli-anything-test`、`/cli-anything-validate`）对照 `HARNESS.md`。
+
+### 常见坑 / 注意事项
+
+- CLI 不替代软件本身。缺少 Blender、GIMP 或 LibreOffice 时，测试会失败而不是跳过。
+- 一次 `/cli-anything` 通常盖不住全部能力，需要按缺口多次 refine。Claude Code 若提示未知技能，先确认插件已加载并执行 `/reload-plugins`，旧版本再试 `/cli-anything:cli-anything`。
+- 流水线依赖源码分析。目标只有编译后的二进制、需要反编译时，质量和覆盖率会明显下降。
+- 闭源软件和纯网页服务的打包仍在路线图上，不要假设任意商业 GUI 都能直接生成。
+- 许可证为 Apache-2.0。部分 harness 会改写工程或调用本机后端，先在测试文件上跑通，再碰正式数据。
