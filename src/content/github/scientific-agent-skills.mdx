@@ -1,0 +1,110 @@
+---
+title: Scientific Agent Skills
+description: 面向科研的 Agent Skills 库：177 个生物、化学、医学与药物发现技能，并文档化 100+ 科学数据库。
+repo: https://github.com/K-Dense-AI/scientific-agent-skills
+homepage: https://arxiv.org/abs/2609.00065
+repoDescription: "Turn any AI agent into an AI Scientist. The #1 Agent Skills library for science, used by 250,000+ scientists worldwide. 177 ready-to-use validated skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery. Compatible with Cursor, Claude Code, Codex, Pi, Antigravity, and the open Agent Skills standard."
+avatarUrl: https://avatars.githubusercontent.com/u/238572432?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 工作流
+language: Python
+stars: 50883
+forks: 4519
+openIssues: 41
+contributors: 59
+license: MIT
+featured: false
+publishedAt: "2026-10-16"
+updatedAt: "2026-10-16"
+curationReason: 做虚拟筛选或单细胞分析时，让编码代理按 RDKit、Scanpy、ChEMBL 的约定跑，而不是临场搜文档。
+---
+
+## 项目介绍
+
+Scientific Agent Skills 是 [K-Dense](https://k-dense.ai/) 维护的科研向 Agent Skills 集合，前身是 Claude Scientific Skills，现已按开放 [Agent Skills](https://agentskills.io/) 标准提供，可在 Cursor、Claude Code、Codex、Gemini CLI、Google Antigravity 等宿主里使用。仓库目前收录 **177** 个技能，覆盖生物信息、化学信息与药物发现、临床研究证据、组学、实验自动化和科学写作；每个技能用 `SKILL.md` 写明用途、流程、版本范围和校验边界，而不是把包文档整份丢给模型。论文见 [arXiv:2609.00065](https://arxiv.org/abs/2609.00065)。
+
+## 核心特性
+
+- **数据库与包技能分开写**：Database Lookup 文档化约 80 个数据源（PubChem、ChEMBL、UniProt、ClinicalTrials.gov 等）的端点、分页与出处；另有 70+ 个带版本基线的 Python 包技能（RDKit、Scanpy、PyDESeq2、DiffDock、OpenMM 等）
+- **跨学科工作流可以拼在同一次对话里**：README 的示例把 ChEMBL 检索、RDKit 构效关系、DiffDock 对接，或 10X 数据的 Scanpy QC 与 PyDESeq2 差异分析串成一条提示
+- **技能文件与依赖分开**：安装技能不会安装科学计算包；仓库工具链要求 Python 3.13+ 与 `uv`，各技能用独立环境避免 pin 冲突
+- **2.72.0 起不再内置文档技能**：原先来自 [anthropics/skills](https://github.com/anthropics/skills) 的 `docx` / `pdf` / `pptx` / `xlsx` 已移除，幻灯片改走 Scientific Slides（PptxGenJS 或 python-pptx）
+- **临床与医疗相关技能有明确边界**：变异证据、临床报告只产出带来源的研究草稿，README 写明不用于诊断、个体风险评估或治疗建议
+
+## 对用户价值
+
+编码代理可以自己 `pip install` 任意科学包，但临场读文档时容易用错版本、漏掉 QC，或把数据库检索和下游分析接错。这套技能把常用路径写成可点名的流程：查哪个库、用哪版包、做到哪一步要停下来核对。对计算生物学和药物化学里那些「一个提示横跨四个工具」的任务，它减少的是接口摸索，而不是替你签出实验结论。
+
+## 与替代方案
+
+- 相比 [Awesome Agent Skills](https://github.com/VoltAgent/awesome-agent-skills) 这种跨领域技能目录，本仓库是单一维护的科研技能集，带 `SKILL.md` 版本元数据、结构测试和安全扫描，不是导航清单。
+- 相比 [mattpocock/skills](https://github.com/mattpocock/skills) 或 [Superpowers](https://github.com/obra/superpowers) 的工程流程技能，这里不管 TDD 或规格，只管 Scanpy、RDKit、文献与数据库这一类研究步骤。
+- 需要 Word / PDF / PPTX / XLSX 文档技能时，2.72.0 起应另装 [anthropics/skills](https://github.com/anthropics/skills)，本仓库不再捆绑这四项。
+- [K-Dense BYOK](https://github.com/K-Dense-AI/k-dense-byok) 是使用本库的桌面端科研工作台（自带 API key、可选 Modal），不是另一套技能。它不替代 RDKit、Scanpy 等上游项目本身。
+
+## 适应人群
+
+- 用 Cursor、Claude Code 或 Codex 做虚拟筛选、单细胞或文献综述，希望点名 `rdkit`、`scanpy`、`database-lookup` 而不是让模型现查 API 的计算化学 / 生物信息研究者。
+- 需要把实验方案、审稿回复或证据型写作交给代理起草，但仍自己核对出处与版本的实验室成员。
+- 评估「科研 Agent」时想要可引用、可 pin 版本的技能集，而不是再维护一份私有 prompt 的方法学或平台团队。
+
+## 如何使用
+
+### 前置条件
+
+- 支持 Agent Skills 的宿主（README 点名 Cursor、Claude Code、Claude Cowork、Codex、Gemini CLI、Google Antigravity）。`npx` 路径需要 Node.js；`gh skill` 需要 GitHub CLI **v2.90.0+**。
+- 要跑技能里的 Python 代码时：安装 [uv](https://docs.astral.sh/uv/)，仓库工具链为 Python 3.13+。各技能的包版本、系统工具和 API key 以对应 `SKILL.md` 的 `compatibility` 为准。
+- 只安装用得到的技能。仓库已含社区贡献，README 明确不建议一次装全 177 个。
+
+### 安装方式
+
+官方首选：
+
+```bash
+npx skills add K-Dense-AI/scientific-agent-skills
+```
+
+只要某一个技能时，用 GitHub CLI：
+
+```bash
+gh skill install K-Dense-AI/scientific-agent-skills scanpy --agent cursor
+```
+
+可复现安装应 pin 到 release tag 或 commit（README 示例仍写着 `v2.71.0`，当前徽章为 **2.72.0**，以你要锁定的 tag 为准）：
+
+```bash
+gh skill install K-Dense-AI/scientific-agent-skills --pin v2.72.0
+```
+
+Cursor 插件方式：在仓库目录执行下面命令，然后 **Developer: Reload Window**，到 **Customize** 里确认插件与技能出现。
+
+```bash
+mkdir -p ~/.cursor/plugins/local
+ln -s "$(pwd)" ~/.cursor/plugins/local/scientific-agent-skills
+```
+
+### 首次运行
+
+重载宿主后，在提示里点名技能，并声明只用已安装的技能。README 的药物发现示例是：
+
+```text
+Use available skills you have access to whenever possible. Query ChEMBL for EGFR inhibitors (IC50 < 50nM), analyze structure-activity relationships with RDKit, generate improved analogs with datamol, perform virtual screening with DiffDock against AlphaFold EGFR structure, search PubMed for resistance mechanisms, check COSMIC for mutations, and create visualizations and a comprehensive report.
+```
+
+对应技能包括 `database-lookup`、`rdkit`、`datamol`、`diffdock`。单细胞路径则点名 `scanpy`，并先按该技能的 `SKILL.md` 用 `uv` 装依赖。安装技能文件本身不会把 Scanpy 装进环境。
+
+### 验证是否成功
+
+- `npx` / `gh skill` 结束后，重开或重载宿主。Cursor 插件安装后，**Customize** 里应能看到 `scientific-agent-skills`；技能拷贝进 skills 目录时，README 建议到 Settings → Rules 确认已被发现，且每个技能目录里有 `SKILL.md`。
+- 让代理复述它将调用的技能名（例如 `scanpy` 或 `rdkit`）。它若改去通用网页搜索、或还在找已废弃的 `scientific-skills/` 路径，说明没装上或装的是 v2.43.0 之前的布局。
+- 准备跑代码时执行 `uv --version`。某个技能缺包时，按该 `SKILL.md` 执行 `uv pip install`，不要对整个仓库 `uv sync` 指望装齐全部科学依赖——`uv sync` 只装仓库的开发与校验工具。
+
+### 常见坑 / 注意事项
+
+- **临床技能不是诊断器**。变异解读、临床报告类技能只应处理已授权的合成、去标识或汇总数据，产出供合格人员审阅的草稿。
+- **仓库 MIT，单个技能未必是 MIT**。FAQ 要求查看每个 `SKILL.md` 的 `license` 字段；商业使用前要逐个核对。
+- **v2.43.0 起目录是 `skills/`，不是 `scientific-skills/`**。旧书签、手动拷贝路径和 `gh skill` 文档链接会 404，需要按新路径重装。
+- **数据库有速率限制和密钥**。ChEMBL、NCBI、Materials Project 等失败时先看对应技能的认证说明，而不是反复重试同一条提示。
+- **技能会指导代理执行代码和访问网络**。README 建议安装前阅读 `SKILL.md`，必要时用 Cisco AI Defense Skill Scanner 自查；NemoClaw 默认拒绝出站，相关域名要事先放行。
