@@ -3,6 +3,11 @@ export default {
   style: 'stagger',
   list: [
     {
+      title: 'WorkBuddy | AI Agent 办公新范式',
+      link: 'https://www.workbuddy.cn/',
+      desc: 'WorkBuddy 是腾讯出品的全场景 AI 办公工作台，说出要求后无需预先拆分步骤，由它自主规划、调用工具并执行任务。它把查资料、写文档、做表格和演示文稿这类多步骤工作一次交付，过程与结果都留给你审核。产品支持同时处理多个任务，授权后可批量整理本地文件，并连接办公即时通讯、文档、邮箱、会议和知识库。适合要把日常办公、设计创意或代码开发交给代理，并借助专家与技能复用工作方法的个人与团队，用完即可拿到可直接使用的完整成果。'
+    },
+    {
       title: 'Agent Skills | 为代理提供新的能力和专业知识。',
       link: 'https://agentskills.io/',
       stars: 5,
