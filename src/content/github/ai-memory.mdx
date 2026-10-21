@@ -1,0 +1,113 @@
+---
+title: "ai-memory"
+description: "编码 Agent 的跨工具长期记忆：交接任务与未决问题，真相源是可手改的 Markdown wiki。"
+repo: "https://github.com/akitaonrails/ai-memory"
+homepage: "https://aimemory.sh"
+repoDescription: "Solution for long term memory for agent coding CLIs and to facilitate handoff between different agent vendors"
+avatarUrl: "https://avatars.githubusercontent.com/u/2840?v=4"
+tags:
+  - AI 编程
+  - Agent
+  - 知识管理
+language: "Rust"
+stars: 12062
+forks: 854
+openIssues: 10
+contributors: 162
+license: "MIT"
+featured: false
+publishedAt: "2026-10-21"
+updatedAt: "2026-10-21"
+curationReason: "Claude Code 中途换 Codex、Cursor 或 Gemini CLI；本机或 homelab 自建，默认不调 API。"
+---
+
+## 项目介绍
+
+ai-memory 是 Fabio Akita（akitaonrails）维护的编码 Agent 长期记忆服务。一个自包含的 Rust 二进制，把 Claude Code、Codex、Cursor、Gemini CLI、OpenCode 等二十余种宿主的会话收成同一份可检索记忆。你在一个工具里做到一半，换到另一个工具或另一台机器，下一个 Agent 会拿到交接：停在哪里、哪种做法失败了、还有哪些问题没关。记忆的真相源是 Git 管理的普通 Markdown wiki，数据库只是可以从文件重建的索引；捕获、搜索和交接的默认路径不调用大模型。官网在 [aimemory.sh](https://aimemory.sh)。
+
+## 核心特性
+
+- **跨 Agent 交接**：二十余种宿主写入同一份记忆。交接是带所有者的类型化协议，每条只会被认领一次。
+- **能带走会话本身**：用 `ai-memory run` 启动。退出 Claude Code 后执行 `ai-memory run codex`，Codex 拿到共享工作流，以及一份仅本机、临时的原生历史投影，用来补上启动包里省略的细节。远程服务器只收到宿主和会话身份，收不到本地记录的路径或正文。直接启动宿主时，行为与未安装时相同。
+- **跨项目、跨机器**：一小份工作习惯（包管理器、测试布局、架构偏好）会作为默认值出现在每个新仓库的会话开头，位于该仓库规则文件之下。单用户默认开启；共享服务器上按人选择加入，且彼此私有。记忆放在你自己运行的服务上，台式机上停下的项目可以在笔记本上继续。
+- **Markdown 即真相源**：wiki 是普通 `.md`，可以 grep、用 Obsidian 打开或手工修改。默认没有必须维护的向量库。生命周期钩子在后台记下提示、工具调用和会话边界，并在写入前做类型化的隐私清洗。
+- **团队与可逆老化**：多人指向同一服务时，项目知识共享，个人交接仍归个人，并带归属和审计日志。常用记忆衰减更慢；压缩、去重、矛盾标记和可选的 LLM「dream」重写默认关闭。这些步骤不硬删除，原文留在 Git 里，可用 `restore-page` 找回。
+
+## 对用户价值
+
+换工具或新开一轮会话时，架构决策、失败尝试和未决问题都要重讲一遍。ai-memory 在会话结束时把观察整理成可读的 wiki 页面，下次任意 Agent 先拿到一份有长度上限的简报，并可以搜索全文、实体和链接。不配置模型时，捕获、全文搜索和交接仍然可用，不必为「记住这个仓库」持续支付 API 费用。页面在你自己的目录里，可以 rsync、手工改正，再从版本链恢复。
+
+## 与替代方案
+
+- 相比 **Claude Code 内置记忆**和本站已收录的 [claude-mem](https://github.com/thedotmack/claude-mem)：内置笔记停在单机、单 Agent；claude-mem 用本地 SQLite 与 Worker 做跨会话摘要，和 Claude Code 钩子绑得更深。ai-memory 把记忆放在你运行的服务上，用「只认领一次」的交接在不同厂商的 CLI 之间传递，真相源是可手改的 Markdown 页面。
+- 相比 [Supermemory](https://github.com/supermemoryai/supermemory)：Supermemory 是托管或本机的 Memory API，面向通用第二大脑、用户画像和文档 RAG。ai-memory 记住的是当前仓库里的工作过程，文件由 Git 管理，默认可以离线运行。
+- 相比 **[Mem0](https://github.com/mem0ai/mem0)** 这类逐轮事实抽取，以及同样把 Markdown 放在磁盘上的 [basic-memory](https://github.com/basicmachines-co/basic-memory)：Mem0 收成的是事实行；basic-memory 以文件为真相源，但没有自动生命周期捕获和跨 Agent 交接。ai-memory 在页面之上加了派生的全文、实体和图索引，以及多用户共享。向量检索和 LLM 整理保持可选，默认关闭。
+
+## 适应人群
+
+- 在 Claude Code、Codex、Cursor、Gemini CLI 之间切换，希望下一工具接着上次的失败尝试和未决问题的开发者。
+- 希望记忆是自己能 grep、用 Obsidian 打开的 Markdown，并且默认不配置 API 密钥的人。
+- 要把同一份项目记忆放到 homelab 或局域网，给多台机器、多名同事共用的团队。个人交接仍然按人隔离。
+
+## 如何使用
+
+### 前置条件
+
+- Linux 或 macOS。Windows 推荐 WSL2；支持矩阵把原生 Windows 标为实验性。
+- 支持矩阵中的一种编码 Agent，例如 Claude Code、Codex、Cursor、Gemini CLI、OpenCode。钩子捕获和 `ai-memory doctor` 会调用 `git`。
+- 默认不需要大模型。需要会话摘要或语义搜索时，再按 `docs/llm-providers.md` 配置 Anthropic、OpenAI、Gemini、Ollama 等。
+- 安装脚本使用预编译发布包。只有从源码构建才需要 Rust 工具链（仓库徽章为 Rust 1.95+）。
+
+### 安装方式
+
+Linux / macOS（两条命令，无需 root）：
+
+```bash
+curl -fsSL https://github.com/akitaonrails/ai-memory/releases/latest/download/install.sh | sh
+ai-memory setup
+```
+
+`install.sh` 按系统和 CPU 下载发布包，并用发布页上的 SHA-256 校验，不匹配则拒绝安装，再把二进制链到 `~/.local/bin/ai-memory`。`ai-memory setup` 创建数据目录和仅所有者可读的 bearer token，启动用户级服务（systemd `--user` 或 launchd LaunchAgent），并为发现到的 Agent 接入 MCP、钩子和 Agent Skills。它会先展示计划再询问：回答 `y`，或输入要接入的编号。`--plan` 只打印计划，`--yes` 跳过确认，重复运行不会改写已完成的配置。
+
+Windows（PowerShell，无需管理员）：
+
+```powershell
+irm https://github.com/akitaonrails/ai-memory/releases/latest/download/install.ps1 | iex
+ai-memory setup
+```
+
+Claude Code 与 Codex 也可以在装好二进制后走插件市场：
+
+```bash
+claude plugin marketplace add akitaonrails/ai-memory && claude plugin install ai-memory@ai-memory
+codex plugin marketplace add akitaonrails/ai-memory && codex plugin add ai-memory@ai-memory
+```
+
+Arch 可用 `yay -S ai-memory-bin`（或从源码的 `yay -S ai-memory`）后再执行 `ai-memory setup`。NixOS、Fedora RPM、macOS 菜单栏应用和 Docker 见仓库 `docs/install.md`。
+
+### 首次运行
+
+`setup` 结束后重启 Agent。日常更适合用 `ai-memory run` 启动宿主：某个宿主第一次这样启动时，若钩子和 MCP 还没装，它会自动补上，并带上跨宿主的会话连续性。服务暂时不可达时，`run` 会警告并仍然启动，捕获先写本地队列；服务恢复后执行 `ai-memory recover`。若要在服务不可达时直接失败，加上 `--require-server`。
+
+```bash
+ai-memory run claude
+ai-memory run codex
+```
+
+在新会话里问「What do you remember about this project?」或「我们上次停在哪里？」。同一项目里两个 Agent 同时工作，或多人连接同一台服务器时，默认按调用者隔离「当前项目」指针。
+
+### 验证是否成功
+
+- 执行 `ai-memory status`，确认服务在运行。新安装应已启用 bearer token；状态若写明尚未开启鉴权，再执行 `ai-memory auth enable`。
+- 完成一轮含工具调用的会话后，数据目录的 `wiki/` 里应出现 Markdown 页面。
+- 换一个宿主执行 `ai-memory run <agent>`，询问上次进度。交接应能说出停在哪里、失败过什么、还有什么没做完。
+- 可选：以 `--enable-web` 启动后用浏览器查看 wiki。只有 bearer token、还没有用户账号时，用户名可任意填写，密码是 `<data_dir>/auth-tokens/default` 的内容。
+
+### 常见坑 / 注意事项
+
+- Docker 快速起步不会执行 `init`，因此没有 token。镜像只绑定 `127.0.0.1:49374`，本机上的进程和浏览器仍然能够访问。原生安装执行过 `init` 后才会默认带上 bearer token。
+- 一个数据目录只能跑一个服务，不能让两个进程同时写同一目录。
+- 换到另一台机器时，能拿到服务端的交接和账本，读不到只存在于原机器上的原生会话记录。`AI_MEMORY_PREVIOUS_SESSION_HISTORY` 指向的临时投影只在启动器本机有效，并要求宿主客户端为 3.1.0 或更新版本。PATH 里更早的旧二进制会挡住这条路径。可用 `type -a ai-memory` 和 `ai-memory --version` 确认实际调用的是哪一个。
+- 从 2.x 升到 3.0 之前先读 `docs/upgrading-to-3.0.md`。LLM 整理、向量搜索和 dream 重写默认关闭。
+- 团队共享的是按项目划分的知识。个人交接不进入这份共享范围。
+- 用管道执行 `install.sh` / `install.ps1` 之前，可按 `docs/install.md` 先核对脚本。API 密钥不要写进 Nix 里世界可读的 store 路径。
