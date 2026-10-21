@@ -1,0 +1,137 @@
+---
+title: Beacon
+description: 跨 Claude Code、Cursor、Codex 等编程助手的开源记忆层，把会话轨迹变成可复用知识。
+repo: https://github.com/Asymptote-Labs/agent-beacon
+homepage: https://beacon.sh
+repoDescription: "The cross-harness, self-improving memory layer for AI agents. Join our community: https://discord.com/invite/zdNChS2fBu"
+avatarUrl: https://avatars.githubusercontent.com/u/235623239?v=4
+tags:
+  - Agent
+  - 知识管理
+  - AI 编程
+language: Go
+stars: 2317
+forks: 208
+openIssues: 39
+contributors: 22
+license: MIT
+featured: false
+publishedAt: "2026-10-21"
+updatedAt: "2026-10-21"
+curationReason: 换工具或开新会话时，回放命令、改动与审批记录，把审过的排错路径留给后续 Agent。
+---
+
+## 项目介绍
+
+Beacon（仓库名 agent-beacon）是 Asymptote Labs 维护的开源记忆层，接在编程 Agent 的 harness 之下。它在本机采集 Claude Code、Cursor、Codex、OpenCode、Cline 等二十余种工具的会话历史，归一成同一套基于 OpenTelemetry 的事件，再把其中有用的工作流、纠正和排错路径交给后续 Agent 检索。官方要解决的问题是：一个 Agent 已经走过的坑，换工具或新开会话之后还要再学一遍。
+
+## 核心特性
+
+- **跨 harness 历史**：Claude Code、Cursor、Codex、OpenCode、Cline 以及 README 列出的二十余种本地运行时进同一份记录；也覆盖部分浏览器对话、云端 Agent、CI 任务与 Anthropic / OpenAI / Claude Agent SDK / Vercel AI SDK 插桩
+- **审阅后的共享记忆**：从轨迹里抽出工作流、纠正、调试路径和仓库约定，经人工确认后，通过 MCP 或 [Beacon Skills](https://docs.beacon.sh/concepts/beacon-skills) 供后续 Agent 取用
+- **可回放的完整轨迹**：提示、回复、工具调用、命令、文件活动、审批、MCP 交互与 token 用量落在同一条 trace 上
+- **本地优先、目的地显式**：默认写入本机 JSONL（`~/.beacon/endpoint/logs/runtime.jsonl`）；可选 Beacon Cloud（Standard 或 Metadata-only），或转发到 Splunk、Datadog、Elastic、Sentinel、S3、GCS 等既有设施
+- **本地查看与 Lens**：`beacon traces` 打开终端浏览器；`beacon endpoint dashboard` 提供只读 Web 视图，会话页可挂自定义 Lens 看 diff、token 账单、安全审查或审批时间线
+
+## 对用户价值
+
+编程助手的上下文停在各自会话里。Claude Code 里踩平的迁移步骤，Cursor 里的下一次对话看不到；同一类报错会在新会话里再走一遍。Beacon 先把当时实际执行的命令、改动和审批记全，再让你挑出值得留下的经验，供下一个 Agent 按需检索，而不是把整段聊天原样塞进 prompt。数据默认留在本机；登录本身不会开始转发，只有在确认屏接受 Beacon Cloud 之后才会按向导写明的账号、操作方与捕获模式向外发送。团队若已有日志或对象存储，同一份归一化历史可以接到现有管道。
+
+## 与替代方案
+
+- 相比本站已收录的 [claude-mem](https://github.com/thedotmack/claude-mem)，后者用钩子捕获观察、生成压缩摘要，并在新会话注入上下文，体验更接近「单一宿主的记忆插件」。Beacon 的主路径是跨工具的原始轨迹（OpenTelemetry 事件、本地 JSONL、可回放），以及审阅后再经 MCP / Skills 复用。若主要目标是自动把摘要塞回 Claude Code，claude-mem 更贴这个用法。
+- 相比 [Mem0](https://github.com/mem0ai/mem0) 这类通用 Agent 记忆 SDK，Beacon 采集的是编程助手的会话遥测和项目知识，而不是从任意产品对话里抽用户偏好。要给客服机器人或多租户应用加记忆层，Mem0 更合适。
+- 相比 [Hindsight](https://github.com/vectorize-io/hindsight) 的 retain / recall / reflect 与心智模型，Beacon 强调可检查的执行轨迹和人工批准的知识，而不是让独立记忆服务替 Agent 形成信念。编码场景两者都能接 Claude Code 与 Cursor；要轨迹和审计选 Beacon，要可反思的长期记忆库选 Hindsight。
+- 相比各 harness 自带的记忆或项目规则，那些约定停在单个工具内。Beacon 把历史归一到工具之外，会话记录跟着人和仓库走。
+
+## 适应人群
+
+- 同时使用 Claude Code、Cursor、Codex 或 OpenCode，希望排错路径和仓库约定能跨工具留下来的个人开发者。
+- 需要回放 Agent 实际执行了哪些命令、改了哪些文件、做过哪些审批的人。
+- 要把归一化会话历史接到自有 SIEM、日志或对象存储的工程或安全团队。
+
+## 如何使用
+
+### 前置条件
+
+- **macOS**：已安装 Homebrew。官方步骤包含 `brew trust`，需要较新的 Homebrew。
+- **Linux**：Debian、Ubuntu、Fedora、RHEL、Rocky 或 Alma，可用 root 安装 `.deb` / `.rpm`。无 root 时改用官方文档中的 tarball 用户模式。
+- **Windows**：x64 MSI，来自 [最新 Release](https://github.com/asymptote-labs/agent-beacon/releases/latest)。
+- **编程助手**：至少有一个受支持的本地运行时。各字段是否采集以 README 的支持表为准；Claude Code、Cursor、Codex CLI、OpenCode 均在表中。
+- **账号**：交互式安装会打开 beacon.sh 登录，并预选 Beacon Cloud。选择 Local 则历史留在本机。系统包、MDM 与 CI 安装路径是非交互的，且不要求账号。
+
+### 安装方式
+
+也可以把下面这句话交给编程助手，让它按官方引导完成配置：
+
+```text
+Read https://beacon.sh/start.md then set me up on Beacon
+```
+
+macOS：
+
+```bash
+brew update
+brew trust asymptote-labs/tap
+brew tap asymptote-labs/tap
+brew install beacon
+
+beacon endpoint install
+```
+
+Linux（安装脚本下载对应架构的包，并对照发布页的 `checksums.txt` 校验）：
+
+```bash
+curl -fsSL https://github.com/asymptote-labs/agent-beacon/releases/latest/download/install.sh | bash
+```
+
+指定版本时可设置 `BEACON_VERSION=<version>`。不想把脚本直接送进 shell 时，先下载 `install.sh` 阅读再执行，或按 README 手工校验 checksum 后用 `apt` / `dnf` 安装。
+
+Windows（将 `<version>` 换成 Release 中的版本号）：
+
+```bash
+msiexec /i BeaconEndpointAgent-<version>-x64.msi
+```
+
+静默安装在同一命令后追加 `/qn`。
+
+### 首次运行
+
+1. 执行 `beacon endpoint install`。向导结束时给出摘要；若确认的是预选的 Beacon Cloud，还会打开 [beacon.sh/dashboard](https://beacon.sh/dashboard)。
+2. 照常使用 Claude Code、Cursor、Codex 或其他已支持的助手。Beacon 在后台持续采集会话。
+3. 无论选择本地还是云端，向导默认把 Beacon Skills 装到 `~/.agents/skills` 与 `~/.claude/skills`，除非你关掉这一步。之后用 `beacon skills install` 或 `beacon skills uninstall` 重做。
+4. 若选择 Beacon Cloud 且未关闭 MCP，向导会在各 harness 注册 Beacon Cloud MCP。也可稍后执行 `beacon mcp connect`，覆盖 Claude Code、Codex CLI、Cursor、VS Code、Gemini CLI 与 OpenCode。首次连接各自走 OAuth，不把 token 写进配置。`beacon mcp disconnect` 只移除它添加的条目。
+
+在终端里浏览轨迹：
+
+```bash
+beacon traces
+```
+
+或打开本地只读 Web 视图：
+
+```bash
+beacon endpoint dashboard
+```
+
+查看交互安装使用的账号：
+
+```bash
+beacon whoami
+```
+
+### 验证是否成功
+
+- `beacon traces` 能打开本地轨迹浏览器，看到会话、事件时间线与 token 用量。官方说明这一步不会把数据发往别处。
+- 使用过编程助手之后，`~/.beacon/endpoint/logs/runtime.jsonl` 持续有新事件。
+- 走过登录流程时，`beacon whoami` 能显示对应账号。
+- 完成 Beacon Cloud 的 MCP 注册后，对应 harness 的 MCP 列表里出现 `beacon-managed`。本地的 `beacon mcp serve` 是另一套服务，不访问网络。
+
+### 常见坑 / 注意事项
+
+- **登录本身不会开始转发。** 只有在确认屏接受预选的 Beacon Cloud 之后，才会安装并开始转发。确认屏会写明账号、操作方（Asymptote Labs）、目的地和捕获模式。要全程留在本机，选择 Local；断开用 `beacon endpoint disconnect`。
+- **`brew trust` 失败时先升级 Homebrew。** 这是当前 README 的 macOS 步骤，旧版可能还没有该子命令。
+- **Linux 安装需要能访问 GitHub Releases。** `checksums.txt` 用来发现损坏或被替换的包，不能证明构建者。需要出处时，对安装包执行 `gh attestation verify "<pkg>" --repo asymptote-labs/agent-beacon`，或把 `VERSION` 固定到已审阅的 Release。
+- **Skills 与 MCP 分开开关。** 关掉 Skills 不会自动关掉云端 MCP。本地 `beacon mcp serve` 与 `beacon mcp connect` 注册的 `beacon-managed` 也不是同一个服务。
+- **Lens 只安装你信任的文件。** Dashboard 的 Lens 是跑在沙箱 iframe 里的单个 HTML，官方说明沙箱挡不住浏览器的每一种外传方式。
+- **字段覆盖因运行时而异。** README 支持表里，Cursor 的 Tokens 列、Codex CLI 的 File 列为空。接入前对照该表，确认你关心的 Session、Tool、Approval、MCP 是否打勾。
