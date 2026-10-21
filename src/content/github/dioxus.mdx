@@ -1,0 +1,132 @@
+---
+title: Dioxus
+description: Rust 全栈 UI 框架：用 RSX 与信号状态，一套代码构建 Web、桌面和移动应用。
+repo: https://github.com/DioxusLabs/dioxus
+homepage: https://dioxuslabs.com
+repoDescription: Fullstack app framework for web, desktop, and mobile.
+avatarUrl: https://avatars.githubusercontent.com/u/79236386?v=4
+tags:
+  - 前端
+  - 跨平台
+  - 开发工具
+language: Rust
+stars: 39453
+forks: 1938
+openIssues: 853
+contributors: 419
+license: Apache-2.0
+featured: false
+publishedAt: "2026-10-21"
+updatedAt: "2026-10-21"
+curationReason: 给已熟悉 HTML/CSS、希望用类型安全 Rust 做跨端产品，并对比 Leptos 与 Tauri 的开发者。
+---
+
+## 项目介绍
+
+Dioxus 是 [Dioxus Labs](https://dioxuslabs.com) 维护的 Rust 全栈应用框架：用接近 JSX 的 `rsx!` 描述界面，用信号（signals）管理状态，同一套组件可以面向 Web（WebAssembly）、桌面、移动端，并通过 Server Functions 接上后端。官方 CLI `dx` 负责开发服务器、热重载与打包，桌面端默认走 WebView，也可实验性地用 WGPU 等渲染器。本仓库是框架与 CLI 源码；上手文档见 [0.7 指南](https://dioxuslabs.com/learn/0.7/)。
+
+## 核心特性
+
+- **一套代码多端运行**：Web、桌面（macOS / Linux / Windows）、移动端（Android / iOS）以及服务端渲染，由平台 feature 切换，而不是重写 UI
+- **RSX 与信号状态**：声明式组件写法接近 React，细粒度更新更接近 Solid / Svelte；HTML 与 CSS 直接写样式，并带 Tailwind 集成
+- **类型安全的全栈能力**：与 [axum](https://github.com/tokio-rs/axum) 集成，内置 Server Functions、SSR / hydration、WebSocket、SSE、表单与文件上传等
+- **`dx` 工具链**：`dx serve` 启动开发服务器并热重载标记与样式；实验性 `dx serve --hotpatch` 可热补丁 Rust 代码；`dx bundle` 打包 Web、桌面与移动产物
+- **官方基础组件**：提供一套对标 shadcn/ui 与 Radix 思路的 primitives，文档与 HTML 元素说明随框架本身做持续集成
+
+## 对用户价值
+
+想用 Rust 做界面时，常见路径是「Leptos / Yew 只做网页」或「Tauri 套一层 Web 前端」，UI 与系统语言被拆成两套栈。Dioxus 把组件、状态、开发服务器和打包收进同一工具链：会 HTML/CSS 的人可以用熟悉的标记写界面，同时保留 Rust 的类型检查；需要接口时用 Server Functions 落到 axum，而不必先选一套独立 BaaS。官方给出的体积量级是小型 Web 应用可压到约 50KB、桌面/移动包可小于 5MB——适合在意安装包与 WASM 体积、又希望少维护多端 UI 的产品原型与工具类应用。
+
+## 与替代方案
+
+- 相比 [Leptos](https://leptos.dev/)（Rust、细粒度响应、Web / 全栈很强），Dioxus 更强调官方 CLI、桌面与移动打包和多渲染器；Leptos 在 Web 生态与 isomorphic 服务端模式上积累更深。若目标只是 Rust 网站或 SSR，两者都值得做同题原型对比。
+- 相比 [Tauri](https://tauri.app/)，Tauri 是系统 WebView 外壳，界面仍用 HTML/JS（或任意前端框架），Rust 负责原生能力；Dioxus 的界面本身用 Rust/`rsx!` 编写，桌面端同样依赖系统 WebView。团队若已有 React 前端，Tauri 迁移更短；若希望 UI 与核心逻辑同为 Rust，Dioxus 更贴近。
+- 相比 [Flutter](https://flutter.dev/) 或 React + React Native / Electron，后两者生态与招聘市场更大，自绘或浏览器运行时更成熟；Dioxus 用系统 WebView 与 WASM，包体通常更小，但组件库、平台适配与招聘匹配仍明显更窄。
+- 边界：WGPU / Skia / Freya 等原生渲染器、以及 `dx serve --hotpatch`，官方均标为实验性。默认桌面路径是 WebView，不要把实验渲染器当成生产默认。
+
+## 适应人群
+
+- 已会 Rust，希望用同一套 UI 覆盖 Web、桌面或移动端，而不想维护 JS 前端加原生壳的工程师。
+- 熟悉 HTML/CSS，想在类型安全语言里写声明式界面，并评估是否替代 React、Electron 或 Flutter 的技术负责人。
+- 需要 Server Functions、SSR 与 axum 后端同仓协作的全栈开发者，以及要做小型工具、内部客户端的独立开发者。
+
+## 如何使用
+
+### 前置条件
+
+- 用 [rustup](https://rustup.rs/) 安装 Rust stable。Web 目标还需 WASM 工具链：
+
+```bash
+rustup toolchain install stable
+rustup target add wasm32-unknown-unknown
+```
+
+- 编辑器建议安装 rust-analyzer；官方推荐 VS Code，并提供 Dioxus 扩展。`dx` 本身通过终端使用。
+- 桌面端：macOS 无额外依赖；Windows 需要 [WebView2](https://developer.microsoft.com/microsoft-edge/webview2/)（已装 Edge 通常即满足）；Linux 需要 WebKitGTK 与 `xdotool`。Ubuntu 可参考文档安装：
+
+```bash
+sudo apt update
+sudo apt install libwebkit2gtk-4.1-dev \
+  build-essential \
+  curl \
+  wget \
+  file \
+  libxdo-dev \
+  libssl-dev \
+  libayatana-appindicator3-dev \
+  librsvg2-dev \
+  lld
+```
+
+- iOS 需要 macOS 与 Xcode；Android 需要 Android SDK 与 NDK。细节见官方平台指南，安装后用 `dx doctor` 检查缺失项。
+
+### 安装方式
+
+仓库 README 与当前 crates.io 快速开始给出的预编译 CLI：
+
+```bash
+curl -fsSL https://dioxuslabs.com/install.sh | bash
+```
+
+已有 [cargo-binstall](https://github.com/cargo-bins/cargo-binstall) 时，文档亦推荐：
+
+```bash
+cargo binstall dioxus-cli --force
+```
+
+从源码安装更慢（官方提示可能长达约 10 分钟），且可能遇到 OpenSSL 依赖问题：
+
+```bash
+cargo install dioxus-cli
+```
+
+需要跟踪本仓库 git 版 CLI 时，README 另给出 `cargo install --git https://github.com/DioxusLabs/dioxus dioxus-cli --locked`。日常开发优先用预编译 `dx`，不要默认跟 main。
+
+### 首次运行
+
+按官方快速开始新建项目（`dx new` 会询问模板、是否全栈、路由、Tailwind 与默认平台）：
+
+```bash
+dx new my-app
+cd my-app
+dx serve --desktop
+```
+
+只做网页时，教程路径是在项目目录执行 `dx serve`（模板默认平台为 Web 时无需 `--desktop`）。终端会打印本地地址；[0.7 教程](https://dioxuslabs.com/learn/0.7/tutorial/new_app/) 中的示例为 `http://127.0.0.1:8080`。移动端分别使用 `dx serve --platform android` 或对应 iOS 流程，需先完成 SDK 配置。
+
+入口一般为 `dioxus::launch(App)`，界面写在 `rsx!` 中。改标记与样式会热重载；改 Rust 逻辑默认触发完整重编译。实验性热补丁为 `dx serve --hotpatch`。
+
+### 验证是否成功
+
+- `dx --version` 能打印 CLI 版本；`dx doctor` 不再报告当前目标平台缺失的工具链。
+- `dx serve` 或 `dx serve --desktop` 完成编译后，浏览器或桌面窗口出现模板欢迎页，控制台无阻塞错误。
+- 修改 `src/main.rs` 里 `rsx!` 的文案并保存，界面应在不手动重启的情况下更新。
+- 需要分发时执行 `dx bundle`，确认产出 Web 静态资源或对应平台安装包。
+
+### 常见坑 / 注意事项
+
+- **稳定版与 main 不一致**：本仓库 README 写明 main 上的 examples 对准 git 版 Dioxus 与 CLI，并指向 `v0.6` 分支作为「最新稳定版示例」。文档站当前教程是 0.7。新建应用请以 `dx new` 与 [0.7 文档](https://dioxuslabs.com/learn/0.7/) 为准，不要直接复制 main 示例的依赖版本。该分支说明可能滞后，升级前再核对 README。
+- **安装脚本域名**：仓库 README 使用 `https://dioxuslabs.com/install.sh`；Getting Started 页面写的是 `https://dioxus.dev/install.sh`。两者任一失败时，改用 `cargo binstall dioxus-cli`。
+- **热补丁与原生渲染器是实验功能**：`--hotpatch`、WGPU、Skia、Freya、LiveView 不要当作默认生产路径。Linux 桌面与 WSL 对 WebKit/显示转发较敏感，WSL 官方亦说明并未完全理顺。
+- **许可证**：GitHub API 显示 SPDX 为 Apache-2.0；README 写明可采用 MIT 或 Apache-2.0 之一。再分发前同时阅读仓库中的 `LICENSE-MIT` 与 `LICENSE-APACHE`。
+- **CLI 与库不是同一个包**：`dioxus-cli`（命令 `dx`）负责开发与打包；应用依赖的是 crates.io 上的 `dioxus`。只 `cargo add dioxus` 不会得到热重载与 `dx bundle`。
