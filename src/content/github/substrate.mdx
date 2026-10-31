@@ -1,0 +1,129 @@
+---
+title: Agent Substrate
+description: 在 Kubernetes 上把空闲 Agent 挂起，请求到达后再恢复到少量预热 Worker 的零信任沙箱运行时。
+repo: https://github.com/agent-substrate/substrate
+homepage: https://ate.dev/
+repoDescription: "Agent Substrate: the core system"
+avatarUrl: https://avatars.githubusercontent.com/u/280516639?v=4
+tags:
+  - Agent
+  - 自托管
+  - 开发工具
+language: Go
+stars: 5982
+forks: 660
+openIssues: 1015
+contributors: 130
+license: Apache-2.0
+featured: false
+publishedAt: "2026-10-31"
+updatedAt: "2026-10-31"
+curationReason: 自有集群上超额订阅互不信任的工作负载，并把密钥留在沙箱外；可按 gVisor、microVM、SPIFFE 检索。
+---
+
+## 项目介绍
+
+Agent Substrate（仓库名 substrate，站点 [ate.dev](https://ate.dev/)）是跑在标准 Kubernetes 上的零信任运行时，用来沙箱化托管大量大多时候在等待的有状态工作负载。官方把它定位成低意见的 runtime，而不是 Agent SDK：工作负载不必是 AI Agent，但自主、不可信、多数时间空闲的 Agent 是它的隔离和调度模型要服务的对象。它把更多 Actor 映射到更少、已经预热的 Worker 上，空闲时把内存和文件系统快照出去，请求到来再恢复。
+
+## 核心特性
+
+- **虚拟机级沙箱，不接受普通容器**：每个 Actor 跑在独立的 [gVisor](https://gvisor.dev/)（`runsc`）或 [Cloud Hypervisor](https://www.cloudhypervisor.org/) microVM 里，计算、网络和存储分开。README 写明不支持普通 Linux 容器。Counter 演示的 microVM 等级把 guest 写成跑在 Cloud Hypervisor 上的 Kata。
+- **空闲挂起，按请求恢复**：Actor 可以被挂起，再恢复到池里任意可用的 Worker。工作内存和文件系统进快照，休眠后会话和工具状态还在。官方给出的目标是恢复小于 500ms、每秒 500 次以上激活，以及相对标准容器约 10 倍密度；演示里约 250 个有状态 Actor 复用 8 个物理 Pod，并写到 10–30 倍超额订阅。这些是 README 与演示中的数字，不是本站复测结果。
+- **沙箱里不放凭证**：Actor 不持有身份证书、API key 或云 token。出口网关 `atenet-egress` 在沙箱外，把凭证注入已经批准的出站请求。活跃 Actor 默认拿到短时 [SPIFFE](https://spiffe.io/) X.509 证书；出口策略需要时，网关还可以签发带 Actor 身份和 atespace 的 JWT。
+- **默认拒绝，策略留在边界上**：Actor 使用私有网络栈，入站只经过 `atenet-router`，Actor 之间以及到控制面默认不通，出站由出口网关限制。这块网关可以换成自有的授权、DLP、提示注入扫描或云 IAM，策略代码不放进不可信沙箱。
+- **不绑定某一种 Agent 框架**：沙箱里跑的是标准 OCI 镜像。README 点名 ADK、LangChain、Claude Code、Codex、Antigravity，以及把 MCP server 做成带身份和出口控制的 Actor。
+
+## 对用户价值
+
+每个 Agent 占一个常驻 Pod 时，模型在思考、人还没回复、工具还没返回，内存和沙箱仍然占着。Substrate 把这段空闲从容量里拿掉：算力花在 Agent 正在思考或执行工具的时候，会话和文件系统靠快照留下来。提示注入或被攻破的 Agent 拿不到可以带出去的密钥，不同租户可以共节点，但不共同一道安全边界。它加在现有的 Pod、自动伸缩和 NetworkPolicy 之上，控制面、节点监督和网络仍是 Kubernetes 集群里的组件。
+
+## 与替代方案
+
+- 相比直接用 Kubernetes Pod 跑 Agent：Pod 更简单，空闲进程继续占内存，密钥也常常进容器，隔离停在容器边界。Substrate 要求 gVisor 或 microVM，并把大量 Actor 复用到一小池预热 Worker。Actor 数量不大、可以接受常驻 Pod 时，原生工作负载更直接。
+- 相比只换 gVisor、Kata 或 Firecracker：这些提供隔离运行时，不负责 Actor 注册、挂起与恢复、请求停放、SPIFFE 身份和出口凭证注入。Substrate 把 gVisor 与 Cloud Hypervisor 收成同一套生命周期。若只是给现有 Pod 换一个更硬的运行时，不必上这套控制面。
+- 相比 [Agent Executor（AX）](https://github.com/google/ax) 和 [kagent](https://github.com/kagent-dev/kagent)：README 把两者写成 Substrate 的上层，而不是互相替代。AX 是在 Substrate 上构建的分布式 Agent harness；kagent 是 Kubernetes 上的 Agent 框架，用 Substrate 跑有状态沙箱。要的是沙箱、快照和调度平面时用 Substrate；要的是任务编排或 K8s 原生 Agent 框架时，再看它们，并且集群里通常要先有 Substrate。
+
+## 适应人群
+
+- 要在自有 Kubernetes 上高密度跑不可信、多数时间在等待的 Agent 或工具，又不想为每个空闲实例留一份常驻算力的平台团队。
+- 需要把 API key 和云 token 留在沙箱外，并用 SPIFFE 或可替换的出口策略做租户隔离的安全与平台工程。
+- 已经在用 ADK、LangChain、Claude Code、Codex 或 MCP，希望不改 SDK，只把执行环境放进沙箱的人。
+
+## 如何使用
+
+### 前置条件
+
+- 开发机已安装 [Go](https://go.dev/doc/install)、[`kubectl`](https://kubernetes.io/docs/tasks/tools/) 和 [Docker](https://www.docker.com/)。本地路径会用 Go 拉起 [kind](https://kind.sigs.k8s.io/)，不必单独预装。
+- 本地快速开始用 kind。Linux 宿主要跑超过大约一千个沙箱时，README 要求把内核邻居表调到 `net.ipv4.neigh.default.gc_thresh1/2/3` = 4096/16384/32768。`hack/create-kind-cluster.sh` 会在默认 1024 时给出警告。
+- GKE 路径需要 GCP 项目、`gcloud` 应用默认凭据，以及创建集群、GCS 和 IAM 的权限。自带集群时，README 要求有 PodCertificateRequest 和 ClusterTrustBundle：GKE 1.37 及以上默认提供；1.36 要作为 beta API 打开，并更换在此之前创建的 1.36 节点池。
+- 项目处于 pre-1.0。README 不保证向后兼容，API 和行为仍可能大改。支持目标是 Kubernetes 最新稳定版和上一个次版本。
+- Counter 演示还要求安装时已经配好快照位置（`SNAPSHOT_LOCATION`）。仓库根目录的快速开始没有单独写出这个变量；演示起不来时，先看 `demos/counter/README.md` 和 `docs/guides/operator-install.md`。
+
+### 安装方式
+
+本地 kind：
+
+```shell
+hack/create-kind-cluster.sh
+
+# 每个要跑 ate-setup 的 shell 都要设置，包括后面的演示
+export ATE_INSTALL_KIND=true
+
+go run ./cmd/ate-setup deploy ate-system --credential-provider='{"name":"k8s.io"}' \
+  --ingress-allowed-spiffe-ids=spiffe://cluster.local/ns/ate-system/sa/atenet-client
+
+go run ./cmd/ate-setup deploy demo counter
+
+go install ./cmd/kubectl-ate
+```
+
+GKE 开发环境先复制并填写环境文件，再创建项目资源：
+
+```bash
+cp hack/ate-dev-env.sh.example .ate-dev-env.sh
+source .ate-dev-env.sh
+
+gcloud auth application-default login --project=${PROJECT_ID}
+
+go run ./tools/setup-gcp bootstrap
+
+go run ./cmd/ate-setup deploy ate-system --credential-provider='{"name":"k8s.io"}' \
+  --ingress-allowed-spiffe-ids=spiffe://cluster.local/ns/ate-system/sa/atenet-client
+```
+
+`{"name":"k8s.io"}` 会装上自带的 Kubernetes Secrets 凭证提供方，命名空间策略一开始是空的，默认拒绝。Actor 要注入凭证之前，得授权它的 atespace 可以读哪些命名空间的 Secret，见 [egress credential injection](https://github.com/agent-substrate/substrate/blob/main/docs/guides/egress-credential-injection.md)。`{"enabled":false}` 会关掉出口凭证注入。不写 `--ingress-allowed-spiffe-ids` 时，路由器不放任何客户端访问 Actor；上面的 SPIFFE ID 就是 `kubectl ate proxy actor` 出示的那个。
+
+### 首次运行
+
+kind 路径在 Counter 演示和 `kubectl-ate` 装好之后：
+
+```shell
+kubectl ate create actor my-counter-1 -a ate-demo-counter --template counter
+
+kubectl ate proxy actor my-counter-1 -a ate-demo-counter
+```
+
+另开一个终端，经本地 8000 端口把 POST 送到这个 Actor。路由器会把它激活到某个 Worker 上：
+
+```shell
+curl -X POST -i http://localhost:8000/
+```
+
+`--template counter` 是 Actor 所在 atespace 里的 ActorTemplate 名称。GKE 上可以先执行 `go run ./cmd/ate-setup deploy demo counter`，再按 `demos/counter/README.md` 创建 Actor。microVM 等级是另一套模板和 atespace（`counter-microvm` / `ate-demo-counter-microvm`），命令以该文档里的折叠段为准。
+
+### 验证是否成功
+
+- `curl` 能连上 `http://localhost:8000/`，而不是连接被拒绝。随后执行 `kubectl ate get actor my-counter-1 -a ate-demo-counter`，Actor 应为 `RUNNING`，并分到某个 Worker Pod。
+- 演示会在每次请求上增加两个计数：一个在进程内存，一个在持久卷上的文件。`kubectl ate suspend actor my-counter-1 -a ate-demo-counter` 之后再 POST，官方说明两个计数都会从上次停下的地方继续；内存计数来自 `MEMORY` 保真度的快照，文件计数来自持久卷。若模板用的是 `VOLUMES` 或 `ROOTFS`，内存计数会从冷启动重来。本条目没有在集群里复跑这条路径。
+- 代理立刻失败时，先核对部署是否带了 `--ingress-allowed-spiffe-ids`，以及 ID 是否为 `spiffe://cluster.local/ns/ate-system/sa/atenet-client`。
+- 还没授权 atespace 可读的 Secret 命名空间时，自带凭证提供方解析不到 Secret。这是默认拒绝，不是安装失败。
+
+### 常见坑 / 注意事项
+
+- pre-1.0。升级前读 `docs/guides/upgrade.md`，不要假设 CRD、命令行参数或行为跨版本兼容。
+- `ATE_INSTALL_KIND=true` 要写在每一个执行 `ate-setup` 的 shell 里，包括演示走查。
+- 只写 `--credential-provider='{"name":"k8s.io"}'` 不够。默认策略拒绝所有命名空间，直到按出口凭证文档授权 atespace。
+- 省略 `--ingress-allowed-spiffe-ids` 时，没有客户端能访问 Actor。
+- `kubectl ate proxy` 目前只支持隧道上的 HTTP(S)。非默认端口上的原始 TCP 还走不通；Counter 文档把这写成当前限制，并说明 CONNECT 隧道本身与协议无关。
+- 拆除本地 kind 用 `./hack/delete-kind-cluster.sh`。GCP 用 `./hack/teardown.sh`：`--all` 会删掉同一项目里所有 Substrate 集群共享的仪表板、快照传输服务账号和项目级 IAM；还有其他集群在用时改用 `--cluster-scoped`。
+- README 社区小节里的会议电话和 PIN 是周会接入信息，不是安装步骤。
