@@ -3,6 +3,11 @@ export default {
   style: 'stagger',
   list: [
     {
+      title: 'Resend | 面向开发者的邮件',
+      link: 'https://resend.com/',
+      desc: 'Resend 是用来规模化投递事务邮件和营销邮件的平台，让重要内容到达收件人而不是垃圾箱。它用简洁界面接入 Node.js、Python 等多种语言的 SDK，几分钟内即可从代码开始发送，还能用测试模式模拟事件，避免误把真实邮件发给真人。平台在邮件送达、打开、退信或链接被点击时，通过模块化 Webhook 实时通知服务器，也能用 React 编写模板，不必处理表格布局和 HTML。适合各规模团队把最重要的邮件稳定送达，并借助详细日志、域名认证与自动预热的专属 IP 掌握投递情况与域名声誉。'
+    },
+    {
       title: 'Github | Let’s build from here',
       stars: 5,
       link: 'https://github.com/',
