@@ -1,0 +1,125 @@
+---
+title: REA
+description: 给编程代理用的本地逆向 MCP，检查应用、网站、.NET 与原生二进制，并带回证据。
+repo: https://github.com/morluto/rea
+homepage: https://rea.tools
+repoDescription: Reverse engineer anything with agents, from app behavior down to native binaries.
+avatarUrl: https://avatars.githubusercontent.com/u/76467478?v=4
+tags:
+  - Agent
+  - CLI
+  - 开发工具
+language: TypeScript
+stars: 476426
+forks: 116041
+openIssues: 1175
+contributors: 456
+license: MIT
+featured: false
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+curationReason: 适合已在用 Cursor、Claude Code 或 Codex，想在本机对照有权分析的 Electron、APK 或原生程序追实现的人。
+---
+
+## 项目介绍
+
+REA（Reverse Engineer Anything）是面向编程代理的本地逆向工具，npm 包名为 `rea-agents`，产品站在 [rea.tools](https://rea.tools/)。它通过一个本地 MCP 把检查工具接到代理上，终端里的 `rea` 走同一套流程。没有源码时，可以查看原生二进制、JavaScript / Electron、网站、.NET 程序集，以及 Android、固件和已记录的运行行为；分析在本机进行，结论附带证据和局限。中文说明见仓库 [简体中文 README](https://github.com/morluto/rea/blob/main/docs/readme/README_zh.md)，分格式要求见 [支持的目标](https://github.com/morluto/rea/blob/main/docs/reference/supported-targets.md)。
+
+## 核心特性
+
+- **代理与终端共用一条分析路径**：`npx rea-agents setup` 在你批准后写入本地 MCP，并默认装上配套的调查 skill。CLI 使用同样的工作流，不依赖某个特定聊天窗口
+- **原生引擎可选，静态检查可以先开工**：深入原生反编译使用已有的 Hopper、Ghidra、IDA 或 Kuna；setup 也可以在单独批准后安装 Hopper。静态 JavaScript / Electron 和 .NET 不需要这些引擎。原生结果是伪代码和汇编，JavaScript 结果是模块、导入、source map、路由和 IPC 边界
+- **很多格式只读文件头或归档**：Go、Rust、PE、ELF、IL2CPP、Godot PCK、PyInstaller 等由内置静态解析处理。网站需要 Chrome 系浏览器；Android 反编译需要 headless JADX 和完整 JDK；固件提取在 Linux 上还可接外部 Binwalk / Unblob。完整矩阵以支持目标文档为准，不要把 README 摘要理解成每个格式都零依赖
+- **证据留在本机**：REA 不把目标应用上传到自己的服务器。代理仍会收到工具返回，所用模型服务商适用它自己的数据政策
+- **可以接到录制材料**：除了安装包和二进制，也可以分析 HAR、SAZ、pcap，以及进程行为记录。官方另有一条从网页会话或 Linux 桌面应用搭建本地 RL 练习环境的指南；本条目没有逐步核过那条指南
+
+## 对用户价值
+
+没有源码时，功能实现散落在反编译器、asar、浏览器和抓包文件里，编程代理默认看不到这些材料。REA 把打开目标、追踪相关代码、带回证据和未知项收成代理能调用的工具，也收成终端命令。解释一个行为或按证据写实现时，不用先把整个应用上传到 REA 的服务器。商用反编译器的许可证、模型密钥和目标文件仍留在你自己的机器和厂商条款下。
+
+## 与替代方案
+
+- [Ghidra](https://github.com/NationalSecurityAgency/ghidra)、IDA、Hopper、Kuna、JEB 是 REA 可以调用的分析引擎，不是被它替换掉的产品。没有对应引擎时，原生伪代码出不来；静态 JavaScript、.NET、APK 签名和若干文件头检查仍然可以做。REA 不附带这些商用工具的许可。
+- 自己在 Ghidra 或 IDA 里标注、写脚本，适合要看控制流图、亲手改数据库的人。REA 适合把同一类证据交回 Cursor、Claude Code、Codex 等本地 MCP 代理。GUI 里的手动分析仍然要打开引擎本身。
+- 只拆 Electron 时，解包 asar 再搜索也能回答很多问题。`analyze-javascript-application` 额外整理模块、导入和 Electron 边界，并写成带证据的结果。它不替代阅读业务代码。
+- 调用方还可以自备 Rizin、GNU objdump、Apktool、adb、tshark。REA 不负责安装或升级这些外部程序。
+- 边界：官方把用途限定在合法研究、教育、互操作、软件保存，以及你拥有或获准检查的软件。破解副本、盗用密钥和绕过商用引擎许可都不在授权范围内。仓库 `main` 上的文档可能超前于 npm 的 `@latest`。
+
+## 适应人群
+
+- 已经在用 Cursor、Claude Code、Codex 或其他本地 MCP 代理，希望在没有源码时仍能追一个功能是怎么实现的开发者。
+- 机器上已有 Ghidra、IDA 或 Hopper，想把伪代码和引用交回代理，而不是只停在反编译器窗口里的逆向工程师。
+- 先要检查自己有权分析的 Electron、.NET 或 APK，暂时不打算安装原生反编译器的人。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 22.x（不低于 22.23.4）、24.x（不低于 24.22.1）或 26.12.1 及以上，以及与该运行时配套的 npm。官方不支持 Node.js 23、25、更早的 26.x 和预发布版。Bun 可以用 `bunx`；`rea doctor` 的 node 检查看的是 Bun 声明的 Node 兼容版本。
+- 在准备分析的项目之外的可信目录里获取软件包。不要在目标仓库或 REA 源码目录里直接 `npx`，包运行器会先读当前项目的 npm 配置。
+- 只分析你拥有或获准检查的文件。IDA、Hopper、JEB 等商用工具须自行合法取得使用权。
+- 做原生反编译前，准备 Hopper、Ghidra、IDA 或 Kuna 中与目标格式、宿主系统匹配的一个。静态 JavaScript / Electron 和 .NET 可以不装。
+- Linux 上，Ghidra、JADX、固件工具和静态 JavaScript / Electron 会先用系统 `ps` 做进程归属检查。需要发行版的 `procps` 或 `procps-ng`。REA 依次尝试 `/bin/ps`、`/usr/bin/ps` 和 NixOS 的 `/run/current-system/sw/bin/ps`，不会用代理改过的 `PATH` 去替换系统 `ps`。
+
+### 安装方式
+
+接入代理时，在可信目录执行：
+
+```bash
+npx rea-agents setup
+```
+
+选择要配置的客户端，核对计划里的路径和变更后再批准。npm 下载包的确认和 REA 写入配置的确认是两步。Hopper 是否安装也是单独一次批准。完成后重启完成信息里点名的代理。要固定最新发布版，用 `npx rea-agents@latest setup`。
+
+经常在终端使用时，安装全局命令后再跑 setup。只执行全局安装不会改掉已经登记的 `npx` MCP：
+
+```bash
+npm install --global rea-agents
+rea setup
+```
+
+不想写配置、只想看计划时：
+
+```bash
+rea setup --client cursor --skill=false --dry-run
+```
+
+`--client` 可换成安装文档表格里的 ID，例如 `claude_code` 或 `codex`。`--dry-run` 退出码为 0，状态是 `planned`。
+
+不接代理、只静态检查一个已解包的 JavaScript / Electron 目录或 ASAR：
+
+```bash
+npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json
+```
+
+把路径换成你的目标。Windows 示例是 `"D:/apps/example"`。
+
+### 首次运行
+
+先走静态 JavaScript 路径，确认命令本身可用。准备一个你有权检查的 Electron 应用目录或 ASAR，在目标项目外执行上面的 `analyze-javascript-application`。返回的 JSON 是一份 Evidence 记录，里面包含模块、导入、Electron 边界和对应证据。
+
+再接代理。在可信目录运行 `npx rea-agents setup`（或全局安装后的 `rea setup`），批准计划并重启代理。官方建议的第一句提问是：弄清目标应用里某个功能如何工作，展示证据，并为自己的项目实现类似功能。把应用名和功能换成你获准分析的目标。
+
+原生二进制不要放在这一步。先用 `rea doctor --provider hopper --json`（或 `ghidra`、`ida`、`kuna`）看选定引擎，再按 [CLI 指南](https://github.com/morluto/rea/blob/main/docs/getting-started/cli.md) 选择 provider。macOS 上 REA 会在需要时启动 Hopper；首次可能弹出演示模式或许可证对话框，需要在同一次用户会话里处理完，再跑无人值守任务。
+
+### 验证是否成功
+
+- 全局安装后，`rea --help` 能打印命令帮助。`npm view rea-agents dist-tags.latest` 用来对照当前 npm 发布版。
+- setup 结束时会列出通过最终检查的代理、分析工具和工作流文件。点名的客户端需要重启后，MCP 才会用上新登记。
+- `rea doctor --json` 只读，不改配置。不带范围时，它会审计所有已发现的登记；总的 `healthy` 可以为 false，而你选定的那条流程仍然可用。查某一项请加范围，例如 `rea doctor --client cursor --json`、`rea doctor --skill --json`，或 `rea doctor --provider ghidra --json`。范围报告里看 `scope_checks`。
+- `analyze-javascript-application ... --json` 成功时，结果里能看到模块、导入和 Electron 边界，且不依赖 Hopper / Ghidra。
+- 代理侧以重启后的工具列表为准。安装文档写明：仓库 `main` 比已安装的 npm 包更新时，包本身不会自动获得 main 上的新能力。
+
+### 常见坑 / 注意事项
+
+- 只从 [morluto/rea](https://github.com/morluto/rea)、[rea.tools](https://rea.tools/) 或 npm 上的 `rea-agents` 获取。名字相近的仓库或被复制的 README 不能说明下载是官方的。
+- 在目标项目里 `npx` 时，当前仓库的 npm override 冲突可能在 REA 启动前就报 `EOVERRIDE`。换到目标仓库外的目录，或改用全局安装的 `rea setup`。
+- 安装过程中若出现 `prebuild-install` 的弃用警告，官方说明它来自传递依赖（例如 Frida），不表示 setup 失败。
+- 批准写入 Claude Desktop 的配置前，先完全退出应用，否则正在运行的进程可能把登记盖回去。
+- `npm install rea-agents` 不加 `--global` 时，命令只出现在当前项目的 `node_modules/.bin`，不会进入 shell 的 `PATH`。
+- `rea update` 只更新当前这条命令所属的 npm 或 Bun 全局安装。`npx` 登记要另跑 `npx rea-agents@latest setup`，核对计划后重启代理。Bun 全局更新需要 Bun 1.2.17 或更新，因为要用到 `bun info`。
+- Hopper 的自动安装覆盖 macOS 12+（还要满足该 Hopper 版本自己的系统要求），以及 x86_64 上的 Ubuntu 24.04+、Fedora 41+、Nobara 44+、Arch、CachyOS、Omarchy。其他 Linux 架构不要等自动安装，改配 Ghidra。`rea doctor` 不会提议安装 Hopper。
+- Linux 上缺少可用的系统 `ps` 时，相关流程会在拉起子进程前拒绝执行。先装 `procps` / `procps-ng`，再按引擎文档排查。
+- 从 skills.sh 安装的 skill 只提供调查说明。MCP 登记仍要 `npx rea-agents setup`，然后重启代理。
+- 静态检查不运行目标程序。进程行为、网站观察和 Android 设备路径会按你的用户权限实际运行或交互，效果以对应指南为准。SQLite 检查在 Node.js 22 上不可用，需要 24.x 或 26.x。
+- 官方声明：REA 用于合法研究、教育、互操作、软件保存，以及分析你拥有或获准检查的软件。不得使用破解的商用反编译器、盗用或共享密钥，也不得绕过许可限制。
