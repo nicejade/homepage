@@ -1,0 +1,119 @@
+---
+title: AI SDK
+description: TypeScript 模型无关工具包：统一 API 生成文本、结构化数据、Agent 与流式聊天界面。
+repo: https://github.com/vercel/ai
+homepage: https://ai-sdk.dev
+repoDescription: The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents
+avatarUrl: https://avatars.githubusercontent.com/u/14985020?v=4
+tags:
+  - AI 编程
+  - Agent
+  - 开发工具
+language: TypeScript
+stars: 28231
+forks: 5722
+openIssues: 1720
+contributors: 788
+license: Apache-2.0
+featured: false
+publishedAt: "2026-11-26"
+updatedAt: "2026-11-26"
+curationReason: Next.js、React、Svelte 或 Vue 项目切换 OpenAI、Anthropic、Google 时，保留类型、useChat 与 AI Gateway。
+---
+
+## 项目介绍
+
+[AI SDK](https://ai-sdk.dev/docs) 是 Vercel 与 Next.js 团队维护的 TypeScript 工具包，用来在 Next.js、React、Svelte、Vue、Angular 和 Node.js 里做 AI 应用与 Agent。它对 OpenAI、Anthropic、Google 等模型商提供同一套调用方式：默认经 [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) 传模型字符串，也可以安装各家 provider 包直连。本仓库是 SDK 源码；接口说明见 [文档](https://ai-sdk.dev/docs) 与 [API Reference](https://ai-sdk.dev/docs/reference)。
+
+## 核心特性
+
+- **统一的模型调用**：`generateText` 接受 Gateway 模型字符串（README 示例为 `openai/gpt-6-astra`），也接受 `@ai-sdk/openai` 等包返回的模型对象，应用侧函数签名不变。
+- **结构化输出**：从 `ai` 引入 `Output`，用 Zod schema 约束对象形状，例如菜谱的名称、用料和步骤。
+- **可复用的工具 Agent**：`ToolLoopAgent` 把模型、系统提示和 tools 收在一起；`createAgentUIStreamResponse` 把 agent 接到 HTTP 流式响应。
+- **框架侧聊天钩子**：安装 `@ai-sdk/react` 后用 `useChat`，按 message parts 渲染文本和工具状态；Svelte、Vue 有对应包。README 用流式生图演示 `input-available` 与 `output-available`。
+- **官方编码技能**：`npx skills add vercel/ai`，给 Claude Code、Cursor 等编程代理一份 AI SDK 用法。
+
+## 对用户价值
+
+换模型商时，真正重写的通常不是 prompt，而是消息类型、流式协议，以及工具结果怎么画回界面。AI SDK 把这些留在 provider 和 UI 包里：服务端继续调 `generateText` 或 `ToolLoopAgent`，前端继续消费同一类 message parts。可以先用 Gateway 的模型字符串打通多家模型；要自己管密钥和区域时，再换成官方 provider 包，调用形状不用另起一套。
+
+## 与替代方案
+
+- 相比 [LangChain.js](https://js.langchain.com/)，AI SDK 更靠 TypeScript 类型，以及 React / Next.js 的聊天与生成式 UI。LangChain 在链、检索和既有 Python / JS 编排上更宽；已经跑在 LangChain 上的知识库管线，不必为了聊天界面整栈迁走。
+- 相比直接使用 OpenAI、Anthropic 或 Google 的官方 SDK，厂商 SDK 更贴近该家独有参数和原样流式事件。AI SDK 多一层抽象，换模型时改动更小；只用一家、且依赖其独有接口时，直连官方 SDK 更合适。
+- 边界：Gateway 是 README 里的默认模型入口，不是另一个应用框架。不走 Gateway 时，安装 `@ai-sdk/openai` 等包即可。本仓库也不包含本地推理运行时；自托管模型要另接兼容的 provider，默认文档路径是云厂商与 Gateway。
+
+## 适应人群
+
+- 用 Next.js、React、Svelte 或 Vue 做聊天、工具调用或生成式界面，希望服务端和前端共用一套类型的 TypeScript 开发者。
+- 需要在 OpenAI、Anthropic、Google 之间更换模型，同时保留现有路由和 `useChat` 写法的产品团队。
+- 已在用 Claude Code 或 Cursor，希望用官方 skill 按 AI SDK 约定写 agent 和页面，而不是从零对照多家 SDK 文档的人。
+
+## 如何使用
+
+### 前置条件
+
+- Node.js 22+（以仓库 README 为准）。
+- npm、pnpm 或 Yarn。
+- 模型入口二选一：按 [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) 文档配置默认入口，或自备厂商 API 密钥并安装对应 provider 包。README 没有写死环境变量名。
+
+### 安装方式
+
+核心包：
+
+```bash
+npm install ai
+```
+
+React / Next.js 界面：
+
+```bash
+npm install @ai-sdk/react
+```
+
+直连厂商、不走 Gateway 模型字符串时：
+
+```bash
+npm install @ai-sdk/openai @ai-sdk/anthropic @ai-sdk/google
+```
+
+结构化输出示例还会 `import { z } from 'zod'`，需要另装 `zod`。README 的安装命令没有列出它。
+
+给编程代理安装官方 skill：
+
+```bash
+npx skills add vercel/ai
+```
+
+### 首次运行
+
+在 Node 脚本或路由里生成文本。模型 ID 沿用当前 README 的 Gateway 示例，上线前对照 [文档](https://ai-sdk.dev/docs) 里的可用模型：
+
+```ts
+import { generateText } from 'ai';
+
+const { text } = await generateText({
+  model: 'openai/gpt-6-astra',
+  prompt: 'What is an agent?',
+});
+
+console.log(text);
+```
+
+直连时把 `model` 换成 provider 工厂，例如 `anthropic('claude-opus-5-5')`（需先 `import { anthropic } from '@ai-sdk/anthropic'`）。
+
+聊天界面的官方路径是三块：定义 `ToolLoopAgent`、在 App Router 里用 `createAgentUIStreamResponse` 返回流、页面用 `useChat` 按 part 渲染。完整示例（含生图工具视图）在仓库 README；按场景起步可用官方 [templates](https://ai-sdk.dev/docs/introduction#templates)。
+
+### 验证是否成功
+
+- 上面的脚本打印出非空 `text`，且没有因缺少 Gateway 凭证或厂商密钥而失败。
+- 若走了聊天路由：浏览器提交后，`useChat` 的 `status` 回到 `ready`，消息列表里出现 assistant 文本。
+- 若接了工具：对应 part 进入 `output-available`。停在 `input-available` 通常表示工具还没执行完，或 `execute` 没有返回。
+
+### 常见坑 / 注意事项
+
+- **Node 版本**：README 要求 Node.js 22+。版本过低时，安装可以成功，运行时才缺 API。
+- **两条模型入口不要混用**：`model: 'openai/gpt-6-astra'` 走 Gateway；`openai('gpt-6-astra')` 走 `@ai-sdk/openai` 和该厂商的密钥。只写了模型字符串却没配 Gateway，调用会在鉴权处失败。示例里的模型名会随文档更新。
+- **包是拆开的**：只装 `ai` 时没有 `useChat`。React、Svelte、Vue 各有自己的 UI 包。
+- **工具不会自动执行**：`ToolLoopAgent` 示例里的 shell 依赖你自己的 sandbox（README 注释写的是 Vercel Sandbox）。仓库不提供这个运行环境。
+- **许可证**：根目录 `LICENSE` 为 Apache-2.0。GitHub API 的 SPDX 字段目前是 `NOASSERTION`，以许可证文件为准。贡献前阅读 [CONTRIBUTING.md](https://github.com/vercel/ai/blob/main/CONTRIBUTING.md)。提问在 [Vercel Community 的 AI SDK 版块](https://community.vercel.com/c/ai-sdk/62)。
