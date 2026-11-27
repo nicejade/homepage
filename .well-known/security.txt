@@ -1,0 +1,10 @@
+Contact: https://www.niceshare.site/about
+Contact: mailto:yunjeff@163.com
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: zh-CN, en
+Canonical: https://www.niceshare.site/.well-known/security.txt
+Policy: https://www.niceshare.site/about
+Acknowledgments: https://www.niceshare.site/about
+
+# 感谢您对逍遥自在轩的安全性关注
+# 如果您发现任何安全问题，请通过上述联系方式告知我们
